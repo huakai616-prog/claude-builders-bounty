@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>小 Claude 弹钢琴</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=ZCOOL+KuaiLe&display=swap">
+<style>
+  :root {
+    --page: #E6ECE9;
+    --panel: #F3F6F4;
+    --ink: #1B2422;
+    --muted: #55635F;
+    --line: #C6D1CC;
+    --accent: #1D6A64;
+    --accent-ink: #FFFFFF;
+    --pet: #D97757;
+    --pet-ink: #B3553A;
+    --pet-tint: rgba(217, 119, 87, 0.16);
+    --stage-shadow: rgba(34, 42, 40, 0.45);
+
+    /* 画布场景颜色，由 piano-pet.js 读取 */
+    --wall: #DAE4DF;
+    --wall-stripe: #D1DCD7;
+    --baseboard: #BFCCC6;
+    --floor: #BE9C79;
+    --floor-line: #AA8764;
+    --rug: #2E6D67;
+    --rug-edge: #245753;
+    --glow-rgb: 255, 240, 210;
+    --glow-a: 0.75;
+    --sky-top: #8DBDDF;
+    --sky-bottom: #D5EBF5;
+    --frame: #F7F4EC;
+    --night: 0;
+    --piano: #1F2227;
+    --piano-hi: #444A53;
+    --key-white: #FBFAF6;
+    --key-shade: #D3CFC6;
+    --key-black: #15171B;
+    --brass: #C6A15A;
+    --wood: #94603F;
+    --wood-dark: #74492F;
+    --leaf: #4F8C60;
+    --leaf-dark: #3A6D4A;
+    --pot: #ECE6DA;
+    --note-a: #D97757;
+    --note-b: #1D6A64;
+    --note-c: #D39A2E;
+    --floor-shadow: rgba(40, 28, 18, 0.2);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0F1413;
+      --panel: #161D1C;
+      --ink: #E4EBE8;
+      --muted: #93A39E;
+      --line: #2A3532;
+      --accent: #62C3B8;
+      --accent-ink: #0B1413;
+      --pet-ink: #EE9677;
+      --pet-tint: rgba(217, 119, 87, 0.22);
+      --stage-shadow: rgba(0, 0, 0, 0.7);
+      --wall: #18211F;
+      --wall-stripe: #1C2624;
+      --baseboard: #243029;
+      --floor: #3A2D24;
+      --floor-line: #2E231C;
+      --rug: #1E4A46;
+      --rug-edge: #173B38;
+      --glow-rgb: 255, 206, 145;
+      --glow-a: 0.28;
+      --sky-top: #081225;
+      --sky-bottom: #1C2A47;
+      --frame: #2C3633;
+      --night: 1;
+      --piano: #0C0E11;
+      --piano-hi: #353B44;
+      --key-white: #ECE8E0;
+      --key-shade: #B5AFA4;
+      --key-black: #07080A;
+      --brass: #B58E48;
+      --wood: #6B4630;
+      --wood-dark: #523524;
+      --leaf: #3F7550;
+      --leaf-dark: #2F5A3D;
+      --pot: #4A504E;
+      --note-a: #E88D6D;
+      --note-b: #62C3B8;
+      --note-c: #E6B24E;
+      --floor-shadow: rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0F1413;
+    --panel: #161D1C;
+    --ink: #E4EBE8;
+    --muted: #93A39E;
+    --line: #2A3532;
+    --accent: #62C3B8;
+    --accent-ink: #0B1413;
+    --pet-ink: #EE9677;
+    --pet-tint: rgba(217, 119, 87, 0.22);
+    --stage-shadow: rgba(0, 0, 0, 0.7);
+    --wall: #18211F;
+    --wall-stripe: #1C2624;
+    --baseboard: #243029;
+    --floor: #3A2D24;
+    --floor-line: #2E231C;
+    --rug: #1E4A46;
+    --rug-edge: #173B38;
+    --glow-rgb: 255, 206, 145;
+    --glow-a: 0.28;
+    --sky-top: #081225;
+    --sky-bottom: #1C2A47;
+    --frame: #2C3633;
+    --night: 1;
+    --piano: #0C0E11;
+    --piano-hi: #353B44;
+    --key-white: #ECE8E0;
+    --key-shade: #B5AFA4;
+    --key-black: #07080A;
+    --brass: #B58E48;
+    --wood: #6B4630;
+    --wood-dark: #523524;
+    --leaf: #3F7550;
+    --leaf-dark: #2F5A3D;
+    --pot: #4A504E;
+    --note-a: #E88D6D;
+    --note-b: #62C3B8;
+    --note-c: #E6B24E;
+    --floor-shadow: rgba(0, 0, 0, 0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    padding-inline: 16px;
+    padding-block: 32px 48px;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+  }
+
+  header { display: grid; gap: 8px; }
+
+  h1 {
+    margin: 0;
+    font-family: "ZCOOL KuaiLe", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    font-weight: 400;
+    font-size: clamp(30px, 6vw, 44px);
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+  }
+  h1 span { color: var(--pet-ink); }
+
+  .lede {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--muted);
+  }
+
+  .stage {
+    margin: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--wall);
+    box-shadow: 0 0 0 1px var(--line), 0 18px 40px -26px var(--stage-shadow);
+  }
+  .stage canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    cursor: pointer;
+  }
+
+  .panel { display: grid; gap: 14px; }
+
+  .timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .cell { border-left: 1px dashed var(--line); }
+  .cell.first { border-left: 0; }
+  .cell.bar { border-left: 2px solid var(--muted); }
+  .chord {
+    grid-column: span 2;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 10px 12px 2px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.12s;
+  }
+  .chord small {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .beat {
+    padding: 2px 12px 10px;
+    font-size: 11px;
+    color: var(--muted);
+    transition: background-color 0.12s;
+  }
+  .chord.is-active, .beat.is-active { background: var(--pet-tint); }
+  .beat.is-active { color: var(--ink); font-weight: 600; }
+  .playhead {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--pet);
+    pointer-events: none;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: inherit;
+    font-size: 14px;
+    line-height: 1;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--muted); }
+  button.primary {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: transparent;
+  }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button:disabled { cursor: default; opacity: 0.6; }
+  button svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+
+  .readout {
+    margin: 0 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .readout #clock { color: var(--ink); }
+
+  .meta, .motion-note, .tech {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .meta {
+    font-family: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    letter-spacing: 0.02em;
+  }
+  .motion-note { color: var(--ink); }
+  .tech { max-width: 70ch; }
+
+  @media (max-width: 560px) {
+    .readout { margin-left: 0; width: 100%; }
+    .chord, .beat { padding-inline: 8px; }
+    .chord small { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>小 <span>Claude</span> 弹钢琴</h1>
+    <p class="lede">一段 5 秒无缝循环的 JavaScript 动画。左手弹根音和五度，右手弹 C–Am–F–G 琶音，节拍器按 96 BPM 摆动。点击画面或「暂停」可以定格，点「开启声音」能听到同步合成的旋律。</p>
+  </header>
+
+  <figure class="stage">
+    <canvas id="stage" width="800" height="450" role="img" aria-label="橙色的 Claude 小宠物站在钢琴后面弹琴，琴键被按下时亮起，音符从琴键上飘起，旁边的节拍器跟着节奏摆动"></canvas>
+  </figure>
+
+  <section class="panel" aria-label="播放控制">
+    <div class="timeline" aria-hidden="true">
+      <div class="cell chord first" data-chord="0">C <small>I</small></div>
+      <div class="cell chord" data-chord="1">Am <small>vi</small></div>
+      <div class="cell chord bar" data-chord="2">F <small>IV</small></div>
+      <div class="cell chord" data-chord="3">G <small>V</small></div>
+      <div class="cell beat first" data-beat="0">1</div>
+      <div class="cell beat" data-beat="1">2</div>
+      <div class="cell beat" data-beat="2">3</div>
+      <div class="cell beat" data-beat="3">4</div>
+      <div class="cell beat bar" data-beat="4">1</div>
+      <div class="cell beat" data-beat="5">2</div>
+      <div class="cell beat" data-beat="6">3</div>
+      <div class="cell beat" data-beat="7">4</div>
+      <div class="playhead" id="playhead"></div>
+    </div>
+
+    <div class="controls">
+      <button id="play-toggle" class="primary" type="button">暂停</button>
+      <button id="sound-toggle" type="button">开启声音</button>
+      <p class="readout">
+        <span id="position">第 1 小节 · 第 1 拍</span>
+        <span><span id="clock">0.00</span> / 5.00 秒</span>
+      </p>
+    </div>
+
+    <p class="motion-note" id="motion-note" hidden>系统开启了「减少动态效果」，动画先停在这一帧，点「播放」开始。</p>
+    <p class="meta">96 BPM · 4/4 拍 · C 大调 · 2 小节 × 4 拍 = 5 秒一圈</p>
+    <p class="tech">原生 JavaScript + Canvas 2D，没有任何依赖。每一帧只由 t = 时间 mod 5 秒算出，所以第 5 秒和第 0 秒的画面完全衔接；声音由 Web Audio 实时合成。</p>
+  </section>
+</main>
+<script src="piano-pet.js"></script>
+</body>
+</html>
