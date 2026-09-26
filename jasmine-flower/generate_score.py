@@ -8,6 +8,7 @@
 用法：python3 generate_score.py [输出文件]
 """
 import itertools
+import xml.etree.ElementTree as ET
 import re
 import sys
 
@@ -31,6 +32,7 @@ PROG = [b.split() for b in (  # 每小节和声：1-4 前奏｜5-18 人声｜19-
 N = len(PROG)
 DL = {4: 'w', 2: 'h', 1: 'q', .5: 'e', .25: 's', .125: 't'}
 W = [0, 1, 2, 3, 4, 3, 2, 1]  # 波浪型琶音
+SW = [0, 1, 2, 3, 4, 5, 6, 7, 8, 7, 6, 5, 4, 3, 2, 1]  # 竖琴大跨度琶音
 
 
 def nm(m, ch): return next(t for t in CH[ch] if pcn(t) == m % 12) + str(m // 12 - 1)
@@ -109,7 +111,7 @@ def csym(ch):  # 和弦名 -> 合法的 MusicXML 和弦标记
 
 PARTS = [  # (名称, 缩写, 乐器, 谱号, 谱[, 歌词, 类])
     ('Flute', 'Fl.', instrument.Flute(), clef.TrebleClef(), P(
-        "@t:dolce @p (A5q A5e C6e) (D6e F6e F6e D6e)", "(C6q C6e D6e C6q) (A5s C6s D6s F6s)",
+        "@p (A5q A5e C6e) (D6e F6e F6e D6e)", "(C6q C6e D6e C6q) (A5s C6s D6s F6s)",
         "@mf @< (Ab6s F6s Db6s C6s Ab5s F5s Db5s C5s) (Bb6s G6s F6s Eb6s Bb5s G5s F5s Eb5s)",
         "@f @> G5h% (E5s G5s Bb5s C6s) (D6t E6t F6t G6t A6t Bb6t C7t Bb6t)", "@p A6q rq rh",
         "rh (A5s C6s D6s F6s) (D6e C6e)", "rw", "rh (E6s D6s C6s A5s) (G5e A5e)", "rw",
@@ -132,7 +134,7 @@ PARTS = [  # (名称, 缩写, 乐器, 谱号, 谱[, 歌词, 类])
     ('Horn in F 1.2', 'Hn.', instrument.Horn(), clef.TrebleClef(), P(
         G(1, 2, hnp, '@pp @<'), G(3, 3, hnp, '@mf @<'), G(4, 4, hnp, '@f @>'), R(4), G(9, 12, hnp, '@mp'),
         G(13, 17, hnp, '@mf @<'), G(18, 18, hnp, '@ff'),
-        "(A3+A4q A3+A4e C4+C5e) (D4+D5e F4+F5e F4+F5e D4+D5e)", "(C4+C5q C4+C5e D4+D5e C4+C5h)",
+        "(A3q> A3e C4e) (D4e F4e F4e D4e)", "(C4q> C4e D4e C4h)",
         G(21, 22, hnp, '@p @>'))),
     ('Trumpet in B♭', 'Tpt.', instrument.Trumpet(), clef.TrebleClef(), P(
         R(2), "@mf @< Ab4+C5h G4+Bb4h", "@f @> F4+Bb4h E4+Bb4h", R(13), "@ff Ab4+C5h G4+Bb4h",
@@ -150,19 +152,19 @@ PARTS = [  # (名称, 缩写, 乐器, 谱号, 谱[, 歌词, 类])
         "rh rq A6q", "rw", "@mf rh C7e G6e Eb7q", "rw", "C7e A6e F6q rh", "rw", "@f F7q C7q G7q Bb6q",
         "@ff A6q C7q F7q rq", "rw", "@p rh C7q A6q", "@pp A6w")),
     ('Harp', 'Hp.', instrument.Harp(), clef.TrebleClef(), P(
-        G(1, 1, arp(53, range(16)), '@p'), G(2, 2, arp(65, W)), G(3, 3, arp(61, range(8)), '@mf @<'),
+        G(1, 1, arp(60, SW), '@p'), G(2, 2, arp(65, W)), G(3, 3, arp(61, range(8)), '@mf @<'),
         "@f @> F4s G4s Bb4s D5s F5s D5s Bb4s G4s Bb6s G6s E6s C6s Bb5s G5s E5s C5s",
         G(5, 8, arp(60, W), '@p'), G(9, 12, arp(60, W), '@mp'), G(13, 17, arp(72, W), '@mf @<'),
-        G(18, 18, arp(61, range(8)), '@ff'), G(19, 19, arp(53, range(16))), G(20, 20, arp(65, W), '@f'),
-        G(21, 21, arp(53, range(15, -1, -1)), '@p @>'), "@pp F4+A4+C5+G5+A5w&"), None, PT),
+        G(18, 18, arp(61, range(8)), '@ff'), G(19, 19, arp(60, SW)), G(20, 20, arp(65, W), '@f'),
+        G(21, 21, arp(65, [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 3, 2, 1, 0]), '@p @>'), "@pp F4+A4+C5+G5+A5w&"), None, PT),
     ('Harp', 'Hp.', None, clef.BassClef(), P(
         "F1+F2w", G(2, 4, octv(29)), G(5, 17, arp(36, [0, 2, 3, 4], .5, True)), G(18, 21, octv(29)), "F1+F2w"),
      None, PT),
     ('Soprano', 'S.', instrument.Soprano(), clef.TrebleClef(), P(
-        R(4), "@t:dolce @mp A4q A4e C5e (D5e F5e) F5e D5e", "C5q (C5e D5e) C5h", "A4q A4e C5e (D5e F5e) F5e D5e",
+        R(4), "@mp A4q A4e C5e (D5e F5e) F5e D5e", "C5q (C5e D5e) C5h", "A4q A4e C5e (D5e F5e) F5e D5e",
         "C5q (C5e D5e) C5h", "@mf C5q C5q C5q (A4e C5e)", "D5q D5q C5h", "A4q (G4e A4e) C5q (A4e G4e)",
-        "F4q (F4e G4e) F4h", "(A4e G4e) (F4e A4e) G4q. A4e", "@< C5q (D5e F5e) C5h",
-        "@f G4q (A4e C5e) (G4e A4e) (F4e D4e)", "C4h D4q F4q", "@< G4q. A4e (F4e G4e) (F4e D4e)", "@f C4w~",
+        "F4q (F4e G4e) F4h", "(A4e G4e) (F4e A4e) G4q. A4e", "C5q (D5e F5e) C5h",
+        "@f G4q (A4e C5e) (G4e A4e) (F4e D4e)", "C4h D4q F4q", "G4q. A4e (F4e G4e) (F4e D4e)", "@f C4w~",
         "C4h rh", R(3)), LYR),
     ('Violin I', 'Vln. I', instrument.Violin(), clef.TrebleClef(), P(
         G(1, 2, pad(2, 67, 81, '*'), '@pp @<'), "@mf @< (F5s G5s Ab5s C6s Db6s Eb6s F6s Ab6s) Bb6h",
@@ -269,9 +271,82 @@ def build(name, abbr, inst, clf, spec, lyr=None, cls=stream.Part):
     return p
 
 
+
+
+def polish(path):
+    """为 Sibelius 整理 MusicXML：A3 页面与 6mm 谱表（避免 18 行谱挤在一页上互相碰撞）、固定分行、
+    “力度+发夹”合并为“mf cresc.”一个表情记号、人声力度放在谱表上方（下方是歌词）、文字放在上方。"""
+    E = ET.SubElement
+    tree = ET.parse(path)
+    r = tree.getroot()
+    d = r.find('defaults')
+    for t in ('scaling', 'page-layout', 'system-layout', 'staff-layout'):
+        for x in d.findall(t):
+            d.remove(x)
+    new = ET.fromstring(
+        '<defaults><scaling><millimeters>5</millimeters><tenths>40</tenths></scaling>'
+        '<page-layout><page-height>3360</page-height><page-width>2376</page-width><page-margins type="both">'
+        '<left-margin>120</left-margin><right-margin>80</right-margin><top-margin>90</top-margin>'
+        '<bottom-margin>90</bottom-margin></page-margins></page-layout><system-layout><system-margins>'
+        '<left-margin>60</left-margin><right-margin>0</right-margin></system-margins>'
+        '<system-distance>120</system-distance><top-system-distance>220</top-system-distance></system-layout>'
+        '<staff-layout><staff-distance>70</staff-distance></staff-layout></defaults>')
+    for i, x in enumerate(new):
+        d.insert(i, x)
+    names = {s.get('id'): s.findtext('part-name') for s in r.iter('score-part')}
+    for n in r.iter('note'):  # 竖琴左手引用了未声明的乐器 id，会被当成“换乐器”
+        for x in n.findall('instrument'):
+            n.remove(x)
+    for part in r.findall('part'):
+        vocal = names[part.get('id')] == 'Soprano'
+        merged = set()
+        for m in part.findall('measure'):
+            if m.get('number') in ('5', '9', '13', '17', '20'):
+                m.insert(0, ET.Element('print', {'new-system': 'yes'}))
+            kids = list(m)
+            for i, el in enumerate(kids):
+                if el.tag != 'direction':
+                    continue
+                mt = el.find('direction-type/metronome/..')
+                if mt is not None:  # 速度文字与节拍器记号合成一个速度标记
+                    wd = next((k for k in kids[max(i - 1, 0):i + 2] if k.tag == 'direction' and k is not el
+                               and k.find('direction-type/words') is not None), None)
+                    if wd is not None:
+                        wd.insert(len(wd.findall('direction-type')), mt)
+                        wd.set('placement', 'above')
+                        for x in el.findall('sound'):
+                            wd.append(x)
+                        m.remove(el)
+                    continue
+                w = el.find('direction-type/wedge')
+                if w is not None and w.get('type') == 'stop':
+                    if w.get('number', '1') in merged:
+                        merged.discard(w.get('number', '1'))
+                        m.remove(el)
+                    continue
+                if w is not None:  # 同一位置已有力度记号 -> 改成文字 cresc./dim.
+                    j = i - 1
+                    while j >= 0 and kids[j].tag in ('direction', 'harmony') and kids[j].find('direction-type/dynamics') is None:
+                        j -= 1
+                    dyn = kids[j] if j >= 0 and kids[j].tag == 'direction' else None
+                    if dyn is not None and dyn.find('direction-type/dynamics') is not None \
+                            and dyn.findtext('offset') == el.findtext('offset'):
+                        dt = ET.Element('direction-type')
+                        E(dt, 'words', {'font-style': 'italic'}).text = ' cresc.' if w.get('type') == 'crescendo' else ' dim.'
+                        dyn.insert(len(dyn.findall('direction-type')), dt)
+                        merged.add(w.get('number', '1'))
+                        m.remove(el)
+                        continue
+                if el.find('direction-type/dynamics') is not None or w is not None:
+                    el.set('placement', 'above' if vocal else 'below')
+                elif el.find('direction-type/words') is not None:
+                    el.set('placement', 'above')
+    tree.write(path, encoding='UTF-8', xml_declaration=True)
+
+
 parts = [build(*x) for x in PARTS]
 
-vo = parts[12]  # 和弦标记写在人声声部上方
+vo = parts[10]  # 和弦标记写在竖琴上方（人声上方留给力度记号）
 for i, bar in enumerate(PROG, 1):
     for j, ch in enumerate(bar):
         vo.measure(i).insert(j * 4 / len(bar), csym(ch))
@@ -302,4 +377,5 @@ for p in parts:  # 实际音高音域检查
 
 out = sys.argv[1] if len(sys.argv) > 1 else '茉莉花_F调_迪士尼风格管弦乐总谱.musicxml'
 sc.write('musicxml', fp=out)
+polish(out)
 print('written', out)
