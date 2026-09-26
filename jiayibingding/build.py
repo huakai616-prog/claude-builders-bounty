@@ -682,6 +682,67 @@ def check(parsed):
     return problems, clashes
 
 
+# ---------------------------------------------------------------------------
+# Lyric subtitles (SRT) on the same timeline as the MIDI / ACE render
+# ---------------------------------------------------------------------------
+SUB_LINES = ["你我怎么两清 怎么忍心", "怎么做回甲乙丙丁", "难道非要耗尽所有委屈",
+             "再赔上这一条烂命", "爱情这场酷刑 教人看清", "爱与不爱之间的差距",
+             "若我落下泪滴", "能否换来一点同情"]
+SUB_LEAD = 0.2  # show each line slightly before it is sung
+SUB_TAIL = 1.5  # keep the last line up after the voice stops
+
+
+def sec_at(abs16):
+    """Seconds from the top of bar 1 to an absolute 16th, via TEMPI."""
+    marks = [((b - 1) * BAR16 + s, bpm) for b, s, bpm in TEMPI]
+    t = 0.0
+    for i, (a, bpm) in enumerate(marks):
+        if abs16 <= a:
+            break
+        end = marks[i + 1][0] if i + 1 < len(marks) else abs16
+        t += (min(abs16, end) - a) * 15.0 / bpm
+    return t
+
+
+def syllables(vocal_events):
+    """[lyric, start16, end16] per sung syllable (ties/melismas merged)."""
+    out = []
+    for e in vocal_events:
+        if e["pitches"] is None:
+            continue
+        if e["lyric"]:
+            out.append([e["lyric"], e["abs"], e["abs"] + e["dur"]])
+        elif out:
+            out[-1][2] = e["abs"] + e["dur"]
+    return out
+
+
+def write_srt(path, vocal_events):
+    syl = syllables(vocal_events)
+    lines, i = [], 0
+    for text in SUB_LINES:
+        chars = text.replace(" ", "")
+        chunk = syl[i:i + len(chars)]
+        assert "".join(s[0] for s in chunk) == chars, text
+        lines.append((text, sec_at(chunk[0][1]), sec_at(chunk[-1][2])))
+        i += len(chars)
+    assert i == len(syl), "subtitle lines do not cover every syllable"
+
+    def ts(t):
+        ms = int(round(t * 1000))
+        return (f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:"
+                f"{ms // 1000 % 60:02d},{ms % 1000:03d}")
+
+    out = []
+    for k, (text, s, e) in enumerate(lines):
+        start = max(0.0, s - SUB_LEAD)
+        end = (lines[k + 1][1] - SUB_LEAD - 0.04 if k + 1 < len(lines)
+               else e + SUB_TAIL)
+        out.append(f"{k + 1}\n{ts(start)} --> {ts(end)}\n{text}\n")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(out))
+
+
 SOUNDS = {"Voice": ("Voice", "voice.vocals"),
           "Violin I": ("Violin", "strings.violin"),
           "Violin II": ("Violin", "strings.violin"),
@@ -734,6 +795,7 @@ def main():
                lyrics=False, with_cc=False)
     write_midi(os.path.join(OUT, "甲乙丙丁_弦乐五重奏_伴奏.mid"),
                [x for x in all_ids if x != "vox"], parsed)
+    write_srt(os.path.join(OUT, "甲乙丙丁_副歌_歌词字幕.srt"), parsed["vox"])
     print("written to", OUT)
 
 
