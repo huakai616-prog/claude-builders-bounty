@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "acestudio": {
+      "source": {
+        "source": "github",
+        "repo": "BeatMagic/acestudio_agent_plugin"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "acestudio@acestudio": true
+  }
+}
