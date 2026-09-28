@@ -81,11 +81,12 @@ def proof_midi(bars):
         ev = []
         for b in bars:
             base = (b["bar"] - 1) * 16
-            octv = 12 if staff == "rh" and b.get("rh_ottava") else 0
             for v in b[staff]:
                 for e in PT.parse_voice(v):
                     if e["pitches"] is None:
                         continue
+                    octv = PT.ottava_shift(b, e["pos"]) if staff == "rh" \
+                        else 0
                     for p in e["pitches"]:
                         n = midi_of(p) + octv
                         on = (base + e["pos"]) * t16

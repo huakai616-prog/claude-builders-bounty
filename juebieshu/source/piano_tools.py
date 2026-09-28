@@ -67,6 +67,15 @@ def parse_voice(s):
     return evs
 
 
+def ottava_shift(b, pos):
+    """Semitones to add to a printed RH pitch at 16th `pos` of bar b to get
+    the sounding pitch (8va bracket; it may end inside the bar at
+    rh_ottava_until)."""
+    if not b.get("rh_ottava"):
+        return 0
+    return 12 if pos < b.get("rh_ottava_until", 16) else 0
+
+
 def check(bars):
     errs = []
     seen = set()
@@ -127,22 +136,30 @@ def split_rest(pos, dur):
     return pieces
 
 
-def ly_pitch(p):
+def ly_pitch(p, shift=0):
     s, acc, o = re.fullmatch(r"([A-G])([#b]{0,2})(-?\d)", p).groups()
-    o = int(o)
+    o = int(o) + shift // 12
     accs = {"": "", "#": "is", "##": "isis", "b": "es", "bb": "eses"}[acc]
     return (s.lower() + accs
             + ("'" * (o - 3) if o >= 3 else "," * (3 - o)))
 
 
-def ly_voice_bar(s, clef_changes=None):
+def ly_voice_bar(s, clef_changes=None, bar=None, emit_ottava=True):
+    """bar: the transcription bar (for 8va). LilyPond's \\ottava wants the
+    sounding pitch, so 8va notes are written an octave up here."""
     toks = []
     clef_changes = dict(clef_changes or {})
+    ott_end = bar.get("rh_ottava_until", 16) if bar and \
+        bar.get("rh_ottava") else None
     for e in parse_voice(s):
         if e["pos"] in clef_changes:
             toks.append(f"\\clef {clef_changes.pop(e['pos'])}")
+        if emit_ottava and ott_end is not None and ott_end < 16 and \
+                e["pos"] == ott_end:
+            toks.append("\\ottava #0")
+        sh = ottava_shift(bar, e["pos"]) if bar else 0
         if e["grace"]:
-            toks.append(f"\\slashedGrace {{ {ly_pitch(e['grace'])}16 }}")
+            toks.append(f"\\slashedGrace {{ {ly_pitch(e['grace'], sh)}16 }}")
         pieces = (split_rest if e["pitches"] is None else split_dur)(
             e["pos"], e["dur"])
         for i, d in enumerate(pieces):
@@ -150,7 +167,7 @@ def ly_voice_bar(s, clef_changes=None):
             if e["pitches"] is None:
                 toks.append("r" + LY_DUR[d])
                 continue
-            ps = [ly_pitch(x) for x in e["pitches"]]
+            ps = [ly_pitch(x, sh) for x in e["pitches"]]
             t = ps[0] if len(ps) == 1 else "<" + " ".join(ps) + ">"
             t += LY_DUR[d]
             if first and e["arp"]:
@@ -195,9 +212,12 @@ def build_ly(bars, first, last):
         if o != ott:
             pre = f"\\ottava #{o} "
             ott = o
+        if o and b.get("rh_ottava_until", 16) < 16:
+            ott = 0          # the bracket ends inside this bar
         for i in range(nrh):
             src = b["rh"][i] if i < len(b["rh"]) else None
-            body = ly_voice_bar(src) if src else "s1"
+            body = ly_voice_bar(src, bar=b, emit_ottava=i == 0) \
+                if src else "s1"
             rh[i].append((brk if i == 0 else "") + (pre if i == 0 else "")
                          + body + " |")
         clefs = clef_list(b)

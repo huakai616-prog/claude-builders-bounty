@@ -312,7 +312,6 @@ def load_piano():
     tied = {}  # (staff, voice) -> set of pitches tied over from before
     for b in sorted(bars, key=lambda x: x["bar"]):
         base = (b["bar"] - 1) * BAR16
-        octv = 12 if b.get("rh_ottava") else 0
         for staff, store in (("rh", rh_snd), ("lh", lh_snd)):
             for vi, v in enumerate(b[staff]):
                 carry = tied.get((staff, vi), set())
@@ -320,8 +319,9 @@ def load_piano():
                     if e["pitches"] is None:
                         carry = set()
                         continue
-                    ps = {midi_of(x) + (octv if staff == "rh" else 0)
-                          for x in e["pitches"]}
+                    octv = PT.ottava_shift(b, e["pos"]) if staff == "rh" \
+                        else 0
+                    ps = {midi_of(x) + octv for x in e["pitches"]}
                     for t in range(e["pos"], e["pos"] + e["dur"]):
                         store.setdefault(base + t, set()).update(ps)
                     if staff == "rh":
@@ -527,19 +527,29 @@ def check_fidelity(parsed, bars=None):
     for b in range(1, NBARS + 1):
         if not in_bars(b, bars):
             continue
+        t0 = (b - 1) * BAR16
         for half in (0, 1):
-            t = (b - 1) * BAR16 + half * 8
+            t = t0 + half * 8
             if (b, half) in BASS_FREE:
                 continue
-            lh = piano["lh"].get(t)
             snd = grid.get(t)
-            if not lh or not snd:
+            if not snd or not piano["lh"].get(t):
                 continue
-            want = min(lh) % 12
+            # acceptable bass pitch classes: the chart's lowest LH note here,
+            # the bar's downbeat bass (held under an arpeggio), and the
+            # lowest LH note of this half bar
+            ok = {min(piano["lh"][t]) % 12}
+            if piano["lh"].get(t0):
+                ok.add(min(piano["lh"][t0]) % 12)
+            half_notes = [min(piano["lh"][x]) for x in range(t, t + 8)
+                          if piano["lh"].get(x)]
+            if half_notes:
+                ok.add(min(half_notes) % 12)
             have = min(x[1] for x in snd)
-            if have % 12 != want:
+            if have % 12 not in ok:
                 out.append(f"BASS: m{b} beat {1 + half * 2}: lowest note "
-                           f"{name_of(have)}, chart bass {_NAMES[want]}")
+                           f"{name_of(have)}, chart bass "
+                           f"{'/'.join(_NAMES[x] for x in sorted(ok))}")
     return out
 
 
