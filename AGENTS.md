@@ -22,9 +22,11 @@
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
+| 诀别书（全曲，钢琴曲，作曲 邓垚） | 纯弦乐五重奏 · F 大调原调（d 小调色彩）· ♩=112 | `claude/determined-galileo-0epaj3` | `juebieshu/`，成品在 `干活/诀别书/` | 已完成：五线谱钢琴谱转写、好莱坞标准总谱与分谱（LilyPond）、西贝柳斯 MusicXML、ACE 用 MIDI。待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 以上分支都还**没有合并进 `main`**。合并以后记得更新这张表。
+- 泪海已经合并进 `main`，其余分支都还**没有合并**。合并以后记得更新这张表。
+- 其他分支上还有后来做的歌（我不难过、茶汤、情歌、大东北我的家乡），各自的 `AGENTS.md` 里有更新的约定，接手前先看一眼那几个分支。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
 
@@ -108,6 +110,11 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **人声长音附近的弦乐**：弦乐和人声的长音不要构成小九度。例如人声 C4 持续时，B♭m6 的 D♭ 只能放在 C4 下面，放在上面就成了小九度。`--check` 会抓出来。
 - **歌词 MIDI**：每个字一个 lyrics meta 事件；拖腔音符写 `-`；倚音带那个字，主音写 `-`。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
+- **钢琴谱（五线谱）转写**（诀别书）：把截图按谱表线自动切成每小节 4 倍放大图，叠上标好音名的刻度线（`juebieshu/source/`），两个代理各自独立转写再比对，最后用 LilyPond 画回五线谱和原图逐小节对照（`juebieshu/transcription/`）。截图是别人的谱，不进仓库（见 `.gitignore`）。
+- **LilyPond 2.24 的字体**：`property-defaults.fonts.serif` 在 2.24 里**不生效**，正文会退回 C059。要写 `#(define fonts (set-global-fonts #:roman "..." #:sans "..." #:factor (/ staff-height pt 20)))`。情歌的 `engrave.py` 也受影响。
+- **LilyPond 里的中文字体**：Noto CJK 的 `.ttc` 会被整套嵌进 PDF，每种字重约 1 MB。`juebieshu/engrave.py` 的 `cjk_subset()` 用 fontTools 只截取用到的字，并改成私有的字体名（CFF 内部名也要改，不然 LilyPond 报同名冲突、不嵌入）。改完总谱约 0.4 MB。
+- **ACE 里拨弦和弱音器只能手动设**：智能模式不会从 MIDI 推出来。要导给 ACE 的编配尽量不用；诀别书全曲没有用。
+- **云端容器只有 4 核时**，多代理工作流同时只跑 2 个代理，大任务要预留时间。
 
 ## 待办 / 待确认
 
