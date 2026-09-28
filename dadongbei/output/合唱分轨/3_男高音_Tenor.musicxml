@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P4540ca80b9e216690faf33ff549d7daf">
+    <score-part id="Pc0241e1f5ae473988b77a3a5392bab09">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="I06e8a65f4b51a849d8a1510226053ad5">
+      <score-instrument id="I847365bea49d4204ca560dbb1b39e71e">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I06e8a65f4b51a849d8a1510226053ad5">
+      <midi-instrument id="I847365bea49d4204ca560dbb1b39e71e">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P4540ca80b9e216690faf33ff549d7daf">
+  <part id="Pc0241e1f5ae473988b77a3a5392bab09">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -126,8 +126,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="1" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -144,7 +146,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -177,6 +183,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>E</step>
@@ -2075,8 +2082,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -2093,7 +2102,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -3461,6 +3474,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>F</step>
@@ -3512,6 +3526,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -3534,8 +3555,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

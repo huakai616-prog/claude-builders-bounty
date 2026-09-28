@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P01533738b8a5e6b1638aa3c685ebe435">
+    <score-part id="P30d3553c1962c0f63c0546f172bb2a40">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="Ia4b7b6376f8406f8577a7918dc1bdfc3">
+      <score-instrument id="Ib17c7f24953d588c0dbf301558bbeba8">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc.</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ia4b7b6376f8406f8577a7918dc1bdfc3">
+      <midi-instrument id="Ib17c7f24953d588c0dbf301558bbeba8">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P01533738b8a5e6b1638aa3c685ebe435">
+  <part id="P30d3553c1962c0f63c0546f172bb2a40">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -194,6 +194,7 @@
           <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -3629,6 +3630,12 @@
         <sound dynamics="107" />
       </direction>
       <sound tempo="112" />
+      <sound tempo="100">
+        <offset>10080</offset>
+      </sound>
+      <sound tempo="88">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -3642,8 +3649,7 @@
           <tied type="start" />
         </notations>
       </note>
-      <sound tempo="100" />
-      <sound tempo="88" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>D</step>
@@ -3687,6 +3693,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -3709,8 +3722,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

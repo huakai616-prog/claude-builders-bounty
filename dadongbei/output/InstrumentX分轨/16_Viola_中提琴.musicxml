@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pe6d2144ca8a8e001152d4e149b3babf1">
+    <score-part id="P344dc55085b0e6ac19b55711465c5dcb">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I0c010ff6d12211eaabb90cf91b2ab871">
+      <score-instrument id="I305e0b51cec57715b749a5bb191421bc">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla.</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I0c010ff6d12211eaabb90cf91b2ab871">
+      <midi-instrument id="I305e0b51cec57715b749a5bb191421bc">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pe6d2144ca8a8e001152d4e149b3babf1">
+  <part id="P344dc55085b0e6ac19b55711465c5dcb">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -145,6 +145,9 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -165,7 +168,7 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
-      <sound tempo="64" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>C</step>
@@ -4955,6 +4958,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>F</step>
@@ -4999,6 +5003,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -5021,8 +5032,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

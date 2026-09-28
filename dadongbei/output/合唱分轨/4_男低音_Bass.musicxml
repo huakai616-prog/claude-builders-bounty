@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P262c2fb3063040fd670624b27cec5408">
+    <score-part id="P9e72b8a1a4733a6e1e80da798dba108d">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="I21b6ae2f9a6fb6b3c25fc9720c509185">
+      <score-instrument id="I063ededff80f11ae63148690e9eb3873">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I21b6ae2f9a6fb6b3c25fc9720c509185">
+      <midi-instrument id="I063ededff80f11ae63148690e9eb3873">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P262c2fb3063040fd670624b27cec5408">
+  <part id="P9e72b8a1a4733a6e1e80da798dba108d">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -142,7 +142,11 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -152,7 +156,11 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -185,6 +193,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -3497,6 +3506,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>D</step>
@@ -3547,6 +3557,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -3569,8 +3586,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P45f4a93d2a5443a920ef851691c1617e">
+    <score-part id="P876c25ec53035a827dd24e9f4b2f94a8">
       <part-name>Piccolo</part-name>
       <part-abbreviation>Picc.</part-abbreviation>
-      <score-instrument id="I2b0c50f6089030d772b48b6aead81608">
+      <score-instrument id="I4fdad57873fad9ee17dcb30cf66ae405">
         <instrument-name>Piccolo</instrument-name>
         <instrument-abbreviation>Picc.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute.piccolo</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I2b0c50f6089030d772b48b6aead81608">
+      <midi-instrument id="I4fdad57873fad9ee17dcb30cf66ae405">
         <midi-channel>1</midi-channel>
         <midi-program>73</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P45f4a93d2a5443a920ef851691c1617e">
+  <part id="P876c25ec53035a827dd24e9f4b2f94a8">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -112,6 +112,9 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest />
         <duration>30240</duration>
@@ -124,7 +127,7 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
-      <sound tempo="64" />
+      <sound tempo="34" />
       <note>
         <rest />
         <duration>10080</duration>
@@ -2008,11 +2011,13 @@
       </note>
     </measure>
     <measure implicit="no" number="75">
+      <sound tempo="122">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
       </note>
-      <sound tempo="122" />
     </measure>
     <measure implicit="no" number="76">
       <direction placement="above">
@@ -2063,6 +2068,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -2121,6 +2127,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>E</step>
@@ -2143,8 +2156,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

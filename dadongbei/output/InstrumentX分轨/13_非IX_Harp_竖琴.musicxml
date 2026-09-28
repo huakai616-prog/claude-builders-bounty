@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pdddc626d5703be878f8795b28887419f">
+    <score-part id="P7841b6a02ef47aaf930d985f32d96914">
       <part-name>Harp</part-name>
       <part-abbreviation>Hp.</part-abbreviation>
-      <score-instrument id="I895267f920c9cf70de7a8ae0d4dcf0ac">
+      <score-instrument id="I6e87f0a3d80adbbd89d30dffec897c1b">
         <instrument-name>Harp</instrument-name>
         <instrument-abbreviation>Hp.</instrument-abbreviation>
         <instrument-sound>pluck.harp</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I895267f920c9cf70de7a8ae0d4dcf0ac">
+      <midi-instrument id="I6e87f0a3d80adbbd89d30dffec897c1b">
         <midi-channel>13</midi-channel>
         <midi-program>47</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pdddc626d5703be878f8795b28887419f">
+  <part id="P7841b6a02ef47aaf930d985f32d96914">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -929,7 +929,7 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -982,6 +982,7 @@
         <type>quarter</type>
         <staff>1</staff>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>C</step>
@@ -1341,7 +1342,7 @@
       </note>
     </measure>
     <measure implicit="no" number="10">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -2445,7 +2446,7 @@
       </note>
     </measure>
     <measure implicit="no" number="21">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -2605,7 +2606,7 @@
         <staff>1</staff>
         <sound dynamics="57" />
       </direction>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -4963,7 +4964,7 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮</words>
         </direction-type>
@@ -5261,7 +5262,7 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♭</words>
         </direction-type>
@@ -8057,7 +8058,7 @@
       </note>
     </measure>
     <measure implicit="no" number="57">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮ D♯ F♯</words>
         </direction-type>
@@ -8271,7 +8272,7 @@
         <sound dynamics="88" />
       </direction>
       <sound tempo="128" />
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">D♮</words>
         </direction-type>
@@ -9003,7 +9004,7 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -9303,7 +9304,7 @@
       </note>
     </measure>
     <measure implicit="no" number="65">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -11947,6 +11948,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>C</step>
@@ -12331,6 +12333,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -12480,8 +12489,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

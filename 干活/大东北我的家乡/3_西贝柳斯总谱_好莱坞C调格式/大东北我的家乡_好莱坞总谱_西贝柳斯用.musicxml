@@ -67,67 +67,67 @@ Orchestra: Instrument X · Choir: ACE Studio
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P0074ea8e624b54ad6ec78124c5a575e8">
+    <score-part id="Pdf6042dd2c77036f3796e8c2e5b8fa91">
       <part-name>Piccolo</part-name>
       <part-abbreviation>Picc.</part-abbreviation>
-      <score-instrument id="I666065775e4ed704b6261c2322a34374">
+      <score-instrument id="Ib0d566d4dd9878ff8e7a24916c33aa88">
         <instrument-name>Piccolo</instrument-name>
         <instrument-abbreviation>Picc.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute.piccolo</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I666065775e4ed704b6261c2322a34374">
+      <midi-instrument id="Ib0d566d4dd9878ff8e7a24916c33aa88">
         <midi-channel>1</midi-channel>
         <midi-program>73</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pa8cbdba20fadfa7266024883eea091d8">
+    <score-part id="P777f25dea10fec001df1f4b0cef16aac">
       <part-name>Flute</part-name>
       <part-abbreviation>Fl.</part-abbreviation>
-      <score-instrument id="I22074f71a4255f066b2e5c2a7a753183">
+      <score-instrument id="I5293bcaedf9eec4bb23be94eb2f7d0d3">
         <instrument-name>Flute</instrument-name>
         <instrument-abbreviation>Fl.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I22074f71a4255f066b2e5c2a7a753183">
+      <midi-instrument id="I5293bcaedf9eec4bb23be94eb2f7d0d3">
         <midi-channel>2</midi-channel>
         <midi-program>74</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P80fa91ce642fb7af255ee6a19d64ebca">
+    <score-part id="P7af7a8f4e679435a99c5485922c5920a">
       <part-name>Oboe</part-name>
       <part-abbreviation>Ob.</part-abbreviation>
-      <score-instrument id="I420f9378a277475c72c06a199ee3bed7">
+      <score-instrument id="I0d40f3a400243d59ff68a3d57ef184ad">
         <instrument-name>Oboe</instrument-name>
         <instrument-abbreviation>Ob.</instrument-abbreviation>
         <instrument-sound>wind.reed.oboe</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I420f9378a277475c72c06a199ee3bed7">
+      <midi-instrument id="I0d40f3a400243d59ff68a3d57ef184ad">
         <midi-channel>3</midi-channel>
         <midi-program>69</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P0c9bfa711ad025a01f664527a4677a92">
+    <score-part id="Pb72f12c4c071f71804d2e3be99c8b5e8">
       <part-name>Clarinet in A</part-name>
       <part-abbreviation>Cl.</part-abbreviation>
-      <score-instrument id="I4f59f836a57550905bf4bf10112e8b21">
+      <score-instrument id="I0cd6f46c6e20c6a5e7e015a34c88f846">
         <instrument-name>Clarinet in A</instrument-name>
         <instrument-abbreviation>Cl.</instrument-abbreviation>
         <instrument-sound>wind.reed.clarinet.a</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4f59f836a57550905bf4bf10112e8b21">
+      <midi-instrument id="I0cd6f46c6e20c6a5e7e015a34c88f846">
         <midi-channel>4</midi-channel>
         <midi-program>72</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P5fa23906c43206b46810a779413970be">
+    <score-part id="Pddb90996c2cd540ee389b43a97b63aa9">
       <part-name>Bassoon</part-name>
       <part-abbreviation>Bsn.</part-abbreviation>
-      <score-instrument id="Id80a00b4a0f868d692422170c67099de">
+      <score-instrument id="Ia403e404b44bb9cd13d7185a19670e4b">
         <instrument-name>Bassoon</instrument-name>
         <instrument-abbreviation>Bsn.</instrument-abbreviation>
         <instrument-sound>wind.reed.bassoon</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id80a00b4a0f868d692422170c67099de">
+      <midi-instrument id="Ia403e404b44bb9cd13d7185a19670e4b">
         <midi-channel>5</midi-channel>
         <midi-program>71</midi-program>
       </midi-instrument>
@@ -137,7 +137,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P6769e26dabba791565e349975c57e106">
+    <score-part id="P15ab2602ebffaf538bba77a1be5c82d3">
       <part-name>Horn in F</part-name>
       <part-name-display>
         <display-text>Horns 1.3</display-text>
@@ -146,17 +146,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Hns. 1.3</display-text>
       </part-abbreviation-display>
-      <score-instrument id="Id94b717c361bc04e22e26d2365da2f1b">
+      <score-instrument id="Ia3fa3d05234ec38264de91fdcd639cc8">
         <instrument-name>Horns 1.3</instrument-name>
         <instrument-abbreviation>Hns. 1.3</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id94b717c361bc04e22e26d2365da2f1b">
+      <midi-instrument id="Ia3fa3d05234ec38264de91fdcd639cc8">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pef6b6e0f34b9edfb059aed4bc62206dd">
+    <score-part id="P018bda5ea0811344fa899629cc8a4c5c">
       <part-name>Horn in F</part-name>
       <part-name-display>
         <display-text>Horns 2.4</display-text>
@@ -165,17 +165,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Hns. 2.4</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I4d0e05f6e8267e7c4009fed2533e5c27">
+      <score-instrument id="Ibe80bbfeb2e0992d037f874f645bf1dd">
         <instrument-name>Horns 2.4</instrument-name>
         <instrument-abbreviation>Hns. 2.4</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4d0e05f6e8267e7c4009fed2533e5c27">
+      <midi-instrument id="Ibe80bbfeb2e0992d037f874f645bf1dd">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pfa50772aad95d2c756b10b1dbcf08bb2">
+    <score-part id="Pbc91c81fb736b015f965a6fc4c40e8fa">
       <part-name>Trumpet in B♭</part-name>
       <part-name-display>
         <display-text>Trumpet in B</display-text>
@@ -185,38 +185,38 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Tpt.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="If0e2166ca5d0a27db7eb77a12363cf61">
+      <score-instrument id="I4b67defce8f8b8b3c167be0e501a468e">
         <instrument-name>Trumpet in B♭</instrument-name>
         <instrument-abbreviation>Tpt.</instrument-abbreviation>
         <instrument-sound>brass.trumpet.bflat</instrument-sound>
       </score-instrument>
-      <midi-instrument id="If0e2166ca5d0a27db7eb77a12363cf61">
+      <midi-instrument id="I4b67defce8f8b8b3c167be0e501a468e">
         <midi-channel>7</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pd2604ea43e12615db6f1c2b32541441d">
+    <score-part id="P0425c45bc2b6030edfb0c462ac4306bd">
       <part-name>Trombone</part-name>
       <part-abbreviation>Tbn.</part-abbreviation>
-      <score-instrument id="Ibab99a63fa28d7a146a25fea8ac043ac">
+      <score-instrument id="I4ee9c9920ba3863669d830fffeac4bd7">
         <instrument-name>Trombone</instrument-name>
         <instrument-abbreviation>Tbn.</instrument-abbreviation>
         <instrument-sound>brass.trombone</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ibab99a63fa28d7a146a25fea8ac043ac">
+      <midi-instrument id="I4ee9c9920ba3863669d830fffeac4bd7">
         <midi-channel>8</midi-channel>
         <midi-program>58</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pf9365753176e2d253a35a60499c2725a">
+    <score-part id="P6e8623be0c4a297d6b1cfd4b74dc57d3">
       <part-name>Tuba</part-name>
       <part-abbreviation>Tba.</part-abbreviation>
-      <score-instrument id="Iacb929269caadba5cb89dadc3eae22d7">
+      <score-instrument id="I976f970a2c88ad1e15b2dbe56c0514ca">
         <instrument-name>Tuba</instrument-name>
         <instrument-abbreviation>Tba.</instrument-abbreviation>
         <instrument-sound>brass.tuba</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Iacb929269caadba5cb89dadc3eae22d7">
+      <midi-instrument id="I976f970a2c88ad1e15b2dbe56c0514ca">
         <midi-channel>9</midi-channel>
         <midi-program>59</midi-program>
       </midi-instrument>
@@ -226,42 +226,42 @@ Orchestra: Instrument X · Choir: ACE Studio
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P3fe8dd1a7f4e28653deadeba49531d22">
+    <score-part id="P86fa40f74547ff0c7fe16beb50fea303">
       <part-name>Timpani</part-name>
       <part-abbreviation>Timp.</part-abbreviation>
-      <score-instrument id="I78d45af8200de8a688498363be5addb7">
+      <score-instrument id="Ibb8e0db1ef720c7b6a36af3f782e6504">
         <instrument-name>Timpani</instrument-name>
         <instrument-abbreviation>Timp.</instrument-abbreviation>
         <instrument-sound>drum.timpani</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I78d45af8200de8a688498363be5addb7">
+      <midi-instrument id="Ibb8e0db1ef720c7b6a36af3f782e6504">
         <midi-channel>11</midi-channel>
         <midi-program>48</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P53bf4f04b2d9f4daccde9795ed4cb121">
+    <score-part id="Pd9fdd88d59d6c75cb633689bc8b2acbe">
       <part-name>Glockenspiel</part-name>
       <part-abbreviation>Glock.</part-abbreviation>
-      <score-instrument id="I85b5bb0e616dfecb4cb65fa7df2efa9a">
+      <score-instrument id="Ie2146ddf6f13061a725840aee75b5767">
         <instrument-name>Glockenspiel</instrument-name>
         <instrument-abbreviation>Glock.</instrument-abbreviation>
         <instrument-sound>pitched-percussion.glockenspiel</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I85b5bb0e616dfecb4cb65fa7df2efa9a">
+      <midi-instrument id="Ie2146ddf6f13061a725840aee75b5767">
         <midi-channel>12</midi-channel>
         <midi-program>10</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="3" type="stop" />
-    <score-part id="Pfb572b039b3ce368b8682d479cfea2bf">
+    <score-part id="Peff80f19c7d471cdec9d845f080df117">
       <part-name>Harp</part-name>
       <part-abbreviation>Hp.</part-abbreviation>
-      <score-instrument id="I2b1544a5cb46ca74b9dc423cb9277e91">
+      <score-instrument id="I4f6a7dc4cbfa6545e45d860eb05e0e50">
         <instrument-name>Harp</instrument-name>
         <instrument-abbreviation>Hp.</instrument-abbreviation>
         <instrument-sound>pluck.harp</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I2b1544a5cb46ca74b9dc423cb9277e91">
+      <midi-instrument id="I4f6a7dc4cbfa6545e45d860eb05e0e50">
         <midi-channel>13</midi-channel>
         <midi-program>47</midi-program>
       </midi-instrument>
@@ -270,7 +270,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       <group-symbol>bracket</group-symbol>
       <group-barline>no</group-barline>
     </part-group>
-    <score-part id="P577b9ba4e07460722a7f64e5f300f1c0">
+    <score-part id="P513a7e26bcdfe218122166a371a8c407">
       <part-name>Soprano</part-name>
       <part-name-display>
         <display-text>Sopranos</display-text>
@@ -279,17 +279,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>S.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I78ec7591ea797684fbc02b6da4d56d4c">
+      <score-instrument id="If1f0be447262b0079fe50d4491df52cd">
         <instrument-name>Sopranos</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I78ec7591ea797684fbc02b6da4d56d4c">
+      <midi-instrument id="If1f0be447262b0079fe50d4491df52cd">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pb815aa293616e24dfe3396db8c389980">
+    <score-part id="Pf01162ea44cb0309849ce3eea22d6670">
       <part-name>Alto</part-name>
       <part-name-display>
         <display-text>Altos</display-text>
@@ -298,17 +298,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>A.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="Id1fbd82c4dc8ee07950cb49b4c3f0b11">
+      <score-instrument id="Ibb8a82a26941bcb2d63c6b73c54a715d">
         <instrument-name>Altos</instrument-name>
         <instrument-abbreviation>A.</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id1fbd82c4dc8ee07950cb49b4c3f0b11">
+      <midi-instrument id="Ibb8a82a26941bcb2d63c6b73c54a715d">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P03e2700774131a4c194d1a1557c00866">
+    <score-part id="P0828c2f1e6479e46b677a2f760e2b460">
       <part-name>Tenor</part-name>
       <part-name-display>
         <display-text>Tenors</display-text>
@@ -317,17 +317,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>T.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="Ifadb351fe01f2ccc97e4923c3be2532a">
+      <score-instrument id="I0dd245c04e1d3517fa975dba701f52cf">
         <instrument-name>Tenors</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ifadb351fe01f2ccc97e4923c3be2532a">
+      <midi-instrument id="I0dd245c04e1d3517fa975dba701f52cf">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P989bca26abd1c3f8e18ba87cc8f2fab1">
+    <score-part id="P1e9743575e8b718cc8ded6cdff5a84f5">
       <part-name>Bass</part-name>
       <part-name-display>
         <display-text>Basses</display-text>
@@ -336,12 +336,12 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>B.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I2de44f87f3ac93d0b797c8a40e28387b">
+      <score-instrument id="I5fac363dc62ff8b1d2e5cae1c2ed75e1">
         <instrument-name>Basses</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I2de44f87f3ac93d0b797c8a40e28387b">
+      <midi-instrument id="I5fac363dc62ff8b1d2e5cae1c2ed75e1">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
@@ -351,7 +351,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P6f2f9ecb3fb6769f7002e4f58af2cb9e">
+    <score-part id="P14f19a774bd59148d178747f74fb6038">
       <part-name>Violin I</part-name>
       <part-name-display>
         <display-text>Violins I</display-text>
@@ -360,17 +360,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Vlns. I</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I66186787e37becbeba2ff0da88b7800e">
+      <score-instrument id="I3c992fe2f188979ff4416a5f81d8718d">
         <instrument-name>Violins I</instrument-name>
         <instrument-abbreviation>Vlns. I</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I66186787e37becbeba2ff0da88b7800e">
+      <midi-instrument id="I3c992fe2f188979ff4416a5f81d8718d">
         <midi-channel>15</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P3fe8e1784956e57a06ca51e5e6c56171">
+    <score-part id="Pa3498c73da4a19c7ffcbab2795db2694">
       <part-name>Violin II</part-name>
       <part-name-display>
         <display-text>Violins II</display-text>
@@ -379,17 +379,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Vlns. II</display-text>
       </part-abbreviation-display>
-      <score-instrument id="Ice1f118c106700fa8e868b8082a53c06">
+      <score-instrument id="I42606292420ea753f4fb7a3f384f42c0">
         <instrument-name>Violins II</instrument-name>
         <instrument-abbreviation>Vlns. II</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ice1f118c106700fa8e868b8082a53c06">
+      <midi-instrument id="I42606292420ea753f4fb7a3f384f42c0">
         <midi-channel>15</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P0a7498da4412b5c15572746d26067c63">
+    <score-part id="P9b6385a7e154bef3314a12d36803efaf">
       <part-name>Viola</part-name>
       <part-name-display>
         <display-text>Violas</display-text>
@@ -398,17 +398,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Vlas.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="Id48d19ef3005e4cb60b272b168960173">
+      <score-instrument id="If92fc72ab856ccff3ffd58593c9b8869">
         <instrument-name>Violas</instrument-name>
         <instrument-abbreviation>Vlas.</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id48d19ef3005e4cb60b272b168960173">
+      <midi-instrument id="If92fc72ab856ccff3ffd58593c9b8869">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pbb6175078300f62efaa790eaeef7e5fe">
+    <score-part id="P4ee059245446c3c43d85d94ac2c69992">
       <part-name>Violoncello</part-name>
       <part-name-display>
         <display-text>Celli</display-text>
@@ -417,17 +417,17 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Vc.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I81a9b186ae0a783c3bd7b8adc90f12c1">
+      <score-instrument id="I0cbcab89a510531638ee86200162f860">
         <instrument-name>Celli</instrument-name>
         <instrument-abbreviation>Vc.</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I81a9b186ae0a783c3bd7b8adc90f12c1">
+      <midi-instrument id="I0cbcab89a510531638ee86200162f860">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pe231e92dc2cd941a96ba975154752aa3">
+    <score-part id="Pa212b58126ae88996220b6829a982493">
       <part-name>Contrabass</part-name>
       <part-name-display>
         <display-text>Contrabasses</display-text>
@@ -436,19 +436,19 @@ Orchestra: Instrument X · Choir: ACE Studio
       <part-abbreviation-display>
         <display-text>Cb.</display-text>
       </part-abbreviation-display>
-      <score-instrument id="I0af16cb335cf0b86a58ae835c1472595">
+      <score-instrument id="I0ea105bdc6d3ab96df24d93bceca2f72">
         <instrument-name>Contrabasses</instrument-name>
         <instrument-abbreviation>Cb.</instrument-abbreviation>
         <instrument-sound>strings.contrabass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I0af16cb335cf0b86a58ae835c1472595">
+      <midi-instrument id="I0ea105bdc6d3ab96df24d93bceca2f72">
         <midi-channel>16</midi-channel>
         <midi-program>44</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="5" type="stop" />
   </part-list>
-  <part id="P0074ea8e624b54ad6ec78124c5a575e8">
+  <part id="Pdf6042dd2c77036f3796e8c2e5b8fa91">
     <measure implicit="no" number="1">
       <print>
         <measure-numbering>measure</measure-numbering>
@@ -515,6 +515,9 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest />
         <duration>30240</duration>
@@ -538,7 +541,6 @@ Orchestra: Instrument X · Choir: ACE Studio
           <words font-size="8" font-style="italic">free — fermata</words>
         </direction-type>
       </direction>
-      <sound tempo="64" />
       <note>
         <rest />
         <duration>10080</duration>
@@ -1229,6 +1231,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -2450,11 +2453,13 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="75">
+      <sound tempo="122">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
       </note>
-      <sound tempo="122" />
     </measure>
     <measure implicit="no" number="76">
       <direction placement="above">
@@ -2578,6 +2583,13 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>E</step>
@@ -2606,11 +2618,9 @@ Orchestra: Instrument X · Choir: ACE Studio
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
-  <part id="Pa8cbdba20fadfa7266024883eea091d8">
+  <part id="P777f25dea10fec001df1f4b0cef16aac">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -4882,6 +4892,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>F</step>
@@ -6448,6 +6459,11 @@ Orchestra: Instrument X · Choir: ACE Studio
         </direction-type>
         <sound dynamics="57" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -6474,6 +6490,11 @@ Orchestra: Instrument X · Choir: ACE Studio
         <duration>10080</duration>
         <type>quarter</type>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="stop" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -6560,7 +6581,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P80fa91ce642fb7af255ee6a19d64ebca">
+  <part id="P7af7a8f4e679435a99c5485922c5920a">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -7184,7 +7205,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -7258,7 +7279,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -8359,6 +8380,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -8519,7 +8541,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -8560,7 +8582,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -9459,7 +9481,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -9504,7 +9526,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -9611,7 +9633,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P0c9bfa711ad025a01f664527a4677a92">
+  <part id="Pb72f12c4c071f71804d2e3be99c8b5e8">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -9654,7 +9676,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -9695,7 +9717,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -10734,7 +10756,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -10799,7 +10821,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -12002,6 +12024,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -12545,7 +12568,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -12586,7 +12609,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -13982,7 +14005,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -14020,7 +14043,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -14107,7 +14130,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P5fa23906c43206b46810a779413970be">
+  <part id="Pddb90996c2cd540ee389b43a97b63aa9">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -14146,7 +14169,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -14190,7 +14213,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -15028,7 +15051,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -15069,7 +15092,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -15483,6 +15506,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -15705,7 +15729,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -15739,7 +15763,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -16074,7 +16098,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -16095,7 +16119,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -16168,7 +16192,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P6769e26dabba791565e349975c57e106">
+  <part id="P15ab2602ebffaf538bba77a1be5c82d3">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -16290,7 +16314,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -16389,7 +16413,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -16826,7 +16850,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -16889,7 +16913,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -17548,6 +17572,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -17764,7 +17789,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -17804,7 +17829,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -18373,7 +18398,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18412,7 +18437,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -18546,7 +18571,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pef6b6e0f34b9edfb059aed4bc62206dd">
+  <part id="P018bda5ea0811344fa899629cc8a4c5c">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -18589,7 +18614,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18664,7 +18689,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -18906,7 +18931,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18954,7 +18979,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -19563,6 +19588,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -19771,7 +19797,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -19797,7 +19823,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -20361,7 +20387,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -20382,7 +20408,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -20481,7 +20507,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pfa50772aad95d2c756b10b1dbcf08bb2">
+  <part id="Pbc91c81fb736b015f965a6fc4c40e8fa">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -20707,7 +20733,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -20753,7 +20779,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -21130,6 +21156,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>E</step>
@@ -21290,7 +21317,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -21333,7 +21360,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -22121,7 +22148,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pd2604ea43e12615db6f1c2b32541441d">
+  <part id="P0425c45bc2b6030edfb0c462ac4306bd">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -22166,7 +22193,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -22191,7 +22218,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -22363,7 +22390,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -22422,7 +22449,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -22844,6 +22871,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -22948,7 +22976,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -22974,7 +23002,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -23434,7 +23462,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pf9365753176e2d253a35a60499c2725a">
+  <part id="P6e8623be0c4a297d6b1cfd4b74dc57d3">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -23479,7 +23507,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -23504,7 +23532,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -23682,7 +23710,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -23723,7 +23751,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -24005,6 +24033,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -24128,7 +24157,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24162,7 +24191,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -24497,7 +24526,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24518,7 +24547,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -24591,7 +24620,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P3fe8dd1a7f4e28653deadeba49531d22">
+  <part id="P86fa40f74547ff0c7fe16beb50fea303">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -24646,7 +24675,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24682,7 +24711,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -24888,7 +24917,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24939,7 +24968,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -25351,6 +25380,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -25434,7 +25464,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -25470,7 +25500,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -25820,7 +25850,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -25851,7 +25881,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -25944,7 +25974,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P53bf4f04b2d9f4daccde9795ed4cb121">
+  <part id="Pd9fdd88d59d6c75cb633689bc8b2acbe">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -26657,6 +26687,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <direction placement="below">
         <direction-type>
           <dynamics default-x="-36" default-y="-80">
@@ -27460,7 +27491,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pfb572b039b3ce368b8682d479cfea2bf">
+  <part id="Peff80f19c7d471cdec9d845f080df117">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -28309,7 +28340,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="4">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -28694,7 +28725,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="10">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -29794,7 +29825,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="21">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -29955,7 +29986,7 @@ Orchestra: Instrument X · Choir: ACE Studio
         <staff>1</staff>
         <sound dynamics="57" />
       </direction>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -32310,7 +32341,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮</words>
         </direction-type>
@@ -32608,7 +32639,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♭</words>
         </direction-type>
@@ -34366,6 +34397,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -35247,7 +35279,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
         <staff>1</staff>
       </direction>
@@ -35403,7 +35435,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="57">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮ D♯ F♯</words>
         </direction-type>
@@ -35481,7 +35513,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
         <staff>1</staff>
       </direction>
@@ -35604,7 +35636,7 @@ Orchestra: Instrument X · Choir: ACE Studio
         <staff>1</staff>
         <sound dynamics="88" />
       </direction>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">D♮</words>
         </direction-type>
@@ -36337,7 +36369,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -36637,7 +36669,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="65">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -39764,7 +39796,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P577b9ba4e07460722a7f64e5f300f1c0">
+  <part id="P513a7e26bcdfe218122166a371a8c407">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -39803,7 +39835,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -39812,8 +39844,10 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -39830,12 +39864,16 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -40749,7 +40787,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -40844,7 +40882,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -42039,6 +42077,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -42074,7 +42113,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -42123,8 +42162,10 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="5" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -42141,7 +42182,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -42158,7 +42203,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -43355,7 +43400,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -43452,7 +43497,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -43578,7 +43623,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pb815aa293616e24dfe3396db8c389980">
+  <part id="Pf01162ea44cb0309849ce3eea22d6670">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -43617,7 +43662,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -43643,7 +43688,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -43654,11 +43703,15 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -44302,8 +44355,12 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
         <accidental>natural</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="23">
@@ -44313,7 +44370,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -44577,7 +44638,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -44682,7 +44743,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -45806,6 +45867,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -45841,7 +45903,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -45907,7 +45969,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="57">
@@ -45917,15 +45983,17 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
         <notations>
+          <tied type="stop" />
           <slur number="5" type="stop" />
         </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -47072,7 +47140,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -47169,7 +47237,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -47277,7 +47345,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P03e2700774131a4c194d1a1557c00866">
+  <part id="P0828c2f1e6479e46b677a2f760e2b460">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -47317,7 +47385,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -47326,8 +47394,10 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="1" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -47344,11 +47414,15 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -47985,7 +48059,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -48090,7 +48164,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -49203,6 +49277,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -49238,7 +49313,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -49247,8 +49322,10 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -49265,7 +49342,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -49315,7 +49396,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -50446,7 +50527,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -50543,7 +50624,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -50654,7 +50735,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P989bca26abd1c3f8e18ba87cc8f2fab1">
+  <part id="P1e9743575e8b718cc8ded6cdff5a84f5">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -50693,7 +50774,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -50719,7 +50800,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -50729,11 +50814,15 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -51369,7 +51458,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -51472,7 +51561,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -52598,6 +52687,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -52633,7 +52723,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -52727,7 +52817,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -53861,7 +53951,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -53958,7 +54048,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -54066,7 +54156,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P6f2f9ecb3fb6769f7002e4f58af2cb9e">
+  <part id="P14f19a774bd59148d178747f74fb6038">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -54141,7 +54231,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -54191,7 +54281,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -54240,7 +54330,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       <print new-page="yes" />
       <direction placement="above">
         <direction-type>
-          <words font-style="italic">arco, dolce</words>
+          <words font-style="italic">ord., dolce</words>
         </direction-type>
       </direction>
       <direction placement="below">
@@ -54870,7 +54960,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -55036,7 +55126,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -56109,6 +56199,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -56747,7 +56838,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -56795,7 +56886,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -57677,7 +57768,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -57726,7 +57817,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -57839,7 +57930,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P3fe8e1784956e57a06ca51e5e6c56171">
+  <part id="Pa3498c73da4a19c7ffcbab2795db2694">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -57896,7 +57987,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -57944,7 +58035,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -58494,7 +58585,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="23">
@@ -58504,7 +58599,11 @@ Orchestra: Instrument X · Choir: ACE Studio
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -58811,7 +58910,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -58978,7 +59077,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -60582,6 +60681,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -61102,7 +61202,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -61150,7 +61250,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -62012,7 +62112,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -62049,7 +62149,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -62139,7 +62239,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="P0a7498da4412b5c15572746d26067c63">
+  <part id="P9b6385a7e154bef3314a12d36803efaf">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -62194,7 +62294,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -62218,7 +62318,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -63198,7 +63298,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -63366,7 +63466,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -64959,6 +65059,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -65465,7 +65566,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -65513,7 +65614,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -66884,7 +66985,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -66905,7 +67006,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -67002,7 +67103,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pbb6175078300f62efaa790eaeef7e5fe">
+  <part id="P4ee059245446c3c43d85d94ac2c69992">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -67066,7 +67167,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -67110,7 +67211,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -67829,7 +67930,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -67902,7 +68003,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -68835,6 +68936,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -69057,7 +69159,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -69091,7 +69193,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -70460,7 +70562,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -70481,7 +70583,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -70554,7 +70656,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </barline>
     </measure>
   </part>
-  <part id="Pe231e92dc2cd941a96ba975154752aa3">
+  <part id="Pa212b58126ae88996220b6829a982493">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -70623,7 +70725,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -70667,7 +70769,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -71337,7 +71439,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -71377,7 +71479,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -71754,6 +71856,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
     </measure>
     <measure implicit="no" number="50">
+      <print new-page="yes" />
       <note>
         <pitch>
           <step>B</step>
@@ -71877,7 +71980,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -71911,7 +72014,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -72250,7 +72353,7 @@ Orchestra: Instrument X · Choir: ACE Studio
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -72271,7 +72374,7 @@ Orchestra: Instrument X · Choir: ACE Studio
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>

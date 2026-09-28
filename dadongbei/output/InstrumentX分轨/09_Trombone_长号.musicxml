@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pf2c8efef448bd510d5ad480adfbf461d">
+    <score-part id="P0d0f2c746e0510225965f4993921b7e4">
       <part-name>Trombone</part-name>
       <part-abbreviation>Tbn.</part-abbreviation>
-      <score-instrument id="I0355f6441ee9af4bce8e231158af3314">
+      <score-instrument id="I5384cba4613f8743618dd08b0fbbe354">
         <instrument-name>Trombone</instrument-name>
         <instrument-abbreviation>Tbn.</instrument-abbreviation>
         <instrument-sound>brass.trombone</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I0355f6441ee9af4bce8e231158af3314">
+      <midi-instrument id="I5384cba4613f8743618dd08b0fbbe354">
         <midi-channel>8</midi-channel>
         <midi-program>58</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pf2c8efef448bd510d5ad480adfbf461d">
+  <part id="P0d0f2c746e0510225965f4993921b7e4">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -156,6 +156,7 @@
           <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>E</step>
@@ -1345,11 +1346,13 @@
       </note>
     </measure>
     <measure implicit="no" number="75">
+      <sound tempo="122">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
       </note>
-      <sound tempo="122" />
     </measure>
     <measure implicit="no" number="76">
       <direction placement="above">
@@ -1404,6 +1407,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>F</step>
@@ -1448,6 +1452,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -1470,8 +1481,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

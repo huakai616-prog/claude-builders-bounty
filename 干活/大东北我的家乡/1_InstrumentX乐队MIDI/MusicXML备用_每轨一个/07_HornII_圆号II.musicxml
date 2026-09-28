@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P4e55cd2789a16cfc49061f97f37b052b">
+    <score-part id="Pd7bee73ce1099f8bb3a250fde0d798bb">
       <part-name>Horn in F II</part-name>
       <part-abbreviation>Hn. II</part-abbreviation>
-      <score-instrument id="I639c73003d54d4a5955c7cb1aa9a6197">
+      <score-instrument id="I3140eafaa3a20dc8065a029f26d88fb0">
         <instrument-name>Horn in F II</instrument-name>
         <instrument-abbreviation>Hn. II</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I639c73003d54d4a5955c7cb1aa9a6197">
+      <midi-instrument id="I3140eafaa3a20dc8065a029f26d88fb0">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P4e55cd2789a16cfc49061f97f37b052b">
+  <part id="Pd7bee73ce1099f8bb3a250fde0d798bb">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -203,6 +203,7 @@
           <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>E</step>
@@ -2027,6 +2028,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>F</step>
@@ -2071,6 +2073,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>B</step>
@@ -2093,8 +2102,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

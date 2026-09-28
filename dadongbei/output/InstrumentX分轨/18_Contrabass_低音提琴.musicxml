@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P38e5ca5d03ac075e92f91bf10a660a30">
+    <score-part id="P00d586e3114a8ad25f4fd8e8adb9a286">
       <part-name>Contrabass</part-name>
       <part-abbreviation>Cb.</part-abbreviation>
-      <score-instrument id="I0579f1a5bac32fd2deb8645b61b86ac1">
+      <score-instrument id="Ia22ad866e628fb4403222a77c2a5caf0">
         <instrument-name>Contrabass</instrument-name>
         <instrument-abbreviation>Cb.</instrument-abbreviation>
         <instrument-sound>strings.contrabass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I0579f1a5bac32fd2deb8645b61b86ac1">
+      <midi-instrument id="Ia22ad866e628fb4403222a77c2a5caf0">
         <midi-channel>16</midi-channel>
         <midi-program>44</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P38e5ca5d03ac075e92f91bf10a660a30">
+  <part id="P00d586e3114a8ad25f4fd8e8adb9a286">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -194,6 +194,7 @@
           <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -1862,6 +1863,12 @@
         <sound dynamics="107" />
       </direction>
       <sound tempo="112" />
+      <sound tempo="100">
+        <offset>10080</offset>
+      </sound>
+      <sound tempo="88">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -1875,8 +1882,7 @@
           <tied type="start" />
         </notations>
       </note>
-      <sound tempo="100" />
-      <sound tempo="88" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>D</step>
@@ -1920,6 +1926,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -1942,8 +1955,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

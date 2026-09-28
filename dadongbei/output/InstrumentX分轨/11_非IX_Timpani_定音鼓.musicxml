@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pa10ffbd066145698753a4e2b41179d0f">
+    <score-part id="P67c181f45dba2eb6f6189b6721c4e0b3">
       <part-name>Timpani</part-name>
       <part-abbreviation>Timp.</part-abbreviation>
-      <score-instrument id="I832e2dd9e2388b84e90ae150875a25d3">
+      <score-instrument id="Ib0ee6cacf11ad1581a49900418b6e035">
         <instrument-name>Timpani</instrument-name>
         <instrument-abbreviation>Timp.</instrument-abbreviation>
         <instrument-sound>drum.timpani</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I832e2dd9e2388b84e90ae150875a25d3">
+      <midi-instrument id="Ib0ee6cacf11ad1581a49900418b6e035">
         <midi-channel>11</midi-channel>
         <midi-program>48</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pa10ffbd066145698753a4e2b41179d0f">
+  <part id="P67c181f45dba2eb6f6189b6721c4e0b3">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -156,6 +156,7 @@
           </ornaments>
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -1410,6 +1411,12 @@
         <sound dynamics="88" />
       </direction>
       <sound tempo="112" />
+      <sound tempo="100">
+        <offset>10080</offset>
+      </sound>
+      <sound tempo="88">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
@@ -1426,8 +1433,7 @@
           </ornaments>
         </notations>
       </note>
-      <sound tempo="100" />
-      <sound tempo="88" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>D</step>
@@ -1485,6 +1491,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>G</step>
@@ -1510,8 +1523,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

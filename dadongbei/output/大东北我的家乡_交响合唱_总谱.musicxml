@@ -49,67 +49,67 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P24c39a583199cbeabf7ab88a43d8109c">
+    <score-part id="P271e9d11425185564773b1372d262a1b">
       <part-name>Piccolo</part-name>
       <part-abbreviation>Picc.</part-abbreviation>
-      <score-instrument id="I0fff8c1c5b9193e026cb747eeefd88a3">
+      <score-instrument id="Ida3ccc79d2c6f345beea6b5391ca252b">
         <instrument-name>Piccolo</instrument-name>
         <instrument-abbreviation>Picc.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute.piccolo</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I0fff8c1c5b9193e026cb747eeefd88a3">
+      <midi-instrument id="Ida3ccc79d2c6f345beea6b5391ca252b">
         <midi-channel>1</midi-channel>
         <midi-program>73</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pf5e98c9bc3bce49f0c4a7913f555c7e3">
+    <score-part id="Pd3b80a694b53398dc6ed4682894712ab">
       <part-name>Flute</part-name>
       <part-abbreviation>Fl.</part-abbreviation>
-      <score-instrument id="I26f898c815c2363ee039f1b13def157d">
+      <score-instrument id="Ic6758f744ead53bfa77b83996bdadcdf">
         <instrument-name>Flute</instrument-name>
         <instrument-abbreviation>Fl.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I26f898c815c2363ee039f1b13def157d">
+      <midi-instrument id="Ic6758f744ead53bfa77b83996bdadcdf">
         <midi-channel>2</midi-channel>
         <midi-program>74</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P00aea20b7304e13da72bce42b0a1b00a">
+    <score-part id="Pb6c2ce3516c8a7aa12807b0154e6f092">
       <part-name>Oboe</part-name>
       <part-abbreviation>Ob.</part-abbreviation>
-      <score-instrument id="I6949f9562893669ce55d9cc558b4d2e5">
+      <score-instrument id="Ia40bfbf54053a08555b29a8d28baad40">
         <instrument-name>Oboe</instrument-name>
         <instrument-abbreviation>Ob.</instrument-abbreviation>
         <instrument-sound>wind.reed.oboe</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I6949f9562893669ce55d9cc558b4d2e5">
+      <midi-instrument id="Ia40bfbf54053a08555b29a8d28baad40">
         <midi-channel>3</midi-channel>
         <midi-program>69</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P7468850f04dac20a56f7a5b1a0e47b94">
+    <score-part id="P0a6931276e8c5f887eabcf3d5acf3bbb">
       <part-name>Clarinet in A</part-name>
       <part-abbreviation>Cl.</part-abbreviation>
-      <score-instrument id="I8da29d2bd60ce8bd91bcf7fa294f2ced">
+      <score-instrument id="I3898c5cf5a5964a40dae5616a7451ae6">
         <instrument-name>Clarinet in A</instrument-name>
         <instrument-abbreviation>Cl.</instrument-abbreviation>
         <instrument-sound>wind.reed.clarinet.a</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I8da29d2bd60ce8bd91bcf7fa294f2ced">
+      <midi-instrument id="I3898c5cf5a5964a40dae5616a7451ae6">
         <midi-channel>4</midi-channel>
         <midi-program>72</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P9b84793adf396a08b154692ea05999db">
+    <score-part id="P15324fa76d22b0ab05a4e5c3a7d45d36">
       <part-name>Bassoon</part-name>
       <part-abbreviation>Bsn.</part-abbreviation>
-      <score-instrument id="Iec0843b5984f63e28b6102ee94fa531a">
+      <score-instrument id="Ie494fefaca303a28159e2c964911d61d">
         <instrument-name>Bassoon</instrument-name>
         <instrument-abbreviation>Bsn.</instrument-abbreviation>
         <instrument-sound>wind.reed.bassoon</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Iec0843b5984f63e28b6102ee94fa531a">
+      <midi-instrument id="Ie494fefaca303a28159e2c964911d61d">
         <midi-channel>5</midi-channel>
         <midi-program>71</midi-program>
       </midi-instrument>
@@ -120,107 +120,107 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="Pb6c5e642bb6b1a2202ba455a2d11877e">
+    <score-part id="P443f190b5e69f30f5a4088b5676f376b">
       <part-name>Horn in F I</part-name>
       <part-abbreviation>Hn. I</part-abbreviation>
-      <score-instrument id="I1505068e05f51c6af628511fc613317b">
+      <score-instrument id="I0c32e2f195fc6b3a537d0e20bfb13d50">
         <instrument-name>Horn in F I</instrument-name>
         <instrument-abbreviation>Hn. I</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I1505068e05f51c6af628511fc613317b">
+      <midi-instrument id="I0c32e2f195fc6b3a537d0e20bfb13d50">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P5e8039e7c66cb6d2a551d375a3537d4b">
+    <score-part id="P7985af64c17c0c9dd6de0b473dcc114e">
       <part-name>Horn in F II</part-name>
       <part-abbreviation>Hn. II</part-abbreviation>
-      <score-instrument id="I4ba75ab98db0abc722b3989fe59ef2fe">
+      <score-instrument id="Ifeda4aa3d10f815a76866ea91552a9ae">
         <instrument-name>Horn in F II</instrument-name>
         <instrument-abbreviation>Hn. II</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4ba75ab98db0abc722b3989fe59ef2fe">
+      <midi-instrument id="Ifeda4aa3d10f815a76866ea91552a9ae">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pbfb088f14d1e100e3d41b36e9603c19f">
+    <score-part id="P070546ed2fffdc5de513c294bb274ce7">
       <part-name>Trumpet in Bb</part-name>
       <part-abbreviation>Tpt.</part-abbreviation>
-      <score-instrument id="I430c36562ec6267ef5e2404eca7cda07">
+      <score-instrument id="I1894eede9c8c83b4ebee71a449187ada">
         <instrument-name>Trumpet in Bb</instrument-name>
         <instrument-abbreviation>Tpt.</instrument-abbreviation>
         <instrument-sound>brass.trumpet.bflat</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I430c36562ec6267ef5e2404eca7cda07">
+      <midi-instrument id="I1894eede9c8c83b4ebee71a449187ada">
         <midi-channel>7</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pba64b6d39f18533c53403bfdb390f5eb">
+    <score-part id="Pbe4b740391daeebe828be5749d01171f">
       <part-name>Trombone</part-name>
       <part-abbreviation>Tbn.</part-abbreviation>
-      <score-instrument id="I49d8ee65035029a46fd42cefeea3ddb7">
+      <score-instrument id="I8837155d5c470e77275d9dea5d2dd233">
         <instrument-name>Trombone</instrument-name>
         <instrument-abbreviation>Tbn.</instrument-abbreviation>
         <instrument-sound>brass.trombone</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I49d8ee65035029a46fd42cefeea3ddb7">
+      <midi-instrument id="I8837155d5c470e77275d9dea5d2dd233">
         <midi-channel>8</midi-channel>
         <midi-program>58</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pc25c5c033ba9a01a14983cf15437fdda">
+    <score-part id="P532bf4f4d1518fb604175ca0d45c6a0d">
       <part-name>Tuba</part-name>
       <part-abbreviation>Tba.</part-abbreviation>
-      <score-instrument id="I5c2c74f873126534357cd7eeab93085d">
+      <score-instrument id="I263a9947893042b834e890d83f99ac4a">
         <instrument-name>Tuba</instrument-name>
         <instrument-abbreviation>Tba.</instrument-abbreviation>
         <instrument-sound>brass.tuba</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I5c2c74f873126534357cd7eeab93085d">
+      <midi-instrument id="I263a9947893042b834e890d83f99ac4a">
         <midi-channel>9</midi-channel>
         <midi-program>59</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="2" type="stop" />
-    <score-part id="Pd9ce8f1f07f92283c08bdc0cca67c9db">
+    <score-part id="P70e9c57f82ae42ac6b2e8e371bdea364">
       <part-name>Timpani</part-name>
       <part-abbreviation>Timp.</part-abbreviation>
-      <score-instrument id="Ief6e626e85bf6222d0dd92ce8c8138c8">
+      <score-instrument id="I737161e5aab0a081df207a6b2c6a8716">
         <instrument-name>Timpani</instrument-name>
         <instrument-abbreviation>Timp.</instrument-abbreviation>
         <instrument-sound>drum.timpani</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ief6e626e85bf6222d0dd92ce8c8138c8">
+      <midi-instrument id="I737161e5aab0a081df207a6b2c6a8716">
         <midi-channel>11</midi-channel>
         <midi-program>48</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pa1cdb4747ac51820dcf6d25f1cb9396d">
+    <score-part id="P5993db5bb37f1d2d071325124732e909">
       <part-name>Glockenspiel</part-name>
       <part-abbreviation>Glk.</part-abbreviation>
-      <score-instrument id="I8086522ac6fd26b6b35daa5c89f6cfdd">
+      <score-instrument id="I2092e4a315ea9cc24bc8056151c7383b">
         <instrument-name>Glockenspiel</instrument-name>
         <instrument-abbreviation>Glk.</instrument-abbreviation>
         <instrument-sound>pitched-percussion.glockenspiel</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I8086522ac6fd26b6b35daa5c89f6cfdd">
+      <midi-instrument id="I2092e4a315ea9cc24bc8056151c7383b">
         <midi-channel>12</midi-channel>
         <midi-program>10</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P66265b86d6b9380a9330a0fb97e67266">
+    <score-part id="Pcb4bedca7a6684cc37809002a9b3c771">
       <part-name>Harp</part-name>
       <part-abbreviation>Hp.</part-abbreviation>
-      <score-instrument id="I963410ff4870e3d2dccb7660c1e88eb7">
+      <score-instrument id="Ide93411069f3b5e6f304eca707162a0d">
         <instrument-name>Harp</instrument-name>
         <instrument-abbreviation>Hp.</instrument-abbreviation>
         <instrument-sound>pluck.harp</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I963410ff4870e3d2dccb7660c1e88eb7">
+      <midi-instrument id="Ide93411069f3b5e6f304eca707162a0d">
         <midi-channel>13</midi-channel>
         <midi-program>47</midi-program>
       </midi-instrument>
@@ -230,54 +230,54 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P9be3fa3d4027aa72eaf06c9aafb4ed45">
+    <score-part id="P1f06dd19229663878f14c8343248ae3d">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="I2bfc0e7335db52800e79ce3d971a7fdd">
+      <score-instrument id="I0443b815ee31e2a21905cd96f5f30f9e">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I2bfc0e7335db52800e79ce3d971a7fdd">
+      <midi-instrument id="I0443b815ee31e2a21905cd96f5f30f9e">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pe40f876c08ae4d75e2149d7cbd960b83">
+    <score-part id="P019062322c18d8aac45d4d11dd19d2f8">
       <part-name>Alto</part-name>
       <part-abbreviation>A.</part-abbreviation>
-      <score-instrument id="I42f3b861774e8421776f0c6e336d8e49">
+      <score-instrument id="I57ac6ac4138ebaa66ff7e5af64a786f9">
         <instrument-name>Alto</instrument-name>
         <instrument-abbreviation>A.</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I42f3b861774e8421776f0c6e336d8e49">
+      <midi-instrument id="I57ac6ac4138ebaa66ff7e5af64a786f9">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pa8c58cefb8e82d85087d204151d16906">
+    <score-part id="Pb3cd8cbd7594184454d60783552c2e4f">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="Iea6e7ca2ba7491c86da9adf519c6f35d">
+      <score-instrument id="Ia81b29a793d48c37938a77378d315e9a">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Iea6e7ca2ba7491c86da9adf519c6f35d">
+      <midi-instrument id="Ia81b29a793d48c37938a77378d315e9a">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P3f462d7883d5de95c4508cbba6007bd7">
+    <score-part id="P9986e566958de7cc06bf668765dfab80">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="Ife5799724dcf0fe4d42c6812b1a99d41">
+      <score-instrument id="I46521b8707175aa198ef72ef037f8b2b">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ife5799724dcf0fe4d42c6812b1a99d41">
+      <midi-instrument id="I46521b8707175aa198ef72ef037f8b2b">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
@@ -288,74 +288,74 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P72c66c3bbda8200508956447aea249d0">
+    <score-part id="P24c0eb714bf82aacad8d5d985e237a7c">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="I68aeffb78e6148e6d41460c212edb770">
+      <score-instrument id="I48e6b3c013b6be6321509ca6f34b72f0">
         <instrument-name>Violin I</instrument-name>
         <instrument-abbreviation>Vln. I</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I68aeffb78e6148e6d41460c212edb770">
+      <midi-instrument id="I48e6b3c013b6be6321509ca6f34b72f0">
         <midi-channel>15</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P30cd53bd7b40ef492a4be5488d0db77b">
+    <score-part id="P12ce022dcc82d888eea68eef83138ca1">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="I5080086cc33b15196d88dbbcb6b4c22c">
+      <score-instrument id="I2593f9a88dd2ee490f296e78068e5c34">
         <instrument-name>Violin II</instrument-name>
         <instrument-abbreviation>Vln. II</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I5080086cc33b15196d88dbbcb6b4c22c">
+      <midi-instrument id="I2593f9a88dd2ee490f296e78068e5c34">
         <midi-channel>15</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pb8bd6ffbc1f97014eea35bfa4b8c5727">
+    <score-part id="P79df1bfd5f95475bde0cd3a543368759">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I1c8ed64ce713aa3287c8df9b6a9fd906">
+      <score-instrument id="Iac22e9fdf49e61fd5f7ea6ffcfabb4f6">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla.</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I1c8ed64ce713aa3287c8df9b6a9fd906">
+      <midi-instrument id="Iac22e9fdf49e61fd5f7ea6ffcfabb4f6">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pe4c0443d5903d5293843ed1a33a5b210">
+    <score-part id="P2b219fb905f81da631be2e99a008a388">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="Iabbe72b7ac126649f5701b5f48e5033b">
+      <score-instrument id="I9d4e3bafd30ea3eb6292f632f12ed8f9">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc.</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Iabbe72b7ac126649f5701b5f48e5033b">
+      <midi-instrument id="I9d4e3bafd30ea3eb6292f632f12ed8f9">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P73ec70a0d626f96ef305dba3b3944dce">
+    <score-part id="Pa965de048db8ceeabfc0816456f759fd">
       <part-name>Contrabass</part-name>
       <part-abbreviation>Cb.</part-abbreviation>
-      <score-instrument id="I766cabc6ceee1ab66b929434f6f44d43">
+      <score-instrument id="Ife2c85e5c55f00ab3f8f23bb781ee0b0">
         <instrument-name>Contrabass</instrument-name>
         <instrument-abbreviation>Cb.</instrument-abbreviation>
         <instrument-sound>strings.contrabass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I766cabc6ceee1ab66b929434f6f44d43">
+      <midi-instrument id="Ife2c85e5c55f00ab3f8f23bb781ee0b0">
         <midi-channel>16</midi-channel>
         <midi-program>44</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="4" type="stop" />
   </part-list>
-  <part id="P24c39a583199cbeabf7ab88a43d8109c">
+  <part id="P271e9d11425185564773b1372d262a1b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -414,6 +414,9 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest />
         <duration>30240</duration>
@@ -426,7 +429,6 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
-      <sound tempo="64" />
       <note>
         <rest />
         <duration>10080</duration>
@@ -2310,11 +2312,13 @@
       </note>
     </measure>
     <measure implicit="no" number="75">
+      <sound tempo="122">
+        <offset>20160</offset>
+      </sound>
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
       </note>
-      <sound tempo="122" />
     </measure>
     <measure implicit="no" number="76">
       <direction placement="above">
@@ -2423,6 +2427,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>E</step>
@@ -2445,11 +2456,9 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
-  <part id="Pf5e98c9bc3bce49f0c4a7913f555c7e3">
+  <part id="Pd3b80a694b53398dc6ed4682894712ab">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -6269,6 +6278,11 @@
         </direction-type>
         <sound dynamics="57" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -6295,6 +6309,11 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="stop" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -6381,7 +6400,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P00aea20b7304e13da72bce42b0a1b00a">
+  <part id="Pb6c2ce3516c8a7aa12807b0154e6f092">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -6999,7 +7018,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -7073,7 +7092,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -8327,7 +8346,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -8368,7 +8387,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -9262,7 +9281,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -9307,7 +9326,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -9414,7 +9433,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P7468850f04dac20a56f7a5b1a0e47b94">
+  <part id="P0a6931276e8c5f887eabcf3d5acf3bbb">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -9457,7 +9476,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -9498,7 +9517,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -10531,7 +10550,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -10596,7 +10615,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -12335,7 +12354,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -12376,7 +12395,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -13767,7 +13786,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -13805,7 +13824,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -13892,7 +13911,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P9b84793adf396a08b154692ea05999db">
+  <part id="P15324fa76d22b0ab05a4e5c3a7d45d36">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -13931,7 +13950,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -13975,7 +13994,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -14807,7 +14826,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -14848,7 +14867,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -15477,7 +15496,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -15511,7 +15530,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -15841,7 +15860,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -15862,7 +15881,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -15935,7 +15954,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pb6c5e642bb6b1a2202ba455a2d11877e">
+  <part id="P443f190b5e69f30f5a4088b5676f376b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -16057,7 +16076,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -16156,7 +16175,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -16587,7 +16606,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -16650,7 +16669,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -17518,7 +17537,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -17558,7 +17577,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -18122,7 +18141,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18161,7 +18180,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -18295,7 +18314,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P5e8039e7c66cb6d2a551d375a3537d4b">
+  <part id="P7985af64c17c0c9dd6de0b473dcc114e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -18338,7 +18357,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18413,7 +18432,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -18649,7 +18668,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -18697,7 +18716,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -19507,7 +19526,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -19533,7 +19552,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -20092,7 +20111,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -20113,7 +20132,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -20212,7 +20231,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pbfb088f14d1e100e3d41b36e9603c19f">
+  <part id="P070546ed2fffdc5de513c294bb274ce7">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -20432,7 +20451,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -20478,7 +20497,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -21008,7 +21027,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -21051,7 +21070,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -21834,7 +21853,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pba64b6d39f18533c53403bfdb390f5eb">
+  <part id="Pbe4b740391daeebe828be5749d01171f">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -21879,7 +21898,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -21904,7 +21923,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -22070,7 +22089,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -22129,7 +22148,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -22648,7 +22667,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -22674,7 +22693,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -23129,7 +23148,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pc25c5c033ba9a01a14983cf15437fdda">
+  <part id="P532bf4f4d1518fb604175ca0d45c6a0d">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -23174,7 +23193,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -23199,7 +23218,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -23371,7 +23390,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -23412,7 +23431,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -23810,7 +23829,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -23844,7 +23863,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -24174,7 +24193,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24195,7 +24214,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -24268,7 +24287,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pd9ce8f1f07f92283c08bdc0cca67c9db">
+  <part id="P70e9c57f82ae42ac6b2e8e371bdea364">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -24323,7 +24342,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24359,7 +24378,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -24559,7 +24578,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -24610,7 +24629,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -25098,7 +25117,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -25134,7 +25153,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -25479,7 +25498,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -25510,7 +25529,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -25603,7 +25622,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pa1cdb4747ac51820dcf6d25f1cb9396d">
+  <part id="P5993db5bb37f1d2d071325124732e909">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -27101,7 +27120,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P66265b86d6b9380a9330a0fb97e67266">
+  <part id="Pcb4bedca7a6684cc37809002a9b3c771">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -27950,7 +27969,7 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -28333,7 +28352,7 @@
       </note>
     </measure>
     <measure implicit="no" number="10">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -29431,7 +29450,7 @@
       </note>
     </measure>
     <measure implicit="no" number="21">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -29591,7 +29610,7 @@
         <staff>1</staff>
         <sound dynamics="57" />
       </direction>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -31943,7 +31962,7 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮</words>
         </direction-type>
@@ -32241,7 +32260,7 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♭</words>
         </direction-type>
@@ -34875,7 +34894,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
         <staff>1</staff>
       </direction>
@@ -35031,7 +35050,7 @@
       </note>
     </measure>
     <measure implicit="no" number="57">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">B♮ D♯ F♯</words>
         </direction-type>
@@ -35109,7 +35128,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
         <staff>1</staff>
       </direction>
@@ -35231,7 +35250,7 @@
         <staff>1</staff>
         <sound dynamics="88" />
       </direction>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">D♮</words>
         </direction-type>
@@ -35963,7 +35982,7 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♯</words>
         </direction-type>
@@ -36263,7 +36282,7 @@
       </note>
     </measure>
     <measure implicit="no" number="65">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-size="9">C♮</words>
         </direction-type>
@@ -39387,7 +39406,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P9be3fa3d4027aa72eaf06c9aafb4ed45">
+  <part id="P1f06dd19229663878f14c8343248ae3d">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -39426,7 +39445,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -39435,8 +39454,10 @@
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -39453,12 +39474,16 @@
           <octave>5</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -40366,7 +40391,7 @@
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -40461,7 +40486,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -41685,7 +41710,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -41733,8 +41758,10 @@
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="5" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -41751,7 +41778,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -41768,7 +41799,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -42960,7 +42991,7 @@
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -43057,7 +43088,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -43183,7 +43214,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pe40f876c08ae4d75e2149d7cbd960b83">
+  <part id="P019062322c18d8aac45d4d11dd19d2f8">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -43222,7 +43253,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -43248,7 +43279,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -43259,11 +43294,15 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -43902,8 +43941,12 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
         <accidental>natural</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="23">
@@ -43913,7 +43956,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -44176,7 +44223,7 @@
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -44281,7 +44328,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -45434,7 +45481,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -45499,7 +45546,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="57">
@@ -45509,15 +45560,17 @@
           <octave>4</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
         <notations>
+          <tied type="stop" />
           <slur number="5" type="stop" />
         </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -46659,7 +46712,7 @@
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -46756,7 +46809,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -46864,7 +46917,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pa8c58cefb8e82d85087d204151d16906">
+  <part id="Pb3cd8cbd7594184454d60783552c2e4f">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -46904,7 +46957,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -46913,8 +46966,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="1" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -46931,11 +46986,15 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -47566,7 +47625,7 @@
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -47671,7 +47730,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -48813,7 +48872,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -48822,8 +48881,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -48840,7 +48901,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -48889,7 +48954,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -50015,7 +50080,7 @@
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -50112,7 +50177,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -50223,7 +50288,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P3f462d7883d5de95c4508cbba6007bd7">
+  <part id="P9986e566958de7cc06bf668765dfab80">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -50262,7 +50327,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -50288,7 +50353,11 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -50298,11 +50367,15 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <direction placement="above">
@@ -50932,7 +51005,7 @@
     <measure implicit="no" number="29">
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -51035,7 +51108,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -52190,7 +52263,7 @@
       </direction>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -52283,7 +52356,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -53412,7 +53485,7 @@
     <measure implicit="no" number="75">
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -53509,7 +53582,7 @@
       </note>
       <direction placement="above">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -53617,7 +53690,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P72c66c3bbda8200508956447aea249d0">
+  <part id="P24c0eb714bf82aacad8d5d985e237a7c">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -53692,7 +53765,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -53742,7 +53815,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -53789,7 +53862,7 @@
     <measure implicit="no" number="9">
       <direction placement="above">
         <direction-type>
-          <words font-style="italic">arco, dolce</words>
+          <words font-style="italic">ord., dolce</words>
         </direction-type>
       </direction>
       <direction placement="below">
@@ -54415,7 +54488,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -54581,7 +54654,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -56285,7 +56358,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -56333,7 +56406,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -57210,7 +57283,7 @@
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -57259,7 +57332,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -57372,7 +57445,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P30cd53bd7b40ef492a4be5488d0db77b">
+  <part id="P12ce022dcc82d888eea68eef83138ca1">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -57429,7 +57502,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -57477,7 +57550,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -58022,7 +58095,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="23">
@@ -58032,7 +58109,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -58338,7 +58419,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -58505,7 +58586,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -60622,7 +60703,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -60670,7 +60751,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -61527,7 +61608,7 @@
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -61564,7 +61645,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -61654,7 +61735,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pb8bd6ffbc1f97014eea35bfa4b8c5727">
+  <part id="P79df1bfd5f95475bde0cd3a543368759">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -61709,7 +61790,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -61733,7 +61814,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -62707,7 +62788,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -62875,7 +62956,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -64967,7 +65048,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -65015,7 +65096,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -66381,7 +66462,7 @@
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -66402,7 +66483,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -66499,7 +66580,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pe4c0443d5903d5293843ed1a33a5b210">
+  <part id="P2b219fb905f81da631be2e99a008a388">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -66563,7 +66644,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -66607,7 +66688,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -67320,7 +67401,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -67393,7 +67474,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -68541,7 +68622,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="1" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -68575,7 +68656,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -69939,7 +70020,7 @@
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -69960,7 +70041,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -70033,7 +70114,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P73ec70a0d626f96ef305dba3b3944dce">
+  <part id="Pa965de048db8ceeabfc0816456f759fd">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -70102,7 +70183,7 @@
     <measure implicit="no" number="3">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="3" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -70146,7 +70227,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -70810,7 +70891,7 @@
     <measure implicit="no" number="29">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -70850,7 +70931,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -71343,7 +71424,7 @@
       </direction>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="5" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -71377,7 +71458,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -71711,7 +71792,7 @@
     <measure implicit="no" number="75">
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -71732,7 +71813,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>

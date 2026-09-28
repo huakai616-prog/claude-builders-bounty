@@ -49,61 +49,61 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="Pe6a206d1138037fed800b5b6b9943636">
+    <score-part id="P4e8480d6ded8b1f90226ae982e2a718f">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="Ie2a4bda73e22ce8551aba5e786d66a39">
+      <score-instrument id="Id87bc85785e37001c2048bb6734671e5">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ie2a4bda73e22ce8551aba5e786d66a39">
+      <midi-instrument id="Id87bc85785e37001c2048bb6734671e5">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P8b305d5c0c60d9d7b25b1b84721470a4">
+    <score-part id="Pc0cfa292a9b6df18019d0ced4a3da453">
       <part-name>Alto</part-name>
       <part-abbreviation>A.</part-abbreviation>
-      <score-instrument id="Ife396016f7253536e207566df913089d">
+      <score-instrument id="I08c77d22f2f823d28a25b6e2a4e1f6e1">
         <instrument-name>Alto</instrument-name>
         <instrument-abbreviation>A.</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ife396016f7253536e207566df913089d">
+      <midi-instrument id="I08c77d22f2f823d28a25b6e2a4e1f6e1">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P882be07b0a0db8f4d1ac096e48e0b28d">
+    <score-part id="P9455a35d65fb9cb9b9e293c6be29b34d">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="Ic897bf2345be63be2593fb47ca79c2ed">
+      <score-instrument id="I12a0402d90c2b0b9bccb51b339f5c124">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ic897bf2345be63be2593fb47ca79c2ed">
+      <midi-instrument id="I12a0402d90c2b0b9bccb51b339f5c124">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P177360307e9fb38b827cda69fc16c7e5">
+    <score-part id="P8e4732e88f8a44308a646b01c9dd98fc">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="Ie2f7120a614ef1ad75eacb6b3180fe86">
+      <score-instrument id="I79ba0ea2481591de3e4be091b3288679">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ie2f7120a614ef1ad75eacb6b3180fe86">
+      <midi-instrument id="I79ba0ea2481591de3e4be091b3288679">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="Pe6a206d1138037fed800b5b6b9943636">
+  <part id="P4e8480d6ded8b1f90226ae982e2a718f">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -170,8 +170,10 @@
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="1" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -182,14 +184,21 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -211,7 +220,7 @@
         <offset sound="yes">-10080</offset>
         <sound dynamics="69" />
       </direction>
-      <sound tempo="64" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>C</step>
@@ -2516,8 +2525,10 @@
           <octave>5</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="2" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -2534,7 +2545,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -3937,6 +3952,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -4005,6 +4021,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>E</step>
@@ -4027,11 +4050,9 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
-  <part id="P8b305d5c0c60d9d7b25b1b84721470a4">
+  <part id="Pc0cfa292a9b6df18019d0ced4a3da453">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -4096,7 +4117,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -4107,7 +4132,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -4753,8 +4782,12 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
         <accidental>natural</accidental>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="23">
@@ -4764,7 +4797,11 @@
           <octave>5</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -6354,7 +6391,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="57">
@@ -6364,9 +6405,11 @@
           <octave>4</octave>
         </pitch>
         <duration>30240</duration>
+        <tie type="stop" />
         <type>half</type>
         <dot />
         <notations>
+          <tied type="stop" />
           <slur number="2" type="stop" />
         </notations>
       </note>
@@ -7722,7 +7765,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P882be07b0a0db8f4d1ac096e48e0b28d">
+  <part id="P9455a35d65fb9cb9b9e293c6be29b34d">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -7771,8 +7814,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="4" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -7789,7 +7834,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>
@@ -9687,8 +9736,10 @@
           <octave>4</octave>
         </pitch>
         <duration>40320</duration>
+        <tie type="start" />
         <type>whole</type>
         <notations>
+          <tied type="start" />
           <slur number="1" type="start" />
         </notations>
         <lyric name="1" number="1">
@@ -9705,7 +9756,11 @@
           <octave>4</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <note>
         <pitch>
@@ -11091,7 +11146,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P177360307e9fb38b827cda69fc16c7e5">
+  <part id="P8e4732e88f8a44308a646b01c9dd98fc">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -11156,7 +11211,11 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="start" />
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure implicit="no" number="4">
@@ -11166,7 +11225,11 @@
           <octave>2</octave>
         </pitch>
         <duration>20160</duration>
+        <tie type="stop" />
         <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
       <direction placement="above">
         <direction-type>

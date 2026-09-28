@@ -678,6 +678,22 @@ BAS.update({
     77: "G2/16~=乡", 78: "G2/16",
 })
 
+
+
+def tie_held(part):
+    """A sung note continued (no new syllable) on the same pitch after the
+    barline is one held note: tie it."""
+    for b in range(1, NBARS):
+        a, c = toks(part[b]), toks(part[b + 1])
+        if a and c and a[-1]["pit"] and a[-1]["pit"] == c[0]["pit"] \
+                and not c[0]["lyr"] and not a[-1]["tie"]:
+            a[-1]["tie"] = True
+            part[b] = untoks(a)
+
+
+for _p in (SOP, ALT, TEN, BAS):
+    tie_held(_p)
+
 # Melody guide (the tune with its words, original octave) for SRT / guide MIDI
 MEL = blank()
 for i in range(1, 18):
@@ -1238,7 +1254,7 @@ PARTS = [
          clef=clef.TrebleClef, program=48, ch=14, ix="Violin 1",
          rng=("G3", "C7"), dyn=D(STR_DYN.replace("5:0:mp ", "9:0:mf ")),
          hair=HP(STR_HAIR),
-         text=TX("1:0:sul tasto|9:0:arco, dolce|22:0:espr.|31:0:cantabile|"
+         text=TX("1:0:sul tasto|9:0:ord., dolce|22:0:espr.|31:0:cantabile|"
                  "58:0:appassionato")),
     dict(id="vn2", name="Violin II", abbr="Vln. II", cn="第二小提琴",
          data=VN2, inst=_ins(instrument.Violin, "Violin II", "Vln. II"),
@@ -1501,6 +1517,8 @@ def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part,
         measures[bb].insert(s / 4, d)
     for bb, s, bb2, s2, kind in p["hair"]:
         n1, n2 = obj_at(bb, s), obj_at(bb2, s2, forward=False)
+        if n1 is n2:     # one held note: run the wedge to the next event
+            n2 = obj_at(bb2, s2 + 1)
         if n1 is not None and n2 is not None and n1 is not n2:
             part.insert(0, (dynamics.Crescendo if kind == "cresc"
                             else dynamics.Diminuendo)(n1, n2))
@@ -1568,7 +1586,8 @@ SOUNDS = {"picc": "wind.flutes.flute.piccolo", "fl": "wind.flutes.flute",
 
 
 def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
-           top_gap=None, margin=None, page_breaks=(), tempo_sounds=True):
+           top_gap=None, margin=None, page_breaks=(), tempo_sounds=True,
+           fermata_steps=False):
     """Page layout, one <instrument-sound> per part so Sibelius maps the
     right instrument, no per-note instrument changes, vocal dynamics above
     the staff (lyrics are below), words and rehearsal marks above."""
@@ -1629,10 +1648,7 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
             n.remove(x)
     parts = r.findall("part")
     if parts and tempo_sounds:
-        add_tempo_sounds(parts[0])
-    for part in parts:
-        if pid_of.get(part.get("id")) == "hpr":
-            add_harp_pedals(part)
+        add_tempo_sounds(parts[0], fermata_steps)
     for part in r.findall("part"):
         if pid_of.get(part.get("id")) not in CHOIR:
             continue
@@ -1664,6 +1680,9 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
                 elif el.find("direction-type/words") is not None or \
                         el.find("direction-type/rehearsal") is not None:
                     el.set("placement", "above")
+    for part in parts:     # pedal changes sit between the harp staves
+        if pid_of.get(part.get("id")) == "hpr":
+            add_harp_pedals(part)
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()
@@ -1679,38 +1698,73 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
 # ---------------------------------------------------------------------------
 # MusicXML additions: every tempo step for playback, harp pedalling
 # ---------------------------------------------------------------------------
-def _insert_at(measure, target, el):
-    """Insert `el` before the first note of the (single-voice) measure that
-    starts at `target` divisions."""
+def _insert_at(measure, target, el, offset_ok=False):
+    """Insert `el` before the note/rest of the first voice that covers
+    `target` (divisions).  If that note starts earlier and `offset_ok`,
+    an <offset> child places `el` exactly at the target."""
     t = 0
     for i, ch in enumerate(list(measure)):
         if ch.tag == "note":
             if ch.find("chord") is not None or ch.find("grace") is not None:
                 continue
-            if t >= target:
+            dur = int(ch.findtext("duration"))
+            if t <= target < t + dur:
+                if target > t:
+                    if not offset_ok:
+                        raise ValueError("target inside a note")
+                    ET.SubElement(el, "offset").text = str(target - t)
                 measure.insert(i, el)
                 return
-            t += int(ch.findtext("duration"))
+            t += dur
         elif ch.tag == "backup":
-            t -= int(ch.findtext("duration"))
+            break          # only the first voice / staff is walked
         elif ch.tag == "forward":
             t += int(ch.findtext("duration"))
-    measure.append(el)
+    raise ValueError(f"no note covers {target} in bar {measure.get('number')}")
 
 
-def add_tempo_sounds(part):
+# TEMPI steps that only stretch a fermata (notation programs hold fermatas
+# themselves; ACE / Instrument X do not)
+FERMATA_STEPS = {(4, 12), (76, 12)}
+
+
+def add_tempo_sounds(part, fermata_steps=False):
     """Hidden <sound tempo> for every step of TEMPI (the visible metronome
-    marks carry their own), so notation playback and Sibelius' timecode
-    follow the same rit./accel. as the MIDI.  The fermata points are left
-    to the notation program's own fermata playback."""
+    marks carry their own), placed exactly with <offset> where the step
+    falls inside a held note, so playback and Sibelius' timecode follow the
+    same rit./accel. as the MIDI.  fermata_steps: also write the steps that
+    stretch the fermatas (for importers that don't play fermatas)."""
     div = int(part.find("measure/attributes/divisions").text)
     shown = {(b, s) for b, s, _, _ in TEMPO_MARKS}
     by_num = {int(m.get("number")): m for m in part.findall("measure")}
     for b, s, bpm in TEMPI:
-        if (b, s) in shown or FERMATAS.get(b) == s:
+        if (b, s) in shown or ((b, s) in FERMATA_STEPS and not fermata_steps):
             continue
-        _insert_at(by_num[b], s * div // 4, ET.Element("sound",
-                                                        tempo=str(bpm)))
+        _insert_at(by_num[b], s * div // 4,
+                   ET.Element("sound", tempo=str(bpm)), offset_ok=True)
+
+
+def sound_positions(part):
+    """[(bar, 16th, bpm)] of every <sound tempo> in a part (read-back)."""
+    div = int(part.find("measure/attributes/divisions").text)
+    out = []
+    for m in part.findall("measure"):
+        t = 0
+        for ch in m:
+            if ch.tag == "note":
+                if ch.find("chord") is None and ch.find("grace") is None:
+                    t += int(ch.findtext("duration"))
+            elif ch.tag == "backup":
+                t -= int(ch.findtext("duration"))
+            elif ch.tag == "forward":
+                t += int(ch.findtext("duration"))
+            snds = [ch] if ch.tag == "sound" else ch.findall("sound")
+            for sd in snds:
+                if sd.get("tempo"):
+                    off = int(sd.findtext("offset") or 0)
+                    out.append((int(m.get("number")), (t + off) * 4 // div,
+                                round(float(sd.get("tempo")))))
+    return out
 
 
 PEDAL_ORDER = "DCBEFGA"
@@ -1745,6 +1799,8 @@ def add_harp_pedals(part):
         ET.SubElement(pt, "pedal-alter").text = str(first[step])
     ET.SubElement(d, "staff").text = "1"
     _insert_at(by_num[1], 0, d)
+    by_num[1].remove(d)
+    by_num[1].insert(list(by_num[1]).index(by_num[1].find("note")), d)
     for b, ch in changes.items():
         d = ET.Element("direction", placement="below")
         w = ET.SubElement(ET.SubElement(d, "direction-type"), "words",
@@ -1752,6 +1808,26 @@ def add_harp_pedals(part):
         w.text = " ".join(ch)
         ET.SubElement(d, "staff").text = "1"
         _insert_at(by_num[b], 0, d)
+
+
+def check_xml_extras(path, ids, fermata_steps=False, tempo=True):
+    """Read back: every tempo step sits where TEMPI puts it, and every
+    part has as many hairpins as its data asks for."""
+    r = ET.parse(path).getroot()
+    parts = r.findall("part")
+    got = sorted(sound_positions(parts[0]))
+    want = sorted((b, s, bpm) for b, s, bpm in TEMPI
+                  if tempo and (fermata_steps or (b, s) not in FERMATA_STEPS))
+    if not tempo:
+        want = sorted((b, s, bpm) for b, s, _, bpm in TEMPO_MARKS)
+    assert got == want, (path, sorted(set(got) ^ set(want)))
+    staff_ids = [i for i in ids if i != "hpl"]
+    for part, pid in zip(parts, staff_ids):
+        n = sum(1 for w in part.iter("wedge")
+                if w.get("type") in ("crescendo", "diminuendo"))
+        want_n = len(PBY[pid]["hair"]) + (len(PBY["hpl"]["hair"])
+                                          if pid == "hpr" else 0)
+        assert n == want_n, (path, pid, n, want_n)
 
 
 def verify(path, parsed, ids):
@@ -1818,8 +1894,8 @@ HW_CLICK = [(1, 0, "click ♩ = 72"), (4, 8, "click follows rit."),
             (76, 12, "free — fermata"), (77, 0, "click ♩ = 96"),
             (78, 8, "free — rit. to end")]
 # one system per page, 4-5 bars, breaks at phrase starts
-HW_PAGES = (5, 9, 14, 18, 22, 26, 31, 35, 39, 43, 48, 52, 56, 58, 62, 66, 70,
-            74)
+HW_PAGES = (5, 9, 14, 18, 22, 26, 31, 35, 39, 43, 48, 50, 52, 56, 58, 62, 66,
+            70, 74)
 # group name, parts, symbol, barlines through the group
 HW_GROUPS = [("Woodwinds", ["picc", "fl", "ob", "cl", "bsn"], "bracket", True),
              ("Brass", ["hn1", "hn2", "tpt", "tbn", "tba"], "bracket", True),
@@ -1988,23 +2064,34 @@ def polish_hollywood(path, ids, cscore=True):
 # ---------------------------------------------------------------------------
 def merged_notes(events):
     """Merge tied notes: list of dict(start, dur, pitches, lyric, melisma,
-    grace, accent, stacc, trem, bar)."""
-    out, cur, in_slur = [], None, False
+    legato, grace, accent, stacc, trem, bar).  A tie continues only into
+    the same pitches starting where the note ends, so the two harp staves
+    can be merged into one event list.  legato: slurred into the next
+    note."""
+    out, open_, in_slur = [], {}, False
     for e in events:
         if e["pitches"] is None:
-            cur, in_slur = None, False
+            in_slur = False
             continue
-        if cur is not None and cur["tie"]:
+        key = tuple(e["pitches"])
+        cur = open_.pop(key, None)
+        if cur is not None and cur["start"] + cur["dur"] == e["abs"]:
             cur["dur"] += e["dur"]
             cur["tie"] = e["tie"]
+            if e["tie"]:
+                open_[key] = cur
             if e["slur_end"]:
                 in_slur = False
+                cur["legato"] = False
             continue
         cur = dict(start=e["abs"], dur=e["dur"], pitches=e["pitches"],
                    lyric=e["lyric"], tie=e["tie"], grace=e["grace"],
                    accent=e["accent"], stacc=e["stacc"], trem=e["trem"],
-                   bar=e["bar"], melisma=(e["lyric"] is None and in_slur))
+                   bar=e["bar"], melisma=(e["lyric"] is None and in_slur),
+                   legato=(in_slur or e["slur_start"]) and not e["slur_end"])
         out.append(cur)
+        if e["tie"]:
+            open_[key] = cur
         if e["slur_start"]:
             in_slur = True
         if e["slur_end"]:
@@ -2069,7 +2156,10 @@ TRACK_NAMES = {"sop": "Soprano 女高音", "alt": "Alto 女低音",
                "mel": "Melody 主旋律"}
 
 
-def part_track(p, events, ch, lyrics=True, cc=True, name=None, program=True):
+def part_track(p, events, ch, lyrics=True, cc=True, name=None, program=True,
+               detache=False):
+    """detache: notes outside slurs end a little early (Instrument X reads
+    touching notes as legato, overlapping ones as a second voice)."""
     notes = merged_notes(events)
     vel = dyn_curve(p)
     sung = p["id"] in CHOIR or p["id"] == "mel"
@@ -2092,6 +2182,9 @@ def part_track(p, events, ch, lyrics=True, cc=True, name=None, program=True):
         if nxt and nxt["start"] * T16 == off and \
                 set(nxt["pitches"]) & set(n["pitches"]):
             off -= 12 if n["dur"] > 2 else 24
+        elif detache and nxt and nxt["start"] * T16 == off and \
+                not n["legato"]:
+            off -= max(20, min(60, (off - on) // 10))
         if in_pizz(p, n["bar"]):
             off = min(off, on + 100)
         elif n["stacc"]:
@@ -2181,9 +2274,10 @@ def write_midi(path, items, parsed, lyrics=True, charset="utf-8", cc=True,
         if ascii_meta and p.get("ix"):
             name = f"{p['name']} (Instrument X: {p['ix']})"
         elif ascii_meta:
-            name = p["name"]
-        mf.tracks.append(part_track(p, evs, ch, lyrics=lyrics, cc=cc,
-                                    name=name, program=program))
+            name = "Melody" if pid == "mel" else p["name"]
+        mf.tracks.append(part_track(
+            p, evs, ch, lyrics=lyrics, cc=cc, name=name, program=program,
+            detache=ascii_meta and pid not in CHOIR and pid != "mel"))
     mf.save(path)
 
 
@@ -2519,6 +2613,13 @@ def export_ganhuo(parsed):
                    ascii_meta=True)
     shutil.copy(os.path.join(OUT, f"{NAME}_交响合唱_合唱四声部.musicxml"),
                 os.path.join(ch, f"{NAME}_合唱四声部_MusicXML备用.musicxml"))
+    mel = os.path.join(ch, "主旋律单轨_参考")
+    os.makedirs(mel)
+    for f, cs in ((f"{NAME}_主旋律单轨_带歌词.mid", "utf-8"),
+                  (f"{NAME}_主旋律单轨_带歌词_GBK编码备用.mid", "gbk")):
+        write_midi(os.path.join(mel, f), ["mel"], parsed, charset=cs,
+                   cc=False, program=False, single_channel=True,
+                   ascii_meta=True)
     lyr = os.path.join(ch, "歌词粘贴备用")
     os.makedirs(lyr)
     for k, c in enumerate(CHOIR, 1):
@@ -2579,6 +2680,7 @@ def main():
     sc.write("musicxml", fp=base + "_总谱.musicxml")
     polish(base + "_总谱.musicxml", staff_ids)
     verify(base + "_总谱.musicxml", parsed, ids)
+    check_xml_extras(base + "_总谱.musicxml", ids)
 
     # choir-only score for singers / checking the vocal lines
     cs = stream.Score()
@@ -2589,7 +2691,8 @@ def main():
     cs.insert(0, layout.StaffGroup(ps, name="Choir", symbol="bracket"))
     cs.write("musicxml", fp=base + "_合唱四声部.musicxml")
     polish(base + "_合唱四声部.musicxml", list(CHOIR), big=False,
-           breaks=(5, 14, 22, 26, 31, 39, 48, 58, 66, 74))
+           breaks=(5, 14, 22, 26, 31, 39, 48, 58, 66, 74), fermata_steps=True)
+    check_xml_extras(base + "_合唱四声部.musicxml", list(CHOIR), True)
 
     # MIDI
     write_midi(base + "_全轨.mid", orch_items() + list(CHOIR), parsed)
@@ -2608,7 +2711,9 @@ def main():
                    cc=False)
         s1 = single_part_score(p, parsed[c], subtitle=p["cn"])
         s1.write("musicxml", fp=stem + ".musicxml")
-        polish(stem + ".musicxml", [c], big=False, breaks=())
+        polish(stem + ".musicxml", [c], big=False, breaks=(),
+               fermata_steps=True)
+        check_xml_extras(stem + ".musicxml", [c], True)
 
     # Instrument X: one MIDI + one concert-pitch MusicXML per track
     k = 0
@@ -2632,11 +2737,15 @@ def main():
             s1.insert(0, layout.StaffGroup([a, z], name="Harp",
                                            symbol="brace"))
             s1.write("musicxml", fp=stem + ".musicxml")
-            polish(stem + ".musicxml", ["hpr"], big=False, breaks=())
+            polish(stem + ".musicxml", ["hpr"], big=False, breaks=(),
+                   fermata_steps=True)
+            check_xml_extras(stem + ".musicxml", ["hpr", "hpl"], True)
         else:
             s1 = single_part_score(p, parsed[p["id"]], concert=True)
             s1.write("musicxml", fp=stem + ".musicxml")
-            polish(stem + ".musicxml", [p["id"]], big=False, breaks=())
+            polish(stem + ".musicxml", [p["id"]], big=False, breaks=(),
+                   fermata_steps=True)
+            check_xml_extras(stem + ".musicxml", [p["id"]], True)
 
     # Hollywood conductor score (score in C) for Sibelius
     for cs_, suffix in ((True, "_好莱坞C调总谱_阅读版.musicxml"),
@@ -2645,6 +2754,7 @@ def main():
         hollywood_score(parsed, cs_).write("musicxml", fp=hw)
         polish_hollywood(hw, staff_ids, cs_)
         verify(hw, parsed, ids)
+        check_xml_extras(hw, ids, tempo=not cs_)
 
     write_srt(os.path.join(OUT, f"{NAME}_歌词字幕.srt"), parsed["mel"])
     # preview MIDI for the rough GM render (velocity only, no CC curves,

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pa0a827879dbf9fd919280fab509a9941">
+    <score-part id="Pb2c66f323db35155d2f0d75c5de2349e">
       <part-name>Clarinet in A</part-name>
       <part-abbreviation>Cl.</part-abbreviation>
-      <score-instrument id="I3aa07236892d78eee7b3b141238cefab">
+      <score-instrument id="I4f71258ebba097f204dd77eab62f708f">
         <instrument-name>Clarinet in A</instrument-name>
         <instrument-abbreviation>Cl.</instrument-abbreviation>
         <instrument-sound>wind.reed.clarinet.a</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I3aa07236892d78eee7b3b141238cefab">
+      <midi-instrument id="I4f71258ebba097f204dd77eab62f708f">
         <midi-channel>4</midi-channel>
         <midi-program>72</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pa0a827879dbf9fd919280fab509a9941">
+  <part id="Pb2c66f323db35155d2f0d75c5de2349e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -166,6 +166,7 @@
           <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>G</step>
@@ -4442,6 +4443,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>C</step>
@@ -4479,6 +4481,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>A</step>
@@ -4499,8 +4508,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

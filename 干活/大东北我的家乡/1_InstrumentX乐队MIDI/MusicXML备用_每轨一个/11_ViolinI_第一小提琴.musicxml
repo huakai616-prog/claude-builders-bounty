@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P88c06fa3689cc4a67cc22520b967ca18">
+    <score-part id="P8ab1cdcd83bffcff11a8823e9a27540f">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="I9cfb86076713f908ced6132f9373853b">
+      <score-instrument id="Id43b73fe793951df3b6c194b1942b5c3">
         <instrument-name>Violin I</instrument-name>
         <instrument-abbreviation>Vln. I</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I9cfb86076713f908ced6132f9373853b">
+      <midi-instrument id="Id43b73fe793951df3b6c194b1942b5c3">
         <midi-channel>15</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P88c06fa3689cc4a67cc22520b967ca18">
+  <part id="P8ab1cdcd83bffcff11a8823e9a27540f">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -184,6 +184,9 @@
       </note>
     </measure>
     <measure implicit="no" number="4">
+      <sound tempo="64">
+        <offset>20160</offset>
+      </sound>
       <note>
         <pitch>
           <step>A</step>
@@ -211,7 +214,7 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
-      <sound tempo="64" />
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -275,7 +278,7 @@
     <measure implicit="no" number="9">
       <direction placement="above">
         <direction-type>
-          <words font-style="italic">arco, dolce</words>
+          <words font-style="italic">ord., dolce</words>
         </direction-type>
       </direction>
       <direction placement="below">
@@ -3845,6 +3848,7 @@
           <tied type="stop" />
         </notations>
       </note>
+      <sound tempo="34" />
       <note>
         <pitch>
           <step>A</step>
@@ -3906,6 +3910,13 @@
       </note>
     </measure>
     <measure implicit="no" number="78">
+      <sound tempo="86" />
+      <sound tempo="66">
+        <offset>20160</offset>
+      </sound>
+      <sound tempo="40">
+        <offset>30240</offset>
+      </sound>
       <note>
         <pitch>
           <step>E</step>
@@ -3931,8 +3942,6 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
-      <sound tempo="66" />
-      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>
