@@ -1,0 +1,60 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="art.js"></script><script src="scenes.js"></script>
+<script>
+// 《等潮》0:00 hook: sunset, the end of the ferry pier, the dog with the red scarf waiting
+seed(44);
+const VP = [540, 440], HOR = 440, pt = (X, Y, d) => [VP[0] + X * d, VP[1] + Y * d];
+const DY = 400, PW = 430, DEND = 0.4, SUNX = 612;
+const dogC = grab(() => dog(540, 604, 0.92, { pose: 'back', wind: 0.75 }));
+// sky
+ctx.fillStyle = vg(ctx, 0, HOR, [[0, '#3e4a7a'], [0.35, '#8a78a0'], [0.65, '#e0958a'], [0.88, '#f6bf86'], [1, '#ffdca0']]); ctx.fillRect(0, 0, W, HOR + 2);
+glow(SUNX, HOR, 520, '255,200,150', 0.45);
+puffs([[200, 120, 260, 22], [860, 90, 240, 20], [700, 230, 260, 14], [240, 300, 280, 12], [960, 320, 180, 10], [520, 150, 160, 12]], '#8c6a8c', 'rgba(255,208,160,1)', SUNX, HOR, 3, 26, '#c98a90', 4);
+glow(SUNX, HOR, 150, '255,236,190', 0.8);
+ctx.fillStyle = rg(ctx, SUNX, HOR, 0, 44, [[0, '#fffbea'], [0.75, '#ffe6a6'], [1, 'rgba(255,214,140,0)']]); ctx.beginPath(); ctx.arc(SUNX, HOR, 44, Math.PI, 0); ctx.fill();
+// far islands and the ferry going away
+ctx.fillStyle = 'rgba(120,80,110,0.55)'; P([[0, HOR], [0, 418], [80, 404, 170, 416], [230, 424, 300, HOR]]); ctx.fill();
+ctx.fillStyle = 'rgba(120,80,110,0.45)'; P([[860, HOR], [920, 424, 1000, 426], [1050, 420, W, 424], [W, HOR]]); ctx.fill();
+ctx.save(); ctx.translate(790, HOR - 1); ctx.fillStyle = '#6c4c68';
+P([[-46, 0], [-40, -10], [44, -10], [50, -2], [46, 0]]); ctx.fill(); ctx.fillRect(-26, -20, 46, 10); ctx.fillRect(-14, -27, 24, 7); ctx.fillRect(8, -36, 7, 10);
+ctx.fillStyle = '#ffd99a'; for (let k = 0; k < 6; k++) ctx.fillRect(-22 + k * 7, -17, 3, 3); ctx.restore();
+glow(790, HOR - 14, 40, '255,210,150', 0.3);
+ctx.strokeStyle = 'rgba(210,180,200,0.35)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(740, HOR + 2); ctx.quadraticCurveTo(700, HOR + 6, 620, HOR + 5); ctx.stroke();
+for (const [x, y, s] of [[380, 250, 1.2], [420, 270, 0.9], [300, 200, 0.8]]) farGull(x, y, s, 0.75, '80,50,70');
+// sea
+seaSurface(HOR, H, '#c7a3a2', '#3c3f5e', SUNX, '255,226,170', 0.6, 800);
+// pilings under the deck, and their reflections
+const pile = (X, d, top, bot) => { const a = pt(X, top, d), b = pt(X, bot, d), w = 26 * d; ctx.fillStyle = lg(ctx, a[0] - w, 0, a[0] + w, 0, [[0, '#3a2a2e'], [0.5, '#5a4040'], [1, '#2a1f24']]); ctx.fillRect(a[0] - w / 2, a[1], w, b[1] - a[1]); };
+for (const X of [-PW + 10, PW - 10]) for (let z = 1 / 1.3; z <= 1 / DEND + 0.01; z += 0.35) { const d = 1 / z; pile(X, d, DY, 560); ctx.fillStyle = 'rgba(40,30,40,0.35)'; const b = pt(X, 560, d); ctx.fillRect(b[0] - 13 * d, b[1], 26 * d, 60 * d); }
+// deck
+const deck = () => poly([pt(-PW, DY, DEND), pt(PW, DY, DEND), pt(PW, DY, 1.4), pt(-PW, DY, 1.4)]);
+deck(); ctx.fillStyle = vg(ctx, pt(0, DY, DEND)[1], H, [[0, '#a2766a'], [0.5, '#7c5750'], [1, '#4a3437']]); ctx.fill();
+ctx.save(); deck(); ctx.clip();
+for (let X = -PW; X < PW; X += 43) { const a1 = pt(X, DY, DEND), a2 = pt(X, DY, 1.4), b1 = pt(X + 43, DY, DEND), b2 = pt(X + 43, DY, 1.4);
+  ctx.fillStyle = `rgba(${rnd() < 0.5 ? '255,220,190' : '40,25,30'},${0.04 + rnd() * 0.06})`; poly([a1, b1, b2, a2]); ctx.fill();
+  ctx.strokeStyle = 'rgba(40,24,28,0.55)'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(...a1); ctx.lineTo(...a2); ctx.stroke(); }
+for (let z = 1 / 1.4; z < 1 / DEND; z += 0.9) { const d = 1 / z; ctx.strokeStyle = 'rgba(40,24,28,0.3)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(...pt(-PW, DY, d)); ctx.lineTo(...pt(PW, DY, d)); ctx.stroke(); }
+// the sunset streak on the wet boards
+ctx.translate(SUNX - 20, 720); ctx.scale(0.3, 1); glow(0, 0, 320, '255,200,150', 0.45); ctx.restore();
+// deck fascia at the far end
+poly([pt(-PW, DY, DEND), pt(PW, DY, DEND), pt(PW, DY + 36, DEND), pt(-PW, DY + 36, DEND)]); ctx.fillStyle = '#4a3036'; ctx.fill();
+// posts and rope along both sides
+for (const X of [-PW + 8, PW - 8]) {
+  let prev = null;
+  for (let z = 1 / 1.3; z <= 1 / DEND + 0.01; z += 0.7) { const d = 1 / z, b = pt(X, DY, d), t = pt(X, 250, d), w = 30 * d;
+    ctx.fillStyle = lg(ctx, b[0] - w / 2, 0, b[0] + w / 2, 0, [[0, '#4a3438'], [0.6, '#7a5550'], [1, '#3a282c']]); ctx.fillRect(b[0] - w / 2, t[1], w, b[1] - t[1]);
+    ctx.fillStyle = '#2f2226'; ctx.fillRect(b[0] - w / 2 - 2 * d, t[1] - 6 * d, w + 4 * d, 8 * d);
+    if (prev) { const r = pt(X, 280, d); ctx.strokeStyle = 'rgba(220,190,160,0.8)'; ctx.lineWidth = Math.max(1.5, 5 * d); ctx.beginPath(); ctx.moveTo(...prev); ctx.quadraticCurveTo((prev[0] + r[0]) / 2, (prev[1] + r[1]) / 2 + 30 * d, ...r); ctx.stroke(); }
+    prev = pt(X, 280, d); }
+}
+// the dog: backlit, warm rim, long shadow toward us
+ctx.save(); ctx.translate(532, 610); ctx.fillStyle = lg(ctx, 0, 0, -30, 220, [[0, 'rgba(40,20,35,0.5)'], [1, 'rgba(40,20,35,0)']]); P([[-60, -4], [60, -4], [40, 230], [-120, 230]]); ctx.fill(); ctx.restore();
+ctx.drawImage(tint(dogC, '#6f4c60', 1), 0, 0);
+rim(dogC, -2, 5, 'rgba(255,215,160,1)', 1, 1.6);
+rim(dogC, 3, 2, 'rgba(255,200,150,1)', 0.6, 1.2);
+caption('他走的那天，把围巾留给了它', 200);
+tag('《等潮》· 0:00 开场第一帧');
+finish({ bloom: 0.26, vignette: 0.32, grain: 6 });
+document.title = 'done';
+</script></body></html>

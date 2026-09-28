@@ -1,0 +1,109 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="art.js"></script><script src="scenes.js"></script>
+<script>
+// 《半把伞》0:00 hook: rainy seaside street at dusk, her umbrella leans to her right, left shoulder soaked
+seed(21);
+const VP = [600, 468], pt = (X, Y, d) => [VP[0] + X * d, VP[1] + Y * d];
+const zl = (d1, d2, u) => 1 / ((1 - u) / d1 + u / d2);
+const FX = -700, GY = 370;
+function fq(d1, d2, Y1, Y2, u1 = 0, u2 = 1) { const a = zl(d1, d2, u1), b = zl(d1, d2, u2); return [pt(FX, Y1, a), pt(FX, Y1, b), pt(FX, Y2, b), pt(FX, Y2, a)]; }
+
+// ---- figure and prop layers ----
+const girlC = grab(() => girl(548, 800, 0.9, { view: 'front', arm: 'umbrella', face: 'neutral', wet: true, umb: { tilt: 0.2 } }));
+const shops = [[1.25, 0.72, -560, '#8fa39a'], [0.72, 0.5, -470, '#c9a79a'], [0.5, 0.37, -520, '#9aa7b9'], [0.37, 0.29, -450, '#c8b58f'], [0.29, 0.235, -540, '#a3b3a4'], [0.235, 0.195, -470, '#b9a0a6'], [0.195, 0.165, -520, '#98a6b6'], [0.165, 0.14, -460, '#bfae93'], [0.14, 0.12, -500, '#a4ada0'], [0.12, 0.1, -470, '#aa9ca6'], [0.1, 0.07, -520, '#9ea8b3']];
+const facadeC = grab(() => {
+  for (const [d1, d2, roof, col] of shops) {
+    const q = fq(d1, d2, GY, roof); poly(q); ctx.fillStyle = col; ctx.fill();
+    ctx.fillStyle = 'rgba(40,50,70,0.42)'; ctx.fill();                       // dusk + rain haze
+    ctx.strokeStyle = 'rgba(30,35,45,0.5)'; ctx.lineWidth = 1.2; ctx.stroke();
+    const bakery = d1 === 0.72;
+    // cornice
+    poly(fq(d1, d2, roof + 30, roof)); ctx.fillStyle = 'rgba(30,36,50,0.45)'; ctx.fill();
+    // upper windows (warm, lit)
+    for (const [u1, u2] of [[0.14, 0.38], [0.58, 0.82]]) {
+      const w = fq(d1, d2, roof + 170, roof + 70, u1, u2); poly(w);
+      const lit = !bakery && rnd() < 0.75; ctx.fillStyle = lit ? '#ffcf8a' : '#3c4658'; ctx.fill(); ctx.strokeStyle = 'rgba(30,30,40,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+      if (lit) { const cx = (w[0][0] + w[2][0]) / 2, cy = (w[0][1] + w[2][1]) / 2; glow(cx, cy, 70 * d1, '255,190,120', 0.35); }
+    }
+    if (bakery) {
+      // closed shutter + dark sign + striped awning
+      const sh = fq(d1, d2, GY, -150, 0.12, 0.88); poly(sh); ctx.fillStyle = '#6b7282'; ctx.fill();
+      ctx.strokeStyle = 'rgba(30,34,44,0.55)'; ctx.lineWidth = 1.3;
+      for (let Y = -140; Y < GY; Y += 16) { const a = pt(FX, Y, zl(d1, d2, 0.12)), b = pt(FX, Y, zl(d1, d2, 0.88)); ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke(); }
+      poly(fq(d1, d2, -300, -250, 0.2, 0.8)); ctx.fillStyle = '#3d3431'; ctx.fill();
+      for (let k = 0; k < 8; k++) { const u1 = 0.04 + k * 0.115, u2 = u1 + 0.115, a1 = zl(d1, d2, u1), a2 = zl(d1, d2, u2);
+        poly([pt(FX, -200, a1), pt(FX, -200, a2), pt(FX + 90, -120, a2), pt(FX + 90, -120, a1)]); ctx.fillStyle = k % 2 ? '#e9e0cf' : '#b8483e'; ctx.fill(); ctx.fillStyle = 'rgba(40,45,70,0.4)'; ctx.fill(); }
+      const e1 = pt(FX + 90, -120, zl(d1, d2, 0.04)), e2 = pt(FX + 90, -120, zl(d1, d2, 0.96)); ctx.strokeStyle = 'rgba(30,25,30,0.6)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(...e1); ctx.lineTo(...e2); ctx.stroke();
+    } else {
+      // shop window, warm
+      const w = fq(d1, d2, 300, -120, 0.1, 0.62); poly(w); ctx.fillStyle = '#f6c47e'; ctx.fill(); ctx.fillStyle = 'rgba(120,70,40,0.25)'; ctx.fill(); ctx.strokeStyle = 'rgba(30,30,40,0.7)'; ctx.lineWidth = 2; ctx.stroke();
+      const cx = (w[0][0] + w[2][0]) / 2, cy = (w[0][1] + w[2][1]) / 2; glow(cx, cy, 160 * d1, '255,180,110', 0.45);
+      const door = fq(d1, d2, GY, -60, 0.7, 0.9); poly(door); ctx.fillStyle = '#3a3340'; ctx.fill();
+    }
+  }
+});
+const lampDs = [0.8, 0.48, 0.33, 0.25, 0.2, 0.165, 0.14, 0.12];
+const lampC = grab(() => {
+  // railing along the sea wall
+  ctx.strokeStyle = '#2b2f3a'; ctx.lineCap = 'round';
+  const RX = 590;
+  for (const Y of [180, 260]) { ctx.lineWidth = Y === 180 ? 5 : 3; ctx.beginPath(); ctx.moveTo(...pt(RX, Y, 0.06)); ctx.lineTo(...pt(RX, Y, 1.3)); ctx.stroke(); }
+  for (let z = 0.8; z < 16; z += 0.55) { const d = 1 / z; ctx.lineWidth = Math.max(1, 7 * d); ctx.beginPath(); ctx.moveTo(...pt(RX, GY, d)); ctx.lineTo(...pt(RX, 170, d)); ctx.stroke(); }
+  for (const d of lampDs) {
+    const b = pt(520, GY, d), t = pt(520, -420, d), w = 16 * d;
+    ctx.fillStyle = '#23272f'; ctx.fillRect(b[0] - w / 2, t[1], w, b[1] - t[1]); ctx.fillRect(b[0] - w, b[1] - 40 * d, 2 * w, 40 * d);
+    ctx.save(); ctx.translate(t[0], t[1]); ctx.scale(d, d);
+    ctx.fillStyle = '#23272f'; P([[-34, -20], [0, -60], [34, -20]]); ctx.fill();
+    ctx.fillStyle = '#ffe2a8'; P([[-26, -20], [26, -20], [20, 40], [-20, 40]]); ctx.fill();
+    ctx.strokeStyle = '#23272f'; ctx.lineWidth = 5; ctx.stroke(); ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, 40); ctx.stroke();
+    ctx.restore();
+  }
+});
+
+// ---- background ----
+ctx.fillStyle = vg(ctx, 0, VP[1], [[0, '#2c3651'], [0.5, '#5b6781'], [0.85, '#9a98a2'], [1, '#b8aca6']]); ctx.fillRect(0, 0, W, VP[1] + 2);
+cloudBank([[300, 60, 400, 70], [800, 110, 420, 80], [980, 250, 260, 60], [700, 330, 300, 40]], '45,52,72', 0.22, 10, 22);
+cloudBank([[860, 400, 300, 30], [1020, 360, 160, 28]], '190,175,175', 0.12, 12, 12);
+glow(900, 470, 260, '255,200,160', 0.25);
+// far headland with a few lights
+ctx.fillStyle = '#6a6f84'; P([[640, 470], [700, 452, 760, 450], [840, 432, 900, 440], [960, 424, 1080, 436], [1080, 472]]); ctx.fill();
+for (const [x, y] of [[720, 458], [735, 460], [880, 446], [905, 448], [1010, 440], [1040, 444]]) { ctx.fillStyle = '#ffd9a0'; E(x, y, 1.6, 1.6); ctx.fill(); glow(x, y, 10, '255,210,150', 0.5); }
+seaSurface(470, 840, '#7a8497', '#2d3a4f', 960, '230,205,180', 0.25, 160, 600, 1080);
+const bgC = snap();
+ctx.drawImage(facadeC, 0, 0);
+// ---- pavement: wet stone, mirrors everything ----
+const pave = () => poly([VP, pt(FX, GY, 1.5), [W, H], pt(560, GY, 1.5)]);
+pave(); ctx.fillStyle = vg(ctx, VP[1], H, [[0, '#566076'], [0.4, '#3d4557'], [1, '#262b37']]); ctx.fill();
+ctx.save(); pave(); ctx.clip();
+// paving joints
+ctx.strokeStyle = 'rgba(20,24,32,0.35)'; ctx.lineWidth = 1;
+for (let z = 1; z < 16; z += 0.5) { const d = 1 / z; ctx.beginPath(); ctx.moveTo(...pt(FX, GY, d)); ctx.lineTo(...pt(560, GY, d)); ctx.stroke(); }
+for (let X = -660; X < 560; X += 90) { ctx.beginPath(); ctx.moveTo(...pt(X, GY, 0.05)); ctx.lineTo(...pt(X, GY, 1.6)); ctx.stroke(); }
+ctx.restore();
+mirror(bgC, VP[1], 0, 0.45, 3, 380, 0, pave);
+mirror(facadeC, 470 + 370 * 600 / 700, -370 / 700, 0.6, 2.5, 420, 6, pave);
+mirror(lampC, 470 - 370 * 600 / 520, 370 / 520, 0.55, 2, 420, 6, pave);
+// lamp light pools and reflected glows
+for (const d of lampDs) { const b = pt(520, GY, d), t = pt(520, -420, d);
+  ctx.save(); pave(); ctx.clip(); ctx.translate(b[0] - 60 * d, b[1]); ctx.scale(1, 0.3); ctx.fillStyle = rg(ctx, 0, 0, 0, 260 * d, [[0, 'rgba(255,200,130,0.35)'], [1, 'rgba(255,200,130,0)']]); ctx.fillRect(-300, -300, 600, 600); ctx.restore();
+  const ry = 2 * b[1] - t[1]; ctx.save(); pave(); ctx.clip(); ctx.translate(t[0], ry); ctx.scale(0.35, 1); glow(0, 0, 180 * d, '255,205,140', 0.5); ctx.restore(); }
+mirror(girlC, 800, 0, 0.5, 2, 260, 3, pave);
+// ripples on the pavement
+ctx.save(); pave(); ctx.clip(); for (let i = 0; i < 220; i++) { const y = 480 + Math.pow(rnd(), 0.7) * 360, k = (y - 470) / 370, x = rnd() * W;
+  ctx.strokeStyle = `rgba(220,230,245,${0.12 + rnd() * 0.18})`; ctx.lineWidth = 0.6 + k; ctx.beginPath(); ctx.ellipse(x, y, 3 + k * 12 * rnd() + 2, (1 + k * 3) * 0.6, 0, 0, Math.PI * 2); ctx.stroke(); } ctx.restore();
+ctx.drawImage(lampC, 0, 0);
+// her: slightly cooled by the dusk, warm light from the lamps on her right side
+ctx.drawImage(tint(girlC, '#b6bfd6', 0.55), 0, 0);
+litFrom(girlC, 800, 360, 420, '255,190,120', 0.35);
+rim(girlC, -3, 2, 'rgba(255,215,160,1)', 0.6);
+// lamp glows + lit rain
+for (const d of lampDs) { const t = pt(520, -420, d); glow(t[0], t[1] + 8 * d, 220 * d, '255,205,140', 0.55); glow(t[0], t[1] + 8 * d, 60 * d, '255,240,200', 0.8); rain(Math.round(120 * d), 0.9, 20 * d + 6, 0.12, t[0] - 180 * d, t[1] - 120 * d, t[0] + 180 * d, t[1] + 360 * d); }
+for (const [cx, cy, r] of [[100, 420, 260], [300, 470, 140]]) glow(cx, cy, r, '255,180,110', 0.12);
+rain(850, 0.24, 30, 0.12);
+rain(90, 0.5, 60, 0.12, 0, 0, W, H);
+caption('分开三个月，她的伞还是往右边歪', 230);
+tag('《半把伞》· 0:00 开场第一帧');
+finish({ bloom: 0.3, vignette: 0.35, grain: 7 });
+document.title = 'done';
+</script></body></html>

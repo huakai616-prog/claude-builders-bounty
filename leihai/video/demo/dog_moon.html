@@ -1,0 +1,53 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="art.js"></script><script src="scenes.js"></script>
+<script>
+// 《等潮》101.5 s: after the storm, moonlight; a gull carries the red scarf away; grandma's lantern waits on the pier
+seed(55);
+const HOR = 520, MX = 930, MY = 150;
+const dogC = grab(() => dog(640, 700, 0.95, { dir: 1, look: 'up', scarf: false }));
+const GX = 790, GY = 300, GR = -0.5, GS = 1.2;
+const gullC = grab(() => {
+  const bx = GX + (58 * Math.cos(GR) + 11 * Math.sin(GR)) * GS, by = GY + (58 * Math.sin(GR) - 11 * Math.cos(GR)) * GS;
+  ribbon(bx - 4, by + 2, 175, 22, 0.75, 0.9, Math.PI / 2, Math.PI - 0.55);
+  gull(GX, GY, GS, 0.7, GR);
+});
+// night sky, stars, moon
+ctx.fillStyle = vg(ctx, 0, HOR, [[0, '#0c1630'], [0.55, '#1f3159'], [1, '#48608d']]); ctx.fillRect(0, 0, W, HOR + 2);
+for (let i = 0; i < 260; i++) { const x = rnd() * W, y = Math.pow(rnd(), 1.4) * (HOR - 60), r = 0.4 + rnd() * 1.3; ctx.fillStyle = `rgba(235,240,255,${0.3 + rnd() * 0.6})`; E(x, y, r, r); ctx.fill(); if (r > 1.4) glow(x, y, 6, '220,230,255', 0.5); }
+glow(MX, MY, 420, '160,185,235', 0.35);
+glow(MX, MY, 120, '220,230,255', 0.5);
+ctx.fillStyle = rg(ctx, MX - 12, MY - 12, 4, 50, [[0, '#fbfbf2'], [1, '#dfe4ea']]); E(MX, MY, 46, 46); ctx.fill();
+ctx.fillStyle = 'rgba(170,180,200,0.35)'; for (const [dx, dy, r] of [[-14, -8, 9], [12, 10, 7], [6, -18, 5], [-4, 18, 6]]) { E(MX + dx, MY + dy, r, r); ctx.fill(); }
+puffs([[300, 200, 260, 20], [640, 300, 240, 16], [1000, 260, 160, 14], [180, 400, 240, 12]], '#1c2a4c', 'rgba(210,222,245,1)', MX, MY, 3, 24, '#2c3d66', 4);
+// far shore with a few village lights (the town the boy left is not here; this is home)
+ctx.fillStyle = '#16213d'; P([[0, HOR], [0, 490], [120, 480, 220, 488], [300, 494, 360, HOR]]); ctx.fill();
+for (const [x, y] of [[60, 494], [90, 497], [150, 490], [230, 496]]) { ctx.fillStyle = '#ffd08a'; E(x, y, 1.5, 1.5); ctx.fill(); glow(x, y, 12, '255,200,130', 0.45); }
+// sea with the moon path
+seaSurface(HOR, H, '#3b5178', '#0f1b33', MX, '225,232,255', 0.35, 700);
+// pier seen from the side: deck, fascia, pilings, reflections
+const DT = 682, DB = 716, WL = 800;
+for (let x = -30; x < 760; x += 118) { ctx.fillStyle = lg(ctx, x, 0, x + 22, 0, [[0, '#1b1a26'], [0.5, '#34303e'], [1, '#15141e']]); ctx.fillRect(x, DB, 22, WL - DB); ctx.fillStyle = 'rgba(20,20,35,0.5)'; ctx.fillRect(x + 2, WL, 18, 40); }
+ctx.fillStyle = vg(ctx, DT - 8, DT + 4, [[0, '#8a8da6'], [1, '#5a5a70']]); ctx.fillRect(-10, DT - 8, 776, 12);
+ctx.fillStyle = vg(ctx, DT + 4, DB, [[0, '#3a3546'], [1, '#231f2c']]); ctx.fillRect(-10, DT + 4, 776, DB - DT - 4);
+ctx.strokeStyle = 'rgba(10,10,20,0.5)'; ctx.lineWidth = 1; for (let x = 0; x < 760; x += 56) { ctx.beginPath(); ctx.moveTo(x, DT + 4); ctx.lineTo(x, DB); ctx.stroke(); }
+ctx.strokeStyle = 'rgba(230,236,255,0.5)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(766, DT - 8); ctx.lineTo(766, DB); ctx.stroke();
+// grandma's lantern on the boards, left of the dog
+const LX = 470, LY = DT - 6;
+ctx.fillStyle = '#2a2530'; ctx.fillRect(LX - 16, LY - 6, 32, 6); P([[LX - 14, LY - 44], [LX + 14, LY - 44], [LX + 18, LY - 6], [LX - 18, LY - 6]]); ctx.fill();
+ctx.fillStyle = '#ffd690'; ctx.fillRect(LX - 10, LY - 40, 20, 30);
+ctx.strokeStyle = '#2a2530'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(LX, LY - 40); ctx.lineTo(LX, LY - 10); ctx.stroke();
+ctx.beginPath(); ctx.arc(LX, LY - 50, 12, Math.PI, 0); ctx.stroke();
+glow(LX, LY - 26, 260, '255,190,110', 0.45); glow(LX, LY - 26, 70, '255,230,170', 0.8);
+ctx.save(); ctx.translate(LX, DT - 4); ctx.scale(1, 0.12); glow(0, 0, 240, '255,190,110', 0.6); ctx.restore();
+// dog: moonlit, warm lantern light on its left side
+ctx.drawImage(tint(dogC, '#5f6d9c', 0.95), 0, 0);
+litFrom(dogC, LX, LY - 26, 300, '255,180,110', 0.42);
+rim(dogC, -3, 4, 'rgba(210,225,255,1)', 0.8, 1.4);
+// the gull with the scarf, flying toward the moon
+ctx.drawImage(tint(gullC, '#aab8dc', 0.5), 0, 0);
+rim(gullC, -3, 3, 'rgba(230,238,255,1)', 0.7, 1.2);
+tag('《等潮》· 1:41.5 海鸥叼走了红围巾');
+finish({ bloom: 0.3, vignette: 0.38, grain: 7 });
+document.title = 'done';
+</script></body></html>

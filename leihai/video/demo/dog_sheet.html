@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1600" height="1000"></canvas>
+<script src="art.js"></script>
+<script>
+seed(12);
+ctx.fillStyle = vg(ctx, 0, H, [[0, '#f6efe4'], [1, '#ebe0cf']]); ctx.fillRect(0, 0, W, H);
+glow(600, 480, 700, '255,245,225', 0.6);
+function t(s, x, y, size = 26, col = '#463c34', w = 'bold', align = 'left') { ctx.fillStyle = col; ctx.textAlign = align; ctx.font = `${w} ${size}px "Noto Serif CJK SC"`; ctx.fillText(s, x, y); ctx.textAlign = 'left'; }
+t('角色设定 ·「阿旺」（《等潮》）', 60, 70, 38);
+t('奶油色小土狗，红色毛线围巾是男孩走的那天给它系上的。', 60, 112, 22, '#6e645a', 'normal');
+dog(230, 840, 1.45, { wind: 0.15 });
+dog(640, 840, 1.45, { look: 'bright', wind: 0.55 });
+dog(1010, 840, 1.45, { pose: 'back', wind: 0.85 });
+t('侧面（坐着等）', 230, 915, 22, '#6e645a', 'normal', 'center'); t('听见船笛', 640, 915, 22, '#6e645a', 'normal', 'center'); t('背面（望着海）', 1010, 915, 22, '#6e645a', 'normal', 'center');
+// palette
+const pal = [['#f2d6ad', '奶油毛色'], ['#fdf7ec', '胸口 / 口鼻白'], ['#c8473c', '围巾红'], ['#2a1f1b', '鼻头']];
+pal.forEach(([c, n], i) => { const px = 70 + i * 190; ctx.fillStyle = c; E(px, 962, 13, 13); ctx.fill(); ink(1.6); t(n, px + 22, 970, 19, '#6e645a', 'normal'); });
+const cells = [['等待', { look: 'ahead' }], ['听见船笛', { look: 'bright' }], ['失落（耳朵耷拉）', { ears: 'down', look: 'sad' }], ['对着海叫一声', { mouth: 'bark' }], ['被奶奶摸头', { ears: 'down', look: 'closed' }], ['望向远处', { look: 'up' }]];
+t('表情', 1250, 142, 24);
+cells.forEach(([name, o], i) => {
+  const cx = 1335 + (i % 2) * 175, top = 158 + Math.floor(i / 2) * 262;
+  ctx.save(); ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.beginPath(); ctx.roundRect(cx - 82, top, 164, 205, 14); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(cx - 82, top, 164, 205, 14); ctx.clip();
+  dog(cx + 50, top + 332, 1.0, Object.assign({ wind: 0.05, tailLen: 0.5 }, o)); ctx.restore();
+  t(name, cx, top + 234, 19, '#6e645a', 'normal', 'center');
+});
+finish({ bloom: 0.12, vignette: 0.12, grain: 6 });
+document.title = 'done';
+</script></body></html>

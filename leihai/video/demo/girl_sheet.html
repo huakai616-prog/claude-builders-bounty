@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1600" height="1000"></canvas>
+<script src="art.js"></script>
+<script>
+seed(8);
+ctx.fillStyle = vg(ctx, 0, H, [[0, '#f6efe4'], [1, '#ebe0cf']]); ctx.fillRect(0, 0, W, H);
+glow(600, 420, 700, '255,245,225', 0.6);
+function t(s, x, y, size = 26, col = '#463c34', w = 'bold') { ctx.fillStyle = col; ctx.font = `${w} ${size}px "Noto Serif CJK SC"`; ctx.fillText(s, x, y); }
+t('角色设定 ·「小满」（《半把伞》）', 60, 70, 38);
+t('短发、芥末黄雨衣、红雨靴、透明伞。伞总往右边偏，左肩是湿的。', 60, 112, 22, '#6e645a', 'normal');
+girl(210, 900, 1.1, { face: 'neutral' });
+girl(560, 900, 1.1, { arm: 'umbrella', face: 'sad', wet: true, umb: { tilt: 0.25 } });
+girl(930, 900, 1.1, { view: 'back', arm: 'umbrella', wet: true, umb: { tilt: 0.25 } });
+t('正面', 185, 960, 22, '#6e645a', 'normal'); t('撑伞（伞偏右、左肩湿）', 440, 960, 22, '#6e645a', 'normal'); t('背面', 905, 960, 22, '#6e645a', 'normal');
+// expressions
+const cells = [['平静', 'neutral', 1330, 250], ['抬头淋雨', 'up', 1505, 250], ['闭眼', 'closed', 1330, 560], ['释然的笑', 'smile', 1505, 560], ['难过', 'sad', 1330, 870]];
+for (const [name, face, cx, cy] of cells) {
+  ctx.save(); ctx.fillStyle = 'rgba(255,255,255,0.45)'; ctx.beginPath(); ctx.roundRect(cx - 88, cy - 125, 176, 230, 14); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(cx - 88, cy - 125, 176, 230, 14); ctx.clip();
+  girl(cx, cy + 335 * 0.95 + 5, 0.95, { face, arm: 'down' }); ctx.restore();
+  t(name, cx - 26, cy + 128, 20, '#6e645a', 'normal');
+}
+t('表情', 1300, 160, 24);
+finish({ bloom: 0.12, vignette: 0.12, grain: 6 });
+document.title = 'done';
+</script></body></html>

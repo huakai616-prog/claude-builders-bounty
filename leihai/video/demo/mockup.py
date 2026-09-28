@@ -122,14 +122,3 @@ def douyin_zones(cv):
     for b in [(2, 2, W - 3, 170), (905, 880, W - 3, 1545), (2, 1575, W - 3, H - 3)]:
         dashed(b)
     d.text((14, 1582), '红虚线内：抖音界面大约会盖住', font=font(22), fill=(190, 40, 40, 200))
-
-
-def seal(cv, x, y, size=46, chars='花开富贵'):
-    """A small red name seal (2x2 characters)."""
-    d = ImageDraw.Draw(cv, 'RGBA')
-    d.rounded_rectangle([x, y, x + size, y + size], radius=4, fill=(184, 51, 42, 235))
-    f = font(int(size * 0.4), 'Bold'); h = size / 2
-    for i, ch in enumerate(chars):   # read top-right, bottom-right, top-left, bottom-left like a seal
-        col, row = (1 - i // 2), i % 2
-        cx, cy = x + col * h + h / 2, y + row * h + h / 2
-        w = d.textlength(ch, font=f); d.text((cx - w / 2, cy - size * 0.24), ch, font=f, fill=(250, 238, 225, 255))
