@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="hq.js"></script>
+<script>
+// 《还给海》开头 = 结尾（首尾循环）：窗台上一缸海水，鱼不见了，缸里映着落日
+seed(11);
+const WX0 = 120, WX1 = 1100, WY0 = -20, WY1 = 560, HOR = 330, SUNX = 700, SILL = 560;
+ctx.fillStyle = vg(ctx, 0, H, [[0, '#e7d0b6'], [1, '#caa283']]); ctx.fillRect(0, 0, W, H);
+ctx.save(); ctx.beginPath(); ctx.rect(WX0, WY0, WX1 - WX0, WY1 - WY0); ctx.clip();
+sunsetSky(ctx, WX0, WY0, WX1 - WX0, HOR, SUNX, { stops: [[0, '#5d6899'], [0.35, '#b98fa8'], [0.7, '#eea88c'], [1, '#ffdca0']], clouds: [[360, 90, 240, 26], [820, 150, 200, 18], [560, 230, 160, 12]], sunR: 46 });
+sea(ctx, WX0, WX1 - WX0, HOR, WY1, SUNX);
+// far shoreline with a line of footprints being filled by the tide
+ctx.fillStyle = vg(ctx, 470, WY1, [[0, 'rgba(214,190,150,0)'], [1, 'rgba(214,190,150,0.85)']]); ctx.fillRect(WX0, 470, WX1 - WX0, 100);
+ctx.fillStyle = 'rgba(120,95,70,0.45)'; for (let i = 0; i < 9; i++) { ctx.beginPath(); ctx.ellipse(260 + i * 34, 540 - i * 7, 5, 2.4, -0.2, 0, Math.PI * 2); ctx.fill(); }
+ctx.restore();
+ctx.fillStyle = '#efe1ca'; ctx.fillRect(WX0 - 26, WY0, 26, WY1 - WY0);
+ctx.strokeStyle = OUT; ctx.lineWidth = 2.6; ctx.strokeRect(WX0, WY0, WX1 - WX0 + 40, WY1 - WY0); ctx.strokeRect(WX0 - 26, WY0, 26, WY1 - WY0);
+// sill
+ctx.fillStyle = vg(ctx, SILL, SILL + 46, [[0, '#ecd6b3'], [1, '#caa982']]); ctx.fillRect(0, SILL, W, 46);
+ctx.fillStyle = 'rgba(70,45,30,0.25)'; ctx.fillRect(0, SILL + 46, W, 20); ctx.beginPath(); ctx.moveTo(0, SILL); ctx.lineTo(W, SILL); ctx.stroke();
+ctx.fillStyle = rg(ctx, 330, SILL + 14, 10, 200, [[0, 'rgba(90,60,40,0.35)'], [1, 'rgba(90,60,40,0)']]); ctx.save(); ctx.scale(1, 0.12); ctx.beginPath(); ctx.ellipse(330, (SILL + 14) / 0.12, 210, 150, 0, 0, Math.PI * 2); ctx.restore(); ctx.fill();
+// a small shell beside the bowl
+ctx.save(); ctx.translate(720, SILL + 26); ctx.scale(1.6, 1.6); ctx.fillStyle = vg(ctx, -14, 6, [[0, '#fbe8dc'], [1, '#d9b3a0']]);
+ctx.beginPath(); ctx.moveTo(-18, 6); ctx.quadraticCurveTo(0, -26, 18, 6); ctx.closePath(); ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 2; ctx.stroke();
+ctx.lineWidth = 1; for (const a of [-0.6, -0.3, 0, 0.3, 0.6]) { ctx.beginPath(); ctx.moveTo(0, 5); ctx.lineTo(Math.sin(a) * 16, 5 - Math.cos(a) * 18); ctx.stroke(); } ctx.restore();
+// the bowl full of sea water, the setting sun caught inside
+glassBowl(470, 400, 165, 270, 300, () => {
+  ctx.fillStyle = vg(ctx, 300, 565, [[0, 'rgba(110,165,180,0.55)'], [1, 'rgba(40,90,110,0.75)']]); ctx.fillRect(300, 300, 340, 280);
+  ctx.fillStyle = rg(ctx, 420, 360, 0, 70, [[0, 'rgba(255,245,210,0.95)'], [0.3, 'rgba(255,215,150,0.6)'], [1, 'rgba(255,190,130,0)']]); ctx.fillRect(330, 290, 200, 160);
+  const [c, g] = layer();
+  for (let i = 0; i < 90; i++) { const y = 310 + Math.pow(rnd(), 1.4) * 220, x = 420 + gauss() * (8 + (y - 310) * 0.35); g.fillStyle = `rgba(255,${225 + rnd() * 25},${170 + rnd() * 50},${0.5 + rnd() * 0.5})`; g.beginPath(); g.ellipse(x, y, 2 + rnd() * 8, 1 + rnd(), 0, 0, Math.PI * 2); g.fill(); }
+  blurDraw(ctx, c, 2, 'screen'); ctx.drawImage(c, 0, 0);
+});
+{ const [c, g] = layer(); g.fillStyle = 'rgba(255,238,195,0.9)';
+  for (let i = 0; i < 50; i++) { g.beginPath(); g.ellipse(250 + gauss() * 40, SILL + 16 + gauss() * 4, 6 + rnd() * 16, 2 + rnd() * 3, 0, 0, Math.PI * 2); g.fill(); }
+  blurDraw(ctx, c, 3, 'screen', 0.55); }
+motes(50, 150, 80, 1050, 540);
+finish({ bloom: 0.3, vignette: 0.32 });
+document.title = 'done';
+</script></body></html>

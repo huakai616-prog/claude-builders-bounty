@@ -1,0 +1,74 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="hq.js"></script>
+<script>
+// 《还给海》23 s 精修版：窗边鱼缸，「泪」落进缸里，倒影里的回忆
+seed(5);
+const WX0 = 250, WX1 = 1030, WY0 = 50, WY1 = 600, HOR = 400, SUNX = 860, SILL = 600;
+// room
+ctx.fillStyle = vg(ctx, 0, H, [[0, '#e9d3bb'], [0.65, '#dcbc9c'], [1, '#c89f80']]); ctx.fillRect(0, 0, W, H);
+ctx.fillStyle = rg(ctx, 120, 320, 10, 260, [[0, 'rgba(255,214,160,0.45)'], [1, 'rgba(255,214,160,0)']]); ctx.fillRect(0, 0, 400, 700);
+{ const [c, g] = layer(); for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(${rnd() < 0.5 ? '255,255,255' : '90,60,40'},0.05)`; g.fillRect(rnd() * W, rnd() * H, 2 + rnd() * 6, 2 + rnd() * 6); } blurDraw(ctx, c, 2); }
+// view
+ctx.save(); ctx.beginPath(); ctx.rect(WX0, WY0, WX1 - WX0, WY1 - WY0); ctx.clip();
+sunsetSky(ctx, WX0, WY0, WX1 - WX0, HOR, SUNX, { stops: [[0, '#7c88b4'], [0.35, '#c79db0'], [0.7, '#f0b594'], [1, '#ffe2a8']], clouds: [[420, 140, 200, 24], [720, 205, 160, 16], [960, 110, 150, 18]], sunR: 34 });
+sea(ctx, WX0, WX1 - WX0, HOR, WY1, SUNX);
+ctx.restore();
+// frame (lit from outside: bright inner edges)
+ctx.fillStyle = '#efe1ca';
+ctx.fillRect(WX0 - 26, WY0 - 26, WX1 - WX0 + 52, 26); ctx.fillRect(WX0 - 26, WY0, 26, WY1 - WY0); ctx.fillRect(WX1, WY0, 26, WY1 - WY0); ctx.fillRect(629, WY0, 22, WY1 - WY0);
+ctx.fillStyle = 'rgba(255,230,190,0.7)'; ctx.fillRect(WX1 - 3, WY0, 3, WY1 - WY0); ctx.fillRect(649, WY0, 2, WY1 - WY0);
+ctx.fillStyle = 'rgba(80,50,30,0.18)'; ctx.fillRect(WX0 - 26, WY0 - 26, 6, WY1 - WY0 + 26);
+ctx.strokeStyle = OUT; ctx.lineWidth = 2.6;
+ctx.strokeRect(WX0, WY0, WX1 - WX0, WY1 - WY0); ctx.strokeRect(WX0 - 26, WY0 - 26, WX1 - WX0 + 52, WY1 - WY0 + 26); ctx.strokeRect(629, WY0, 22, WY1 - WY0);
+// sill
+ctx.fillStyle = vg(ctx, SILL, SILL + 40, [[0, '#ecd6b3'], [1, '#caa982']]); ctx.fillRect(WX0 - 60, SILL, WX1 - WX0 + 140, 40);
+ctx.fillStyle = 'rgba(70,45,30,0.25)'; ctx.fillRect(WX0 - 60, SILL + 40, WX1 - WX0 + 140, 18);
+ctx.strokeRect(WX0 - 60, SILL, WX1 - WX0 + 140, 40);
+// long shadows toward the left (sun on the right)
+ctx.fillStyle = rg(ctx, 330, SILL + 12, 10, 190, [[0, 'rgba(90,60,40,0.35)'], [1, 'rgba(90,60,40,0)']]); ctx.save(); ctx.scale(1, 0.12); ctx.beginPath(); ctx.ellipse(330, (SILL + 12) / 0.12, 190, 150, 0, 0, Math.PI * 2); ctx.restore(); ctx.fill();
+// books + Clawd leaning toward the bowl (light from the right)
+litBox(600, 578, 230, 22, '#9db3ac', '#7f968f', 1, false); litBox(612, 556, 206, 22, '#e2c395', '#c9a877', 1, false);
+ctx.save(); ctx.translate(705, 450); ctx.rotate(-0.07); ctx.translate(-705, -450);
+litBox(645, 530, 24, 30, '#d7805c', '#b0603f', 1, false); litBox(745, 530, 24, 30, '#d7805c', '#b0603f', 1, false);
+litBox(610, 340, 190, 195, '#eb9b77', '#c86f4f', 1);
+clawdEye(626, 368, 1.2, true);
+ctx.restore();
+// the bowl, with the memory in the water
+glassBowl(465, 455, 142, 350, 378, () => {
+  const [c, g] = layer();
+  g.fillStyle = vg(g, 470, 600, [[0, 'rgba(120,160,175,0)'], [1, 'rgba(70,105,120,0.7)']]); g.fillRect(320, 470, 300, 140);
+  g.fillStyle = 'rgba(64,95,110,0.8)'; g.beginPath(); g.ellipse(380, 560, 60, 30, 0, 0, Math.PI * 2); g.fill(); g.beginPath(); g.ellipse(560, 566, 56, 26, 0, 0, Math.PI * 2); g.fill();
+  g.fillStyle = 'rgba(215,240,244,0.7)'; g.beginPath(); g.ellipse(468, 575, 64, 10, 0, 0, Math.PI * 2); g.fill();
+  // two small figures at the tide pool; the blue one lifts the jar
+  g.fillStyle = 'rgba(214,160,140,0.85)'; g.fillRect(398, 498, 46, 40); g.fillRect(404, 536, 8, 12); g.fillRect(430, 536, 8, 12);
+  g.fillStyle = 'rgba(120,150,200,0.9)'; g.fillRect(486, 490, 46, 48); g.fillRect(492, 536, 8, 12); g.fillRect(518, 536, 8, 12);
+  g.save(); g.translate(490, 500); g.rotate(-1.1); g.fillRect(0, -4, 22, 9); g.restore();
+  g.strokeStyle = 'rgba(40,55,70,0.7)'; g.lineWidth = 2; g.strokeRect(398, 498, 46, 40); g.strokeRect(486, 490, 46, 48);
+  g.fillStyle = 'rgba(40,40,50,0.8)'; g.fillRect(434, 506, 4, 9); g.fillRect(492, 500, 4, 9);
+  g.strokeStyle = 'rgba(250,255,255,0.95)'; g.lineWidth = 2; g.strokeRect(470, 448, 14, 19); g.fillStyle = '#4f78c4'; g.fillRect(473, 459, 8, 4);
+  // soft, cool, faded like a reflection
+  g.globalCompositeOperation = 'destination-in'; g.fillStyle = rg(g, 470, 520, 20, 130, [[0, 'rgba(0,0,0,0.85)'], [1, 'rgba(0,0,0,0)']]); g.fillRect(320, 380, 300, 240);
+  blurDraw(ctx, c, 1.1);
+  blueFish(420, 420, 1.05, -0.12);
+});
+// ripple rings + the drop
+ctx.save(); ctx.globalCompositeOperation = 'screen';
+for (const [r, a] of [[10, 0.9], [21, 0.6], [33, 0.35]]) { ctx.strokeStyle = `rgba(255,255,255,${a})`; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(540, 379, r, r * 0.26, 0, 0, Math.PI * 2); ctx.stroke(); }
+ctx.restore();
+ctx.save(); ctx.translate(552, 350);
+ctx.fillStyle = rg(ctx, -2, 0, 0, 10, [[0, 'rgba(255,255,255,0.98)'], [0.6, 'rgba(190,230,245,0.9)'], [1, 'rgba(150,205,230,0.6)']]);
+ctx.beginPath(); ctx.moveTo(0, -12); ctx.quadraticCurveTo(8, 3, 0, 9); ctx.quadraticCurveTo(-8, 3, 0, -12); ctx.fill();
+ctx.strokeStyle = 'rgba(60,110,130,0.6)'; ctx.lineWidth = 1; ctx.stroke(); ctx.restore();
+// caustic light focused through the bowl onto the sill (to the left)
+{ const [c, g] = layer(); g.fillStyle = 'rgba(255,240,200,0.9)';
+  for (let i = 0; i < 40; i++) { g.beginPath(); g.ellipse(300 + gauss() * 30, SILL + 14 + gauss() * 4, 6 + rnd() * 14, 2 + rnd() * 3, 0, 0, Math.PI * 2); g.fill(); }
+  blurDraw(ctx, c, 3, 'screen', 0.5); }
+// arm resting toward the bowl
+litBox(596, 488, 50, 22, '#eb9b77', '#cf7858', 1, false);
+// light beam + dust
+{ const [c, g] = layer(); g.fillStyle = 'rgba(255,225,170,0.18)'; g.beginPath(); g.moveTo(WX1, WY0 + 80); g.lineTo(WX1, WY1); g.lineTo(0, 760); g.lineTo(0, 420); g.closePath(); g.fill(); blurDraw(ctx, c, 30, 'screen', 0.8); }
+motes(70, 120, 150, 1000, 600);
+finish({ bloom: 0.25, vignette: 0.3 });
+document.title = 'done';
+</script></body></html>
