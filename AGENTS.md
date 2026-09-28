@@ -22,9 +22,10 @@
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
+| 大东北我的家乡（全曲，何玉） | 迪士尼风格交响乐（Instrument X）+ SATB 合唱 · F 大调，末段副歌转 G · ♩=128 | `claude/determined-archimedes-93zrgx` | `dadongbei/` | 已完成，待在 Instrument X / ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 以上分支都还**没有合并进 `main`**。合并以后记得更新这张表。
+- 泪海已经合并进 `main`（PR #2），其余分支都还**没有合并**。合并以后记得更新这张表。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
 
@@ -39,6 +40,10 @@
   - 高潮前留一拍弦乐全停让人声清唱，下一拍全奏落地。
   - 结尾渐宽、渐慢。
 - 用户说「图二」但只传了一张图时，就用那张图，并在回复里说明。
+- 也会要整首歌的大编制，例如：「给这首歌创作一个华丽的适配Instrument X演奏的迪士尼风格的交响乐搭配传统四声部合唱」。
+  - **Instrument X** 是 Dreamtonics 的神经网络乐器（不是 ACE Studio 的功能），首发 13 件管弦乐器：Violin 1 / Viola 1 / Violoncello 1 / Contrabass 1、Piccolo 1 / Flute 1 / Oboe 1 / Clarinet in A 1 / Bassoon 1、Horn 1 / Trumpet 1 / Trombone 1 / Tuba 1，另有两支爵士萨克斯。没有竖琴、打击乐、键盘，这些写成可选轨。
+  - 每轨一件独奏乐器，用 unison 叠成声部；木管、铜管每轨只写单音。
+  - 交付每轨一个 MIDI 加一个 C 调 MusicXML（见 `dadongbei/`）。
 - **用户嫌每次从聊天里下载文件麻烦**。生成的文件一律提交进仓库的 `output/` 目录，不要只作为聊天附件发。
 
 ## 从简谱图到交付
@@ -108,11 +113,19 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **人声长音附近的弦乐**：弦乐和人声的长音不要构成小九度。例如人声 C4 持续时，B♭m6 的 D♭ 只能放在 C4 下面，放在上面就成了小九度。`--check` 会抓出来。
 - **歌词 MIDI**：每个字一个 lyrics meta 事件；拖腔音符写 `-`；倚音带那个字，主音写 `-`。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
+- **大编制（`dadongbei/build.py`）**：
+  - 伴奏声部由 `CHART` 和声表自动生成。**maj7 和弦的上方声部不能用根音**，否则会在旋律的七音（例如 B♭maj7 里的 A）上方构成小二度。`chord_tones(upper=True)` 已经去掉。
+  - 旋律唱 9 音时（例如 Gm7 上的 A），伴奏也不能放三音。那里改用 G11 这类不带三音的和弦。
+  - 移调乐器：music21 的 Part 要设 `atSoundingPitch = True`，才会写成记谱音高并带 `<transpose>`。`verify()` 会回读总谱，逐音核对实际音高。
+  - 倚音 token 要写在连线括号前面：`g:D6 (C6/2`，不能写 `(g:D6`。
+  - 23 行谱表的总谱用 A3、3.7 毫米谱表，不强制换行，MuseScore 第一页才放得下标题和第一行。
+  - GM 试听用的 MIDI 不写 CC：几条轨共用一个 GM 通道，CC1、CC11 会互相覆盖。
 
 ## 待办 / 待确认
 
 - **泪海唱几遍**：副歌目前唱两遍，第一遍抒情，第二遍高燃。用户还没确认要不要只唱一遍。如果只要一遍，把第 14–24 小节换成直接进尾奏的结尾（见 `leihai/README.md` 末尾）。
 - **泪海 ACE Studio 渲染**：只能在用户的 Mac 上做（见下一节）。
+- **大东北我的家乡**：在用户的机器上用 Instrument X 渲染乐队、ACE Studio 渲染合唱（步骤见 `dadongbei/README.md`）。目前唱一遍主歌、两遍副歌，要不要照原谱整首唱两遍待确认。
 - **合并分支**：上面的分支是否合并进 `main`，由用户决定。
 
 ## ACE Studio（在用户的 Mac 上）
