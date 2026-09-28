@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+# 诀别书: the piano chart screenshots and their crops stay local (third-party
+# chart, public repo); scratch renders from the transcription agents
+juebieshu/source/pages/
+juebieshu/source/crops/
+juebieshu/transcription/work/scratch/
