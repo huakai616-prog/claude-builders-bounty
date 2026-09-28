@@ -14,18 +14,30 @@
 
 用户在自己的 Mac 上用西贝柳斯看谱，用 ACE Studio 做 demo（AI 人声 + AI 弦乐）。
 
+**用户在「编曲交付中心」找文件**：https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN
+- 已经钉在用户 claude.ai 的左侧边栏。
+- 每首歌点「下载到电脑」，就得到一个整理好的 zip。
+- 用户说过「我不太会用 GitHub」，所以别让用户去 GitHub 或分支里找文件。
+- 每次交付都要把作品加进交付中心，回复第一句给这个链接。步骤见 `.claude/skills/hollywood-score/SKILL.md` 的「Delivery center」。
+- GPT / Codex 发布不了这个页面，就在回复里写明「请 Claude 把它加进交付中心」。
+
 ## 项目地图
 
 | 歌 | 编制 · 调 · 速度 | 分支 | 目录 | 状态 |
 |---|---|---|---|---|
-| 泪海（副歌，许茹芸） | 人声 + 弦乐四重奏 · F 大调 · ♩=59 | `claude/elegant-pascal-83rncr` | `leihai/` | 已完成。待确认副歌唱一遍还是两遍，待在 ACE Studio 渲染 |
+| 泪海（副歌，许茹芸） | 人声 + 弦乐四重奏 · F 大调 · ♩=59 | `main` | `leihai/` | 已完成。PDF 是旧版预览，没有花开当富贵署名。副歌唱两遍（用户已在 ACE 渲染、Logic 混音） |
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
-| 我不难过（副歌，孙燕姿） | 人声 + 弦乐四重奏 · ♭E 大调（原调） · ♩=68 | `claude/eager-bell-1xpu86` | `wobunanguo/` | 已完成，副歌唱一遍，带前奏尾奏，好莱坞总谱 PDF（第一首用 `tools/hollywood` 的）。待用户确认谱上几处低八度（见目录 README「转写说明」），待在 ACE Studio 渲染 |
+| 我不难过（副歌，孙燕姿） | 人声 + 弦乐四重奏 · ♭E 大调（原调） · ♩=68 | `main`（原 `claude/eager-bell-1xpu86`） | `wobunanguo/` | 已完成，副歌唱一遍，带前奏尾奏，好莱坞总谱 PDF（第一首用 `tools/hollywood` 的）。待用户确认谱上几处低八度（见目录 README「转写说明」），待在 ACE Studio 渲染 |
+| 情歌（最后一遍副歌，梁静茹） | 人声 + 弦乐四重奏 · F 大调 · ♩=70 | `claude/serene-darwin-2l4jy4` | `qingge/` | 已完成，带封面 PDF（LilyPond 排的 A4，不是 `tools/hollywood` 的 11×17）。有三处八度 / 节奏待用户确认 |
+| 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `claude/magical-meitner-wj6g5j` | `chatang/` | 已完成，PDF 是旧版预览，没有花开当富贵署名 |
+| 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
+| 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 泪海已经通过 PR #2 合并进 `main`，其他分支都还**没有合并**。合并以后记得更新这张表。
+- 泪海、我不难过、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
+- 情歌、茶汤、大东北、泪海、甲乙丙丁、茉莉花的 PDF 或署名还没按好莱坞标准重做。用户要的时候，用 `tools/hollywood` 重出，再更新交付中心。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
 
@@ -140,7 +152,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 
 - **泪海唱几遍**：副歌目前唱两遍，第一遍抒情，第二遍高燃。用户还没确认要不要只唱一遍。如果只要一遍，把第 14–24 小节换成直接进尾奏的结尾（见 `leihai/README.md` 末尾）。
 - **泪海 ACE Studio 渲染**：只能在用户的 Mac 上做（见下一节）。
-- **合并分支**：上面的分支是否合并进 `main`，由用户决定。
+- **合并分支**：用户已经授权：每次交付检查通过后，由 AI 自己开 PR 合并进 `main`，不用再问。别的对话建的旧分支里的歌，合并前要注意 AGENTS.md 冲突，只合并歌曲目录。
 
 ## ACE Studio（在用户的 Mac 上）
 
@@ -158,5 +170,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 ## Git 约定
 
 - 新工作开新分支提交，提交信息写清楚。不改写别人分支的历史，不 force push。
-- 生成的文件（`output/`）要提交进仓库。用户直接从 GitHub 或本地同步的文件夹打开，不想每次从聊天里下载。
+- **交付完成后自己合并进 `main`**（用户授权过，不用再问）：推送分支，开 PR，合并。新对话只读 `main` 里的规则和工具，不合并的话下次对话就不知道。
+- 生成的文件（`output/`）要提交进仓库，同时放进编曲交付中心。用户从交付中心下载，不用 GitHub。
+- `tools/deliver/dist/` 是打包中间产物，已经在 `.gitignore` 里，不提交。
 - `__pycache__` 已经在 `.gitignore` 里，不要提交。

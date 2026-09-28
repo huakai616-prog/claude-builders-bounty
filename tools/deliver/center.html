@@ -1,0 +1,363 @@
+<title>编曲交付中心</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap">
+<style>
+/* Layout: one column "score cabinet", newest work first; each entry is a
+   catalogue row: engraved first page | title block + four-file checklist |
+   actions. A five-line staff rules the masthead. */
+:root {
+  --paper: #f3f5f2;
+  --surface: #ffffff;
+  --ink: #1b2130;
+  --muted: #5d6573;
+  --rule: #d8ddd6;
+  --accent: #23508e;
+  --accent-ink: #ffffff;
+  --ok: #2c7650;
+  --ok-bg: #e3f1e8;
+  --warn: #92560a;
+  --warn-bg: #f6ecdb;
+  --idle: #5f6673;
+  --idle-bg: #e8eaee;
+  --shadow: 0 1px 2px rgba(20, 30, 50, .06);
+  --display: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121518; --surface: #1a1e23; --ink: #e8eaed; --muted: #9ca4b0;
+    --rule: #2c323a; --accent: #92b8ee; --accent-ink: #0e1a2c;
+    --ok: #74d09c; --ok-bg: #173226; --warn: #f0b765; --warn-bg: #362a17;
+    --idle: #aab1bc; --idle-bg: #262b32; --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121518; --surface: #1a1e23; --ink: #e8eaed; --muted: #9ca4b0;
+  --rule: #2c323a; --accent: #92b8ee; --accent-ink: #0e1a2c;
+  --ok: #74d09c; --ok-bg: #173226; --warn: #f0b765; --warn-bg: #362a17;
+  --idle: #aab1bc; --idle-bg: #262b32; --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font-family: var(--body);
+       font-size: 15px; line-height: 1.6; padding-inline: 16px; }
+.wrap { max-width: 880px; margin: 0 auto; padding-block: 28px 64px;
+        display: grid; gap: 28px; }
+
+/* masthead */
+.mast { display: grid; gap: 14px; }
+.mast-top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-end;
+            justify-content: space-between; }
+.mast h1 { font-family: var(--display); font-weight: 700; font-size: 34px;
+           line-height: 1.15; margin: 0; letter-spacing: .04em; text-wrap: balance; }
+.byline { color: var(--muted); font-size: 14px; margin: 4px 0 0; letter-spacing: .06em; }
+.staff { height: 17px; background: repeating-linear-gradient(to bottom,
+         var(--rule) 0 1px, transparent 1px 4px); }
+.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap;
+         gap: 8px 22px; color: var(--muted); font-size: 14px; counter-reset: s; }
+.steps li { counter-increment: s; display: flex; gap: 8px; align-items: baseline; }
+.steps li::before { content: counter(s); font-family: var(--mono); font-size: 12px;
+         color: var(--accent); border: 1px solid var(--accent); min-width: 20px;
+         height: 20px; display: inline-grid; place-items: center; }
+.summary { font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+           letter-spacing: .02em; }
+
+/* buttons */
+button { font: inherit; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 6px;
+       padding: 8px 14px; font-size: 14px; font-weight: 500; border: 1px solid var(--accent);
+       background: var(--accent); color: var(--accent-ink); white-space: nowrap; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn .sz { font-family: var(--mono); font-size: 12px; opacity: .8; font-weight: 500; }
+.btn:hover { filter: brightness(1.06); }
+.btn:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn[disabled] { opacity: .55; cursor: progress; }
+
+/* sections */
+.sec-head { display: flex; align-items: center; gap: 12px; margin: 0; }
+.mark { font-family: var(--display); font-weight: 700; font-size: 16px; width: 28px;
+        height: 28px; display: grid; place-items: center; border: 1.6px solid var(--ink); }
+.sec-head h2 { font-family: var(--display); font-size: 20px; font-weight: 600; margin: 0; }
+.list { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+
+/* one work */
+.work { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 18px;
+        padding-block: 22px; border-bottom: 1px solid var(--rule); }
+.thumb { width: 112px; aspect-ratio: 11 / 15; max-width: 100%; background: var(--surface);
+         border: 1px solid var(--rule); box-shadow: var(--shadow); overflow: hidden;
+         display: grid; place-items: center; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.thumb .glyph { font-family: var(--display); font-size: 40px; color: var(--muted); }
+.body { min-width: 0; display: grid; gap: 10px; align-content: start; }
+.title-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.work h3 { font-family: var(--display); font-weight: 700; font-size: 24px; margin: 0;
+           line-height: 1.25; letter-spacing: .03em; }
+.pill { font-size: 12px; font-weight: 500; padding: 1px 9px; border-radius: 999px;
+        white-space: nowrap; }
+.pill.ready { color: var(--ok); background: var(--ok-bg); }
+.pill.old { color: var(--warn); background: var(--warn-bg); }
+.pill.partial, .pill.media { color: var(--idle); background: var(--idle-bg); }
+.sub { color: var(--muted); font-size: 14px; margin: -6px 0 0; }
+.meta { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.checks { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 0; padding: 0;
+          list-style: none; font-size: 13.5px; }
+.checks li { display: flex; align-items: center; gap: 6px; }
+.checks .ok::before, .checks .no::before { font-family: var(--mono); font-size: 12px;
+          width: 16px; height: 16px; display: inline-grid; place-items: center; border-radius: 3px; }
+.checks .ok::before { content: "✓"; color: var(--ok); background: var(--ok-bg); }
+.checks .no { color: var(--muted); }
+.checks .no::before { content: "–"; color: var(--idle); background: var(--idle-bg); }
+.note { font-size: 13.5px; color: var(--muted); margin: 0; max-width: 62ch; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+audio { width: min(100%, 420px); height: 36px; }
+video { width: 100%; max-width: 560px; aspect-ratio: 16 / 9; background: #000; border: 1px solid var(--rule); }
+details { font-size: 14px; }
+summary { cursor: pointer; color: var(--warn); font-weight: 500; width: fit-content; }
+details ul { margin: 8px 0 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 64ch; }
+
+.empty { padding: 28px 20px; border: 1px dashed var(--rule); color: var(--muted);
+         text-align: left; display: grid; gap: 6px; }
+.empty strong { color: var(--ink); font-weight: 500; }
+.foot { color: var(--muted); font-size: 13px; display: grid; gap: 4px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%);
+         bottom: calc(18px + env(safe-area-inset-bottom, 0px)); max-width: calc(100% - 32px);
+         background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 8px;
+         font-size: 14px; box-shadow: 0 4px 18px rgba(0, 0, 0, .18); }
+
+@media (max-width: 560px) {
+  .mast h1 { font-size: 28px; }
+  .work { grid-template-columns: 76px minmax(0, 1fr); gap: 14px; }
+  .thumb { width: 76px; }
+  .work h3 { font-size: 21px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .work { animation: rise .35s ease-out both; }
+  @keyframes rise { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <div class="mast-top">
+      <div>
+        <h1>编曲交付中心</h1>
+        <p class="byline">花开当富贵 · 改编 / 制谱</p>
+      </div>
+      <button class="btn" id="all" type="button" hidden>全部歌曲一次下载 <span class="sz" id="all-size"></span></button>
+    </div>
+    <div class="staff" aria-hidden="true"></div>
+    <ol class="steps">
+      <li>点「下载到电脑」</li>
+      <li>在弹出的确认里点「保存」</li>
+      <li>电脑：在「下载」文件夹里（Mac 会自动解压成文件夹）；手机：选「存储到文件」</li>
+    </ol>
+    <div class="summary" id="summary">正在读取作品列表…</div>
+  </header>
+
+  <section id="songs-sec">
+    <div class="sec-head"><span class="mark">A</span><h2>歌曲</h2></div>
+    <div class="list" id="songs">
+      <div class="empty" id="empty"><strong>作品列表正在加载</strong>
+        <span>每首歌完成后会出现在这里，最新的在最上面。每首歌可以一键下载到电脑：西贝柳斯工程、总谱 PDF、弦乐总 MIDI、人声带歌词 MIDI，打包成一个文件。</span></div>
+    </div>
+  </section>
+
+  <section id="media-sec" hidden>
+    <div class="sec-head"><span class="mark">B</span><h2>视频与动画</h2></div>
+    <div class="list" id="media"></div>
+  </section>
+
+  <footer class="foot">
+    <span>以后每做完一首歌，Claude 会把它放到这里的最上面，不用再去别处找。</span>
+    <span>所有文件在 GitHub 仓库 huakai616-prog/claude-builders-bounty 里也有一份备份，平时不需要打开。</span>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const size = (n) => !n ? "" : n >= 1e6 ? (n / 1e6).toFixed(1) + " MB"
+    : Math.max(1, Math.round(n / 1e3)) + " KB";
+  const use = (name) => (window.claude && window.claude.use)
+    ? window.claude.use(name).catch(() => null) : Promise.resolve(null);
+  const dlP = use("downloads");
+  const dbP = use("db");
+  let works = [];
+  let toastTimer;
+
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 4200);
+  }
+
+  const REASON = {
+    rate_limited: "上一个保存确认还开着，先处理它再点一次。",
+    too_large: "这个文件太大，这里存不下。",
+    rejected_extension: "这里不能保存这种文件。",
+    extension_not_enabled: "这里不能保存这种文件。",
+  };
+
+  function bytes(b64) {
+    const bin = atob(b64);
+    const u = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u;
+  }
+
+  async function get(href, as) {
+    const res = await fetch(href);
+    if (!res.ok) throw { code: "fetch" };
+    return as === "json" ? res.json() : as === "buf" ? res.arrayBuffer() : res.blob();
+  }
+
+  // A work's files arrive as bundle.json (small files inline, media by
+  // reference); the zip itself is assembled here in the browser.
+  async function addBundle(zip, href, prefix) {
+    const b = await get(href, "json");
+    for (const f of b.files) {
+      const data = f.b64 ? bytes(f.b64) : new Uint8Array(await get(f.href, "buf"));
+      zip.file(prefix + f.path, data, { binary: true, createFolders: false });
+    }
+  }
+
+  async function save(href, filename, btn, kind) {
+    const dl = await dlP;
+    if (!dl) { toast("这里不能下载。请在 Claude 网页或 App 里打开这个页面。"); return; }
+    if (kind === "zip" && !window.JSZip) { toast("打包组件没加载出来，刷新页面再试；也可以先下载总谱 PDF。"); return; }
+    const label = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = "准备中…";
+    try {
+      let blob;
+      if (kind === "zip") {
+        const zip = new JSZip();
+        await addBundle(zip, href, "");
+        blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE",
+                                         compressionOptions: { level: 6 } });
+      } else {
+        blob = await get(href, "blob");
+      }
+      await dl.save({ filename, data: blob });
+      toast("已保存：" + filename);
+    } catch (e) {
+      const code = e && e.code;
+      if (code === "declined") toast("已取消。");
+      else if (code === "fetch") toast("文件没取到，刷新页面再试一次。");
+      else toast(REASON[code] || "这里不能下载。请在 Claude 网页或 App 里打开这个页面。");
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = label;
+    }
+  }
+
+  async function saveAll(btn) {
+    const dl = await dlP;
+    if (!dl || !window.JSZip) { toast("这里不能打包下载。请在 Claude 网页或 App 里打开。"); return; }
+    const songs = works.filter((w) => w.section === "song");
+    const label = btn.innerHTML;
+    btn.disabled = true;
+    try {
+      const out = new JSZip();
+      const root = "花开当富贵_编曲交付/";
+      for (let i = 0; i < songs.length; i++) {
+        btn.textContent = `打包中 ${i + 1}/${songs.length}…`;
+        await addBundle(out, songs[i].zip.href, root);
+      }
+      btn.textContent = "生成压缩包…";
+      const blob = await out.generateAsync({ type: "blob", compression: "DEFLATE",
+                                             compressionOptions: { level: 6 } });
+      const day = new Date().toISOString().slice(0, 10);
+      await dl.save({ filename: `花开当富贵_编曲交付_全部歌曲_${day}.zip`, data: blob });
+      toast("已保存全部歌曲。");
+    } catch (e) {
+      const code = e && e.code;
+      toast(code === "declined" ? "已取消。" : (REASON[code] || "打包没成功，刷新页面再试一次。"));
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = label;
+    }
+  }
+
+  function card(w) {
+    const checks = (w.main || []).map((m) =>
+      `<li class="${m.ok ? "ok" : "no"}">${esc(m.label)}</li>`).join("");
+    const pdfLabel = w.pdf_kind === "hollywood" ? "总谱 PDF" : "总谱 PDF（旧版预览）";
+    const qs = (w.questions || []);
+    const thumb = w.cover
+      ? `<img src="${esc(w.cover)}" alt="${esc(w.title)} 总谱第一页" loading="lazy">`
+      : `<span class="glyph" aria-hidden="true">${esc((w.title || "").replace(/[《》]/g, "").slice(0, 1))}</span>`;
+    const zipLabel = w.section === "song" ? "下载到电脑" : "下载文件";
+    return `<article class="work" id="${esc(w.slug)}">
+      <div class="thumb">${thumb}</div>
+      <div class="body">
+        <div class="title-row"><h3>${esc(w.title)}</h3>
+          <span class="pill ${esc(w.status)}">${esc(w.status_zh)}</span></div>
+        <p class="sub">${esc(w.subtitle)}${w.artist ? " · 原唱 " + esc(w.artist) : ""}</p>
+        ${w.meta ? `<div class="meta">${esc(w.meta)} · 更新 ${esc(w.updated)}</div>`
+                 : `<div class="meta">更新 ${esc(w.updated)}</div>`}
+        ${checks ? `<ul class="checks" aria-label="四样主文件">${checks}</ul>` : ""}
+        ${w.note ? `<p class="note">${esc(w.note)}</p>` : ""}
+        ${w.video ? `<video controls playsinline preload="metadata" src="${esc(w.video.href)}"></video>` : ""}
+        <div class="actions">
+          <button class="btn" type="button" data-kind="zip" data-href="${esc(w.zip.href)}" data-name="${esc(w.zip.name)}">${zipLabel} <span class="sz">${size(w.zip.size)}</span></button>
+          ${w.pdf ? `<button class="btn ghost" type="button" data-href="${esc(w.pdf.href)}" data-name="${esc(w.pdf.name)}">${pdfLabel} <span class="sz">${size(w.pdf.size)}</span></button>` : ""}
+          ${w.video ? `<button class="btn ghost" type="button" data-href="${esc(w.video.href)}" data-name="${esc(w.video.name)}">下载视频 <span class="sz">${size(w.video.size)}</span></button>` : ""}
+        </div>
+        ${w.audio ? `<audio controls preload="none" src="${esc(w.audio)}" aria-label="${esc(w.title)} 试听"></audio>` : ""}
+        ${qs.length ? `<details><summary>待你确认 ${qs.length} 条</summary><ul>${qs.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></details>` : ""}
+      </div>
+    </article>`;
+  }
+
+  function render() {
+    const byNew = (a, b) => String(b.sort).localeCompare(String(a.sort));
+    const songs = works.filter((w) => w.section === "song").sort(byNew);
+    const media = works.filter((w) => w.section !== "song").sort(byNew);
+    $("songs").innerHTML = songs.length ? songs.map(card).join("")
+      : `<div class="empty"><strong>还没有作品</strong><span>做完第一首歌后会出现在这里。</span></div>`;
+    $("media").innerHTML = media.map(card).join("");
+    $("media-sec").hidden = !media.length;
+    const total = songs.reduce((n, w) => n + (w.zip ? w.zip.size : 0), 0);
+    $("all-size").textContent = size(total);
+    $("all").hidden = !(songs.length > 1 && window.JSZip);
+    const latest = works.map((w) => w.updated).sort().pop();
+    $("summary").textContent = `${songs.length} 首歌 · ${media.length} 个视频与动画`
+      + (latest ? ` · 最近更新 ${latest}` : "");
+  }
+
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-href]");
+    if (b) { save(b.dataset.href, b.dataset.name, b, b.dataset.kind); return; }
+    if (e.target.closest("#all")) saveAll($("all"));
+  });
+
+  dbP.then((db) => {
+    if (!db) {
+      $("summary").textContent = "请在 Claude 里打开这个页面";
+      $("empty").innerHTML = "<strong>这里看不到作品列表</strong><span>这个页面要在 Claude 网页或 App 里打开，才能列出作品和下载。</span>";
+      return;
+    }
+    db.collection("works").onSnapshot((snap) => {
+      works = snap.docs.filter((d) => d.exists).map((d) => d.data());
+      render();
+    }, () => {
+      $("summary").textContent = "作品列表没读到，刷新页面再试一次。";
+    });
+  });
+
+  dlP.then((dl) => {
+    if (!dl) document.querySelectorAll(".steps").forEach((el) => {
+      el.insertAdjacentHTML("afterend", '<div class="summary">在这里打开不能下载；请在 Claude 网页或 App 里打开这个页面。</div>');
+    });
+  });
+})();
+</script>

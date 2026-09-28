@@ -1,6 +1,6 @@
 ---
 name: hollywood-score
-description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), and the Hollywood layout, and says how to render and check it with tools/hollywood. Follow it without asking the user about layout, credits or deliverables.
+description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), the Hollywood layout (tools/hollywood), and the hand-off: every finished work goes into the pinned 编曲交付中心 page (tools/deliver) and is merged into main. Follow it without asking the user about layout, credits, deliverables or merging.
 ---
 
 # Hollywood score delivery
@@ -17,6 +17,8 @@ The user set these rules once and does not want to be asked again.
    - Also keep the usual extras: full-track MIDI for ACE, plain vocal MIDI, GM preview mp3, SRT.
 2. **Credits**: 改编 (arranger) and 制谱 (engraver / music preparation) are both **花开当富贵**. They appear on the cover, in the first-page title block, in every page footer, in the MusicXML `<creator type="arranger">` and `<encoder>`, and in the PDF metadata. `tools/hollywood` defaults to this; never leave either credit out.
 3. **Layout must be refined** (精益求精). Render, look at every page, and fix problems before you deliver (see the QA list below).
+4. **The user must be able to find the files without GitHub** (they said 「我不太会用 GitHub」). Every finished work goes into the pinned **编曲交付中心** page, and the first line of your reply is its link: https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN . There, one click saves a zip to the computer's Downloads folder. Never tell the user to look for files on a branch.
+5. **Merge into main yourself** once the work is checked (the user authorized this once, for good): open a PR from your branch to `main` and merge it. New conversations only read `main`, so the rules, tools and catalog must live there.
 
 ## What "Hollywood standard" means here
 
@@ -116,3 +118,30 @@ xmllint --noout --schema musicxml.xsd <song>/output/*.musicxml   # schema from w
 - The cover and header are an HTML page printed by headless Chromium on a transparent background and merged onto the MS4 pages. Page size must stay 11 × 17 in on both sides.
 - EB Garamond has no ♩ ♭ ♯; `hollywood._sym` wraps them in a fallback font.
 - MuseScore 3 (`mscore3`) cannot read this style. The Hollywood PDF needs MuseScore 4.
+
+## Delivery center (编曲交付中心)
+
+The page is `tools/deliver/center.html`, published at https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN and pinned in the user's claude.ai sidebar.
+
+- It lists the works from its database: collection `works`, one document per work, sorted newest first.
+- It serves each work's files from `files/<slug>/`.
+- 「下载到电脑」 builds `<歌名>_编曲交付.zip` in the browser from `bundle.json` and saves it through the `downloads` capability. The zip has `说明.txt`, `1_四样主文件/` and `2_其他文件/`. (The artifact host refuses to serve .zip, .mid or .musicxml files, so small files travel base64 inside `bundle.json`; PDF, mp3, mp4, png and fonts are served as themselves.)
+- 「全部歌曲一次下载」 merges every song into one zip.
+
+To add or update a work, after its files are built and committed:
+
+1. Add or edit its entry in `tools/deliver/catalog.py`.
+   - `ref=None` means "the current working tree", i.e. the song you just built.
+   - Fill in `main` (the four files), `pdf_kind` (`"hollywood"` for the tools/hollywood PDF), `audio`, and the open questions for the user.
+2. `python3 tools/deliver/package.py <slug> --files`. This prints the `files` map to publish. Output goes to `tools/deliver/dist/`, which is git-ignored.
+3. `Artifact` `action: "read"` on the URL. A publish from a new conversation is refused until you have read it.
+4. `Artifact` publish:
+   - `url` = the page URL;
+   - `file_path` = `tools/deliver/center.html`;
+   - `files` = the printed map.
+   Files you leave out are kept. Omit `capabilities` and `icon` so they stay as they are.
+5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`.
+6. Reply to the user with the page link first, then what changed.
+7. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+
+Works that live on other branches keep their branch name as `ref`. `package.py` reads them with `git archive`, so fetch first: `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.
