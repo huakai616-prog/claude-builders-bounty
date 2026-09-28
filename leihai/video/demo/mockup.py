@@ -52,13 +52,13 @@ def handdrawn(ink):
     return out
 
 
-def score(cv, t, centers, labels=True, x0=250, x1=1010, play=432, alpha=1.0):
-    sc = 14.0 / 8.25
+def score(cv, t, centers, labels=True, x0=250, x1=1010, play=432, alpha=1.0, space=14.0, band_px=50, fade=60):
+    sc = space / 8.25
     big0 = STRIP.resize((int(STRIP.width * sc), int(STRIP.height * sc)), Image.LANCZOS)
     PAD = 1400  # white margin so the scroll can run past either end of the strip
     big = Image.new('L', (big0.width + 2 * PAD, big0.height), 255); big.paste(big0, (PAD, 0))
     ink = Image.new('L', (W, H), 255)
-    band = int(50 * sc)
+    band = int(band_px * sc)
     px = strip_x(t) * sc + PAD
     for k, cy in enumerate(centers):
         sy = int(STAFF_MID[k] * sc)
@@ -66,7 +66,7 @@ def score(cv, t, centers, labels=True, x0=250, x1=1010, play=432, alpha=1.0):
         body = row.crop((int(px - (play - x0)), 0, int(px - (play - x0)) + (x1 - x0), row.height))
         # soft fade at the right end of the scrolling body
         m = Image.new('L', body.size, 255); d = ImageDraw.Draw(m)
-        for i in range(60): d.line([(body.width - 60 + i, 0), (body.width - 60 + i, body.height)], fill=int(255 * (1 - i / 60)))
+        for i in range(fade): d.line([(body.width - fade + i, 0), (body.width - fade + i, body.height)], fill=int(255 * (1 - i / fade)))
         ink.paste(Image.composite(body, Image.new('L', body.size, 255), m), (x0, cy - band))
         ink.paste(row.crop((PAD, 0, PAD + int(HEADER_W * sc), row.height)), (x0 - int(HEADER_W * sc) - 12, cy - band))
     ink = handdrawn(ink)
@@ -77,9 +77,10 @@ def score(cv, t, centers, labels=True, x0=250, x1=1010, play=432, alpha=1.0):
     d = ImageDraw.Draw(cv, 'RGBA')
     if labels:
         for (cy, name) in zip(centers, ['小提琴 I', '小提琴 II', '中提琴', '大提琴']):
-            d.text((64, cy - 13), name, font=font(22), fill=GREY)
-    d.line([(play, centers[0] - 70), (play, centers[-1] + 60)], fill=(200, 100, 63, 110), width=2)
-    d.ellipse([play - 4, centers[0] - 76, play + 4, centers[0] - 68], fill=(205, 70, 55, 230))
+            d.text((x0 - int(HEADER_W * sc) - 12 - 108, cy - 13), name, font=font(22), fill=GREY)
+    top_y, bot_y = centers[0] - int(7.2 * space), centers[-1] + int(3.6 * space)
+    d.line([(play, top_y), (play, bot_y)], fill=(200, 100, 63, 110), width=2)
+    d.ellipse([play - 4, top_y - 6, play + 4, top_y + 2], fill=(205, 70, 55, 230))
 
 
 def base(top_png, fade_from=790, fade_to=930):
@@ -121,3 +122,14 @@ def douyin_zones(cv):
     for b in [(2, 2, W - 3, 170), (905, 880, W - 3, 1545), (2, 1575, W - 3, H - 3)]:
         dashed(b)
     d.text((14, 1582), '红虚线内：抖音界面大约会盖住', font=font(22), fill=(190, 40, 40, 200))
+
+
+def seal(cv, x, y, size=46, chars='花开富贵'):
+    """A small red name seal (2x2 characters)."""
+    d = ImageDraw.Draw(cv, 'RGBA')
+    d.rounded_rectangle([x, y, x + size, y + size], radius=4, fill=(184, 51, 42, 235))
+    f = font(int(size * 0.4), 'Bold'); h = size / 2
+    for i, ch in enumerate(chars):   # read top-right, bottom-right, top-left, bottom-left like a seal
+        col, row = (1 - i // 2), i % 2
+        cx, cy = x + col * h + h / 2, y + row * h + h / 2
+        w = d.textlength(ch, font=f); d.text((cx - w / 2, cy - size * 0.24), ch, font=f, fill=(250, 238, 225, 255))
