@@ -97,11 +97,23 @@ def m21_name(p):
 # Form, tempo and rehearsal marks
 # ---------------------------------------------------------------------------
 # >>> FORM (filled in by the arrangement plan)
-REHEARSAL = {}          # bar -> (letter, "English", "中文"); bar 1 gets only a title
+REHEARSAL = {9: ("A", "Theme", "主题"), 17: ("B", "Chorus I", "副歌 · 一"),
+             25: ("C", "Chorus II", "副歌 · 二"), 33: ("D", "Interlude", "间奏"),
+             41: ("E", "Reprise", "再现"), 49: ("F", "Coda", "尾声")}
 INTRO_TITLE = ("Intro", "前奏")
 TEMPO_MARK = ("Moderato con moto", 112)   # printed at bar 1
-TEMPI = [(1, 0, 112)]   # MIDI tempo map: (bar, 16th, bpm)
-TEMPO_TEXT = []         # printed tempo words: (bar, 16th, text, bpm or None)
+# MIDI tempo map: (bar, 16th, bpm); the last two steps stretch the final
+# fermata (about 4.7 s) so ACE holds it without a manual edit
+TEMPI = [(1, 0, 112), (32, 8, 108), (32, 12, 104), (33, 0, 112),
+         (45, 0, 108), (45, 8, 104), (46, 0, 100), (46, 8, 96), (47, 0, 92),
+         (48, 0, 88), (48, 8, 82), (48, 12, 76), (49, 0, 88), (51, 0, 84),
+         (51, 8, 78), (52, 0, 72), (52, 8, 40)]
+# printed tempo words: (bar, 16th, text, bpm or None)
+TEMPO_TEXT = [(32, 8, "poco rit.", None), (33, 0, "a tempo", None),
+              (41, 0, "Grandioso", None), (45, 0, "allargando", None),
+              (46, 0, "molto allarg.", None), (47, 0, "Largamente", 92),
+              (48, 0, "rit.", None), (49, 0, "Meno mosso, dolce", 88),
+              (51, 0, "rit.", None)]
 SYSTEM_BREAKS = ()      # bars that start a new system in the full score
 PAGE_BREAKS = ()        # bars that start a new page in the full score
 PART_BREAKS = {}        # part id -> bars that start a new line in the part
@@ -1110,7 +1122,8 @@ def duration_text():
 # 干活/诀别书/: only the finished things the user asked for, by purpose
 # ---------------------------------------------------------------------------
 DELIVER = os.path.join(HERE, "..", "干活", NAME)
-GP_NOTE = ""        # one line about the general pause, set with the FORM
+GP_NOTE = ("第 40 小节第 4 拍五条轨同时休止一拍（G.P. 全体休止），是有意留的"
+           "呼吸，下一小节全奏落地，不要补音。")
 
 
 def usage_md():
