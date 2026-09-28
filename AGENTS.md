@@ -22,7 +22,7 @@
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
-| 大东北我的家乡（全曲，何玉） | 迪士尼风格交响乐（Instrument X）+ SATB 合唱 · F 大调，末段副歌转 G · ♩=128 | `claude/determined-archimedes-93zrgx` | `dadongbei/` | 已完成，待在 Instrument X / ACE Studio 渲染 |
+| 大东北我的家乡（全曲，何玉） | 迪士尼风格交响乐（Instrument X）+ SATB 合唱 · F 大调，末段副歌转 G · ♩=128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，成品在 `干活/大东北我的家乡/` | 已完成：Instrument X 分轨 MIDI、合并的合唱歌词 MIDI、好莱坞格式西贝柳斯总谱。待在用户的 Mac 上渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
 - 泪海已经合并进 `main`（PR #2），其余分支都还**没有合并**。合并以后记得更新这张表。
@@ -45,6 +45,7 @@
   - 每轨一件独奏乐器，用 unison 叠成声部；木管、铜管每轨只写单音。
   - 交付每轨一个 MIDI 加一个 C 调 MusicXML（见 `dadongbei/`）。
 - **用户嫌每次从聊天里下载文件麻烦**。生成的文件一律提交进仓库的 `output/` 目录，不要只作为聊天附件发。
+- **用户要的成品另外放进仓库根目录的 `干活/<歌名>/`**（用户原话：「做好的文件放到“干活”的文件夹里」）。只放用户点名要的东西，按用途分子文件夹，再附一份 `使用说明.md`。由 `build.py` 直接生成，不要手动复制。
 
 ## 从简谱图到交付
 
@@ -120,12 +121,26 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - 倚音 token 要写在连线括号前面：`g:D6 (C6/2`，不能写 `(g:D6`。
   - 23 行谱表的总谱用 A3、3.7 毫米谱表，不强制换行，MuseScore 第一页才放得下标题和第一行。
   - GM 试听用的 MIDI 不写 CC：几条轨共用一个 GM 通道，CC1、CC11 会互相覆盖。
+- **Instrument X**（2026-09 调研，来源主要是论坛和搜索摘要）：
+  - 在自己的编辑器里导入 MIDI / MusicXML，离线渲染。宿主发给它的 MIDI 只触发钢琴预览，所以不能当普通插件挂在 ACE 里实时用。
+  - MIDI 导入多半不读速度变化和拍号。`build.py` 的 `flatten_tempo()` 另出一套固定 120 BPM、按秒对齐的备用 MIDI。
+  - 力度自动生成，不读 CC1 / CC11。没有键位开关，拨弦、震音、颤音要在它里面逐个音符设。
+  - 音符重叠会变成第二个声部，所以连奏要首尾相接、不重叠。
+- **西贝柳斯**：
+  - `.sib` 是加密的专有格式，外部生成不了，只能交 MusicXML、让用户另存。
+  - 导入端没有证据支持 MusicXML 4.0 的 `concert-score` / `for-part`。给西贝柳斯的文件用记谱音高 + `<transpose>`（版本号写 3.1），`<part-name>` 用西贝柳斯自带的乐器名，好莱坞写法放进 `<part-name-display>`。用户打开后关掉 Transposing Score 就是 C 调总谱。
+  - 超过 16 行谱表需要 Sibelius Ultimate。
+- **MuseScore 3 预览**：它会忽略 MusicXML 里的纸张大小和 `<measure-numbering>`。要出 11×17、每小节小节号的预览，先转成 `.mscx`，改掉 `<Style>` 再导出（`render_pdf()`）。
+- **ACE Studio 合唱**：“合并的带歌词 MIDI”指一个文件、四条人声轨。ACE 一条人声轨只能唱单旋律，压成一条轨会丢歌词。ACE 按不带声调的拼音唱，只需核对长、模、呐、血这类会变音节的多音字。
 
 ## 待办 / 待确认
 
 - **泪海唱几遍**：副歌目前唱两遍，第一遍抒情，第二遍高燃。用户还没确认要不要只唱一遍。如果只要一遍，把第 14–24 小节换成直接进尾奏的结尾（见 `leihai/README.md` 末尾）。
 - **泪海 ACE Studio 渲染**：只能在用户的 Mac 上做（见下一节）。
-- **大东北我的家乡**：在用户的机器上用 Instrument X 渲染乐队、ACE Studio 渲染合唱（步骤见 `dadongbei/README.md`）。目前唱一遍主歌、两遍副歌，要不要照原谱整首唱两遍待确认。
+- **大东北我的家乡**：在用户的机器上用 Instrument X 渲染乐队、ACE Studio 渲染合唱（步骤见 `干活/大东北我的家乡/使用说明.md`）。待确认：
+  - Instrument X 导入时读不读速度变化（看第 5 小节是不是 ♩=128）。
+  - 西贝柳斯导入后移调乐器是否正常。
+  - 目前唱一遍主歌、两遍副歌，要不要照原谱整首唱两遍。
 - **合并分支**：上面的分支是否合并进 `main`，由用户决定。
 
 ## ACE Studio（在用户的 Mac 上）

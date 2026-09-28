@@ -34,6 +34,8 @@ All pitches are concert (sounding) pitch.
 """
 import os
 import re
+import shutil
+import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
@@ -1052,13 +1054,20 @@ def fix_ties(part):
 # Parts
 # ---------------------------------------------------------------------------
 def _ins(cls, name, abbr, transp=None):
-    def make(concert=False):
+    """mode: 'trans' (transposing score), 'cscore' (score in C: only
+    octave transpositions such as piccolo / contrabass / glockenspiel
+    remain), 'concert' (everything at sounding pitch)."""
+    def make(concert=False, mode=None, names=None):
+        mode = mode or ("concert" if concert else "trans")
         i = cls()
-        i.partName, i.partAbbreviation = name, abbr
-        i.instrumentName, i.instrumentAbbreviation = name, abbr
-        if transp and not concert:
+        nm, ab = names or (name, abbr)
+        i.partName, i.partAbbreviation = nm, ab
+        i.instrumentName, i.instrumentAbbreviation = nm, ab
+        if transp:
             i.transposition = interval.Interval(transp)
-        elif concert:
+        if mode == "concert" or (
+                mode == "cscore" and i.transposition is not None
+                and i.transposition.semitones % 12 != 0):
             i.transposition = None
         return i
     return make
@@ -1355,9 +1364,15 @@ def split_dur(pos, dur):
 QL = {1: 0.25, 2: 0.5, 3: 0.75, 4: 1.0, 6: 1.5, 8: 2.0, 12: 3.0, 16: 4.0}
 
 
-def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part):
+def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part,
+             mode=None, names=None, rehearsal=None, timings=False, hw=False,
+             sections=None):
+    """hw: conductor-score conventions (English technique words, click
+    notes above the top staff)."""
+    rehearsal = REHEARSAL if rehearsal is None else rehearsal
+    word = (lambda t: HW_WORDS.get(t, t)) if hw else (lambda t: t)
     part = staff_cls(id=p["id"])
-    part.insert(0, p["inst"](concert=concert))
+    part.insert(0, p["inst"](concert=concert, mode=mode, names=names))
     notes_at, slur_open, measures, by_bar = {}, None, {}, {}
     for e in events:
         by_bar.setdefault(e["bar"], []).append(e)
@@ -1422,10 +1437,23 @@ def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part):
                 slur_open = None
         # words and marks go in after the notes, or append() shifts them
         if top:
-            if b in REHEARSAL:
-                rm = expressions.RehearsalMark(REHEARSAL[b])
+            if b in rehearsal:
+                rm = expressions.RehearsalMark(rehearsal[b])
                 rm.placement = "above"
                 m.insert(0, rm)
+            if sections and b in sections:
+                te = expressions.TextExpression(sections[b])
+                te.style.fontWeight = "bold"
+                te.style.fontSize = 12
+                te.placement = "above"
+                m.insert(0, te)
+            if timings:
+                t = sec_at((b - 1) * BAR16)
+                te = expressions.TextExpression(
+                    f"{int(t // 60)}:{t % 60:04.1f}")
+                te.style.fontSize = 7
+                te.placement = "above"
+                m.insert(0, te)
             for tb, ts, txt, bpm in TEMPO_MARKS:
                 if tb == b:
                     mm = tempo.MetronomeMark(text=txt, number=bpm,
@@ -1434,7 +1462,14 @@ def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part):
                     m.insert(ts / 4, mm)
             for tb, ts, txt in TEMPO_TEXT:
                 if tb == b:
-                    m.insert(ts / 4, tempo.TempoText(txt))
+                    m.insert(ts / 4, tempo.TempoText(word(txt)))
+            for tb, ts, txt in (HW_CLICK if hw else ()):
+                if tb == b:
+                    te = expressions.TextExpression(txt)
+                    te.style.fontSize = 8
+                    te.style.fontStyle = "italic"
+                    te.placement = "above"
+                    m.insert(ts / 4, te)
         if p["pizz"]:
             now = in_pizz(p, b)
             if now != prev_pizz:
@@ -1470,7 +1505,7 @@ def make_m21(p, events, top=False, concert=False, staff_cls=stream.Part):
             part.insert(0, (dynamics.Crescendo if kind == "cresc"
                             else dynamics.Diminuendo)(n1, n2))
     for bb, s, txt in p["text"]:
-        te = expressions.TextExpression(txt)
+        te = expressions.TextExpression(word(txt))
         te.style.fontStyle = "italic"
         te.placement = "above"
         measures[bb].insert(s / 4, te)
@@ -1532,7 +1567,8 @@ SOUNDS = {"picc": "wind.flutes.flute.piccolo", "fl": "wind.flutes.flute",
           "vc": "strings.cello", "cb": "strings.contrabass"}
 
 
-def polish(path, ids, big=True, breaks=SYSTEM_BREAKS):
+def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
+           top_gap=None, margin=None, page_breaks=()):
     """Page layout, one <instrument-sound> per part so Sibelius maps the
     right instrument, no per-note instrument changes, vocal dynamics above
     the staff (lyrics are below), words and rehearsal marks above."""
@@ -1549,16 +1585,21 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS):
         mm, pw, ph, sd, st = "3.7", 3211, 4541, 80, 42
     else:     # A4 portrait, 6 mm staves
         mm, pw, ph, sd, st = "6", 1400, 1980, 110, 75
+    if page:
+        mm, pw, ph = page
     new = ET.fromstring(
         f"<defaults><scaling><millimeters>{mm}</millimeters><tenths>40"
         f"</tenths></scaling><page-layout><page-height>{ph}</page-height>"
         f"<page-width>{pw}</page-width><page-margins type=\"both\">"
-        "<left-margin>80</left-margin><right-margin>60</right-margin>"
-        "<top-margin>70</top-margin><bottom-margin>70</bottom-margin>"
+        f"<left-margin>{margin or 80}</left-margin>"
+        f"<right-margin>{margin or 60}</right-margin>"
+        f"<top-margin>{margin or 70}</top-margin>"
+        f"<bottom-margin>{margin or 70}</bottom-margin>"
         "</page-margins></page-layout><system-layout><system-margins>"
         "<left-margin>90</left-margin><right-margin>0</right-margin>"
         f"</system-margins><system-distance>{sd}</system-distance>"
-        f"<top-system-distance>{110 if big else 170}</top-system-distance>"
+        f"<top-system-distance>{top_gap or (110 if big else 170)}"
+        "</top-system-distance>"
         "</system-layout>"
         f"<staff-layout><staff-distance>{st}</staff-distance></staff-layout>"
         "</defaults>")
@@ -1586,15 +1627,36 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS):
     for n in r.iter("note"):
         for x in n.findall("instrument"):
             n.remove(x)
+    parts = r.findall("part")
+    if parts:
+        add_tempo_sounds(parts[0])
+    for part in parts:
+        if pid_of.get(part.get("id")) == "hpr":
+            add_harp_pedals(part)
+    for part in r.findall("part"):
+        if pid_of.get(part.get("id")) not in CHOIR:
+            continue
+        last = None   # the lyric of the syllable being held
+        for n in part.iter("note"):
+            if n.find("rest") is not None:
+                last = None
+            elif n.find("grace") is not None:
+                continue
+            elif n.find("lyric") is not None:
+                last = n.find("lyric")
+            elif last is not None and last.find("extend") is None:
+                ET.SubElement(last, "extend")
     for part in r.findall("part"):
         vocal = pid_of.get(part.get("id")) in CHOIR
         for m in part.findall("measure"):
-            if int(m.get("number")) in breaks:
+            num = int(m.get("number"))
+            if num in breaks or num in page_breaks:
                 pr = m.find("print")
                 if pr is None:
                     pr = ET.Element("print")
                     m.insert(0, pr)
-                pr.set("new-system", "yes")
+                pr.set("new-page" if num in page_breaks else "new-system",
+                       "yes")
             for el in m.findall("direction"):
                 if el.find("direction-type/dynamics") is not None or \
                         el.find("direction-type/wedge") is not None:
@@ -1612,6 +1674,84 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS):
             "MusicXML 4.0 Partwise//EN\" "
             "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
         open(path, "w", encoding="utf-8").write(xml)
+
+
+# ---------------------------------------------------------------------------
+# MusicXML additions: every tempo step for playback, harp pedalling
+# ---------------------------------------------------------------------------
+def _insert_at(measure, target, el):
+    """Insert `el` before the first note of the (single-voice) measure that
+    starts at `target` divisions."""
+    t = 0
+    for i, ch in enumerate(list(measure)):
+        if ch.tag == "note":
+            if ch.find("chord") is not None or ch.find("grace") is not None:
+                continue
+            if t >= target:
+                measure.insert(i, el)
+                return
+            t += int(ch.findtext("duration"))
+        elif ch.tag == "backup":
+            t -= int(ch.findtext("duration"))
+        elif ch.tag == "forward":
+            t += int(ch.findtext("duration"))
+    measure.append(el)
+
+
+def add_tempo_sounds(part):
+    """Hidden <sound tempo> for every step of TEMPI (the visible metronome
+    marks carry their own), so notation playback and Sibelius' timecode
+    follow the same rit./accel. as the MIDI.  The fermata points are left
+    to the notation program's own fermata playback."""
+    div = int(part.find("measure/attributes/divisions").text)
+    shown = {(b, s) for b, s, _, _ in TEMPO_MARKS}
+    by_num = {int(m.get("number")): m for m in part.findall("measure")}
+    for b, s, bpm in TEMPI:
+        if (b, s) in shown or FERMATAS.get(b) == s:
+            continue
+        _insert_at(by_num[b], s * div // 4, ET.Element("sound",
+                                                        tempo=str(bpm)))
+
+
+PEDAL_ORDER = "DCBEFGA"
+ACC_TXT = {-1: "♭", 0: "♮", 1: "♯"}
+
+
+def harp_pedal_changes():
+    state = {"D": 0, "C": 0, "B": -1, "E": 0, "F": 0, "G": 0, "A": 0}
+    first = dict(state)
+    evs = sorted(parse_part(HPR) + parse_part(HPL), key=lambda e: e["abs"])
+    changes = {}
+    for e in evs:
+        for p in e["pitches"] or []:
+            step, acc, _ = PIT.fullmatch(p).groups()
+            a = _ACC[acc]
+            if state[step] != a:
+                state[step] = a
+                changes.setdefault(e["bar"], []).append(step + ACC_TXT[a])
+    return first, changes
+
+
+def add_harp_pedals(part):
+    """Pedal diagram at bar 1 and the pedal changes (as text between the
+    staves) at the start of each bar that needs them."""
+    first, changes = harp_pedal_changes()
+    by_num = {int(m.get("number")): m for m in part.findall("measure")}
+    d = ET.Element("direction", placement="below")
+    hp = ET.SubElement(ET.SubElement(d, "direction-type"), "harp-pedals")
+    for step in PEDAL_ORDER:
+        pt = ET.SubElement(hp, "pedal-tuning")
+        ET.SubElement(pt, "pedal-step").text = step
+        ET.SubElement(pt, "pedal-alter").text = str(first[step])
+    ET.SubElement(d, "staff").text = "1"
+    _insert_at(by_num[1], 0, d)
+    for b, ch in changes.items():
+        d = ET.Element("direction", placement="below")
+        w = ET.SubElement(ET.SubElement(d, "direction-type"), "words",
+                          {"font-size": "9"})
+        w.text = " ".join(ch)
+        ET.SubElement(d, "staff").text = "1"
+        _insert_at(by_num[b], 0, d)
 
 
 def verify(path, parsed, ids):
@@ -1644,6 +1784,201 @@ def verify(path, parsed, ids):
             held = e["tie"] and e["pitches"] is not None
         assert sorted(got) == sorted(want), \
             (pid, sorted(set(got) ^ set(want))[:6])
+
+
+# ---------------------------------------------------------------------------
+# Hollywood-style conductor score (score in C) for Sibelius
+# ---------------------------------------------------------------------------
+HW_NAMES = {
+    "picc": ("Piccolo", "Picc."), "fl": ("Flute", "Fl."),
+    "ob": ("Oboe", "Ob."), "cl": ("Clarinet in A", "Cl."),
+    "bsn": ("Bassoon", "Bsn."), "hn1": ("Horns 1.3", "Hns. 1.3"),
+    "hn2": ("Horns 2.4", "Hns. 2.4"), "tpt": ("Trumpet in B♭", "Tpt."),
+    "tbn": ("Trombone", "Tbn."), "tba": ("Tuba", "Tba."),
+    "timp": ("Timpani", "Timp."), "glk": ("Glockenspiel", "Glock."),
+    "hpr": ("Harp", "Hp."), "hpl": ("Harp", "Hp."),
+    "sop": ("Sopranos", "S."), "alt": ("Altos", "A."),
+    "ten": ("Tenors", "T."), "bas": ("Basses", "B."),
+    "vn1": ("Violins I", "Vlns. I"), "vn2": ("Violins II", "Vlns. II"),
+    "va": ("Violas", "Vlas."), "vc": ("Celli", "Vc."),
+    "cb": ("Contrabasses", "Cb."),
+}
+# film sessions navigate by bar numbers: section words, no letters
+HW_SECTIONS = {1: "PROLOGUE", 5: "INTRO", 14: "VERSE", 31: "CHORUS 1",
+               48: "INTERLUDE", 58: "CHORUS 2 (in G)", 74: "CODA"}
+# technique words in English / Italian in the conductor score
+HW_WORDS = {"唢呐风 (suona-like)": "suona-like", "唢呐风": "suona-like",
+            "潺潺 (rippling)": "rippling", "潺潺流淌 (ripples)": "ripples",
+            "女声齐唱": "women unis.", "哼鸣“啊”": "“ah”",
+            "男声领唱": "men", "大东北 motif": "motif (bars 31–32)",
+            "G.P. (bar runs)": "G.P. (runs only)"}
+HW_CLICK = [(1, 0, "click ♩ = 72"), (4, 8, "click follows rit."),
+            (4, 12, "free — fermata"), (5, 0, "click ♩ = 128"),
+            (74, 0, "click ♩ = 118"), (76, 0, "click follows allarg."),
+            (76, 12, "free — fermata"), (77, 0, "click ♩ = 96"),
+            (78, 8, "free — rit. to end")]
+# one system per page, 4-5 bars, breaks at phrase starts
+HW_PAGES = (5, 9, 14, 18, 22, 26, 31, 35, 39, 43, 48, 52, 56, 58, 62, 66, 70,
+            74)
+# group name, parts, symbol, barlines through the group
+HW_GROUPS = [("Woodwinds", ["picc", "fl", "ob", "cl", "bsn"], "bracket", True),
+             ("Brass", ["hn1", "hn2", "tpt", "tbn", "tba"], "bracket", True),
+             ("Percussion", ["timp", "glk"], "bracket", True),
+             ("Choir", list(CHOIR), "bracket", False),
+             ("Strings", ["vn1", "vn2", "va", "vc", "cb"], "bracket", True)]
+# written-to-sounding transposition of the parts extracted from the C score
+HW_FOR_PART = {"cl": (-2, -3), "hn1": (-4, -7), "hn2": (-4, -7),
+               "tpt": (-1, -2)}
+# Sibelius maps instruments by name: keep its stock names in <part-name>
+# and show the session names through <part-name-display>
+HW_STOCK = {"picc": "Piccolo", "fl": "Flute", "ob": "Oboe",
+            "cl": "Clarinet in A", "bsn": "Bassoon", "hn1": "Horn in F",
+            "hn2": "Horn in F", "tpt": "Trumpet in B♭", "tbn": "Trombone",
+            "tba": "Tuba", "timp": "Timpani", "glk": "Glockenspiel",
+            "hpr": "Harp", "sop": "Soprano", "alt": "Alto", "ten": "Tenor",
+            "bas": "Bass", "vn1": "Violin I", "vn2": "Violin II",
+            "va": "Viola", "vc": "Violoncello", "cb": "Contrabass"}
+HW_CUE = "1M1"
+# 11 x 17 in (tabloid) portrait, 5 mm staves (MOLA minimum is 4 mm):
+# tenths = mm / 5 * 40; 0.5 in margins
+HW_PAGE = ("5", 2235, 3454)
+HW_MARGIN = 102
+
+
+def hollywood_score(parsed, cscore=True):
+    """cscore=True: notes at concert pitch (MusicXML 4.0 concert score).
+    cscore=False: the same layout written for transposing instruments with
+    <transpose>, the encoding every Sibelius version imports reliably; the
+    user switches Sibelius to concert pitch after opening."""
+    sc = stream.Score()
+    score_meta(sc, "Score in C")
+    objs = {}
+    for p in PARTS:
+        cls = stream.PartStaff if p["id"] in ("hpr", "hpl") else stream.Part
+        objs[p["id"]] = make_m21(p, parsed[p["id"]], top=p["id"] == "picc",
+                                 staff_cls=cls,
+                                 mode="cscore" if cscore else "trans",
+                                 names=HW_NAMES[p["id"]],
+                                 rehearsal={}, sections=HW_SECTIONS,
+                                 timings=cscore, hw=True)
+        sc.insert(0, objs[p["id"]])
+    for name, ids, sym, through in HW_GROUPS:
+        g = layout.StaffGroup([objs[i] for i in ids], name=name, symbol=sym)
+        g.barTogether = through
+        sc.insert(0, g)
+    g = layout.StaffGroup([objs["hpr"], objs["hpl"]], name="Harp",
+                          symbol="brace")
+    g.barTogether = True
+    sc.insert(0, g)
+    return sc
+
+
+def _credit(words, x, y, size, justify="left", valign="top", ctype=None,
+            weight=None):
+    c = ET.Element("credit", page="1")
+    if ctype:
+        ET.SubElement(c, "credit-type").text = ctype
+    w = ET.SubElement(c, "credit-words", {
+        "default-x": str(x), "default-y": str(y), "font-size": str(size),
+        "justify": justify, "valign": valign})
+    if weight:
+        w.set("font-weight", weight)
+    w.text = words
+    return c
+
+
+def polish_hollywood(path, ids, cscore=True):
+    """Score in C on 11x17 paper: title block with cue number, bar numbers
+    on every bar, MusicXML 4.0 concert-score with the parts' transpositions,
+    B-flat in the trumpet name."""
+    polish(path, ids, breaks=(), page=HW_PAGE, top_gap=300, margin=HW_MARGIN,
+           page_breaks=HW_PAGES)
+    tree = ET.parse(path)
+    r = tree.getroot()
+    for c in r.findall("credit"):
+        r.remove(c)
+    for g in r.iter("part-group"):
+        for x in g.findall("group-name"):
+            g.remove(x)
+    _, W, Hh = HW_PAGE
+    dur = sec_at(NBARS * BAR16)
+    credits = [
+        _credit(f"{HW_CUE}\nSCORE IN C", HW_MARGIN, Hh - HW_MARGIN, 16,
+                weight="bold"),
+        _credit("大东北我的家乡", W // 2, Hh - HW_MARGIN, 24, "center",
+                ctype="title"),
+        _credit("Da Dongbei, Wo De Jiaxiang · Symphonic Orchestra & SATB "
+                "Choir", W // 2, Hh - HW_MARGIN - 105, 12, "center",
+                ctype="subtitle"),
+        _credit(f"Music & Lyrics: 刘旗\n"
+                f"Orchestra: Instrument X · Choir: ACE Studio\n"
+                f"♩ = 72 / 128 · F → G · {int(dur // 60)}:{dur % 60:04.1f}",
+                W - HW_MARGIN, Hh - HW_MARGIN, 9, "right", ctype="composer"),
+    ]
+    at = list(r).index(r.find("part-list"))
+    for i, c in enumerate(credits):
+        r.insert(at + i, c)
+    d = r.find("defaults")
+    if cscore and d.find("concert-score") is None:
+        d.insert(list(d).index(d.find("scaling")) + 1,
+                 ET.Element("concert-score"))
+    pid_of = dict(zip([sp.get("id") for sp in r.iter("score-part")], ids))
+    for sp in r.iter("score-part"):
+        pid = pid_of[sp.get("id")]
+        show, show_ab = HW_NAMES[pid]
+        pn, pa = sp.find("part-name"), sp.find("part-abbreviation")
+        if not cscore:   # Sibelius copy: stock name for instrument mapping
+            pn.text = HW_STOCK[pid]
+        if pn.text == show and "♭" not in show:
+            continue
+        for tag, ref, text in (("part-name-display", pn, show),
+                               ("part-abbreviation-display", pa, show_ab)):
+            disp = ET.Element(tag)
+            if text.endswith(" in B♭"):
+                ET.SubElement(disp, "display-text").text = text[:-1]
+                ET.SubElement(disp, "accidental-text").text = "flat"
+            else:
+                ET.SubElement(disp, "display-text").text = text
+            sp.insert(list(sp).index(ref) + 1, disp)
+    # Chinese lyrics need a CJK font in Sibelius' Lyrics text style
+    lf = ET.Element("lyric-font", {"font-family": "PingFang SC",
+                                   "font-size": "10"})
+    last = max(i for i, x in enumerate(d)
+               if x.tag in ("scaling", "concert-score", "page-layout",
+                            "system-layout", "staff-layout", "appearance",
+                            "music-font", "word-font"))
+    d.insert(last + 1, lf)
+    for k, part in enumerate(r.findall("part")):
+        pid = pid_of[part.get("id")]
+        m1 = part.find("measure")
+        if k == 0:
+            pr = m1.find("print")
+            if pr is None:
+                pr = ET.Element("print")
+                m1.insert(0, pr)
+            mn = ET.SubElement(pr, "measure-numbering")
+            mn.text = "measure"
+        if cscore and pid in HW_FOR_PART:
+            at_ = m1.find("attributes")
+            fp = ET.SubElement(at_, "for-part")
+            pt = ET.SubElement(fp, "part-transpose")
+            dia, chrom = HW_FOR_PART[pid]
+            ET.SubElement(pt, "diatonic").text = str(dia)
+            ET.SubElement(pt, "chromatic").text = str(chrom)
+    # the Sibelius copy uses nothing from 4.0, so it is labelled 3.1 and
+    # Sibelius opens it without the "newer MusicXML version" warning
+    version = "4.0" if cscore else "3.1"
+    r.set("version", version)
+    ET.indent(tree, space="  ")
+    tree.write(path, encoding="UTF-8", xml_declaration=True)
+    xml = open(path, encoding="utf-8").read()
+    xml = re.sub(r"<!DOCTYPE[^>]*>\n?", "", xml)
+    xml = xml.replace(
+        "?>\n",
+        "?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD "
+        f"MusicXML {version} Partwise//EN\" "
+        "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
+    open(path, "w", encoding="utf-8").write(xml)
 
 
 # ---------------------------------------------------------------------------
@@ -1699,7 +2034,13 @@ def dyn_curve(p):
     return v
 
 
-def tempo_track(title):
+REHEARSAL_ASCII = {1: "Prologue", 5: "A Intro", 14: "B Verse",
+                   31: "C Chorus 1", 48: "D Interlude", 58: "E Chorus 2 (G)",
+                   74: "Coda"}
+
+
+def tempo_track(title, ascii_meta=False):
+    marks = REHEARSAL_ASCII if ascii_meta else REHEARSAL
     ab = [(0, mido.MetaMessage("track_name", name=title)),
           (0, mido.MetaMessage("time_signature", numerator=4, denominator=4))]
     for b, k in KEYS.items():
@@ -1708,7 +2049,7 @@ def tempo_track(title):
     for b, s, bpm in TEMPI:
         ab.append((((b - 1) * BAR16 + s) * T16,
                    mido.MetaMessage("set_tempo", tempo=mido.bpm2tempo(bpm))))
-    for b, name in REHEARSAL.items():
+    for b, name in marks.items():
         ab.append(((b - 1) * BAR16 * T16,
                    mido.MetaMessage("marker", text=name)))
     ab.sort(key=lambda x: x[0])
@@ -1726,14 +2067,15 @@ TRACK_NAMES = {"sop": "Soprano 女高音", "alt": "Alto 女低音",
                "mel": "Melody 主旋律"}
 
 
-def part_track(p, events, ch, lyrics=True, cc=True, name=None):
+def part_track(p, events, ch, lyrics=True, cc=True, name=None, program=True):
     notes = merged_notes(events)
     vel = dyn_curve(p)
     sung = p["id"] in CHOIR or p["id"] == "mel"
     ab = [(0, 0, mido.MetaMessage(
-        "track_name", name=name or TRACK_NAMES.get(p["id"], p["name"]))),
-        (0, 1, mido.Message("program_change", channel=ch,
-                            program=p["program"]))]
+        "track_name", name=name or TRACK_NAMES.get(p["id"], p["name"])))]
+    if program:
+        ab.append((0, 1, mido.Message("program_change", channel=ch,
+                                      program=p["program"])))
     if cc:
         for t in range(0, NBARS * BAR16, 2):
             if t == 0 or vel[t] != vel[t - 2]:
@@ -1810,10 +2152,17 @@ MEL_PART = dict(id="mel", name="Melody", program=52, dyn=D(VOX_DYN),
 
 
 def write_midi(path, items, parsed, lyrics=True, charset="utf-8", cc=True,
-               title=None, single_channel=False):
-    """items: list of part ids ('hp' = harp, 'mel' = melody guide)."""
+               title=None, single_channel=False, ascii_meta=False,
+               own_channels=False, program=True):
+    """items: list of part ids ('hp' = harp, 'mel' = melody guide).
+    ascii_meta: English track names and markers only (Instrument X).
+    own_channels: every track on its own channel (skipping 10), so hosts
+    that route by channel keep each track's CC curves apart."""
+    free = iter([c for c in range(16) if c != 9])
     mf = mido.MidiFile(type=1, ticks_per_beat=TPQ, charset=charset)
-    mf.tracks.append(tempo_track(title or NAME))
+    mf.tracks.append(tempo_track(
+        title or ("Da Dongbei Wo De Jiaxiang" if ascii_meta else NAME),
+        ascii_meta))
     for pid in items:
         if pid == "mel":
             p, evs = MEL_PART, parsed["mel"]
@@ -1822,9 +2171,17 @@ def write_midi(path, items, parsed, lyrics=True, charset="utf-8", cc=True,
             p = PBY["hpr" if pid == "hp" else pid]
             evs = track_events(parsed, pid)
             ch = 0 if single_channel else p["ch"]
+        if own_channels:
+            ch = next(free)
         if pid == "hp":
             p = dict(p, name="Harp")
-        mf.tracks.append(part_track(p, evs, ch, lyrics=lyrics, cc=cc))
+        name = None
+        if ascii_meta and p.get("ix"):
+            name = f"{p['name']} (Instrument X: {p['ix']})"
+        elif ascii_meta:
+            name = p["name"]
+        mf.tracks.append(part_track(p, evs, ch, lyrics=lyrics, cc=cc,
+                                    name=name, program=program))
     mf.save(path)
 
 
@@ -1975,6 +2332,210 @@ def write_srt(path, events):
 
 
 # ---------------------------------------------------------------------------
+# Previews (MuseScore 3, FluidSynth, ffmpeg) and the 干活 hand-off folder
+# ---------------------------------------------------------------------------
+# MuseScore ignores the page size and <measure-numbering> in MusicXML, so the
+# Hollywood preview is rendered through a .mscx with these style settings.
+MS_STYLE_HOLLYWOOD = {
+    "pageWidth": "11", "pageHeight": "17", "pagePrintableWidth": "10",
+    "pageEvenLeftMargin": "0.5", "pageOddLeftMargin": "0.5",
+    "pageEvenTopMargin": "0.5", "pageEvenBottomMargin": "0.5",
+    "pageOddTopMargin": "0.5", "pageOddBottomMargin": "0.5",
+    "pageTwosided": "0", "Spatium": "1.4",
+    "showMeasureNumber": "1", "showMeasureNumberOne": "1",
+    "measureNumberInterval": "1", "measureNumberSystem": "0",
+    "measureNumberFontSize": "14", "measureNumberFontStyle": "1",
+    "measureNumberFrameType": "0", "measureNumberHPlacement": "1",
+    "enableVerticalSpread": "1", "maxSystemSpread": "40",
+    "maxStaffSpread": "8",
+}
+
+
+def _mscore(*args):
+    env = dict(os.environ, QT_QPA_PLATFORM="offscreen")
+    subprocess.run(["mscore3", *args], env=env, check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def render_pdf(xml, pdf, style=None):
+    if not style:
+        _mscore("-o", pdf, xml)
+        return
+    tmp = os.path.join(tempfile.gettempdir(), "dadongbei_style.mscx")
+    _mscore("-o", tmp, xml)
+    s = open(tmp, encoding="utf-8").read()
+    for k in style:
+        s = re.sub(rf"\s*<{k}>[^<]*</{k}>", "", s)
+    s = s.replace("<Style>", "<Style>" + "".join(
+        f"\n      <{k}>{v}</{k}>" for k, v in style.items()), 1)
+    open(tmp, "w", encoding="utf-8").write(s)
+    _mscore("-o", pdf, tmp)
+
+
+def render_all():
+    base = os.path.join(OUT, f"{NAME}_交响合唱")
+    render_pdf(base + "_好莱坞C调总谱_阅读版.musicxml",
+               base + "_好莱坞C调总谱_预览.pdf", MS_STYLE_HOLLYWOOD)
+    render_pdf(base + "_总谱.musicxml", base + "_总谱预览.pdf")
+    render_pdf(base + "_合唱四声部.musicxml",
+               os.path.join(OUT, f"{NAME}_合唱四声部_预览.pdf"))
+    wav = os.path.join(tempfile.gettempdir(), "dadongbei_preview.wav")
+    subprocess.run(["fluidsynth", "-ni", "-g", "0.5", "-F", wav,
+                    "/usr/share/sounds/sf2/FluidR3_GM.sf2", PREVIEW],
+                   check=True, stdout=subprocess.DEVNULL)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav, "-af",
+                    "loudnorm=I=-16:TP=-1.5", "-b:a", "160k",
+                    os.path.join(OUT, "粗略试听_GM音色_非最终效果.mp3")],
+                   check=True)
+
+
+def lyric_text(events):
+    """One token per sung note in ACE's lyric-input syntax ('-' continues
+    the previous syllable), one line per section, for pasting into ACE if
+    the imported lyrics come in garbled."""
+    notes = merged_notes(events)
+    starts = sorted(REHEARSAL)
+    lines, cur, sec = [], [], None
+    for n in notes:
+        b = n["start"] // BAR16 + 1
+        s_ = max(x for x in starts if x <= b)
+        if sec is not None and s_ != sec and cur:
+            lines.append(f"[{REHEARSAL[sec]}, m{sec}] " + " ".join(cur))
+            cur = []
+        sec = s_
+        if n["grace"]:
+            cur.append(n["lyric"] or "-")
+            cur.append("-")
+        else:
+            cur.append(n["lyric"] or "-")
+    if cur:
+        lines.append(f"[{REHEARSAL[sec]}, m{sec}] " + " ".join(cur))
+    return ("# 每个音符一个字，'-' 表示接着唱上一个字（拖腔）。\n"
+            "# 粘贴时只复制方括号后面的部分，从该段第一个音符开始粘贴。\n"
+            + "\n".join(lines) + "\n")
+
+
+FLAT_BPM = 120
+
+
+def flatten_tempo(src, dst, bpm=FLAT_BPM):
+    """Re-time a MIDI file to one constant tempo so every event keeps its
+    real time in seconds: ritardandos and fermatas are baked into the note
+    positions.  For hosts that ignore tempo maps (Instrument X's MIDI
+    import): with the project at `bpm`, the audio lines up second for
+    second with the choir, but the bar lines no longer match the score."""
+    mf = mido.MidiFile(src)
+    tempo_map = []   # (tick, microseconds per beat)
+    for tr in mf.tracks:
+        t = 0
+        for m in tr:
+            t += m.time
+            if m.type == "set_tempo":
+                tempo_map.append((t, m.tempo))
+    tempo_map.sort()
+
+    def seconds(tick):
+        sec, last_t, last_us = 0.0, 0, tempo_map[0][1]
+        for t, us in tempo_map:
+            if t >= tick:
+                break
+            sec += (t - last_t) * last_us / 1e6 / mf.ticks_per_beat
+            last_t, last_us = t, us
+        return sec + (tick - last_t) * last_us / 1e6 / mf.ticks_per_beat
+
+    out = mido.MidiFile(type=mf.type, ticks_per_beat=mf.ticks_per_beat,
+                        charset=mf.charset)
+    per_sec = bpm / 60 * mf.ticks_per_beat
+    for k, tr in enumerate(mf.tracks):
+        ab, t = [], 0
+        for m in tr:
+            t += m.time
+            if m.type in ("set_tempo", "end_of_track"):
+                continue
+            ab.append((round(seconds(t) * per_sec), m))
+        if k == 0:
+            ab.insert(0, (0, mido.MetaMessage("set_tempo",
+                                              tempo=mido.bpm2tempo(bpm))))
+        new, last = mido.MidiTrack(), 0
+        for tt, m in ab:
+            new.append(m.copy(time=tt - last))
+            last = tt
+        new.append(mido.MetaMessage("end_of_track", time=0))
+        out.tracks.append(new)
+    out.save(dst)
+
+
+GANHUO = os.path.join(os.path.dirname(HERE), "干活", NAME)
+
+
+def export_ganhuo(parsed):
+    """The user's hand-off folder: only the finished files, grouped by use."""
+    if os.path.isdir(GANHUO):
+        shutil.rmtree(GANHUO)
+    ix = os.path.join(GANHUO, "1_InstrumentX乐队MIDI")
+    opt = os.path.join(ix, "可选_非InstrumentX音源")
+    ch = os.path.join(GANHUO, "2_合唱四声部合并_带歌词MIDI")
+    sib = os.path.join(GANHUO, "3_西贝柳斯总谱_好莱坞C调格式")
+    for d in (ix, opt, ch, sib):
+        os.makedirs(d)
+    ix_parts = [p for p in PARTS if p["ix"]]
+    write_midi(os.path.join(ix, "00_全乐队15轨_InstrumentX.mid"),
+               [p["id"] for p in ix_parts], parsed, ascii_meta=True,
+               own_channels=True)
+    for k, p in enumerate(ix_parts, 1):
+        write_midi(os.path.join(
+            ix, f"{k:02d}_{p['name'].replace(' ', '')}_"
+                f"{p['cn'].replace(' ', '')}_{p['ix'].replace(' ', '')}.mid"),
+            [p["id"]], parsed, single_channel=True, ascii_meta=True)
+    for pid, cn in (("hp", "竖琴"), ("glk", "钟琴"), ("timp", "定音鼓")):
+        p = PBY["hpr" if pid == "hp" else pid]
+        write_midi(os.path.join(opt, f"{p['name']}_{cn}.mid"), [pid], parsed,
+                   single_channel=True, ascii_meta=True)
+    xml_dir = os.path.join(ix, "MusicXML备用_每轨一个")
+    os.makedirs(xml_dir)
+    src = {f.split("_", 2)[1]: f for f in os.listdir(os.path.join(OUT, IX_DIR))
+           if f.endswith(".musicxml")}
+    for k, p in enumerate(ix_parts, 1):
+        f = src[p["name"].replace(" ", "")]
+        shutil.copy(os.path.join(OUT, IX_DIR, f), os.path.join(
+            xml_dir, f"{k:02d}_{p['name'].replace(' ', '')}_"
+                     f"{p['cn'].replace(' ', '')}.musicxml"))
+    # the same files re-timed to a constant 120 BPM (see flatten_tempo)
+    flat = os.path.join(ix, f"按秒对齐_固定{FLAT_BPM}BPM_备用")
+    for root, _, files in os.walk(ix):
+        if root.startswith(flat) or root.startswith(xml_dir):
+            continue
+        for f in sorted(files):
+            rel = os.path.relpath(os.path.join(root, f), ix)
+            dst = os.path.join(flat, rel)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            flatten_tempo(os.path.join(root, f), dst)
+    for f, cs in ((f"{NAME}_合唱四声部合并_带歌词.mid", "utf-8"),
+                  (f"{NAME}_合唱四声部合并_带歌词_GBK编码备用.mid", "gbk")):
+        write_midi(os.path.join(ch, f), list(CHOIR), parsed, charset=cs,
+                   own_channels=True, cc=False, program=False,
+                   ascii_meta=True)
+    shutil.copy(os.path.join(OUT, f"{NAME}_交响合唱_合唱四声部.musicxml"),
+                os.path.join(ch, f"{NAME}_合唱四声部_MusicXML备用.musicxml"))
+    lyr = os.path.join(ch, "歌词粘贴备用")
+    os.makedirs(lyr)
+    for k, c in enumerate(CHOIR, 1):
+        with open(os.path.join(lyr, f"{k}_{PBY[c]['cn']}_歌词.txt"), "w",
+                  encoding="utf-8") as fh:
+            fh.write(lyric_text(parsed[c]))
+    base = os.path.join(OUT, f"{NAME}_交响合唱")
+    for src, dst in ((base + "_好莱坞总谱_西贝柳斯用.musicxml",
+                      f"{NAME}_好莱坞总谱_西贝柳斯用.musicxml"),
+                     (base + "_好莱坞C调总谱_预览.pdf",
+                      f"{NAME}_好莱坞C调总谱_预览.pdf")):
+        if os.path.exists(src):
+            shutil.copy(src, os.path.join(sib, dst))
+    readme = os.path.join(HERE, "干活说明.md")
+    if os.path.exists(readme):
+        shutil.copy(readme, os.path.join(GANHUO, "使用说明.md"))
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 PREVIEW = os.path.join(tempfile.gettempdir(), "dadongbei_preview.mid")
@@ -2032,9 +2593,10 @@ def main():
     write_midi(base + "_全轨.mid", orch_items() + list(CHOIR), parsed)
     write_midi(base + "_管弦乐伴奏.mid", orch_items(), parsed)
     write_midi(os.path.join(OUT, f"{NAME}_合唱SATB_带歌词.mid"), list(CHOIR),
-               parsed)
+               parsed, own_channels=True, cc=False, program=False)
     write_midi(os.path.join(OUT, f"{NAME}_合唱SATB_带歌词_GBK编码备用.mid"),
-               list(CHOIR), parsed, charset="gbk")
+               list(CHOIR), parsed, charset="gbk", own_channels=True,
+               cc=False, program=False)
     write_midi(os.path.join(OUT, f"{NAME}_主旋律_带歌词.mid"), ["mel"], parsed,
                cc=False, single_channel=True)
     for k, c in enumerate(CHOIR, 1):
@@ -2054,7 +2616,8 @@ def main():
         k += 1
         stem = os.path.join(OUT, IX_DIR, fname(p, k))
         item = "hp" if p["id"] == "hpr" else p["id"]
-        write_midi(stem + ".mid", [item], parsed, single_channel=True)
+        write_midi(stem + ".mid", [item], parsed, single_channel=True,
+                   ascii_meta=True)
         if p["id"] == "hpr":
             s1 = stream.Score()
             score_meta(s1, "Harp")
@@ -2073,12 +2636,22 @@ def main():
             s1.write("musicxml", fp=stem + ".musicxml")
             polish(stem + ".musicxml", [p["id"]], big=False, breaks=())
 
+    # Hollywood conductor score (score in C) for Sibelius
+    for cs_, suffix in ((True, "_好莱坞C调总谱_阅读版.musicxml"),
+                        (False, "_好莱坞总谱_西贝柳斯用.musicxml")):
+        hw = base + suffix
+        hollywood_score(parsed, cs_).write("musicxml", fp=hw)
+        polish_hollywood(hw, staff_ids, cs_)
+        verify(hw, parsed, ids)
+
     write_srt(os.path.join(OUT, f"{NAME}_歌词字幕.srt"), parsed["mel"])
     # preview MIDI for the rough GM render (velocity only, no CC curves,
     # which would fight each other on the shared GM channels)
     write_midi(PREVIEW, orch_items() + list(CHOIR), parsed, cc=False)
-    print("written to", OUT)
-    print("GM preview MIDI:", PREVIEW)
+    if "--render" in sys.argv:
+        render_all()
+    export_ganhuo(parsed)
+    print("written to", OUT, "and", GANHUO)
 
 
 if __name__ == "__main__":

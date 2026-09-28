@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P2980f0715b2b377ca2f81cb9b861de1f">
+    <score-part id="P2db3ae3f569eb937aade39ba31c985ad">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="I92b8d406448ba023f42a245fcca4cce9">
+      <score-instrument id="Ib0e59741bfa3e31795f75841fd1aca76">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I92b8d406448ba023f42a245fcca4cce9">
+      <midi-instrument id="Ib0e59741bfa3e31795f75841fd1aca76">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P2980f0715b2b377ca2f81cb9b861de1f">
+  <part id="P2db3ae3f569eb937aade39ba31c985ad">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -132,6 +132,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啊</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -165,6 +166,7 @@
         <offset sound="yes">-10080</offset>
         <sound dynamics="69" />
       </direction>
+      <sound tempo="64" />
       <note>
         <pitch>
           <step>C</step>
@@ -322,6 +324,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>浪</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -806,6 +809,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啊</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -844,6 +848,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啊</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -1155,6 +1160,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>洋</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -1248,6 +1254,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>北</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -1511,6 +1518,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>聚</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -1730,6 +1738,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>肠</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -1796,6 +1805,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>北</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -1990,6 +2000,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>土</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -2315,6 +2326,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>乡</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -2420,6 +2432,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啊</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -2458,6 +2471,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啊</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -2493,6 +2507,7 @@
           <words default-y="45" font-weight="bold">G.P. (bar runs)</words>
         </direction-type>
       </direction>
+      <sound tempo="112" />
       <note>
         <rest />
         <duration>10080</duration>
@@ -2519,6 +2534,7 @@
         </direction-type>
         <sound dynamics="107" />
       </direction>
+      <sound tempo="128" />
       <note>
         <pitch>
           <step>E</step>
@@ -2556,6 +2572,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>北</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -2821,6 +2838,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>聚</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -3040,6 +3058,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>肠</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -3098,6 +3117,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>北</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -3292,6 +3312,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>土</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -3760,6 +3781,7 @@
           <text>的</text>
         </lyric>
       </note>
+      <sound tempo="122" />
       <note>
         <pitch>
           <step>D</step>
@@ -3816,6 +3838,7 @@
         </direction-type>
         <sound dynamics="107" />
       </direction>
+      <sound tempo="112" />
       <note>
         <pitch>
           <step>B</step>
@@ -3828,6 +3851,7 @@
           <text>我</text>
         </lyric>
       </note>
+      <sound tempo="100" />
       <note>
         <pitch>
           <step>D</step>
@@ -3842,8 +3866,10 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
+          <extend />
         </lyric>
       </note>
+      <sound tempo="88" />
       <note>
         <pitch>
           <step>D</step>
@@ -3872,6 +3898,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>家</text>
+          <extend />
         </lyric>
       </note>
       <note>
@@ -3918,6 +3945,7 @@
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>乡</text>
+          <extend />
         </lyric>
       </note>
     </measure>
@@ -3944,6 +3972,8 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
+      <sound tempo="66" />
+      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>

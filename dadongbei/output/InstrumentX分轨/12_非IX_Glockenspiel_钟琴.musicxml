@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pbe4cf6607219ee947bfff34cfd1451b2">
+    <score-part id="Pe4f8a2905e81ff12c479fe4644d72aa7">
       <part-name>Glockenspiel</part-name>
       <part-abbreviation>Glk.</part-abbreviation>
-      <score-instrument id="I282098f55d43e9face249ff4546a5793">
+      <score-instrument id="I12d68fe85e586405f1fb4b6745e41757">
         <instrument-name>Glockenspiel</instrument-name>
         <instrument-abbreviation>Glk.</instrument-abbreviation>
         <instrument-sound>pitched-percussion.glockenspiel</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I282098f55d43e9face249ff4546a5793">
+      <midi-instrument id="I12d68fe85e586405f1fb4b6745e41757">
         <midi-channel>12</midi-channel>
         <midi-program>10</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pbe4cf6607219ee947bfff34cfd1451b2">
+  <part id="Pe4f8a2905e81ff12c479fe4644d72aa7">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -161,6 +161,7 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
+      <sound tempo="64" />
       <note>
         <rest />
         <duration>10080</duration>
@@ -1018,6 +1019,7 @@
         </direction-type>
         <offset>-10080</offset>
       </direction>
+      <sound tempo="112" />
     </measure>
     <measure implicit="no" number="58">
       <attributes>
@@ -1039,6 +1041,7 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
+      <sound tempo="128" />
       <note>
         <rest measure="yes" />
         <duration>40320</duration>
@@ -1500,6 +1503,7 @@
         <rest measure="yes" />
         <duration>40320</duration>
       </note>
+      <sound tempo="122" />
     </measure>
     <measure implicit="no" number="76">
       <direction placement="above">
@@ -1515,6 +1519,7 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
+      <sound tempo="112" />
       <note>
         <pitch>
           <step>B</step>
@@ -1523,6 +1528,7 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
+      <sound tempo="100" />
       <note>
         <pitch>
           <step>D</step>
@@ -1535,6 +1541,7 @@
           <tied type="start" />
         </notations>
       </note>
+      <sound tempo="88" />
       <note>
         <pitch>
           <step>D</step>
@@ -1654,6 +1661,7 @@
           <words default-y="45" font-weight="bold">rit.</words>
         </direction-type>
       </direction>
+      <sound tempo="66" />
       <note>
         <rest />
         <duration>20160</duration>
@@ -1662,6 +1670,7 @@
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
+      <sound tempo="40" />
     </measure>
   </part>
 </score-partwise>
