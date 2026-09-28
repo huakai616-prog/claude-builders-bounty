@@ -2,14 +2,15 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>我不难过（副歌）</work-title>
+    <work-title>我不难过</work-title>
   </work>
-  <movement-title>我不难过（副歌）· 人声与弦乐四重奏</movement-title>
+  <movement-title>我不难过（副歌 · 人声与弦乐四重奏）</movement-title>
   <identification>
-    <creator type="composer">李偲菘 曲</creator>
-    <creator type="lyricist">杨明学 词</creator>
-    <creator type="arranger">人声与弦乐四重奏 · 降E大调</creator>
+    <creator type="composer">李偲菘</creator>
+    <creator type="lyricist">杨明学</creator>
+    <creator type="arranger">花开当富贵</creator>
     <encoding>
+      <encoder>花开当富贵</encoder>
       <encoding-date>2026-09-28</encoding-date>
       <software>music21 v.10.5.0</software>
       <supports element="beam" type="yes" />
@@ -19,41 +20,60 @@
   </identification>
   <defaults>
     <scaling>
-      <millimeters>6</millimeters>
+      <millimeters>7.2</millimeters>
       <tenths>40</tenths>
     </scaling>
     <page-layout>
-      <page-height>1980</page-height>
-      <page-width>1400</page-width>
+      <page-height>2398.9</page-height>
+      <page-width>1552.2</page-width>
       <page-margins type="both">
-        <left-margin>80</left-margin>
-        <right-margin>60</right-margin>
-        <top-margin>70</top-margin>
-        <bottom-margin>70</bottom-margin>
+        <left-margin>84.7</left-margin>
+        <right-margin>84.7</right-margin>
+        <top-margin>148.2</top-margin>
+        <bottom-margin>134.1</bottom-margin>
       </page-margins>
     </page-layout>
     <system-layout>
       <system-margins>
-        <left-margin>60</left-margin>
+        <left-margin>0</left-margin>
         <right-margin>0</right-margin>
       </system-margins>
-      <system-distance>110</system-distance>
-      <top-system-distance>170</top-system-distance>
+      <system-distance>100</system-distance>
+      <top-system-distance>250</top-system-distance>
     </system-layout>
     <staff-layout>
-      <staff-distance>75</staff-distance>
+      <staff-distance>70</staff-distance>
     </staff-layout>
   </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words default-x="776.1" default-y="2250.7" font-size="30" justify="center" valign="top" font-weight="bold">我不难过</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>subtitle</credit-type>
+    <credit-words default-x="776.1" default-y="2180.7" font-size="14" justify="center" valign="top">副歌 · 人声与弦乐四重奏</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>lyricist</credit-type>
+    <credit-words default-x="84.7" default-y="2100.7" font-size="10.5" justify="left" valign="bottom">作词：杨明学
+原唱：孙燕姿</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-words default-x="1467.5" default-y="2100.7" font-size="10.5" justify="right" valign="bottom">作曲：李偲菘
+改编：花开当富贵
+制谱：花开当富贵</credit-words>
+  </credit>
   <part-list>
-    <score-part id="P6b1dbe2506343a0ab55a0bdeb364e39d">
+    <score-part id="P9ada218147eec581fa6954ceeadcfa80">
       <part-name>Voice</part-name>
       <part-abbreviation>V.</part-abbreviation>
-      <score-instrument id="I84da9de6b757c2b18980992d35794fe2">
+      <score-instrument id="I1d98404b416edb109da759f32fb51432">
         <instrument-name>Voice</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
         <instrument-sound>voice.vocals</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I84da9de6b757c2b18980992d35794fe2">
+      <midi-instrument id="I1d98404b416edb109da759f32fb51432">
         <midi-channel>1</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
@@ -63,62 +83,65 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="Pa290946d1da0e9d65f9384e6af994593">
+    <score-part id="P838a8bedf08f78eb797650a8baba960e">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="I213acce0ea92033fbd048780eedf42cd">
+      <score-instrument id="I95f342129c8a6a29497fe2a0ec2d30ed">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I213acce0ea92033fbd048780eedf42cd">
+      <midi-instrument id="I95f342129c8a6a29497fe2a0ec2d30ed">
         <midi-channel>2</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P51cf1470f5dcf7e09bfbbc9e4043f340">
+    <score-part id="P795c9700debbc9501d9cb9d0f9eb71b9">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="I6c64566c66a8b6bcba557714620e3503">
+      <score-instrument id="I0ce8cdc8c908dd1eb3d75c336ced2263">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I6c64566c66a8b6bcba557714620e3503">
+      <midi-instrument id="I0ce8cdc8c908dd1eb3d75c336ced2263">
         <midi-channel>3</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pab88bf26163aceef81d03b4d3226fb1e">
+    <score-part id="Pa88a8c981fc05456c90dea2d678ca8af">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I45d410c9cd508ad4a6e160749578c87d">
+      <score-instrument id="I392c9b5efee45a62b1e1a28318e0d5a9">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I45d410c9cd508ad4a6e160749578c87d">
+      <midi-instrument id="I392c9b5efee45a62b1e1a28318e0d5a9">
         <midi-channel>4</midi-channel>
         <midi-program>42</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P1306454337761f09b11bd9c0949bbcaf">
+    <score-part id="Pbdb7d5ea9a40f899c4e6758f53f80fbd">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="I577650c6aa0e309f2edda42a85973fad">
+      <score-instrument id="Ie409f396bd1fd6401479d78a453465fc">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I577650c6aa0e309f2edda42a85973fad">
+      <midi-instrument id="Ie409f396bd1fd6401479d78a453465fc">
         <midi-channel>5</midi-channel>
         <midi-program>43</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="P6b1dbe2506343a0ab55a0bdeb364e39d">
+  <part id="P9ada218147eec581fa6954ceeadcfa80">
     <measure implicit="no" number="1">
+      <print>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
@@ -136,10 +159,13 @@
       </attributes>
       <direction placement="above">
         <direction-type>
-          <rehearsal halign="center" valign="middle">Intro</rehearsal>
+          <words font-weight="bold">Intro 前奏</words>
         </direction-type>
       </direction>
       <direction placement="above">
+        <direction-type>
+          <words font-weight="bold">Andante espressivo </words>
+        </direction-type>
         <direction-type>
           <metronome parentheses="no">
             <beat-unit>quarter</beat-unit>
@@ -147,11 +173,6 @@
           </metronome>
         </direction-type>
         <sound tempo="68" />
-      </direction>
-      <direction placement="above">
-        <direction-type>
-          <words default-y="45" font-weight="bold">Andante espressivo</words>
-        </direction-type>
       </direction>
       <note>
         <rest measure="yes" />
@@ -208,7 +229,12 @@
       <print new-system="yes" />
       <direction placement="above">
         <direction-type>
-          <rehearsal halign="center" valign="middle">A  副歌</rehearsal>
+          <rehearsal halign="center" valign="middle">A</rehearsal>
+        </direction-type>
+      </direction>
+      <direction placement="above">
+        <direction-type>
+          <words font-weight="bold">Chorus 副歌</words>
         </direction-type>
       </direction>
       <note>
@@ -1466,7 +1492,12 @@
       <print new-system="yes" />
       <direction placement="above">
         <direction-type>
-          <rehearsal halign="center" valign="middle">B  高潮</rehearsal>
+          <rehearsal halign="center" valign="middle">B</rehearsal>
+        </direction-type>
+      </direction>
+      <direction placement="above">
+        <direction-type>
+          <words font-weight="bold">Climax 高潮</words>
         </direction-type>
       </direction>
       <note>
@@ -2632,7 +2663,12 @@
       <print new-system="yes" />
       <direction placement="above">
         <direction-type>
-          <rehearsal halign="center" valign="middle">Coda</rehearsal>
+          <rehearsal halign="center" valign="middle">C</rehearsal>
+        </direction-type>
+      </direction>
+      <direction placement="above">
+        <direction-type>
+          <words font-weight="bold">Coda 尾奏</words>
         </direction-type>
       </direction>
       <note>
@@ -2676,7 +2712,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pa290946d1da0e9d65f9384e6af994593">
+  <part id="P838a8bedf08f78eb797650a8baba960e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -3919,7 +3955,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P51cf1470f5dcf7e09bfbbc9e4043f340">
+  <part id="P795c9700debbc9501d9cb9d0f9eb71b9">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -5448,7 +5484,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pab88bf26163aceef81d03b4d3226fb1e">
+  <part id="Pa88a8c981fc05456c90dea2d678ca8af">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -8265,7 +8301,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P1306454337761f09b11bd9c0949bbcaf">
+  <part id="Pbdb7d5ea9a40f899c4e6758f53f80fbd">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

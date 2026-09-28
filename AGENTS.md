@@ -22,12 +22,30 @@
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
-| 我不难过（副歌，孙燕姿） | 人声 + 弦乐四重奏 · ♭E 大调（原调） · ♩=68 | `claude/eager-bell-1xpu86` | `wobunanguo/` | 已完成，副歌唱一遍，带前奏尾奏。待用户确认谱上几处低八度（见目录 README「转写说明」），待在 ACE Studio 渲染 |
+| 我不难过（副歌，孙燕姿） | 人声 + 弦乐四重奏 · ♭E 大调（原调） · ♩=68 | `claude/eager-bell-1xpu86` | `wobunanguo/` | 已完成，副歌唱一遍，带前奏尾奏，好莱坞总谱 PDF（第一首用 `tools/hollywood` 的）。待用户确认谱上几处低八度（见目录 README「转写说明」），待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
 - 泪海已经通过 PR #2 合并进 `main`，其他分支都还**没有合并**。合并以后记得更新这张表。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
+
+## 交付标准（用户的长期要求，每次都照做，不要再问）
+
+用户原话：「给我交付的要西贝柳斯工程，PDF 是要向好莱坞标准来做，要有封面，排版要精益求精、要看精致，改编和制谱都写『花开当富贵』。还要 MIDI 文件，一份弦乐的总的，一份人声带歌词的。」「以后都要像这么做，好莱坞模板你自己总结出一套 skill，下次就不用问我了。」
+
+1. **必交四样**，都提交进 `<歌>/output/`：
+   - **西贝柳斯工程**：MusicXML（`.sib` 外部生成不了，要在回复里用一句话说明），通过 MusicXML 4.0 schema 校验；
+   - **好莱坞标准总谱 PDF**，要有封面：`<歌名>_副歌_总谱.pdf`；
+   - **弦乐总 MIDI**：所有弦乐声部在一个文件里；
+   - **人声带歌词 MIDI**，外加 GBK 编码备用版。
+   - 其他照旧：全轨 MIDI、人声素 MIDI、试听 mp3、字幕。
+2. **署名**：改编、制谱都写**花开当富贵**。封面、首页标题栏、每页页脚、MusicXML 的 arranger / encoder 都要写。
+3. **好莱坞模板**：规范和做法都写在 `.claude/skills/hollywood-score/SKILL.md`，工具在 `tools/hollywood/`（`hollywood.py` + `hollywood.mss`）。GPT / Codex 也照这份 SKILL.md 做。要点：
+   - 11×17 英寸总谱纸，Score in C；
+   - 封面；首页标题栏；每页页眉页脚和「第几页 / 共几页」；
+   - 每小节有方框小节号；排练号用字母加框，旁边写段落名；
+   - MuseScore 4 排版；尽量每页 3 行，不要单小节一行，最后一页不要只剩孤零零一行。
+4. 交付前逐页看 PNG，按 SKILL.md 的检查清单查一遍。
 
 ## 用户怎么提需求
 
@@ -67,7 +85,7 @@
 | `…_人声_素.mid` | 不带歌词的人声 MIDI |
 | `…_全轨.mid` | 给 ACE 用。音轨名为 `Vocal 人声` / `Violin I` / `Violin II` / `Viola` / `Violoncello` |
 | `…_弦乐四重奏_伴奏.mid` | 只有弦乐声部 |
-| `…_总谱预览.pdf` | MuseScore 3 渲染的预览 |
+| `…_总谱.pdf` | 好莱坞标准总谱：封面 + 总谱，MuseScore 4 排版 + `tools/hollywood` 加封面和页眉页脚（泪海的旧文件还叫 `…_总谱预览.pdf`，是 MuseScore 3 的预览） |
 | `粗略试听_GM音色_非ACE效果.mp3` | FluidSynth + GM 音色渲染，只用来核对音符 |
 | `…_歌词字幕.srt` | 歌词字幕，时间从第 1 小节算起 |
 
@@ -85,7 +103,8 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - `~` 连音线，`>` 重音，`( )` 圆滑线；
   - `=字` 歌词，`g:G4` 倚音。
 - 改完必须先 `--check` 干净（没有 RANGE / CLASH / PARALLEL 输出），再生成。
-- PDF 和 mp3 不在 `build.py` 里，需要另外渲染。Ubuntu 上先装 `apt-get install musescore3 fluidsynth fluid-soundfont-gm ffmpeg`，然后：
+- **好莱坞总谱 PDF**：`python3 <歌>/build.py --pdf`（需要 MuseScore 4 和 Chromium，环境准备见 `.claude/skills/hollywood-score/SKILL.md`）。我不难过已经接好，新歌照 `wobunanguo/build.py` 接。
+- mp3 不在 `build.py` 里，需要另外渲染。泪海的旧 PDF 预览是 MuseScore 3 出的。Ubuntu 上先装 `apt-get install musescore3 fluidsynth fluid-soundfont-gm ffmpeg`，然后：
 
   ```bash
   cd leihai/output
@@ -110,6 +129,11 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **歌词 MIDI**：每个字一个 lyrics meta 事件；拖腔音符写 `-`；倚音带那个字，主音写 `-`。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
 - **圆滑线从连音线的后半个音开始**（例如 `Bb4/1~=时 (Bb4/1 Ab4/1)`）：泪海版 `merged_notes()` 会漏掉后面拖腔音符的 `-` 歌词。`wobunanguo/build.py` 已修，新歌从它复制。
+- **MuseScore 4 排 PDF 的坑**：
+  - 直接导入 MusicXML 时 `-S` 样式不生效，要先转成 `.mscz` 再加样式导出；
+  - 导入的署名位置会乱（作曲跑到顶上，作词掉进谱里）。
+  - 这两个 `tools/hollywood/hollywood.py` 都已经处理了。
+  - pypdf 报 `_cffi_backend` 时 `pip install cffi`。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 
 ## 待办 / 待确认

@@ -34,6 +34,9 @@ from music21 import (articulations, bar, clef, dynamics, expressions,
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "output")
+sys.path.insert(0, os.path.join(HERE, "..", "tools", "hollywood"))
+import hollywood  # noqa: E402  (shared Hollywood score template)
+
 NAME = "我不难过"
 NBARS = 23
 BAR16 = 16
@@ -275,9 +278,23 @@ ACCENT = 14
 # Tempo map: (bar, 16th, bpm)
 TEMPI = [(1, 0, BPM), (19, 8, 66), (20, 0, 62), (21, 0, 60), (22, 0, 57),
          (22, 8, 53), (23, 0, 46)]
-REHEARSAL = {1: "Intro", 5: "A  副歌", 13: "B  高潮", 21: "Coda"}
+# Section starts: (bar, rehearsal letter or None, section title)
+SECTIONS = [(1, None, "Intro 前奏"), (5, "A", "Chorus 副歌"),
+            (13, "B", "Climax 高潮"), (21, "C", "Coda 尾奏")]
 TEMPO_TEXT = [(20, 0, "allarg."), (22, 0, "rit.")]
 SYSTEM_BREAKS = (5, 8, 11, 13, 15, 17, 19, 21)
+
+# Cover, title block and running header / footer (tools/hollywood)
+META = dict(
+    title="我不难过", title_latin="Wǒ Bù Nánguò",
+    subtitle="副歌 · 人声与弦乐四重奏",
+    subtitle_en="Chorus — for Voice and String Quartet",
+    composer="李偲菘", lyricist="杨明学", artist="孙燕姿",
+    instrumentation=[("Voice", "人声"), ("Violin I", "第一小提琴"),
+                     ("Violin II", "第二小提琴"), ("Viola", "中提琴"),
+                     ("Violoncello", "大提琴")],
+    key="E♭ Major · 降E大调", tempo="♩ = 68", duration="ca. 1′25″",
+    year="2026", tempo_text="Andante espressivo")
 
 # ---------------------------------------------------------------------------
 # Parsing
@@ -369,14 +386,10 @@ def make_m21(p, events):
             m.insert(0, key.Key(KEY_M21))
             m.insert(0, meter.TimeSignature("4/4"))
             if p["id"] == "vox":
-                mm = tempo.MetronomeMark(text="Andante espressivo",
-                                         number=BPM, referent=1.0)
+                # the text is joined to it by hollywood.polish_musicxml
+                mm = tempo.MetronomeMark(number=BPM, referent=1.0)
                 mm.placement = "above"
                 m.insert(0, mm)
-        if p["id"] == "vox" and b in REHEARSAL:
-            rm = expressions.RehearsalMark(REHEARSAL[b])
-            rm.placement = "above"
-            m.insert(0, rm)
         for e in by_bar[b]:
             if e["grace"]:
                 g = note.Note(m21_name(e["grace"]), type="16th")
@@ -421,6 +434,16 @@ def make_m21(p, events):
             for tb, ts, txt in TEMPO_TEXT:
                 if tb == b:
                     m.insert(ts / 4, tempo.TempoText(txt))
+            for sb, letter, title in SECTIONS:
+                if sb == b:
+                    if letter:
+                        rm = expressions.RehearsalMark(letter)
+                        rm.placement = "above"
+                        m.insert(0, rm)
+                    te = expressions.TextExpression(title)
+                    te.style.fontWeight = "bold"
+                    te.placement = "above"
+                    m.insert(0, te)
         if b == NBARS:
             for n in m.notesAndRests:
                 if not n.isRest:
@@ -465,11 +488,10 @@ def make_m21(p, events):
 def build_score(parsed):
     sc = stream.Score()
     md = metadata.Metadata()
-    md.title = "我不难过（副歌）"
-    md.movementName = "我不难过（副歌）· 人声与弦乐四重奏"
-    md.composer = "李偲菘 曲"
-    md.lyricist = "杨明学 词"
-    md.add("arranger", "人声与弦乐四重奏 · 降E大调")
+    md.title = META["title"]
+    md.movementName = f"{META['title']}（{META['subtitle']}）"
+    md.composer = META["composer"]
+    md.lyricist = META["lyricist"]
     sc.insert(0, md)
     for p in PARTS:
         sc.insert(0, make_m21(p, parsed[p["id"]]))
@@ -489,34 +511,13 @@ SOUNDS = {"Voice": ("Voice", "voice.vocals"),
 
 
 def polish(path):
-    """Tidy the MusicXML for Sibelius: A4 page and 6 mm staves, system
-    breaks at phrase starts, one <instrument-sound> per part so the staves
-    map to the right instruments, no per-note instrument changes, voice
-    dynamics above the staff (lyrics are below), words and rehearsal marks
-    above."""
+    """Tidy the MusicXML for Sibelius: system breaks at phrase starts, one
+    <instrument-sound> per part so the staves map to the right instruments,
+    no per-note instrument changes, voice dynamics above the staff (lyrics
+    are below), words and rehearsal marks above.  Page layout, credits and
+    creators come from tools/hollywood (Hollywood house style)."""
     tree = ET.parse(path)
     r = tree.getroot()
-    d = r.find("defaults")
-    if d is None:
-        d = ET.Element("defaults")
-        r.insert(list(r).index(r.find("part-list")), d)
-    for t in ("scaling", "page-layout", "system-layout", "staff-layout"):
-        for x in d.findall(t):
-            d.remove(x)
-    new = ET.fromstring(
-        "<defaults><scaling><millimeters>6</millimeters><tenths>40</tenths>"
-        "</scaling><page-layout><page-height>1980</page-height>"
-        "<page-width>1400</page-width><page-margins type=\"both\">"
-        "<left-margin>80</left-margin><right-margin>60</right-margin>"
-        "<top-margin>70</top-margin><bottom-margin>70</bottom-margin>"
-        "</page-margins></page-layout><system-layout><system-margins>"
-        "<left-margin>60</left-margin><right-margin>0</right-margin>"
-        "</system-margins><system-distance>110</system-distance>"
-        "<top-system-distance>170</top-system-distance></system-layout>"
-        "<staff-layout><staff-distance>75</staff-distance></staff-layout>"
-        "</defaults>")
-    for i, x in enumerate(new):
-        d.insert(i, x)
     for sp in r.iter("score-part"):
         pname = sp.findtext("part-name")
         iname, snd = SOUNDS[pname]
@@ -641,7 +642,7 @@ def tempo_track():
         t = ((b - 1) * BAR16 + s) * T16
         ab.append((t, mido.MetaMessage("set_tempo",
                                        tempo=mido.bpm2tempo(bpm))))
-    for b, name in REHEARSAL.items():
+    for b, _, name in SECTIONS:
         ab.append(((b - 1) * BAR16 * T16,
                    mido.MetaMessage("marker", text=name.split()[0])))
     ab.sort(key=lambda x: x[0])
@@ -898,6 +899,7 @@ def main():
     sc = build_score(parsed)
     sc.write("musicxml", fp=base + ".musicxml")
     polish(base + ".musicxml")
+    hollywood.polish_musicxml(base + ".musicxml", META)
     verify_bars(base + ".musicxml")
     all_ids = [p["id"] for p in PARTS]
     write_midi(base + "_全轨.mid", all_ids, parsed)
@@ -911,6 +913,16 @@ def main():
                [x for x in all_ids if x != "vox"], parsed)
     write_srt(os.path.join(OUT, f"{NAME}_副歌_歌词字幕.srt"), parsed["vox"])
     print("written to", OUT)
+    if "--pdf" in sys.argv:
+        write_pdf()
+
+
+def write_pdf(png_dir=None):
+    """Hollywood-standard full score PDF (cover + score + header/footer)."""
+    src = os.path.join(OUT, f"{NAME}_副歌_人声弦乐四重奏.musicxml")
+    dst = os.path.join(OUT, f"{NAME}_副歌_总谱.pdf")
+    n = hollywood.render_pdf(src, dst, META, png_dir=png_dir)
+    print(f"PDF: {dst} ({n} pages)")
 
 
 if __name__ == "__main__":
