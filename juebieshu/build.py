@@ -114,10 +114,15 @@ TEMPO_TEXT = [(32, 8, "poco rit.", None), (33, 0, "a tempo", None),
               (46, 0, "molto allarg.", None), (47, 0, "Largamente", 92),
               (48, 0, "rit.", None), (49, 0, "Meno mosso, dolce", 88),
               (51, 0, "rit.", None)]
-SYSTEM_BREAKS = ()      # bars that start a new system in the full score
-PAGE_BREAKS = ()        # bars that start a new page in the full score
+# full score: 4-bar phrases per system, every rehearsal letter starts a
+# system; page 1 = title block + 2 systems, then 3 systems per page
+SYSTEM_BREAKS = (5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49)
+PAGE_BREAKS = (9, 21, 33, 45)
 PART_BREAKS = {}        # part id -> bars that start a new line in the part
 CLEFS = {}              # part id -> [(bar, 16th, "tenor" / "treble" / ...)]
+# printed 8va lines (notation only; data and MIDI stay at sounding pitch):
+# part id -> [(bar, 16th, last bar, last 16th)]
+OTTAVA = {"vn1": [(27, 0, 31, 11), (49, 0, 52, 15)]}
 # <<< FORM
 
 # ---------------------------------------------------------------------------

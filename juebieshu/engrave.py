@@ -64,15 +64,25 @@ def ly_notes(p, events, part_mode=False):
     by_bar = {}
     for e in events:
         by_bar.setdefault(e["bar"], []).append(e)
+    ott = [((b1 - 1) * B.BAR16 + s1, (b2 - 1) * B.BAR16 + s2)
+           for b1, s1, b2, s2 in B.OTTAVA.get(p["id"], [])]
+    ott_on = False
     lines = []
     for b in range(1, B.NBARS + 1):
         evs = by_bar[b]
-        if len(evs) == 1 and evs[0]["pitches"] is None:
+        if len(evs) == 1 and evs[0]["pitches"] is None and not ott_on:
             lines.append("R1" + ("\\fermata" if evs[0]["fermata"] else "")
                          + " |")
             continue
         toks = []
         for e in evs:
+            inside = any(a <= e["abs"] <= z for a, z in ott)
+            if inside and not ott_on:
+                toks.append("\\ottava #1")
+                ott_on = True
+            elif ott_on and not inside:
+                toks.append("\\ottava #0")
+                ott_on = False
             if e["grace"]:
                 toks.append("\\slashedGrace { "
                             f"{ly_pitch(e['grace'], octv)}8 }}")
@@ -108,6 +118,8 @@ def ly_notes(p, events, part_mode=False):
                     t += ")"
                 toks.append(t)
         lines.append(" ".join(toks) + " |")
+    if ott_on:
+        lines.append("\\ottava #0")
     return "\n    ".join(lines)
 
 
@@ -188,10 +200,11 @@ def ly_global(score=True):
         f"\\override #'(font-name . \"{CJK_SANS}\") {ly_str(B.INTRO_TITLE[1])} }}")
     for b, s, txt, bpm in B.TEMPO_TEXT:
         att[pos(b, s)].append(tempo_markup(txt, bpm))
+    full = score is True
     for b, (letter, en, zh) in B.REHEARSAL.items():
         att[pos(b, 0)].append(mark_markup(letter, en, zh,
-                                          3.2 if score else 2.6))
-    if score:
+                                          3.2 if full else 2.6))
+    if full:
         for b in range(2, B.NBARS + 1):
             if b in B.PAGE_BREAKS:
                 att[pos(b, 0)].insert(0, "\\pageBreak")
@@ -360,6 +373,8 @@ LAYOUT = """
   }
   \\context {
     \\Staff
+    ottavationMarkups = #ottavation-ordinals
+    \\override OttavaBracket.font-shape = #'italic
     \\override InstrumentName.self-alignment-X = #RIGHT
     \\override InstrumentName.padding = #1.2
     \\override InstrumentName.font-size = #1
