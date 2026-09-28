@@ -30,7 +30,9 @@ Usage:
                                       stops, melody / bass fidelity
   python3 build.py --check --bars 17-24   the same, only those bars
   python3 build.py                    MusicXML + MIDI
-  python3 build.py --pdf              also engrave the score and parts
+  python3 build.py --pdf              also engrave the score and parts,
+                                      render the GM preview mp3 and copy
+                                      the finished files to 干活/诀别书/
 """
 import json
 import os
@@ -1105,6 +1107,96 @@ def duration_text():
 
 
 # ---------------------------------------------------------------------------
+# 干活/诀别书/: only the finished things the user asked for, by purpose
+# ---------------------------------------------------------------------------
+DELIVER = os.path.join(HERE, "..", "干活", NAME)
+GP_NOTE = ""        # one line about the general pause, set with the FORM
+
+
+def usage_md():
+    marks = "\n".join(f"| {l} | {b} | {en} {zh} |"
+                       for b, (l, en, zh) in sorted(REHEARSAL.items()))
+    speakers = "\n".join(
+        f"| {i + 1} | `{p['name']}` | {p['zh']} | **{p['ace']}** |"
+        for i, p in enumerate(PARTS))
+    return f"""# {TITLE} · 弦乐五重奏 使用说明
+
+作曲 {COMPOSER}（钢琴谱 {SOURCE_CHART}）· 改编、制谱 {ARRANGER}
+全曲 52 小节 · F 大调（原调，d 小调色彩）· 4/4 · ♩ = {TEMPO_MARK[1]} · {duration_text()}
+编制：第一小提琴、第二小提琴、中提琴、大提琴、低音提琴
+
+## 1_西贝柳斯工程
+
+`{NAME}_弦乐五重奏.musicxml`：在西贝柳斯里用「文件 → 打开」打开（或者直接拖进窗口），然后**另存为 `.sib`**。`.sib` 是西贝柳斯的加密专有格式，外部程序生成不了，所以交 MusicXML。
+
+- 文件已经按 MusicXML 4.0 官方 schema 校验通过。
+- 纸张 11×17 英寸，C 调总谱（Score in C），首页有标题和署名，每小节都有小节号。
+- 低音提琴按惯例比实际音高**高八度记谱**，文件里带了移调信息，西贝柳斯会自动识别。
+- 如果版面有挤压，执行「版面 → 重置设计 / 重置位置」，让西贝柳斯重新排一次。
+
+## 2_总谱与分谱PDF
+
+- `{NAME}_弦乐五重奏_总谱.pdf`：好莱坞标准总谱，11×17 英寸（Tabloid），带封面。每页有页眉页脚和「第几页 / 共几页」，每小节有方框小节号，排练号加框并标段落名。打印时选 Tabloid / A3，按「实际大小」或「适合页面」。
+- `{NAME}_弦乐五重奏_全部分谱.pdf` 和 `分谱/`：五个声部的分谱，9×12 英寸，连续休止合并成多小节休止，排练号和总谱一致。A4 纸打印选「适合页面」。
+
+## 3_ACE_Studio_MIDI
+
+`{NAME}_弦乐五重奏_全轨.mid` 一个文件五轨，带速度变化，音符都是实际音高。
+
+1. 在 ACE Studio 里把它导入到第 1 小节，**保留速度信息**。
+2. 五条轨都加载 AI 乐器 **String Section**，按下表选 speaker：
+
+| 轨 | 轨名 | 声部 | String Section 的 speaker |
+|---|---|---|---|
+{speakers}
+
+3. 演奏法保持默认的**智能模式**。长音、连线、断奏、重音都已经体现在音符的长短、间隙和力度里。这版**没有用拨弦（pizz.）和弱音器**，这两种只能在 ACE 里手动设置，所以不需要改。
+4. {GP_NOTE}
+5. 确认没有轨被静音或独奏（被静音的轨不会渲染），然后从头播放一遍，让五条轨都渲染完。
+6. 如果只想单独换某一轨，`分轨/` 里有每个声部单独的 MIDI，同样导入到第 1 小节。
+
+## 粗略试听
+
+`粗略试听_GM音色_非ACE效果.mp3` 用普通 GM 音色渲染，只用来核对音符，**不是最终音效**。
+
+## 段落（排练号）
+
+| 排练号 | 小节 | 段落 |
+|---|---|---|
+| — | 1 | {INTRO_TITLE[0]} {INTRO_TITLE[1]} |
+{marks}
+"""
+
+
+def deliver():
+    import shutil
+    base = score_basename()
+    plan = [
+        ("1_西贝柳斯工程", [base + ".musicxml"]),
+        ("2_总谱与分谱PDF", [base + "_总谱.pdf", base + "_全部分谱.pdf"]),
+        ("2_总谱与分谱PDF/分谱",
+         sorted(os.path.join(OUT, "分谱", f)
+                for f in os.listdir(os.path.join(OUT, "分谱")))),
+        ("3_ACE_Studio_MIDI", [base + "_全轨.mid"]),
+        ("3_ACE_Studio_MIDI/分轨",
+         sorted(os.path.join(OUT, "ACE分轨MIDI", f)
+                for f in os.listdir(os.path.join(OUT, "ACE分轨MIDI")))),
+        ("", [os.path.join(OUT, "粗略试听_GM音色_非ACE效果.mp3")]),
+    ]
+    if os.path.isdir(DELIVER):
+        shutil.rmtree(DELIVER)
+    for sub, files in plan:
+        d = os.path.join(DELIVER, sub)
+        os.makedirs(d, exist_ok=True)
+        for f in files:
+            shutil.copy(f, d)
+    with open(os.path.join(DELIVER, "使用说明.md"), "w",
+              encoding="utf-8") as fh:
+        fh.write(usage_md())
+    print("delivered to", os.path.normpath(DELIVER))
+
+
+# ---------------------------------------------------------------------------
 def score_basename():
     return os.path.join(OUT, f"{NAME}_弦乐五重奏")
 
@@ -1143,6 +1235,7 @@ def main():
     if "--pdf" in sys.argv:
         import engrave
         engrave.main(png="--png" in sys.argv)
+        deliver()
 
 
 if __name__ == "__main__":
