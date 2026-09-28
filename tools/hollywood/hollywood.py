@@ -1,0 +1,489 @@
+#!/usr/bin/env python3
+"""Hollywood-standard full score: shared by every song's build.py.
+
+Two entry points:
+
+  polish_musicxml(path, meta)
+      Page layout (11 x 17 in tabloid, concert pitch), first-page credit block
+      and <identification> for the MusicXML that goes to Sibelius.  Arranger
+      and engraver are always 花开当富贵 unless meta overrides them.
+
+  render_pdf(musicxml, out_pdf, meta, png_dir=None)
+      MuseScore Studio 4 engraves the score with hollywood.mss, headless
+      Chromium draws the cover page and the running header / footer, and
+      pypdf merges them into one PDF.
+
+`meta` is a plain dict; see DEFAULT_META and the SKILL.md for every key.
+Command line (re-render a PDF without rebuilding the song):
+
+  python3 tools/hollywood/hollywood.py <song>/build.py
+"""
+import glob
+import html
+import importlib.util
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import xml.etree.ElementTree as ET
+import zipfile
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+STYLE = os.path.join(HERE, "hollywood.mss")
+
+ARRANGER = "花开当富贵"
+ENGRAVER = "花开当富贵"
+
+DEFAULT_META = {
+    "title": "",            # 我不难过
+    "title_latin": "",      # Wǒ Bù Nánguò (cover only)
+    "subtitle": "",         # 副歌 · 人声与弦乐四重奏
+    "subtitle_en": "",      # Chorus — for Voice and String Quartet
+    "composer": "",
+    "lyricist": "",
+    "artist": "",           # original performer
+    "arranger": ARRANGER,
+    "engraver": ENGRAVER,
+    "instrumentation": [],  # [("Voice", "人声"), ("Violin I", "第一小提琴"), ...]
+    "key": "",              # "E♭ Major · 降E大调"
+    "tempo": "",            # "♩ = 68"
+    "duration": "",         # "ca. 1′25″"
+    "year": "",
+    "tempo_text": "",       # "Andante espressivo": joined to the bar-1 metronome
+}
+
+# page geometry, must match hollywood.mss (inches)
+PAGE_W, PAGE_H = 11.0, 17.0
+MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM = 0.6, 1.05, 0.95
+SPATIUM_MM = 1.8  # also <Spatium> in hollywood.mss
+
+
+def _meta(meta):
+    m = dict(DEFAULT_META)
+    m.update(meta or {})
+    return m
+
+
+# ---------------------------------------------------------------------------
+# MusicXML: layout + credits (what Sibelius opens)
+# ---------------------------------------------------------------------------
+def _tenths(inches):
+    return round(inches * 25.4 / SPATIUM_MM * 10, 1)
+
+
+def _credit(page, ctype, text, x, y, size, justify, valign, weight=None):
+    c = ET.Element("credit", page=str(page))
+    ET.SubElement(c, "credit-type").text = ctype
+    w = ET.SubElement(c, "credit-words", {
+        "default-x": str(x), "default-y": str(y), "font-size": str(size),
+        "justify": justify, "valign": valign})
+    if weight:
+        w.set("font-weight", weight)
+    w.text = text
+    return c
+
+
+def polish_musicxml(path, meta):
+    """Tabloid layout, spacing, credit block and creators for Sibelius."""
+    m = _meta(meta)
+    tree = ET.parse(path)
+    r = tree.getroot()
+
+    # identification: creators + encoder
+    ident = r.find("identification")
+    if ident is None:
+        ident = ET.Element("identification")
+        anchor = r.find("defaults")
+        if anchor is None:
+            anchor = r.find("part-list")
+        r.insert(list(r).index(anchor), ident)
+    for x in ident.findall("creator"):
+        ident.remove(x)
+    creators = [("composer", m["composer"]), ("lyricist", m["lyricist"]),
+                ("arranger", m["arranger"])]
+    for i, (t, v) in enumerate(c for c in creators if c[1]):
+        el = ET.Element("creator", type=t)
+        el.text = v
+        ident.insert(i, el)
+    enc = ident.find("encoding")
+    if enc is not None:
+        for x in enc.findall("encoder"):
+            enc.remove(x)
+        e = ET.Element("encoder")
+        e.text = m["engraver"]
+        enc.insert(0, e)
+
+    # defaults: page layout and staff spacing
+    d = r.find("defaults")
+    for t in ("scaling", "page-layout", "system-layout", "staff-layout"):
+        for x in d.findall(t):
+            d.remove(x)
+    W, H = _tenths(PAGE_W), _tenths(PAGE_H)
+    new = ET.fromstring(
+        f"<defaults><scaling><millimeters>{SPATIUM_MM * 4}</millimeters>"
+        "<tenths>40</tenths></scaling><page-layout>"
+        f"<page-height>{H}</page-height><page-width>{W}</page-width>"
+        "<page-margins type=\"both\">"
+        f"<left-margin>{_tenths(MARGIN_X)}</left-margin>"
+        f"<right-margin>{_tenths(MARGIN_X)}</right-margin>"
+        f"<top-margin>{_tenths(MARGIN_TOP)}</top-margin>"
+        f"<bottom-margin>{_tenths(MARGIN_BOTTOM)}</bottom-margin>"
+        "</page-margins></page-layout><system-layout><system-margins>"
+        "<left-margin>0</left-margin><right-margin>0</right-margin>"
+        "</system-margins><system-distance>100</system-distance>"
+        "<top-system-distance>250</top-system-distance></system-layout>"
+        "<staff-layout><staff-distance>70</staff-distance></staff-layout>"
+        "</defaults>")
+    for i, x in enumerate(new):
+        d.insert(i, x)
+
+    # credits: replace whatever music21 wrote with the house title block
+    for c in r.findall("credit"):
+        r.remove(c)
+    top = round(H - _tenths(MARGIN_TOP), 1)
+    left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
+    lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
+               f"原唱：{m['artist']}" if m["artist"] else ""]
+    lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
+               f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
+    base = round(top - 150, 1)  # left and right blocks share a baseline
+    credits = [
+        _credit(1, "title", m["title"], mid, top, 30, "center", "top", "bold"),
+        _credit(1, "subtitle", m["subtitle"], mid, round(top - 70, 1), 14,
+                "center", "top"),
+        _credit(1, "lyricist", "\n".join(x for x in lines_l if x),
+                left, base, 10.5, "left", "bottom"),
+        _credit(1, "composer", "\n".join(x for x in lines_r if x),
+                right, base, 10.5, "right", "bottom"),
+    ]
+    at = list(r).index(r.find("part-list"))
+    for c in reversed(credits):
+        r.insert(at, c)
+
+    # tempo: one mark, "Andante espressivo ♩ = 68", not two stacked texts
+    if m["tempo_text"]:
+        for dr in r.find("part/measure").findall("direction"):
+            met = dr.find("direction-type/metronome")
+            if met is not None:
+                dt = ET.Element("direction-type")
+                ET.SubElement(dt, "words", {"font-weight": "bold"}).text = \
+                    m["tempo_text"] + " "
+                dr.insert(0, dt)
+                break
+
+    # every bar numbered (Sibelius honours <measure-numbering>)
+    first = r.find("part/measure")
+    if first is not None:
+        pr = first.find("print")
+        if pr is None:
+            pr = ET.Element("print")
+            first.insert(0, pr)
+        for x in pr.findall("measure-numbering"):
+            pr.remove(x)
+        mn = ET.Element("measure-numbering")
+        mn.text = "measure"
+        # schema order inside <print>: layouts first, measure-numbering last
+        pr.append(mn)
+
+    ET.indent(tree, space="  ")
+    tree.write(path, encoding="UTF-8", xml_declaration=True)
+    xml = open(path, encoding="utf-8").read()
+    if "<!DOCTYPE" not in xml:
+        xml = xml.replace(
+            "?>\n",
+            "?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD "
+            "MusicXML 4.0 Partwise//EN\" "
+            "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
+        open(path, "w", encoding="utf-8").write(xml)
+
+
+# ---------------------------------------------------------------------------
+# Tools
+# ---------------------------------------------------------------------------
+MS4_URL = ("https://github.com/musescore/MuseScore/releases/download/v4.4.4/"
+           "MuseScore-Studio-4.4.4.243461245-x86_64.AppImage")
+MS4_DIR = "/opt/ms4"
+
+
+def find_ms4(install=True):
+    cands = [os.environ.get("MSCORE4", ""),
+             os.path.join(MS4_DIR, "squashfs-root", "AppRun"),
+             shutil.which("mscore4portable") or "",
+             shutil.which("mscore4") or "",
+             "/Applications/MuseScore 4.app/Contents/MacOS/mscore"]
+    for c in cands:
+        if c and os.path.exists(c):
+            return c
+    if not install:
+        return None
+    print("MuseScore 4 not found, downloading the AppImage to", MS4_DIR)
+    os.makedirs(MS4_DIR, exist_ok=True)
+    img = os.path.join(MS4_DIR, "ms4.AppImage")
+    subprocess.run(["curl", "-sSL", "-o", img, MS4_URL], check=True)
+    os.chmod(img, 0o755)
+    subprocess.run([img, "--appimage-extract"], cwd=MS4_DIR, check=True,
+                   stdout=subprocess.DEVNULL)
+    return os.path.join(MS4_DIR, "squashfs-root", "AppRun")
+
+
+def find_chrome():
+    cands = [os.environ.get("CHROME", "")]
+    cands += sorted(glob.glob("/opt/pw-browsers/chromium-*/chrome-linux/chrome"))
+    cands += [shutil.which(x) or "" for x in
+              ("chromium", "chromium-browser", "google-chrome")]
+    cands.append("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    for c in cands:
+        if c and os.path.exists(c):
+            return c
+    raise SystemExit("Chromium / Chrome not found (set CHROME=...)")
+
+
+def _ms4(args):
+    env = dict(os.environ, QT_QPA_PLATFORM="offscreen")
+    p = subprocess.run([find_ms4()] + args, env=env, capture_output=True,
+                       text=True, timeout=600)
+    if p.returncode != 0:
+        raise RuntimeError(f"MuseScore 4 failed: {args}\n{p.stderr[-2000:]}")
+
+
+TITLE_FRAME_SP = 21  # height of the first-page title frame, in spaces
+
+
+def _fix_title_frame(mscz):
+    """MS4 imports MusicXML credits with odd offsets (composer drifts to the
+    top, lyricist into the music).  Give the title frame a fixed height and
+    let the style place each text: title / subtitle centred at the top,
+    lyricist bottom-left, composer bottom-right on one shared baseline."""
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    out = []
+    for info, data in items:
+        if info.filename.endswith(".mscx"):
+            x = data.decode("utf-8")
+
+            def fix(mo):
+                box = mo.group(0)
+                box = re.sub(r"<height>[^<]*</height>",
+                             f"<height>{TITLE_FRAME_SP}</height>", box, 1)
+                box = re.sub(r"\s*<offset [^>]*/>", "", box)
+                box = re.sub(r"\s*<align>[^<]*</align>", "", box)
+                return box
+            x = re.sub(r"<VBox>.*?</VBox>", fix, x, count=1, flags=re.S)
+            data = x.encode("utf-8")
+        out.append((info, data))
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in out:
+            z.writestr(info, data)
+
+
+def _chrome_pdf(html_path, pdf_path):
+    subprocess.run([find_chrome(), "--headless", "--no-sandbox", "--disable-gpu",
+                    "--no-pdf-header-footer", "--virtual-time-budget=4000",
+                    f"--print-to-pdf={pdf_path}", "file://" + html_path],
+                   check=True, capture_output=True, timeout=300)
+
+
+# ---------------------------------------------------------------------------
+# Cover and running header / footer (HTML, printed by Chromium)
+# ---------------------------------------------------------------------------
+CSS = """
+@page { size: 11in 17in; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: transparent; }
+body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
+       color: #111; font-variant-numeric: lining-nums; }
+.cjk { font-family: 'Noto Serif CJK SC', 'Songti SC', serif; }
+.sym { font-family: 'DejaVu Sans', sans-serif; font-size: .95em; }
+.page { width: 11in; height: 17in; position: relative; overflow: hidden;
+        page-break-after: always; break-after: page; }
+.page:last-child { page-break-after: auto; break-after: auto; }
+.sc { text-transform: uppercase; letter-spacing: .22em; font-size: .78em; }
+
+/* cover */
+.cover { background: #fff; }
+.frame { position: absolute; inset: .55in; border: 1.6pt solid #111; }
+.frame::after { content: ''; position: absolute; inset: 5pt;
+                border: .5pt solid #111; }
+.cv { position: absolute; left: 0; right: 0; text-align: center; }
+.kicker { top: 2.05in; font-size: 15pt; letter-spacing: .5em;
+          text-transform: uppercase; }
+.kicker2 { top: 2.5in; font-size: 11pt; letter-spacing: .3em;
+           text-transform: uppercase; color: #444; }
+.title { top: 4.1in; font-family: 'Noto Serif CJK SC', serif;
+         font-weight: 700; font-size: 92pt; letter-spacing: .12em;
+         padding-left: .12em; line-height: 1.1; }
+.latin { top: 6.05in; font-size: 17pt; letter-spacing: .45em;
+         text-transform: uppercase; color: #333; }
+.orn { top: 6.85in; }
+.orn span { display: inline-block; width: 1.6in; height: 0;
+            border-top: .6pt solid #111; vertical-align: middle; }
+.orn b { display: inline-block; width: 7pt; height: 7pt; margin: 0 12pt;
+         transform: rotate(45deg); border: .8pt solid #111;
+         vertical-align: middle; }
+.sub { top: 7.4in; font-family: 'Noto Serif CJK SC', serif; font-size: 22pt;
+       letter-spacing: .12em; }
+.suben { top: 8.05in; font-size: 17pt; font-style: italic; color: #222; }
+.credits { position: absolute; top: 9.55in; left: 2.35in; right: 2.35in;
+           border-collapse: collapse; width: 6.3in; }
+.credits td { padding: 8pt 0; vertical-align: middle;
+              border-bottom: .4pt solid #bbb; }
+.credits tr:last-child td { border-bottom: none; }
+.credits .zh { font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
+               width: .75in; letter-spacing: .15em; }
+.credits .en { font-size: 10pt; letter-spacing: .2em; text-transform: uppercase;
+               color: #555; width: 2.3in; }
+.credits .nm { font-family: 'Noto Serif CJK SC', serif; font-size: 15pt;
+               text-align: right; font-weight: 600; }
+.info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em; color: #222; }
+.inst { top: 13.75in; font-size: 11pt; letter-spacing: .12em; color: #444; }
+.inst .cjk { font-size: 10pt; letter-spacing: .05em; color: #666; }
+.sig { top: 15.1in; font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
+       letter-spacing: .5em; padding-left: .5em; }
+.sig2 { top: 15.5in; font-size: 9.5pt; letter-spacing: .35em;
+        text-transform: uppercase; color: #555; }
+
+/* running header / footer on the music pages (transparent overlay) */
+.hd { position: absolute; top: .42in; left: .6in; right: .6in; height: .42in;
+      border-bottom: .45pt solid #888; }
+.hd .l { position: absolute; left: 0; bottom: 6pt; font-size: 10.5pt; }
+.hd .l .t { font-family: 'Noto Serif CJK SC', serif; font-weight: 600;
+            letter-spacing: .08em; }
+.hd .l .x { color: #555; margin-left: 10pt; font-size: 8.5pt;
+            letter-spacing: .25em; text-transform: uppercase; }
+.hd .r { position: absolute; right: 0; bottom: 3pt; font-size: 21pt;
+         font-weight: 700; }
+.ft { position: absolute; bottom: .38in; left: .6in; right: .6in;
+      height: .36in; border-top: .45pt solid #888; font-size: 9pt; }
+.ft .l { position: absolute; left: 0; top: 7pt; }
+.ft .l .cjk { letter-spacing: .08em; }
+.ft .l .en { color: #555; margin-left: 8pt; font-style: italic; }
+.ft .r { position: absolute; right: 0; top: 7pt; letter-spacing: .2em;
+         text-transform: uppercase; font-size: 8pt; color: #333; }
+"""
+
+
+def _e(s):
+    return html.escape(str(s))
+
+
+def _sym(s):
+    """Wrap music glyphs EB Garamond lacks (♩ ♪ ♭ ♯) in a fallback font."""
+    out = []
+    for ch in _e(s):
+        out.append(f"<span class='sym'>{ch}</span>" if ch in "♩♪♭♯♮" else ch)
+    return "".join(out)
+
+
+def cover_html(m):
+    rows = [("作曲", "Music", m["composer"]), ("作词", "Lyrics", m["lyricist"]),
+            ("原唱", "Original Artist", m["artist"]),
+            ("改编", "Arranged by", m["arranger"]),
+            ("制谱", "Music Preparation", m["engraver"])]
+    trs = "".join(
+        f"<tr><td class='zh'>{_e(a)}</td><td class='en'>{_e(b)}</td>"
+        f"<td class='nm'>{_e(c)}</td></tr>" for a, b, c in rows if c)
+    info = "　·　".join(_sym(x) for x in (m["key"], m["tempo"], m["duration"])
+                       if x)
+    inst = "　·　".join(
+        f"{_e(en)} <span class='cjk'>{_e(zh)}</span>"
+        for en, zh in m["instrumentation"])
+    return f"""
+<div class='page cover'>
+  <div class='frame'></div>
+  <div class='cv kicker'>Full Score</div>
+  <div class='cv kicker2'>Score in C · Concert Pitch</div>
+  <div class='cv title'>{_e(m['title'])}</div>
+  <div class='cv latin'>{_e(m['title_latin'])}</div>
+  <div class='cv orn'><span></span><b></b><span></span></div>
+  <div class='cv sub'>{_e(m['subtitle'])}</div>
+  <div class='cv suben'>{_e(m['subtitle_en'])}</div>
+  <table class='credits'>{trs}</table>
+  <div class='cv info'>{info}</div>
+  <div class='cv inst'>{inst}</div>
+  <div class='cv sig'>{_e(m['arranger'])}</div>
+  <div class='cv sig2'>Arrangement &amp; Music Preparation{
+      ' · ' + _e(m['year']) if m['year'] else ''}</div>
+</div>"""
+
+
+def overlay_html(m, page, total):
+    same = m["arranger"] == m["engraver"]
+    who = (f"<span class='cjk'>改编 · 制谱　{_e(m['arranger'])}</span>"
+           "<span class='en'>Arranged &amp; Music Preparation by "
+           f"{_e(m['arranger'])}</span>") if same else (
+           f"<span class='cjk'>改编　{_e(m['arranger'])}　·　制谱　"
+           f"{_e(m['engraver'])}</span>")
+    head = _e(m["title"]) + (f" · {_e(m['subtitle'].split('·')[0].strip())}"
+                             if m["subtitle"] else "")
+    return f"""
+<div class='page'>
+  <div class='hd'><div class='l'><span class='t'>{head}</span>
+    <span class='x'>Full Score in C</span></div>
+    <div class='r'>{page}</div></div>
+  <div class='ft'><div class='l'>{who}</div>
+    <div class='r'>Page {page} of {total}</div></div>
+</div>"""
+
+
+# ---------------------------------------------------------------------------
+# PDF
+# ---------------------------------------------------------------------------
+def render_pdf(musicxml, out_pdf, meta, png_dir=None):
+    from pypdf import PdfReader, PdfWriter
+    m = _meta(meta)
+    with tempfile.TemporaryDirectory() as tmp:
+        mscz = os.path.join(tmp, "score.mscz")
+        score_pdf = os.path.join(tmp, "score.pdf")
+        _ms4(["-o", mscz, musicxml])            # import MusicXML
+        _fix_title_frame(mscz)
+        _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
+        score = PdfReader(score_pdf)
+        n = len(score.pages)
+        doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
+               + CSS + "</style></head><body>" + cover_html(m)
+               + "".join(overlay_html(m, i + 1, n) for i in range(n))
+               + "</body></html>")
+        hp = os.path.join(tmp, "pages.html")
+        open(hp, "w", encoding="utf-8").write(doc)
+        ov_pdf = os.path.join(tmp, "pages.pdf")
+        _chrome_pdf(hp, ov_pdf)
+        ov = PdfReader(ov_pdf)
+        assert len(ov.pages) == n + 1, (len(ov.pages), n)
+        w = PdfWriter()
+        w.add_page(ov.pages[0])
+        for i in range(n):
+            pg = score.pages[i]
+            pg.merge_page(ov.pages[i + 1])
+            w.add_page(pg)
+        w.add_metadata({
+            "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
+            "/Author": f"{m['composer']} 曲 / {m['lyricist']} 词 · "
+                       f"改编 {m['arranger']} · 制谱 {m['engraver']}",
+            "/Subject": m["subtitle_en"],
+            "/Creator": "MuseScore Studio 4 + tools/hollywood"})
+        with open(out_pdf, "wb") as fh:
+            w.write(fh)
+        if png_dir:
+            os.makedirs(png_dir, exist_ok=True)
+            for f in glob.glob(os.path.join(png_dir, "page-*.png")):
+                os.remove(f)
+            subprocess.run(["pdftoppm", "-r", "60", "-png", out_pdf,
+                            os.path.join(png_dir, "page")], check=True)
+    return n + 1
+
+
+def _load_build(path):
+    spec = importlib.util.spec_from_file_location("song_build", path)
+    mod = importlib.util.module_from_spec(spec)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(path)))
+    spec.loader.exec_module(mod)
+    return mod
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        raise SystemExit(__doc__)
+    b = _load_build(sys.argv[1])
+    b.write_pdf()
