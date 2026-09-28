@@ -169,7 +169,7 @@ VA = {
         "(C3/1 F3/1 A3/1 C4/1 F4/1 C4/1 A3/1 F3/1)",
     12: "(D3/1 G3/1 Bb3/1 D4/1 F4/1 D4/1 Bb3/1 G3/1) Bb3+F4/8>",
     13: "A3+F4/16",
-    14: "(D4/8 Db4/8)",
+    14: "D4/8 Db4/8",
     15: "C4/16",
 }
 
@@ -196,9 +196,15 @@ VC = {
 # Text: (bar, 16th, text)
 # Hairpins end on the next dynamic: bars 7-8 build to the f hit on m8
 # beat 3; the coda thins from p (m13 b3) to pp on the last chord.
+# At the climax the strings hit fp on m12 b3 and swell under the voice's
+# "天长地" to mf on "久", so they carry the singer instead of covering her.
 STRING_HAIRPINS = [(4, 0, 4, 15, "cresc"), (7, 0, 8, 7, "cresc"),
-                   (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim"),
-                   (14, 8, 14, 15, "dim")]
+                   (11, 0, 12, 7, "cresc"), (12, 9, 12, 15, "cresc"),
+                   (13, 0, 13, 7, "dim"), (14, 8, 14, 15, "dim")]
+# Character words are printed with the dynamic below the staff (Gould);
+# technique words (marcato, a cappella) stay above.
+MOOD_WORDS = {"dolce, espr.", "cantabile", "legato, come onde",
+              "con passione", "eco"}
 PARTS = [
     dict(id="vox", name="Voice", abbr="V.", data=VOCAL,
          inst=instrument.Soprano, clef=clef.TrebleClef, program=52,
@@ -209,31 +215,35 @@ PARTS = [
     dict(id="vn1", name="Violin I", abbr="Vln. I", data=VN1,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
          dyn=[(1, 0, "mp"), (5, 0, "mf"), (8, 8, "f"), (9, 0, "f"),
-              (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+              (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"), (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(1, 0, "dolce, espr."), (5, 0, "cantabile"),
                (9, 0, "con passione"), (13, 8, "eco")]),
     dict(id="vn2", name="Violin II", abbr="Vln. II", data=VN2,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
+              (15, 0, "pp")],
          hair=STRING_HAIRPINS,
-         text=[(9, 0, "marc., on the string")]),
+         text=[(9, 0, "marcato, on the string")]),
     dict(id="va", name="Viola", abbr="Vla.", data=VA,
          inst=instrument.Viola, clef=clef.AltoClef, program=41,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
+              (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(5, 0, "legato, come onde")]),
     dict(id="vc", name="Violoncello", abbr="Vc.", data=VC,
          inst=instrument.Violoncello, clef=clef.BassClef, program=42,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
+              (15, 0, "pp")],
          hair=STRING_HAIRPINS,
-         text=[(5, 0, "marcato"), (9, 0, "marcato")]),
+         text=[(5, 0, "marcato")]),
 ]
 
-VEL = {"pp": 36, "p": 48, "mp": 62, "mf": 76, "f": 92, "ff": 106}
+VEL = {"pp": 36, "p": 48, "mp": 62, "mf": 76, "f": 92, "ff": 106,
+       "fp": 70}
 ACCENT = 14
 
 # Tempo map: (bar, 16th, bpm)
@@ -350,15 +360,6 @@ def make_m21(p, events):
             m.insert(0, p["clef"]())
             m.insert(0, key.Key("F"))
             m.insert(0, meter.TimeSignature("4/4"))
-            if p["id"] == "vox":
-                mm = tempo.MetronomeMark(text=TEMPO_MARK,
-                                         number=TEMPI[0][2], referent=1.0)
-                mm.placement = "above"
-                m.insert(0, mm)
-        if p["id"] == "vox" and b in REHEARSAL:
-            rm = expressions.RehearsalMark("  ".join(REHEARSAL[b]))
-            rm.placement = "above"
-            m.insert(0, rm)
         for e in by_bar[b]:
             if e["grace"]:
                 g = note.Note(m21_name(e["grace"]), type="16th")
@@ -402,10 +403,6 @@ def make_m21(p, events):
             if e["slur_end"] and slur_open is not None:
                 part.insert(0, spanner.Slur(slur_open, objs[-1]))
                 slur_open = None
-        if p["id"] == "vox":  # after the notes, or append() would shift them
-            for tb, ts, txt in TEMPO_TEXT:
-                if tb == b:
-                    m.insert(ts / 4, tempo.TempoText(txt))
         if b == NBARS:
             for n in m.notesAndRests:
                 f = expressions.Fermata()
@@ -428,15 +425,6 @@ def make_m21(p, events):
                     return notes_at[k]
         return None
 
-    for bb, s, mark in p["dyn"]:
-        d = dynamics.Dynamic(mark)
-        d.placement = "above" if p["id"] == "vox" else "below"
-        measures[bb].insert(s / 4, d)
-    for bb, s, txt in p["text"]:
-        te = expressions.TextExpression(txt)
-        te.style.fontStyle = "italic"
-        te.placement = "above"
-        measures[bb].insert(s / 4, te)
     return part
 
 
@@ -514,10 +502,10 @@ def polish(path):
                                                       False)],
          W / 2, H - M, "center"),
         (("lyricist",), [("Score in C", 10, True),
-                         (f"\n\n词：{LYRICIST}\n原唱：{SINGER}", 10,
+                         (f"\n\n作词：{LYRICIST}\n原唱：{SINGER}", 10,
                           False)], 80, H - M, "left"),
         (("composer", "arranger"),
-         [(f"曲：{COMPOSER}\n改编：{ARRANGER}\n制谱：{ENGRAVER}", 10,
+         [(f"作曲：{COMPOSER}\n改编：{ARRANGER}\n制谱：{ENGRAVER}", 10,
            False)], W - 60, H - M - 110, "right"),
     ]
     at = list(r).index(r.find("part-list"))
@@ -614,17 +602,50 @@ def _timeline(m, div16):
 
 
 def _insert_at(m, s16, el, div16):
-    """Put el at 16th s16 of measure m: before the note sounding there,
-    with an <offset> when s16 falls inside that note."""
+    """Put el at 16th s16 of measure m. At a note start it goes right
+    before that note; inside a note it goes after the note between a
+    <backup> and a <forward> (importers such as MuseScore ignore
+    <offset>, so no offsets are used)."""
     tl = _timeline(m, div16)
     if s16 >= BAR16 or not tl:
         m.append(el)
         return
-    start, idx, _ = [x for x in tl if x[0] <= s16 + 1e-6][-1]
-    if s16 - start > 1e-6:
-        off = ET.SubElement(el, "offset")
-        off.text = str(round((s16 - start) * div16))
-    m.insert(idx, el)
+    start, idx, note = [x for x in tl if x[0] <= s16 + 1e-6][-1]
+    if s16 - start < 1e-6:
+        m.insert(idx, el)
+        return
+    end = start + int(note.findtext("duration")) / div16
+    back = round((end - s16) * div16)
+    kids = list(m)
+    at = kids.index(note) + 1
+    while at < len(kids) and kids[at].tag == "note" and \
+            kids[at].find("chord") is not None:
+        at += 1
+    bk = ET.Element("backup")
+    ET.SubElement(bk, "duration").text = str(back)
+    fw = ET.Element("forward")
+    ET.SubElement(fw, "duration").text = str(back)
+    for k, x in enumerate((bk, el, fw)):
+        m.insert(at + k, x)
+
+
+def melisma_marks(events):
+    """For each sung syllable (br excluded): True if its melisma lasts at
+    least 3 sixteenths, i.e. long enough for an extender line."""
+    out = []
+    for i, e in enumerate(events):
+        if not e["lyric"] or e["lyric"] == BREATH:
+            continue
+        if not e["slur_start"]:
+            out.append(False)
+            continue
+        total = 0
+        for f in events[i:]:
+            total += f["dur"]
+            if f["slur_end"]:
+                break
+        out.append(total >= 3)
+    return out
 
 
 def _fix_beams(m, div16):
@@ -666,6 +687,8 @@ def _fix_beams(m, div16):
             merged.append(r)
     for r in merged:
         for i, (_, _, el, nb) in enumerate(r):
+            for st in el.findall("stem"):
+                el.remove(st)
             beams = []
             for lvl in range(1, nb + 1):
                 prev = i > 0 and r[i - 1][3] >= lvl
@@ -701,9 +724,36 @@ def _where(abs16):
     return abs16 // BAR16 + 1, abs16 % BAR16
 
 
+def _direction(place, *types, sound=None, system=None):
+    d = ET.Element("direction", placement=place)
+    if system:
+        d.set("system", system)
+    for t in types:
+        dt = ET.SubElement(d, "direction-type")
+        dt.append(t)
+    if sound is not None:
+        ET.SubElement(d, "sound", sound)
+    return d
+
+
+def _words(text, **attrs):
+    w = ET.Element("words", attrs)
+    w.text = text
+    return w
+
+
+def _metronome(bpm, hidden=False):
+    mt = ET.Element("metronome", {"print-object": "no"} if hidden else {})
+    ET.SubElement(mt, "beat-unit").text = "quarter"
+    ET.SubElement(mt, "per-minute").text = str(bpm)
+    return mt
+
+
 def finish_parts(path):
-    """Things music21 does not write the way Sibelius needs them: beams,
-    hairpins at exact positions, lyric extenders, tempo changes."""
+    """Everything music21 does not write the way Sibelius needs it: beams,
+    stems, dynamics with their character words, hairpins, tempo marks and
+    the tempo ramp, rehearsal marks and lyric extenders, all at exact
+    positions."""
     tree = ET.parse(path)
     r = tree.getroot()
     div = int(next(r.iter("divisions")).text)
@@ -713,27 +763,60 @@ def finish_parts(path):
         for m in ms.values():
             _fix_beams(m, div16)
         place = "above" if p["id"] == "vox" else "below"
+        mood = {(b, s16): t for b, s16, t in p["text"] if t in MOOD_WORDS}
+        for b, s16, mark in p["dyn"]:
+            dy = ET.Element("dynamics")
+            ET.SubElement(dy, mark)
+            types = [dy]
+            if (b, s16) in mood:
+                types.append(_words(mood[b, s16], **{"font-style": "italic"}))
+            _insert_at(ms[b], s16, _direction(
+                place, *types,
+                sound={"dynamics": str(round(VEL[mark] / 90 * 100))}),
+                div16)
+        for b, s16, t in p["text"]:
+            if t not in MOOD_WORDS:
+                _insert_at(ms[b], s16, _direction(
+                    "above", _words(t, **{"font-style": "italic"})), div16)
         for b, s16, b2, s2, kind in p["hair"]:
             a = (b - 1) * BAR16 + s16
             z = (b2 - 1) * BAR16 + s2 + 1
             for pos, typ in ((a, "crescendo" if kind == "cresc"
                               else "diminuendo"), (z, "stop")):
                 bb, ss = _where(pos)
-                d = ET.Element("direction", placement=place)
-                dt = ET.SubElement(d, "direction-type")
-                ET.SubElement(dt, "wedge", type=typ, number="1")
-                _insert_at(ms[bb], ss, d, div16)
+                _insert_at(ms[bb], ss, _direction(
+                    place, ET.Element("wedge", type=typ, number="1")), div16)
         if p["id"] == "vox":
+            # tempo heading, tempo words, hidden ramp, rehearsal marks
+            _insert_at(ms[1], 0, _direction(
+                "above", _words(TEMPO_MARK + " ", **{"font-weight": "bold"}),
+                _metronome(TEMPI[0][2]), sound={"tempo": str(TEMPI[0][2])},
+                system="only-top"), div16)
+            # The visible tempo words carry the tempo they start; the finer
+            # ramp (TEMPI) lives in the MIDI. Hidden metronome marks are
+            # shown by some importers, so none are written.
+            tempo_at = {(b, s16): bpm for b, s16, bpm in TEMPI}
+            for b, s16, txt in TEMPO_TEXT:
+                snd = ({"tempo": str(tempo_at[b, s16])}
+                       if (b, s16) in tempo_at else None)
+                _insert_at(ms[b], s16, _direction(
+                    "above", _words(txt, **{"font-weight": "bold"}),
+                    sound=snd, system="only-top"), div16)
+            for b, (letter, label) in REHEARSAL.items():
+                rh = ET.Element("rehearsal", enclosure="square")
+                rh.text = letter
+                # label first so the mark ends up in front of it
+                _insert_at(ms[b], 0, _direction(
+                    "above", _words(label), system="only-top"), div16)
+                _insert_at(ms[b], 0, _direction(
+                    "above", rh, system="only-top"), div16)
+            marks = iter(melisma_marks(parse_part(p["data"])))
             for n in part.iter("note"):
                 ly = n.find("lyric")
-                slur = n.find("notations/slur[@type='start']")
-                if ly is not None and slur is not None and \
-                        ly.findtext("text") != BREATH:
-                    if ly.find("extend") is None:
-                        ET.SubElement(ly, "extend")
-            for b, s16, bpm in TEMPI[1:]:
-                snd = ET.Element("sound", tempo=str(bpm))
-                _insert_at(ms[b], s16, snd, div16)
+                if ly is None or ly.findtext("text") == BREATH:
+                    continue
+                if next(marks) and ly.find("extend") is None:
+                    ET.SubElement(ly, "extend")
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()

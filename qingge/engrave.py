@@ -31,14 +31,12 @@ TOTAL = B.NBARS * B.BAR16
 STAFF_SIZE = 17.5
 BREAKS = (5, 8, 11, 13)         # bars that start a new system
 PAGE_BREAKS = (8, 13)           # bars that start a new page
-SHORT = {"vox": "Vo.", "vn1": "Vln. I", "vn2": "Vln. II", "va": "Vla.",
+SHORT = {"vox": "V.", "vn1": "Vln. I", "vn2": "Vln. II", "va": "Vla.",
          "vc": "Vc."}
 MARKS = B.REHEARSAL
 DURATION = "0′56″"
 COLOPHON_DATE = "2026 年 9 月"
 LATIN_SERIF = "TeX Gyre Pagella"
-# words printed next to the dynamic below the staff instead of above it
-WITH_DYNAMIC = {("vn1", 13, 8)}
 # LilyPond 2.24 ignores the face index of a .ttc collection and always
 # takes face 0, which for Noto CJK is the JAPANESE face (different glyphs
 # for e.g. 直 骨). So the Simplified Chinese faces are extracted into
@@ -114,7 +112,9 @@ def ly_notes(events):
         evs = by_bar[b]
         last_bar = b == B.NBARS
         if len(evs) == 1 and evs[0]["pitches"] is None:
-            lines.append("R1" + ("\\fermata" if last_bar else "") + " |")
+            # the final bar gets a real whole rest so its fermata lines up
+            # with the strings' final chord
+            lines.append("r1\\fermata |" if last_bar else "R1 |")
             continue
         toks = []
         for e in evs:
@@ -149,13 +149,14 @@ def ly_notes(events):
 
 def ly_lyrics(events):
     out = []
+    ext = iter(B.melisma_marks(events))
     for e in events:
         if e["lyric"] == B.BREATH:
             out.append("\\markup \\pad-x #0.7 \\override "
                        "#'(font-name . \"TeX Gyre Pagella Italic\") "
                        "\\fontsize #-0.5 br")
         elif e["lyric"]:
-            out.append(e["lyric"] + (" __" if e["slur_start"] else ""))
+            out.append(e["lyric"] + (" __" if next(ext) else ""))
     return " ".join(out)
 
 
@@ -185,14 +186,18 @@ def ly_dynamics(p):
     att = [[] for _ in range(TOTAL + 1)]
     dyn_at = {pos(b, s) for b, s, _ in p["dyn"]}
     starts = {pos(b, s) for b, s, *_ in p["hair"]}
-    joined = {(b, s): t for b, s, t in p["text"]
-              if (p["id"], b, s) in WITH_DYNAMIC}
+    joined = {(b, s): t for b, s, t in p["text"] if t in B.MOOD_WORDS}
     for b, s, mark in p["dyn"]:
         if (b, s) in joined:
             att[pos(b, s)].append(
                 "-\\tweak self-alignment-X #LEFT "
                 "#(make-dynamic-script (markup #:dynamic "
                 f"\"{mark}\" #:normal-text #:italic \" {joined[b, s]}\"))")
+        elif b == B.NBARS and s == 0:
+            # final chord: start the dynamic under the notehead, clear of
+            # the barline
+            att[pos(b, s)].append("-\\tweak self-alignment-X #LEFT \\"
+                                  + mark)
         else:
             att[pos(b, s)].append("\\" + mark)
     for b, s, b2, s2, kind in p["hair"]:
@@ -219,7 +224,7 @@ def tempo_markup(text, bpm=None):
             "\\note {4} #UP \\normal-text \" = " + str(bpm) + "\" } }")
 
 
-def ly_global(with_marks):
+def ly_global(with_marks, spacer_rests=False):
     att = [[] for _ in range(TOTAL + 1)]
     att[0].append(tempo_markup(B.TEMPO_MARK, B.TEMPI[0][2]))
     for b, s, txt in B.TEMPO_TEXT:
@@ -254,10 +259,11 @@ def ly_global(with_marks):
                 out.append(f"s16*{run}")
                 run = 0
             out.append("|\n  ")
-    # last bar: four hidden quarter rests give the final chord real
-    # spacing columns (spacer rests do not), so it is not squeezed
+    # last bar: hidden rests give the final chord real spacing columns
+    # (spacer rests do not), so it is not squeezed
     last = [x for t in range(TOTAL - B.BAR16, TOTAL) for x in att[t]]
-    out.append(" ".join(last) + " \\hide Rest r4 r4 r4 r4 |")
+    out.append(" ".join(last) + (" \\hide Rest r2 r2 |" if spacer_rests
+                                  else " s1 |"))
     out.append('\\bar "|."')
     return " ".join(out)
 
@@ -299,7 +305,7 @@ def cover():
         \\override #'(font-name . "{CJK_SERIF}")
         \\abs-fontsize #11 \\left-column {{ {names} }}
       }} }}
-    \\vspace #13
+    \\vspace #15
     \\fill-line {{ \\draw-line #'(60 . 0) }}
     \\vspace #1.2
     \\fill-line {{ \\abs-fontsize #10 {ly_str(inst)} }}
@@ -323,17 +329,17 @@ def title_block():
         {ly_str(B.TITLE)}
       \\sans \\bold \\fontsize #-0.5 "Full Score"
     }}
-    \\vspace #0.2
+    \\vspace #0.9
     \\fill-line {{ \\override #'(font-name . "{CJK_SERIF}")
       \\abs-fontsize #11.5 {ly_str(B.SUBTITLE)} }}
-    \\vspace #0.8
+    \\vspace #0.5
     \\fill-line {{
       \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #9.5
-        \\left-column {{ {ly_str("词：" + B.LYRICIST)}
+        \\left-column {{ {ly_str("作词：" + B.LYRICIST)}
                          {ly_str("原唱：" + B.SINGER)} }}
       \\null
       \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #9.5
-        \\right-column {{ {ly_str("曲：" + B.COMPOSER)}
+        \\right-column {{ {ly_str("作曲：" + B.COMPOSER)}
                           {ly_str("改编：" + B.ARRANGER)}
                           {ly_str("制谱：" + B.ENGRAVER)} }}
     }}
@@ -343,8 +349,8 @@ def title_block():
 
 
 def paper():
-    footer = (f"{B.TITLE} · {B.SUBTITLE}　　原曲：{B.LYRICIST} 词 · "
-              f"{B.COMPOSER} 曲 · {B.SINGER} 演唱　　"
+    footer = (f"{B.TITLE} · {B.SUBTITLE}　　原曲：作词 {B.LYRICIST} · "
+              f"作曲 {B.COMPOSER} · 原唱 {B.SINGER}　　"
               f"改编 · 制谱：{B.ARRANGER}")
     return f"""
 #(define-markup-command (from-page layout props n arg) (number? markup?)
@@ -417,7 +423,8 @@ def layout():
     \\override RehearsalMark.padding = #1.6
     \\override RehearsalMark.outside-staff-padding = #1.4
     \\override DynamicLineSpanner.padding = #1.1
-    \\override MetronomeMark.padding = #1.2
+    \\override MetronomeMark.padding = #1.8
+    \\override Script.padding = #0.45
     \\override RehearsalMark.outside-staff-priority = #1500
     \\override MetronomeMark.outside-staff-priority = #1400
     \\override TextScript.outside-staff-priority = #450
@@ -442,6 +449,7 @@ def layout():
     \\override LyricExtender.right-padding = #0.9
     \\override LyricSpace.minimum-distance = #1.3
     \\override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.2
+    \\override VerticalAxisGroup.nonstaff-unrelatedstaff-spacing.padding = #3.5
   }
 }
 """
@@ -452,13 +460,16 @@ def staff(p, parsed, top_marks):
     clef = {"vox": "treble", "vn1": "treble", "vn2": "treble",
             "va": "alto", "vc": "bass"}[pid]
     extra = []
+    if pid == "vc":
+        extra += ["\\override DynamicLineSpanner.staff-padding = #4.2"]
     if pid in ("vox", "vn1"):
         extra += ["\\consists Mark_engraver",
                   "\\consists Staff_collecting_engraver",
                   "\\consists Metronome_mark_engraver"]
     name = p["name"]
     notes = ly_notes(parsed[pid])
-    glob = ly_global(with_marks=top_marks) if pid in ("vox", "vn1") \
+    glob = ly_global(with_marks=top_marks, spacer_rests=pid == "vn1") \
+        if pid in ("vox", "vn1") \
         else ("s1*%d \\bar \"|.\"" % B.NBARS)
     dyn_up = "\\dynamicUp " if pid == "vox" else ""
     voice_name = f'= "{pid}"'
