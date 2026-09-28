@@ -85,6 +85,8 @@ def ly_notes(events):
                     continue
                 ps = [ly_pitch(x) for x in e["pitches"]]
                 t = (ps[0] if len(ps) == 1 else "<" + " ".join(ps) + ">")
+                if e["lyric"] == B.BREATH:
+                    t = "\\xNote " + t
                 t += LY_DUR[d]
                 if not last or e["tie"]:
                     t += "~"
@@ -104,7 +106,9 @@ def ly_notes(events):
 def ly_lyrics(events):
     out = []
     for e in events:
-        if e["lyric"]:
+        if e["lyric"] == B.BREATH:
+            out.append("\\markup \\italic \\fontsize #-1 br")
+        elif e["lyric"]:
             out.append(e["lyric"] + (" __" if e["slur_start"] else ""))
     return " ".join(out)
 

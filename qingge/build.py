@@ -22,6 +22,11 @@ Token syntax (durations in 16th notes, one string per bar):
   (G4/1 A4/1) slur start / slur end
   G4/1=怎     lyric
   g:G4        grace note before the next note
+  C5/2=br     audible breath (ACE Studio "br" note): x notehead, lyric br
+
+Strings and breaths follow the user's corrected MIDI (2026-09-28): no
+16th-note bass pushes, no dotted syncopations in Violin I; the voice keeps
+the chart's rhythm, with the three "br" breaths the user added.
 """
 import os
 import re
@@ -70,13 +75,14 @@ DRIVE = (0, 3, 6)  # 3+3+2 accents inside a half bar of 16ths
 # ---------------------------------------------------------------------------
 # Harmony (half bars; chart chords in brackets where they differ)
 #   Intro  Bbmaj7  Am7 | Gm7  Bbmaj7/C | Bbmaj7  Am7 | Gm7  C7sus4 C7
-#   A      F  C/E (bass pushes to D on the last 16th) | Dm7  Am/C [3m] |
+#   A      F  C/E | Dm7  Am/C [3m] |
 #          Bbmaj7  F/A | Gm7  Bb/C (hit) - (beat 4: strings tacet)
 #   B      F  C/E | Dm7  Am/C | Bbmaj7  F/A | Gm7  Bb/C -> C7 (allarg.)
 #   Coda   F | Bbmaj7  Bbm6 | Fadd9
 # The bass walks down F E D C Bb A G C in both halves of the chorus.
 # ---------------------------------------------------------------------------
 REST = "r/16"
+BREATH = "br"  # lyric of an audible-breath note
 
 # Credits. Standing rule from the user: 改编 and 制谱 are always 花开当富贵.
 TITLE = "情歌"
@@ -92,14 +98,15 @@ VOCAL = {b: REST for b in range(1, NBARS + 1)}
 VOCAL.update({
     4: "r/12 A4/2=你 (G4/1=写 F4/1)",
     5: "F4/4=给 C5/4=我 Bb4/2=我 A4/1=的 G4/1~=第 G4/1 F4/3=一",
-    6: "F4/4=首 C5/4=歌 Bb4/2=你 A4/1=和 G4/1~=我 G4/2 A4/2=十",
+    6: "F4/4=首 C5/2=歌 C5/2=br Bb4/2=你 A4/1=和 G4/1~=我 G4/2 A4/2=十",
     7: "G4/2=指 F4/1=紧 F4/1~=扣 F4/2 A4/2=默 G4/2=写 F4/1=前 F4/1~=奏 "
-       "F4/3 C4/1=可",
+       "F4/1 F4/2=br C4/1=可",
     8: "D4/2=是 F4/1=那 F4/1~=然 F4/1 (A4/2=后 G4/1) G4/4=呢 A4/2=还 "
        "(G4/1=好 F4/1)",
     9: "F4/4=我 C5/4=有 Bb4/2=我 A4/1=这 G4/1~=一 G4/1 F4/3=首",
     10: "F4/4=情 C5/4=歌 Bb4/2=轻 A4/1=轻 G4/1~=的 G4/2 A4/2=轻",
-    11: "G4/2=轻 F4/1=哼 F4/1~=着 F4/2 A4/2=哭 G4/2=着 F4/1=笑 F4/1~=着 "
+    11: "G4/2=轻 F4/1=哼 F4/1~=着 F4/1 F4/1=br A4/2=哭 G4/2=着 F4/1=笑 "
+        "F4/1~=着 "
         "F4/2 (A4/2=我",
     12: "G4/2) G4/2~=的 G4/4 r/2 A4/2=天 G4/3=长 F4/1=地",
     13: "F4/8=久 r/8",
@@ -118,10 +125,10 @@ VN1 = {
     6: "(F5/4 A5/4 C6/8)",
     7: "(D6/8 C6/8)",
     8: "(Bb5/4 A5/4) D6/4> r/4",
-    9: "(C6/4 F6/4 G6/6 F6/2~",
+    9: "(C6/4 F6/4 G6/4 E6/4",
     10: "F6/4 D6/4 E6/6 C6/2)",
     11: "(D6/4 E6/4 F6/8",
-    12: "G6/8) F6/6> E6/2",
+    12: "G6/8) F6/4> E6/4",
     13: f"F6/8 ({HOOK_A}",
     14: f"{HOOK_B} F5/2 Eb5/2 F5/2 G5/2",
     15: "A5/16)",
@@ -172,11 +179,11 @@ VC = {
     3: "Bb2/8 A2/8",
     4: "G2/8 C3/4 C2/4",
     # the chart's slow-soul bass figure "1 ~ 1 5 1"
-    5: "F3/6 C3/1 F3/1 E3/5 D3/3~",
+    5: "F3/6 C3/1 F3/1 E3/8",
     6: "D3/6 A2/1 D3/1 C3/6 G2/1 C3/1",
     7: "Bb2/6 F2/1 Bb2/1 A2/6 F2/1 A2/1",
     8: "G2/6 D2/1 G2/1 C2+C3/4> r/4",
-    9: "F2/2> F3/2 F2/2 F3/2 E2/2 E3/2 E2/1 D2/1 D3/2",
+    9: "F2/2> F3/2 F2/2 F3/2 E2/2 E3/2 E2/2 E3/2",
     10: "D2/2 D3/2 D2/2 D3/2 C2/2 C3/2 C2/2 C3/2",
     11: "Bb2/2 Bb3/2 Bb2/2 Bb3/2 A2/2 A3/2 A2/2 C3/2",
     12: "G2/2 G3/2 G2/2 G3/2 C2+C3/8>",
@@ -380,6 +387,8 @@ def make_m21(p, events):
                         n.tie = tie.Tie("start")
                     if first and e["lyric"]:
                         n.lyric = e["lyric"]
+                    if e["lyric"] == BREATH:
+                        n.notehead = "x"
                     if first and e["accent"]:
                         n.articulations.append(articulations.Accent())
                 m.append(n)
@@ -753,9 +762,14 @@ def write_midi(path, part_ids, parsed, lyrics=True, charset="utf-8",
 RANGES = {"vox": ("C4", "D5"), "vn1": ("G3", "G6"), "vn2": ("G3", "E6"),
           "va": ("C3", "Bb4"), "vc": ("C2", "Bb3")}
 
-# Intentional minor-9ths: the intro hook's own B-flat, an appoggiatura on
-# beat 4 over the Am7 root (as in the original record). (bar, part, part)
-CLASH_ALLOW = {(1, "vn1", "vc"), (3, "vn1", "vc")}
+# Intentional minor-9ths. (bar, part, part)
+#  m1, m3: the intro hook's own B-flat, an appoggiatura on beat 4 over the
+#          Am7 root (as in the original record).
+#  m5, m9: the user's MIDI keeps the bass on E (C/E) to the end of the bar,
+#          under the voice's anticipated F ("一" / "首") and, in m9, the
+#          viola's last-16th F4. Passing, kept as the user wrote it.
+CLASH_ALLOW = {(1, "vn1", "vc"), (3, "vn1", "vc"), (5, "vox", "vc"),
+               (9, "vox", "vc"), (9, "va", "vc")}
 
 
 def sounding(parsed):
@@ -817,7 +831,9 @@ def check(parsed):
     lines = {pid: top_line(evs) for pid, evs in parsed.items()}
     parallels = []
     ids = list(parsed)
-    allow = set()  # (part, part, bar) for intentional doublings
+    # (part, part, bar) for intentional doublings. m6: violin II E5-D5 over
+    # the bass E3-D3, as in the user's MIDI.
+    allow = {("vn2", "vc", 6)}
     for i in range(len(ids)):
         for j in range(i + 1, len(ids)):
             a, b = lines[ids[i]], lines[ids[j]]
@@ -876,6 +892,8 @@ def syllables(vocal_events):
     out = []
     for e in vocal_events:
         if e["pitches"] is None:
+            continue
+        if e["lyric"] == BREATH:
             continue
         if e["lyric"]:
             out.append([e["lyric"], e["abs"], e["abs"] + e["dur"]])
