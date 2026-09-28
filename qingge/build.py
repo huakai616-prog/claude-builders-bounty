@@ -125,13 +125,13 @@ VN1 = {
     6: "(F5/4 A5/4 C6/8)",
     7: "(D6/8 C6/8)",
     8: "(Bb5/4 A5/4) D6/4> r/4",
-    9: "(C6/4 F6/4 G6/4 E6/4",
-    10: "F6/4 D6/4 E6/6 C6/2)",
-    11: "(D6/4 E6/4 F6/8",
-    12: "G6/8) F6/4> E6/4",
-    13: f"F6/8 ({HOOK_A}",
-    14: f"{HOOK_B} F5/2 Eb5/2 F5/2 G5/2",
-    15: "A5/16)",
+    9: "(C6/4 F6/4) (G6/4 E6/4)",
+    10: "(F6/4 D6/4) (E6/6 C6/2)",
+    11: "(D6/4 E6/4) F6/8",
+    12: "G6/8 F6/4> E6/4",
+    13: f"F6/8 ({HOOK_A})",
+    14: f"({HOOK_B}) (F5/2 Eb5/2 F5/2 G5/2)",
+    15: "A5/16",
 }
 
 VN2 = {
@@ -169,8 +169,8 @@ VA = {
         "(C3/1 F3/1 A3/1 C4/1 F4/1 C4/1 A3/1 F3/1)",
     12: "(D3/1 G3/1 Bb3/1 D4/1 F4/1 D4/1 Bb3/1 G3/1) Bb3+F4/8>",
     13: "A3+F4/16",
-    14: "(D4/8 Db4/8",
-    15: "C4/16)",
+    14: "(D4/8 Db4/8)",
+    15: "C4/16",
 }
 
 VC = {
@@ -194,42 +194,42 @@ VC = {
 
 # Dynamics: (bar, 16th, mark). Hairpins: (bar, 16th, bar2, 16th2, kind).
 # Text: (bar, 16th, text)
+# Hairpins end on the next dynamic: bars 7-8 build to the f hit on m8
+# beat 3; the coda thins from p (m13 b3) to pp on the last chord.
+STRING_HAIRPINS = [(4, 0, 4, 15, "cresc"), (7, 0, 8, 7, "cresc"),
+                   (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim"),
+                   (14, 8, 14, 15, "dim")]
 PARTS = [
     dict(id="vox", name="Voice", abbr="V.", data=VOCAL,
          inst=instrument.Soprano, clef=clef.TrebleClef, program=52,
-         dyn=[(4, 12, "mf"), (9, 0, "f"), (13, 0, "mf")],
-         hair=[(7, 0, 8, 11, "cresc"), (11, 0, 12, 7, "cresc"),
+         dyn=[(4, 12, "mf"), (9, 0, "f"), (12, 0, "ff"), (12, 10, "mf")],
+         hair=[(7, 0, 8, 15, "cresc"), (11, 0, 11, 15, "cresc"),
                (13, 0, 13, 7, "dim")],
          text=[(8, 12, "a cappella")]),
     dict(id="vn1", name="Violin I", abbr="Vln. I", data=VN1,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
-         dyn=[(1, 0, "mp"), (5, 0, "mf"), (9, 0, "f"), (12, 8, "ff"),
-              (13, 8, "pp"), (15, 0, "pp")],
-         hair=[(4, 0, 4, 15, "cresc"), (7, 0, 8, 11, "cresc"),
-               (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim"),
-               (14, 8, 15, 15, "dim")],
+         dyn=[(1, 0, "mp"), (5, 0, "mf"), (8, 8, "f"), (9, 0, "f"),
+              (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+         hair=STRING_HAIRPINS,
          text=[(1, 0, "dolce, espr."), (5, 0, "cantabile"),
                (9, 0, "con passione"), (13, 8, "eco")]),
     dict(id="vn2", name="Violin II", abbr="Vln. II", data=VN2,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
-         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (9, 0, "f"),
-              (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
-         hair=[(4, 0, 4, 15, "cresc"), (7, 0, 8, 11, "cresc"),
-               (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim")],
+         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
+              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+         hair=STRING_HAIRPINS,
          text=[(9, 0, "marc., on the string")]),
     dict(id="va", name="Viola", abbr="Vla.", data=VA,
          inst=instrument.Viola, clef=clef.AltoClef, program=41,
-         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (9, 0, "f"),
-              (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
-         hair=[(4, 0, 4, 15, "cresc"), (7, 0, 8, 11, "cresc"),
-               (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim")],
+         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
+              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+         hair=STRING_HAIRPINS,
          text=[(5, 0, "legato, come onde")]),
     dict(id="vc", name="Violoncello", abbr="Vc.", data=VC,
          inst=instrument.Violoncello, clef=clef.BassClef, program=42,
-         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (9, 0, "f"),
-              (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
-         hair=[(4, 0, 4, 15, "cresc"), (7, 0, 8, 11, "cresc"),
-               (11, 0, 12, 7, "cresc"), (13, 0, 13, 7, "dim")],
+         dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
+              (9, 0, "f"), (12, 8, "ff"), (13, 8, "p"), (15, 0, "pp")],
+         hair=STRING_HAIRPINS,
          text=[(5, 0, "marcato"), (9, 0, "marcato")]),
 ]
 
@@ -240,10 +240,11 @@ ACCENT = 14
 TEMPI = [(1, 0, 70), (12, 8, 66), (12, 12, 60), (13, 0, 58), (13, 8, 56),
          (14, 0, 54), (14, 8, 50), (15, 0, 44)]
 TEMPO_MARK = "Slow soul"
-REHEARSAL = {1: "Intro", 5: "A  副歌前半", 9: "B  副歌后半 · 全奏",
-             13: "Coda"}
+# Rehearsal marks (score) and MIDI markers
+REHEARSAL = {5: ("A", "副歌前半"), 9: ("B", "副歌后半 · 全奏"), 13: ("C", "尾奏")}
+MIDI_MARKERS = {1: "Intro", 5: "A", 9: "B", 13: "Coda"}
 TEMPO_TEXT = [(12, 8, "allarg."), (14, 0, "rit.")]
-SYSTEM_BREAKS = (5, 9, 11, 13)
+SYSTEM_BREAKS = (5, 8, 11, 13)
 
 # ---------------------------------------------------------------------------
 # Parsing
@@ -355,7 +356,7 @@ def make_m21(p, events):
                 mm.placement = "above"
                 m.insert(0, mm)
         if p["id"] == "vox" and b in REHEARSAL:
-            rm = expressions.RehearsalMark(REHEARSAL[b])
+            rm = expressions.RehearsalMark("  ".join(REHEARSAL[b]))
             rm.placement = "above"
             m.insert(0, rm)
         for e in by_bar[b]:
@@ -407,10 +408,9 @@ def make_m21(p, events):
                     m.insert(ts / 4, tempo.TempoText(txt))
         if b == NBARS:
             for n in m.notesAndRests:
-                if not n.isRest:
-                    f = expressions.Fermata()
-                    f.type = "upright"
-                    n.expressions.append(f)
+                f = expressions.Fermata()
+                f.type = "upright"
+                n.expressions.append(f)
             m.rightBarline = bar.Barline("final")
         measures[b] = m
         part.append(m)
@@ -432,12 +432,6 @@ def make_m21(p, events):
         d = dynamics.Dynamic(mark)
         d.placement = "above" if p["id"] == "vox" else "below"
         measures[bb].insert(s / 4, d)
-    for bb, s, bb2, s2, kind in p["hair"]:
-        n1, n2 = obj_at(bb, s), obj_at(bb2, s2, forward=False)
-        if n1 is not None and n2 is not None and n1 is not n2:
-            sp = (dynamics.Crescendo if kind == "cresc"
-                  else dynamics.Diminuendo)(n1, n2)
-            part.insert(0, sp)
     for bb, s, txt in p["text"]:
         te = expressions.TextExpression(txt)
         te.style.fontStyle = "italic"
@@ -599,6 +593,159 @@ def polish(path):
         open(path, "w", encoding="utf-8").write(xml)
 
 
+TOTAL16 = NBARS * BAR16
+BEAMS = {"eighth": 1, "16th": 2, "32nd": 3}
+
+
+def _timeline(m, div16):
+    """[(start16, index, note)] for the time-advancing notes of a measure."""
+    out, pos = [], 0.0
+    for i, el in enumerate(list(m)):
+        if el.tag == "note":
+            if el.find("grace") is not None or el.find("chord") is not None:
+                continue
+            out.append((pos, i, el))
+            pos += int(el.findtext("duration")) / div16
+        elif el.tag == "backup":
+            pos -= int(el.findtext("duration")) / div16
+        elif el.tag == "forward":
+            pos += int(el.findtext("duration")) / div16
+    return out
+
+
+def _insert_at(m, s16, el, div16):
+    """Put el at 16th s16 of measure m: before the note sounding there,
+    with an <offset> when s16 falls inside that note."""
+    tl = _timeline(m, div16)
+    if s16 >= BAR16 or not tl:
+        m.append(el)
+        return
+    start, idx, _ = [x for x in tl if x[0] <= s16 + 1e-6][-1]
+    if s16 - start > 1e-6:
+        off = ET.SubElement(el, "offset")
+        off.text = str(round((s16 - start) * div16))
+    m.insert(idx, el)
+
+
+def _fix_beams(m, div16):
+    """Beam by beat; two eighth pairs in the same half bar share a beam
+    (same as LilyPond's 4/4 default), so Sibelius shows what the PDF shows.
+    """
+    notes = []
+    for start, _, el in _timeline(m, div16):
+        for b in el.findall("beam"):
+            el.remove(b)
+        dur = int(el.findtext("duration")) / div16
+        nb = 0 if el.find("rest") is not None else \
+            BEAMS.get(el.findtext("type"), 0)
+        notes.append((start, dur, el, nb))
+    for el in m.findall("note"):
+        if el.find("chord") is not None:
+            for b in el.findall("beam"):
+                el.remove(b)
+    runs, cur = [], []
+    for n in notes:
+        beat = int(n[0] // 4)
+        if n[3] and cur and int(cur[-1][0] // 4) == beat:
+            cur.append(n)
+            continue
+        if len(cur) > 1:
+            runs.append(cur)
+        cur = [n] if n[3] else []
+    if len(cur) > 1:
+        runs.append(cur)
+    merged = []
+    for r in runs:
+        pair = lambda x: (len(x) == 2 and all(y[3] == 1 for y in x)
+                          and x[0][0] % 4 == 0)
+        if merged and pair(r) and pair(merged[-1]) and \
+                int(r[0][0] // 4) == int(merged[-1][0][0] // 4) + 1 and \
+                int(r[0][0] // 8) == int(merged[-1][0][0] // 8):
+            merged[-1] = merged[-1] + r
+        else:
+            merged.append(r)
+    for r in merged:
+        for i, (_, _, el, nb) in enumerate(r):
+            beams = []
+            for lvl in range(1, nb + 1):
+                prev = i > 0 and r[i - 1][3] >= lvl
+                nxt = i < len(r) - 1 and r[i + 1][3] >= lvl
+                if lvl == 1:
+                    v = "begin" if i == 0 else \
+                        "end" if i == len(r) - 1 else "continue"
+                elif prev and nxt:
+                    v = "continue"
+                elif prev:
+                    v = "end"
+                elif nxt:
+                    v = "begin"
+                else:
+                    v = "backward hook" if i == len(r) - 1 else \
+                        "forward hook"
+                b = ET.Element("beam", number=str(lvl))
+                b.text = v
+                beams.append(b)
+            at = len(el)
+            for k, child in enumerate(el):
+                if child.tag in ("notations", "lyric", "play", "listen"):
+                    at = k
+                    break
+            for k, b in enumerate(beams):
+                el.insert(at + k, b)
+
+
+def _where(abs16):
+    """(bar, 16th) of an absolute 16th; the piece end maps to bar end."""
+    if abs16 >= TOTAL16:
+        return NBARS, BAR16
+    return abs16 // BAR16 + 1, abs16 % BAR16
+
+
+def finish_parts(path):
+    """Things music21 does not write the way Sibelius needs them: beams,
+    hairpins at exact positions, lyric extenders, tempo changes."""
+    tree = ET.parse(path)
+    r = tree.getroot()
+    div = int(next(r.iter("divisions")).text)
+    div16 = div / 4
+    for p, part in zip(PARTS, r.findall("part")):
+        ms = {int(m.get("number")): m for m in part.findall("measure")}
+        for m in ms.values():
+            _fix_beams(m, div16)
+        place = "above" if p["id"] == "vox" else "below"
+        for b, s16, b2, s2, kind in p["hair"]:
+            a = (b - 1) * BAR16 + s16
+            z = (b2 - 1) * BAR16 + s2 + 1
+            for pos, typ in ((a, "crescendo" if kind == "cresc"
+                              else "diminuendo"), (z, "stop")):
+                bb, ss = _where(pos)
+                d = ET.Element("direction", placement=place)
+                dt = ET.SubElement(d, "direction-type")
+                ET.SubElement(dt, "wedge", type=typ, number="1")
+                _insert_at(ms[bb], ss, d, div16)
+        if p["id"] == "vox":
+            for n in part.iter("note"):
+                ly = n.find("lyric")
+                slur = n.find("notations/slur[@type='start']")
+                if ly is not None and slur is not None and \
+                        ly.findtext("text") != BREATH:
+                    if ly.find("extend") is None:
+                        ET.SubElement(ly, "extend")
+            for b, s16, bpm in TEMPI[1:]:
+                snd = ET.Element("sound", tempo=str(bpm))
+                _insert_at(ms[b], s16, snd, div16)
+    ET.indent(tree, space="  ")
+    tree.write(path, encoding="UTF-8", xml_declaration=True)
+    xml = open(path, encoding="utf-8").read()
+    if "<!DOCTYPE" not in xml:
+        xml = xml.replace(
+            "?>\n",
+            "?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD "
+            "MusicXML 4.0 Partwise//EN\" "
+            "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
+        open(path, "w", encoding="utf-8").write(xml)
+
+
 def verify_bars(path):
     """Every bar of every part in the written file must hold exactly 4/4."""
     from music21 import converter
@@ -674,7 +821,7 @@ def tempo_track():
         t = ((b - 1) * BAR16 + s) * T16
         ab.append((t, mido.MetaMessage("set_tempo",
                                        tempo=mido.bpm2tempo(bpm))))
-    for b, name in REHEARSAL.items():
+    for b, name in MIDI_MARKERS.items():
         ab.append(((b - 1) * BAR16 * T16,
                    mido.MetaMessage("marker", text=name.split()[0])))
     ab.sort(key=lambda x: x[0])
@@ -943,6 +1090,7 @@ def main():
     sc = build_score(parsed)
     sc.write("musicxml", fp=base + ".musicxml")
     polish(base + ".musicxml")
+    finish_parts(base + ".musicxml")
     verify_bars(base + ".musicxml")
     all_ids = [p["id"] for p in PARTS]
     write_midi(base + "_全轨.mid", all_ids, parsed)

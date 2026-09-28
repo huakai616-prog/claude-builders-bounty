@@ -28,18 +28,62 @@ LY_DUR = {1: "16", 2: "8", 3: "8.", 4: "4", 6: "4.", 8: "2", 12: "2.",
 TOTAL = B.NBARS * B.BAR16
 
 # Engraving choices for this score
-STAFF_SIZE = 18
-BREAKS = (5, 9, 12)             # bars that start a new system
-PAGE_BREAKS = ()                # bars that start a new page
+STAFF_SIZE = 17.5
+BREAKS = (5, 8, 11, 13)         # bars that start a new system
+PAGE_BREAKS = (8, 13)           # bars that start a new page
 SHORT = {"vox": "Vo.", "vn1": "Vln. I", "vn2": "Vln. II", "va": "Vla.",
          "vc": "Vc."}
-MARKS = {5: ("A", "副歌前半"), 9: ("B", "副歌后半 · 全奏"), 13: ("C", "Coda")}
+MARKS = B.REHEARSAL
 DURATION = "0′56″"
+COLOPHON_DATE = "2026 年 9 月"
 LATIN_SERIF = "TeX Gyre Pagella"
 # words printed next to the dynamic below the staff instead of above it
 WITH_DYNAMIC = {("vn1", 13, 8)}
-CJK_SERIF = "Noto Serif CJK SC"
-CJK_SANS = "Noto Sans CJK SC"
+# LilyPond 2.24 ignores the face index of a .ttc collection and always
+# takes face 0, which for Noto CJK is the JAPANESE face (different glyphs
+# for e.g. 直 骨). So the Simplified Chinese faces are extracted into
+# standalone fonts under their own family names and loaded from a cache.
+CJK_SERIF = "QG Serif SC"
+CJK_SANS = "QG Sans SC"
+NOTO = "/usr/share/fonts/opentype/noto"
+SC_FONTS = {  # (family, style) -> source collection
+    (CJK_SERIF, "Regular"): f"{NOTO}/NotoSerifCJK-Regular.ttc",
+    (CJK_SERIF, "Bold"): f"{NOTO}/NotoSerifCJK-Bold.ttc",
+    (CJK_SANS, "Regular"): f"{NOTO}/NotoSansCJK-Regular.ttc",
+    (CJK_SANS, "Light"): f"{NOTO}/NotoSansCJK-Light.ttc",
+}
+FONT_DIR = os.path.join(os.path.expanduser("~"), ".cache", "qingge-fonts")
+
+
+def ensure_sc_fonts():
+    """Extract the SC face of each Noto CJK collection (needs fonttools)."""
+    from fontTools.ttLib import TTCollection
+    os.makedirs(FONT_DIR, exist_ok=True)
+    for (fam, style), src in SC_FONTS.items():
+        ps = f"{fam.replace(' ', '')}-{style}"
+        out = os.path.join(FONT_DIR, ps + ".otf")
+        if os.path.exists(out):
+            continue
+        coll = TTCollection(src, lazy=True)
+        font = next(f for f in coll.fonts
+                    if "CJKsc-" in (f["name"].getDebugName(6) or ""))
+        name = font["name"]
+        name.names = [n for n in name.names if n.nameID > 6 and
+                      n.nameID not in (16, 17)]
+        legacy = fam if style in ("Regular", "Bold") else f"{fam} {style}"
+        sub = style if style in ("Regular", "Bold") else "Regular"
+        for nid, val in ((1, legacy), (2, sub), (3, ps), (4, f"{fam} {style}"),
+                         (6, ps), (16, fam), (17, style)):
+            name.setName(val, nid, 3, 1, 0x409)
+            name.setName(val, nid, 1, 0, 0)
+        if "CFF " in font:
+            cff = font["CFF "].cff
+            cff.fontNames = [ps]
+            top = cff.topDictIndex[0]
+            for k, v in (("FullName", f"{fam} {style}"), ("FamilyName", fam)):
+                if hasattr(top, k):
+                    setattr(top, k, v)
+        font.save(out)
 
 
 def pos(bar, s16):
@@ -107,7 +151,9 @@ def ly_lyrics(events):
     out = []
     for e in events:
         if e["lyric"] == B.BREATH:
-            out.append("\\markup \\italic \\fontsize #-1 br")
+            out.append("\\markup \\pad-x #0.7 \\override "
+                       "#'(font-name . \"TeX Gyre Pagella Italic\") "
+                       "\\fontsize #-0.5 br")
         elif e["lyric"]:
             out.append(e["lyric"] + (" __" if e["slur_start"] else ""))
     return " ".join(out)
@@ -144,7 +190,8 @@ def ly_dynamics(p):
     for b, s, mark in p["dyn"]:
         if (b, s) in joined:
             att[pos(b, s)].append(
-                "-#(make-dynamic-script (markup #:dynamic "
+                "-\\tweak self-alignment-X #LEFT "
+                "#(make-dynamic-script (markup #:dynamic "
                 f"\"{mark}\" #:normal-text #:italic \" {joined[b, s]}\"))")
         else:
             att[pos(b, s)].append("\\" + mark)
@@ -193,7 +240,7 @@ def ly_global(with_marks):
             att[pos(b, 0)].insert(0, "\\noBreak ")
     # post-events have to follow the spacer; commands go before it
     out, run = [], 0
-    for t in range(TOTAL):
+    for t in range(TOTAL - B.BAR16):
         cmds = [x for x in att[t]]
         if cmds:
             if run:
@@ -207,6 +254,10 @@ def ly_global(with_marks):
                 out.append(f"s16*{run}")
                 run = 0
             out.append("|\n  ")
+    # last bar: four hidden quarter rests give the final chord real
+    # spacing columns (spacer rests do not), so it is not squeezed
+    last = [x for t in range(TOTAL - B.BAR16, TOTAL) for x in att[t]]
+    out.append(" ".join(last) + " \\hide Rest r4 r4 r4 r4 |")
     out.append('\\bar "|."')
     return " ".join(out)
 
@@ -267,10 +318,10 @@ def title_block():
   \\override #'(baseline-skip . 3)
   \\column {{
     \\fill-line {{
-      \\sans \\bold \\fontsize #0.5 "Score in C"
+      \\sans \\bold \\fontsize #-0.5 "Score in C"
       \\override #'(font-name . "{CJK_SERIF} Bold") \\abs-fontsize #26
         {ly_str(B.TITLE)}
-      \\sans \\fontsize #-1 "Full Score"
+      \\sans \\bold \\fontsize #-0.5 "Full Score"
     }}
     \\vspace #0.2
     \\fill-line {{ \\override #'(font-name . "{CJK_SERIF}")
@@ -307,8 +358,12 @@ def paper():
 
 \\paper {{
   #(set-paper-size "a4")
-  property-defaults.fonts.serif = "{LATIN_SERIF}, {CJK_SERIF}"
-  property-defaults.fonts.sans = "TeX Gyre Heros, {CJK_SANS}"
+  #(define fonts
+     (set-global-fonts
+       #:roman "{LATIN_SERIF}, {CJK_SERIF}"
+       #:sans "TeX Gyre Heros, {CJK_SANS}"
+       #:typewriter "DejaVu Sans Mono"
+       #:factor (/ staff-height pt 20)))
   top-margin = 12\\mm
   bottom-margin = 12\\mm
   left-margin = 15\\mm
@@ -321,13 +376,16 @@ def paper():
   scoreTitleMarkup = ##f
   ragged-last = ##f
   ragged-bottom = ##f
-  ragged-last-bottom = ##f
+  ragged-last-bottom = ##t
   markup-system-spacing = #'((basic-distance . 10) (minimum-distance . 6)
                              (padding . 3) (stretchability . 4))
   system-system-spacing = #'((basic-distance . 16) (minimum-distance . 10)
                              (padding . 5) (stretchability . 40))
-  last-bottom-spacing = #'((basic-distance . 6) (minimum-distance . 4)
-                           (padding . 2) (stretchability . 30))
+  last-bottom-spacing = #'((basic-distance . 10) (minimum-distance . 8)
+                           (padding . 6) (stretchability . 30))
+  top-system-spacing = #'((basic-distance . 12) (minimum-distance . 8)
+                          (padding . 4) (stretchability . 0))
+  system-separator-markup = \\slashSeparator
   oddHeaderMarkup = \\markup \\from-page #2 \\fill-line {{
     \\sans \\fontsize #-2 \\concat {{ {ly_str(B.TITLE)} " · Full Score" }}
     \\sans \\bold \\fontsize #1 \\fromproperty #'page:page-number-string
@@ -357,6 +415,8 @@ def layout():
     \\override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1/32)
     \\override RehearsalMark.self-alignment-X = #LEFT
     \\override RehearsalMark.padding = #1.6
+    \\override RehearsalMark.outside-staff-padding = #1.4
+    \\override DynamicLineSpanner.padding = #1.1
     \\override MetronomeMark.padding = #1.2
     \\override RehearsalMark.outside-staff-priority = #1500
     \\override MetronomeMark.outside-staff-priority = #1400
@@ -377,8 +437,10 @@ def layout():
   \\context {
     \\Lyrics
     \\override LyricText.font-size = #0.6
-    \\override LyricText.font-name = "Noto Serif CJK SC"
+    \\override LyricText.font-name = "QG Serif SC"
     \\override LyricExtender.thickness = #1.2
+    \\override LyricExtender.right-padding = #0.9
+    \\override LyricSpace.minimum-distance = #1.3
     \\override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.2
   }
 }
@@ -427,6 +489,7 @@ def ly_source():
     strings = "".join(staff(parts[x], parsed, x == "vn1")
                       for x in ("vn1", "vn2", "va", "vc"))
     return f"""\\version "2.24.0"
+#(ly:font-config-add-directory "{FONT_DIR}")
 #(set-global-staff-size {STAFF_SIZE})
 {paper()}
 \\book {{
@@ -454,12 +517,17 @@ def ly_source():
   >>
 {layout()}
 }}
+\\markup {{ \\vspace #3 \\fill-line {{ \\null
+  \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #8.5
+  \\right-column {{ {ly_str("改编 · 制谱：" + B.ARRANGER)}
+                    {ly_str(COLOPHON_DATE)} }} }} }}
 }}
 """
 
 
 def main():
     os.makedirs(B.OUT, exist_ok=True)
+    ensure_sc_fonts()
     pdf = os.path.join(B.OUT, f"{B.NAME}_总谱.pdf")
     with tempfile.TemporaryDirectory() as tmp:
         ly = os.path.join(tmp, "score.ly")
