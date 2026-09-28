@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P41894db977d69f55b1afd14307e43da1">
+    <score-part id="P466fa4f5eab9b99569daee137b45540a">
       <part-name>Flute</part-name>
       <part-abbreviation>Fl.</part-abbreviation>
-      <score-instrument id="I456600130f5499aa64e9b98b025cd9bd">
+      <score-instrument id="Idc4a5efa2826c91542fab03a3829fbc7">
         <instrument-name>Flute</instrument-name>
         <instrument-abbreviation>Fl.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I456600130f5499aa64e9b98b025cd9bd">
+      <midi-instrument id="Idc4a5efa2826c91542fab03a3829fbc7">
         <midi-channel>2</midi-channel>
         <midi-program>74</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P41894db977d69f55b1afd14307e43da1">
+  <part id="P466fa4f5eab9b99569daee137b45540a">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

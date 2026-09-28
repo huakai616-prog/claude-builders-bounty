@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pce52151e80faac18715c680645b48a62">
+    <score-part id="P6338e1cc59268a361ada5f6b6f2a6482">
       <part-name>Tuba</part-name>
       <part-abbreviation>Tba.</part-abbreviation>
-      <score-instrument id="Ife8005bb21c5d12d867f251fc7fd6637">
+      <score-instrument id="I1b62afe78a057659fc786fbbcae13a44">
         <instrument-name>Tuba</instrument-name>
         <instrument-abbreviation>Tba.</instrument-abbreviation>
         <instrument-sound>brass.tuba</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ife8005bb21c5d12d867f251fc7fd6637">
+      <midi-instrument id="I1b62afe78a057659fc786fbbcae13a44">
         <midi-channel>9</midi-channel>
         <midi-program>59</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pce52151e80faac18715c680645b48a62">
+  <part id="P6338e1cc59268a361ada5f6b6f2a6482">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

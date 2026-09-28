@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pc0241e1f5ae473988b77a3a5392bab09">
+    <score-part id="Pb979d8d038054a9decb504530481a64b">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="I847365bea49d4204ca560dbb1b39e71e">
+      <score-instrument id="Ib3b61877445c42548d798ba57d50d767">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I847365bea49d4204ca560dbb1b39e71e">
+      <midi-instrument id="Ib3b61877445c42548d798ba57d50d767">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pc0241e1f5ae473988b77a3a5392bab09">
+  <part id="Pb979d8d038054a9decb504530481a64b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

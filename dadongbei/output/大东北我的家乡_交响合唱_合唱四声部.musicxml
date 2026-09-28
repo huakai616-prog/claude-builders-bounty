@@ -49,61 +49,61 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P4e8480d6ded8b1f90226ae982e2a718f">
+    <score-part id="P61bcb16af90f94af2aad03e3d340d45b">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="Id87bc85785e37001c2048bb6734671e5">
+      <score-instrument id="I90ef0f14e32f5300d6dbf9eb6dcc5e1d">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id87bc85785e37001c2048bb6734671e5">
+      <midi-instrument id="I90ef0f14e32f5300d6dbf9eb6dcc5e1d">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pc0cfa292a9b6df18019d0ced4a3da453">
+    <score-part id="Pfa50ba6d9d8f1c571e0301ac74066d4e">
       <part-name>Alto</part-name>
       <part-abbreviation>A.</part-abbreviation>
-      <score-instrument id="I08c77d22f2f823d28a25b6e2a4e1f6e1">
+      <score-instrument id="I3901d350450b4be050677f4c346b7cc4">
         <instrument-name>Alto</instrument-name>
         <instrument-abbreviation>A.</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I08c77d22f2f823d28a25b6e2a4e1f6e1">
+      <midi-instrument id="I3901d350450b4be050677f4c346b7cc4">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P9455a35d65fb9cb9b9e293c6be29b34d">
+    <score-part id="P32cc5a7c4d76609d32fcc2894ffea9f5">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="I12a0402d90c2b0b9bccb51b339f5c124">
+      <score-instrument id="I179230b8f3070873792d6121bbbe2b1c">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T.</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I12a0402d90c2b0b9bccb51b339f5c124">
+      <midi-instrument id="I179230b8f3070873792d6121bbbe2b1c">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P8e4732e88f8a44308a646b01c9dd98fc">
+    <score-part id="P38f9637b1b1dc1c801fe036762cb2703">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="I79ba0ea2481591de3e4be091b3288679">
+      <score-instrument id="I428e1ff8898692143159911000e3e818">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I79ba0ea2481591de3e4be091b3288679">
+      <midi-instrument id="I428e1ff8898692143159911000e3e818">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="P4e8480d6ded8b1f90226ae982e2a718f">
+  <part id="P61bcb16af90f94af2aad03e3d340d45b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -4052,7 +4052,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pc0cfa292a9b6df18019d0ced4a3da453">
+  <part id="Pfa50ba6d9d8f1c571e0301ac74066d4e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -7765,7 +7765,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P9455a35d65fb9cb9b9e293c6be29b34d">
+  <part id="P32cc5a7c4d76609d32fcc2894ffea9f5">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -11146,7 +11146,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P8e4732e88f8a44308a646b01c9dd98fc">
+  <part id="P38f9637b1b1dc1c801fe036762cb2703">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P67c181f45dba2eb6f6189b6721c4e0b3">
+    <score-part id="P877d0faecfbadc0aedf8e23a188eda94">
       <part-name>Timpani</part-name>
       <part-abbreviation>Timp.</part-abbreviation>
-      <score-instrument id="Ib0ee6cacf11ad1581a49900418b6e035">
+      <score-instrument id="If7b9e6227903e4ac39e3f8f5708a6b2c">
         <instrument-name>Timpani</instrument-name>
         <instrument-abbreviation>Timp.</instrument-abbreviation>
         <instrument-sound>drum.timpani</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ib0ee6cacf11ad1581a49900418b6e035">
+      <midi-instrument id="If7b9e6227903e4ac39e3f8f5708a6b2c">
         <midi-channel>11</midi-channel>
         <midi-program>48</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P67c181f45dba2eb6f6189b6721c4e0b3">
+  <part id="P877d0faecfbadc0aedf8e23a188eda94">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

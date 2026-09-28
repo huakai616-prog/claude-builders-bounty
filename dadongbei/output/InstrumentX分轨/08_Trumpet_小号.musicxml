@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P8f45de1cee7b5b79ae2a5402ff1e3bec">
+    <score-part id="P8aa7be8a60e73a3490fd315a112c4787">
       <part-name>Trumpet in Bb</part-name>
       <part-abbreviation>Tpt.</part-abbreviation>
-      <score-instrument id="I36b009a804878c2a863b995e493129eb">
+      <score-instrument id="If5b67d242c3e9dc25f72097fc72117f9">
         <instrument-name>Trumpet in Bb</instrument-name>
         <instrument-abbreviation>Tpt.</instrument-abbreviation>
         <instrument-sound>brass.trumpet.bflat</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I36b009a804878c2a863b995e493129eb">
+      <midi-instrument id="If5b67d242c3e9dc25f72097fc72117f9">
         <midi-channel>7</midi-channel>
         <midi-program>57</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P8f45de1cee7b5b79ae2a5402ff1e3bec">
+  <part id="P8aa7be8a60e73a3490fd315a112c4787">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

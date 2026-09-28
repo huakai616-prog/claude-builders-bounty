@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P7841b6a02ef47aaf930d985f32d96914">
+    <score-part id="P3de850299dfcd436068bcffa7fe3b2fa">
       <part-name>Harp</part-name>
       <part-abbreviation>Hp.</part-abbreviation>
-      <score-instrument id="I6e87f0a3d80adbbd89d30dffec897c1b">
+      <score-instrument id="I388700133db48c1068b76df23bc7cd1b">
         <instrument-name>Harp</instrument-name>
         <instrument-abbreviation>Hp.</instrument-abbreviation>
         <instrument-sound>pluck.harp</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I6e87f0a3d80adbbd89d30dffec897c1b">
+      <midi-instrument id="I388700133db48c1068b76df23bc7cd1b">
         <midi-channel>13</midi-channel>
         <midi-program>47</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P7841b6a02ef47aaf930d985f32d96914">
+  <part id="P3de850299dfcd436068bcffa7fe3b2fa">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

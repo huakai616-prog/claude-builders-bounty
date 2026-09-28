@@ -2179,12 +2179,13 @@ def part_track(p, events, ch, lyrics=True, cc=True, name=None, program=True,
         on = n["start"] * T16
         off = (n["start"] + n["dur"]) * T16
         nxt = notes[i + 1] if i + 1 < len(notes) else None
-        if nxt and nxt["start"] * T16 == off and \
-                set(nxt["pitches"]) & set(n["pitches"]):
-            off -= 12 if n["dur"] > 2 else 24
-        elif detache and nxt and nxt["start"] * T16 == off and \
-                not n["legato"]:
-            off -= max(20, min(60, (off - on) // 10))
+        gap = 0
+        if nxt and nxt["start"] * T16 == off:
+            if set(nxt["pitches"]) & set(n["pitches"]):
+                gap = 12 if n["dur"] > 2 else 24
+            if detache and not n["legato"]:
+                gap = max(gap, 20, min(60, (off - on) // 10))
+        off -= gap
         if in_pizz(p, n["bar"]):
             off = min(off, on + 100)
         elif n["stacc"]:

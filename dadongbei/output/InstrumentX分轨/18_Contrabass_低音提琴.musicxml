@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P00d586e3114a8ad25f4fd8e8adb9a286">
+    <score-part id="P9ece9938507a13a7e12efd636a13afbd">
       <part-name>Contrabass</part-name>
       <part-abbreviation>Cb.</part-abbreviation>
-      <score-instrument id="Ia22ad866e628fb4403222a77c2a5caf0">
+      <score-instrument id="Iab615c078b7109d65413cdbefbc5ac19">
         <instrument-name>Contrabass</instrument-name>
         <instrument-abbreviation>Cb.</instrument-abbreviation>
         <instrument-sound>strings.contrabass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ia22ad866e628fb4403222a77c2a5caf0">
+      <midi-instrument id="Iab615c078b7109d65413cdbefbc5ac19">
         <midi-channel>16</midi-channel>
         <midi-program>44</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P00d586e3114a8ad25f4fd8e8adb9a286">
+  <part id="P9ece9938507a13a7e12efd636a13afbd">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

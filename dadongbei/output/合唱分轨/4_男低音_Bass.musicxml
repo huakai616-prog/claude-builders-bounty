@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P9e72b8a1a4733a6e1e80da798dba108d">
+    <score-part id="Pede166bb39a228c49c3874b92a283054">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="I063ededff80f11ae63148690e9eb3873">
+      <score-instrument id="I9c618acd686c3295542d0aee763cc324">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B.</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I063ededff80f11ae63148690e9eb3873">
+      <midi-instrument id="I9c618acd686c3295542d0aee763cc324">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P9e72b8a1a4733a6e1e80da798dba108d">
+  <part id="Pede166bb39a228c49c3874b92a283054">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

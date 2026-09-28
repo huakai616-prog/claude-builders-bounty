@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P1fe48219f3acc56f3f60cdb71df977a9">
+    <score-part id="P79bd7bc315b1fb8de735440f6939bce5">
       <part-name>Bassoon</part-name>
       <part-abbreviation>Bsn.</part-abbreviation>
-      <score-instrument id="I6904fd9aa6f470779f4129244aea4a21">
+      <score-instrument id="Idceb4b7a555a1f58ac824fa75a0c1067">
         <instrument-name>Bassoon</instrument-name>
         <instrument-abbreviation>Bsn.</instrument-abbreviation>
         <instrument-sound>wind.reed.bassoon</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I6904fd9aa6f470779f4129244aea4a21">
+      <midi-instrument id="Idceb4b7a555a1f58ac824fa75a0c1067">
         <midi-channel>5</midi-channel>
         <midi-program>71</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P1fe48219f3acc56f3f60cdb71df977a9">
+  <part id="P79bd7bc315b1fb8de735440f6939bce5">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

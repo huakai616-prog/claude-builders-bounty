@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P6222354ddcaddc3f17b6bb8751511d89">
+    <score-part id="Pa2777464149ac77d840ff8aedb660510">
       <part-name>Glockenspiel</part-name>
       <part-abbreviation>Glk.</part-abbreviation>
-      <score-instrument id="I8aed00599be92ad8a3ae04a6ecfac1c1">
+      <score-instrument id="I08753c0540885bc688a0adbdcb08fe97">
         <instrument-name>Glockenspiel</instrument-name>
         <instrument-abbreviation>Glk.</instrument-abbreviation>
         <instrument-sound>pitched-percussion.glockenspiel</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I8aed00599be92ad8a3ae04a6ecfac1c1">
+      <midi-instrument id="I08753c0540885bc688a0adbdcb08fe97">
         <midi-channel>12</midi-channel>
         <midi-program>10</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P6222354ddcaddc3f17b6bb8751511d89">
+  <part id="Pa2777464149ac77d840ff8aedb660510">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Pb2c66f323db35155d2f0d75c5de2349e">
+    <score-part id="Padf292785f29d5a4f1a8ec69b9e27fc4">
       <part-name>Clarinet in A</part-name>
       <part-abbreviation>Cl.</part-abbreviation>
-      <score-instrument id="I4f71258ebba097f204dd77eab62f708f">
+      <score-instrument id="I011b3457ebeabb1a83dfd29aef91b40d">
         <instrument-name>Clarinet in A</instrument-name>
         <instrument-abbreviation>Cl.</instrument-abbreviation>
         <instrument-sound>wind.reed.clarinet.a</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4f71258ebba097f204dd77eab62f708f">
+      <midi-instrument id="I011b3457ebeabb1a83dfd29aef91b40d">
         <midi-channel>4</midi-channel>
         <midi-program>72</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Pb2c66f323db35155d2f0d75c5de2349e">
+  <part id="Padf292785f29d5a4f1a8ec69b9e27fc4">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

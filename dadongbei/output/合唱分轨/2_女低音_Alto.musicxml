@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P26d222e511654dd5040b6a1ab64a02c7">
+    <score-part id="P5f1e8301578f8d47932c3d2226e906f7">
       <part-name>Alto</part-name>
       <part-abbreviation>A.</part-abbreviation>
-      <score-instrument id="I8ba9db8430f1e4bc085219ec58b3bc47">
+      <score-instrument id="Ifdd871cf167c9f011b84205c48f14966">
         <instrument-name>Alto</instrument-name>
         <instrument-abbreviation>A.</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I8ba9db8430f1e4bc085219ec58b3bc47">
+      <midi-instrument id="Ifdd871cf167c9f011b84205c48f14966">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P26d222e511654dd5040b6a1ab64a02c7">
+  <part id="P5f1e8301578f8d47932c3d2226e906f7">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

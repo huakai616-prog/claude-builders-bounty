@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="Paaa4cd665f61a7e101293fb193f78555">
+    <score-part id="P033f5d6fcd5056915be460b88658bf24">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="I265808913ee8a49d89d017b2210a8413">
+      <score-instrument id="I0bec8df61cd5240b54a415c4daaea54f">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S.</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I265808913ee8a49d89d017b2210a8413">
+      <midi-instrument id="I0bec8df61cd5240b54a415c4daaea54f">
         <midi-channel>14</midi-channel>
         <midi-program>53</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="Paaa4cd665f61a7e101293fb193f78555">
+  <part id="P033f5d6fcd5056915be460b88658bf24">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

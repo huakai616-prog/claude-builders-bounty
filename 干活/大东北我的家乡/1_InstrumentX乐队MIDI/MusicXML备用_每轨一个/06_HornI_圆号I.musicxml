@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P8873b40a7ef6cb972109f5e961503820">
+    <score-part id="P466ba12b558f80a8bfe13f159a6cc835">
       <part-name>Horn in F I</part-name>
       <part-abbreviation>Hn. I</part-abbreviation>
-      <score-instrument id="Ia44e0f8472d3b5eb312efe5683b9b5a5">
+      <score-instrument id="I1f781b99dedb490a67a7655c35da1d36">
         <instrument-name>Horn in F I</instrument-name>
         <instrument-abbreviation>Hn. I</instrument-abbreviation>
         <instrument-sound>brass.french-horn</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ia44e0f8472d3b5eb312efe5683b9b5a5">
+      <midi-instrument id="I1f781b99dedb490a67a7655c35da1d36">
         <midi-channel>6</midi-channel>
         <midi-program>61</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P8873b40a7ef6cb972109f5e961503820">
+  <part id="P466ba12b558f80a8bfe13f159a6cc835">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P344dc55085b0e6ac19b55711465c5dcb">
+    <score-part id="Pa7b21ab6e6e86cab5ccaac8bba496d81">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I305e0b51cec57715b749a5bb191421bc">
+      <score-instrument id="Ia7b9429e18fffa707b79f023c30469cf">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla.</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I305e0b51cec57715b749a5bb191421bc">
+      <midi-instrument id="Ia7b9429e18fffa707b79f023c30469cf">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P344dc55085b0e6ac19b55711465c5dcb">
+  <part id="Pa7b21ab6e6e86cab5ccaac8bba496d81">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

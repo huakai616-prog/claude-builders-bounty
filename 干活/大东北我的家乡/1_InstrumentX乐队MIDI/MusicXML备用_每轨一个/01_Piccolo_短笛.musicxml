@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P876c25ec53035a827dd24e9f4b2f94a8">
+    <score-part id="Pc6d060ae26bc9cd7cf3816eef836709b">
       <part-name>Piccolo</part-name>
       <part-abbreviation>Picc.</part-abbreviation>
-      <score-instrument id="I4fdad57873fad9ee17dcb30cf66ae405">
+      <score-instrument id="I2ffecbc6b095ccc98633d60ea4dc56d1">
         <instrument-name>Piccolo</instrument-name>
         <instrument-abbreviation>Picc.</instrument-abbreviation>
         <instrument-sound>wind.flutes.flute.piccolo</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4fdad57873fad9ee17dcb30cf66ae405">
+      <midi-instrument id="I2ffecbc6b095ccc98633d60ea4dc56d1">
         <midi-channel>1</midi-channel>
         <midi-program>73</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P876c25ec53035a827dd24e9f4b2f94a8">
+  <part id="Pc6d060ae26bc9cd7cf3816eef836709b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P30d3553c1962c0f63c0546f172bb2a40">
+    <score-part id="Pf75fcba0c02fa4774667e2468016e444">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="Ib17c7f24953d588c0dbf301558bbeba8">
+      <score-instrument id="I29820f2785a037dfa088449e5ba5ce96">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc.</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ib17c7f24953d588c0dbf301558bbeba8">
+      <midi-instrument id="I29820f2785a037dfa088449e5ba5ce96">
         <midi-channel>16</midi-channel>
         <midi-program>49</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P30d3553c1962c0f63c0546f172bb2a40">
+  <part id="Pf75fcba0c02fa4774667e2468016e444">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

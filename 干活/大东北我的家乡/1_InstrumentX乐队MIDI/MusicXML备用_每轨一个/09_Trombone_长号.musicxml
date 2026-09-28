@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P0d0f2c746e0510225965f4993921b7e4">
+    <score-part id="P98fecb7e97640b0daa5dc4776649c51e">
       <part-name>Trombone</part-name>
       <part-abbreviation>Tbn.</part-abbreviation>
-      <score-instrument id="I5384cba4613f8743618dd08b0fbbe354">
+      <score-instrument id="I55dfcc0e7d26b052b6c832073c256b20">
         <instrument-name>Trombone</instrument-name>
         <instrument-abbreviation>Tbn.</instrument-abbreviation>
         <instrument-sound>brass.trombone</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I5384cba4613f8743618dd08b0fbbe354">
+      <midi-instrument id="I55dfcc0e7d26b052b6c832073c256b20">
         <midi-channel>8</midi-channel>
         <midi-program>58</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P0d0f2c746e0510225965f4993921b7e4">
+  <part id="P98fecb7e97640b0daa5dc4776649c51e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>

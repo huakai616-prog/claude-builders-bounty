@@ -44,21 +44,21 @@
     </staff-layout>
   </defaults>
   <part-list>
-    <score-part id="P407021ca15432e235b79e750dc92f099">
+    <score-part id="P651e7f86f1bf5382e4f64d9189ff2ef3">
       <part-name>Oboe</part-name>
       <part-abbreviation>Ob.</part-abbreviation>
-      <score-instrument id="Idad07ace11b2124458ad7b447a77e780">
+      <score-instrument id="Ifd38c5c5456eb12191570e4bd1079bc3">
         <instrument-name>Oboe</instrument-name>
         <instrument-abbreviation>Ob.</instrument-abbreviation>
         <instrument-sound>wind.reed.oboe</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Idad07ace11b2124458ad7b447a77e780">
+      <midi-instrument id="Ifd38c5c5456eb12191570e4bd1079bc3">
         <midi-channel>3</midi-channel>
         <midi-program>69</midi-program>
       </midi-instrument>
     </score-part>
   </part-list>
-  <part id="P407021ca15432e235b79e750dc92f099">
+  <part id="P651e7f86f1bf5382e4f64d9189ff2ef3">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
