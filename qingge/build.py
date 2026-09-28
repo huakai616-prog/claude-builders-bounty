@@ -128,7 +128,7 @@ VN1 = {
     9: "(C6/4 F6/4) (G6/4 E6/4)",
     10: "(F6/4 D6/4) (E6/6 C6/2)",
     11: "(D6/4 E6/4) F6/8",
-    12: "G6/8 F6/4> E6/4",
+    12: "G6/8 F6/4 E6/4",
     13: f"F6/8 ({HOOK_A})",
     14: f"({HOOK_B}) (F5/2 Eb5/2 F5/2 G5/2)",
     15: "A5/16",
@@ -146,7 +146,7 @@ VN2 = {
     9: rep("A5", 8, acc=DRIVE) + " " + rep("G5", 8, acc=DRIVE),
     10: rep("F5", 8, acc=DRIVE) + " " + rep("E5", 8, acc=DRIVE),
     11: rep("F5", 8, acc=DRIVE) + " " + rep("A5", 8, acc=DRIVE),
-    12: rep("Bb5", 8, acc=DRIVE) + " D6/8>",
+    12: rep("Bb5", 8, acc=DRIVE) + " D6/8",
     13: "C6/8 A4/8",
     14: "F4/8 G4/8~",
     15: "G4/16",
@@ -167,8 +167,8 @@ VA = {
         "(C3/1 E3/1 A3/1 C4/1 E4/1 C4/1 A3/1 E3/1)",
     11: "(D3/1 F3/1 Bb3/1 D4/1 F4/1 D4/1 Bb3/1 F3/1) "
         "(C3/1 F3/1 A3/1 C4/1 F4/1 C4/1 A3/1 F3/1)",
-    12: "(D3/1 G3/1 Bb3/1 D4/1 F4/1 D4/1 Bb3/1 G3/1) Bb3+F4/8>",
-    13: "A3+F4/16",
+    12: "(D3/1 G3/1 Bb3/1 D4/1 F4/1 D4/1 Bb3/1 G3/1) Bb3+F4/8",
+    13: "A3+F4/8~ A3+F4/8",
     14: "D4/8 Db4/8",
     15: "C4/16",
 }
@@ -186,9 +186,9 @@ VC = {
     9: "F2/2> F3/2 F2/2 F3/2 E2/2 E3/2 E2/2 E3/2",
     10: "D2/2 D3/2 D2/2 D3/2 C2/2 C3/2 C2/2 C3/2",
     11: "Bb2/2 Bb3/2 Bb2/2 Bb3/2 A2/2 A3/2 A2/2 C3/2",
-    12: "G2/2 G3/2 G2/2 G3/2 C2+C3/8>",
-    13: "F2+C3/16",
-    14: "Bb2/16",
+    12: "G2/2 G3/2 G2/2 G3/2 C2+C3/8",
+    13: "F2+C3/8~ F2+C3/8",
+    14: "Bb2/8~ Bb2/8",
     15: "F2/16",
 }
 
@@ -199,45 +199,46 @@ VC = {
 # At the climax the strings hit fp on m12 b3 and swell under the voice's
 # "天长地" to mf on "久", so they carry the singer instead of covering her.
 STRING_HAIRPINS = [(4, 0, 4, 15, "cresc"), (7, 0, 8, 7, "cresc"),
-                   (11, 0, 12, 7, "cresc"), (12, 9, 12, 15, "cresc"),
+                   (11, 0, 11, 15, "cresc"), (12, 8, 12, 15, "cresc"),
                    (13, 0, 13, 7, "dim"), (14, 8, 14, 15, "dim")]
-# Character words are printed with the dynamic below the staff (Gould);
-# technique words (marcato, a cappella) stay above.
+# Playing words that start with a dynamic are printed with it, below the
+# staff ("mf cantabile"), so each instruction clearly belongs to its staff.
 MOOD_WORDS = {"dolce, espr.", "cantabile", "legato, come onde",
-              "con passione", "eco"}
+              "con passione", "eco", "marcato", "marcato, on the string"}
 PARTS = [
     dict(id="vox", name="Voice", abbr="V.", data=VOCAL,
          inst=instrument.Soprano, clef=clef.TrebleClef, program=52,
          dyn=[(4, 12, "mf"), (9, 0, "f"), (12, 0, "ff"), (12, 10, "mf")],
          hair=[(7, 0, 8, 15, "cresc"), (11, 0, 11, 15, "cresc"),
-               (13, 0, 13, 7, "dim")],
+               (13, 0, 13, 7, "niente")],
          text=[(8, 12, "a cappella")]),
     dict(id="vn1", name="Violin I", abbr="Vln. I", data=VN1,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
          dyn=[(1, 0, "mp"), (5, 0, "mf"), (8, 8, "f"), (9, 0, "f"),
-              (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"), (15, 0, "pp")],
+              (12, 0, "ff"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
+              (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(1, 0, "dolce, espr."), (5, 0, "cantabile"),
                (9, 0, "con passione"), (13, 8, "eco")]),
     dict(id="vn2", name="Violin II", abbr="Vln. II", data=VN2,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
-              (15, 0, "pp")],
+              (9, 0, "f"), (12, 0, "ff"), (12, 8, "fp"), (13, 0, "mf"),
+              (13, 8, "p"), (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(9, 0, "marcato, on the string")]),
     dict(id="va", name="Viola", abbr="Vla.", data=VA,
          inst=instrument.Viola, clef=clef.AltoClef, program=41,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
-              (15, 0, "pp")],
+              (9, 0, "f"), (12, 0, "ff"), (12, 8, "fp"), (13, 0, "mf"),
+              (13, 8, "p"), (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(5, 0, "legato, come onde")]),
     dict(id="vc", name="Violoncello", abbr="Vc.", data=VC,
          inst=instrument.Violoncello, clef=clef.BassClef, program=42,
          dyn=[(1, 0, "p"), (3, 0, "mp"), (5, 0, "mf"), (8, 8, "f"),
-              (9, 0, "f"), (12, 8, "fp"), (13, 0, "mf"), (13, 8, "p"),
-              (15, 0, "pp")],
+              (9, 0, "f"), (12, 0, "ff"), (12, 8, "fp"), (13, 0, "mf"),
+              (13, 8, "p"), (15, 0, "pp")],
          hair=STRING_HAIRPINS,
          text=[(5, 0, "marcato")]),
 ]
@@ -602,31 +603,22 @@ def _timeline(m, div16):
 
 
 def _insert_at(m, s16, el, div16):
-    """Put el at 16th s16 of measure m. At a note start it goes right
-    before that note; inside a note it goes after the note between a
-    <backup> and a <forward> (importers such as MuseScore ignore
-    <offset>, so no offsets are used)."""
+    """Put el at 16th s16 of measure m, right before the note (or rest)
+    that starts there. Directions are only ever placed on onsets: a
+    position inside a sustained note would need <backup>/<forward> or
+    <offset>, which importers (Sibelius, MuseScore) turn into hidden rests
+    or drop. Split the note in the data (tied notes) instead."""
     tl = _timeline(m, div16)
     if s16 >= BAR16 or not tl:
         m.append(el)
         return
-    start, idx, note = [x for x in tl if x[0] <= s16 + 1e-6][-1]
-    if s16 - start < 1e-6:
-        m.insert(idx, el)
-        return
-    end = start + int(note.findtext("duration")) / div16
-    back = round((end - s16) * div16)
-    kids = list(m)
-    at = kids.index(note) + 1
-    while at < len(kids) and kids[at].tag == "note" and \
-            kids[at].find("chord") is not None:
-        at += 1
-    bk = ET.Element("backup")
-    ET.SubElement(bk, "duration").text = str(back)
-    fw = ET.Element("forward")
-    ET.SubElement(fw, "duration").text = str(back)
-    for k, x in enumerate((bk, el, fw)):
-        m.insert(at + k, x)
+    for start, idx, _ in tl:
+        if abs(start - s16) < 1e-6:
+            m.insert(idx, el)
+            return
+    raise ValueError(
+        f"m{m.get('number')}: no note starts at 16th {s16}; split the "
+        "sustained note (tie) so the dynamic/hairpin has an onset")
 
 
 def melisma_marks(events):
@@ -762,6 +754,19 @@ def finish_parts(path):
         ms = {int(m.get("number")): m for m in part.findall("measure")}
         for m in ms.values():
             _fix_beams(m, div16)
+        for n in part.iter("note"):
+            if n.find("voice") is None:
+                kids = [c.tag for c in n]
+                at = max(i for i, t in enumerate(kids)
+                         if t in ("duration", "tie", "instrument", "chord",
+                                  "pitch", "rest", "unpitched", "grace",
+                                  "cue")) + 1
+                v = ET.Element("voice")
+                v.text = "1"
+                n.insert(at, v)
+            t = n.find("lyric/text")
+            if t is not None and t.text == BREATH:
+                t.set("font-style", "italic")
         place = "above" if p["id"] == "vox" else "below"
         mood = {(b, s16): t for b, s16, t in p["text"] if t in MOOD_WORDS}
         for b, s16, mark in p["dyn"]:
@@ -784,8 +789,10 @@ def finish_parts(path):
             for pos, typ in ((a, "crescendo" if kind == "cresc"
                               else "diminuendo"), (z, "stop")):
                 bb, ss = _where(pos)
-                _insert_at(ms[bb], ss, _direction(
-                    place, ET.Element("wedge", type=typ, number="1")), div16)
+                w = ET.Element("wedge", type=typ, number="1")
+                if kind == "niente" and typ == "diminuendo":
+                    w.set("niente", "yes")
+                _insert_at(ms[bb], ss, _direction(place, w), div16)
         if p["id"] == "vox":
             # tempo heading, tempo words, hidden ramp, rehearsal marks
             _insert_at(ms[1], 0, _direction(
@@ -887,6 +894,8 @@ def dyn_curve(p):
         v0 = v[a]
         nxt = [val for t, val in pts if t > z]
         v1 = nxt[0] if nxt else v0 + (-14 if kind == "dim" else 14)
+        if kind == "niente":
+            v1 = min(v1, v0 - 24)
         if kind == "cresc" and v1 <= v0:
             v1 = v0 + 12
         if kind == "dim" and v1 >= v0:

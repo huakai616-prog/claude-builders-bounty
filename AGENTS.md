@@ -124,6 +124,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **原曲自带的不协和**：前奏钩子里的倚音这类原曲本来就有的小九度，写进 `CLASH_ALLOW` 白名单并在 README 说明，不要为了过检查去改原曲旋律。
 - **LilyPond 的中文字形**：LilyPond 2.24 读 `.ttc` 字体集合时忽略字形编号，永远用第 0 个。Noto CJK 的第 0 个是日文，「直」「骨」等字会变成日文写法。`engrave.py` 用 fontTools 把简体中文那一个抽成独立字体（`QG Serif SC` / `QG Sans SC`，缓存在 `~/.cache/qingge-fonts`）。字体设置要用 2.24 的 `set-global-fonts`，`property-defaults.fonts` 是 2.25 的写法，2.24 会静默忽略。交付前用 `grep -a -o "/FontName */[A-Za-z+_-]*" 总谱.pdf` 确认没有 `jp` 字体。
 - **MusicXML 给西贝柳斯的细节**：music21 写出的十六分音符符杠会在拍中间断开，八分音符按拍分组，和 PDF 不一样；起止落在同一个音上的渐强渐弱线会被丢掉。`build.py` 的 `finish_parts()` 负责重算符杠、按准确位置写渐强渐弱线、拖腔加延长线、渐慢写成 `<sound tempo>`。
+- **MusicXML 的记号只挂在音符起点**：力度、渐强渐弱线、文字如果落在持续音中间，就得用 `<backup>/<forward>` 或 `<offset>` 定位，西贝柳斯会因此生成隐藏休止符、另开第二声部或截断音符，看起来像「节奏出错」，MuseScore 则直接丢掉这些记号。`build.py` 的 `_insert_at()` 遇到这种位置会直接报错，这时应在数据里把长音拆成用连音线连起来的几个音。
 - **用户发回的 MIDI 优先**：用户在 ACE Studio 里改过的 MIDI 是弦乐的最终版本，照它逐音改 `build.py`，不要自作主张再改回去。人声里 `br` 是用户加的气口，保留并在谱上显示；其余节奏按原谱校准。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
 

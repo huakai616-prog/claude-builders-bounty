@@ -37,6 +37,12 @@ MARKS = B.REHEARSAL
 DURATION = "0′56″"
 COLOPHON_DATE = "2026 年 9 月"
 LATIN_SERIF = "TeX Gyre Pagella"
+# (part, bar, 16th) -> LilyPond command put before that note
+TWEAKS = {
+    # Vln II G4 tied into the last bar: bow the tie clear of the bottom line
+    ("vn2", 14, 8): "\\shape #'((0 . -0.5) (0 . -1.1) (0 . -1.1) "
+                    "(0 . -0.5)) Tie ",
+}
 # LilyPond 2.24 ignores the face index of a .ttc collection and always
 # takes face 0, which for Noto CJK is the JAPANESE face (different glyphs
 # for e.g. 直 骨). So the Simplified Chinese faces are extracted into
@@ -102,7 +108,7 @@ def ly_str(t):
 # ---------------------------------------------------------------------------
 # Notes
 # ---------------------------------------------------------------------------
-def ly_notes(events):
+def ly_notes(events, pid=None):
     """One LilyPond line per bar."""
     by_bar = {}
     for e in events:
@@ -118,6 +124,8 @@ def ly_notes(events):
             continue
         toks = []
         for e in evs:
+            if (pid, b, e["pos"]) in TWEAKS:
+                toks.append(TWEAKS[pid, b, e["pos"]])
             if e["grace"]:
                 toks.append(f"\\slashedGrace {{ {ly_pitch(e['grace'])}16 }}")
             pieces = (B.split_rest if e["pitches"] is None
@@ -202,7 +210,9 @@ def ly_dynamics(p):
             att[pos(b, s)].append("\\" + mark)
     for b, s, b2, s2, kind in p["hair"]:
         a, z = pos(b, s), pos(b2, s2)
-        att[a].append("\\<" if kind == "cresc" else "\\>")
+        att[a].append("\\<" if kind == "cresc" else
+                      "-\\tweak circled-tip ##t \\>" if kind == "niente"
+                      else "\\>")
         end = z + 1
         if end >= TOTAL:
             att[z].append("\\!")
@@ -423,6 +433,8 @@ def layout():
     \\override RehearsalMark.padding = #1.6
     \\override RehearsalMark.outside-staff-padding = #1.4
     \\override DynamicLineSpanner.padding = #1.1
+    \\override DynamicLineSpanner.outside-staff-padding = #0.9
+    \\override MetronomeMark.outside-staff-padding = #0.9
     \\override MetronomeMark.padding = #1.8
     \\override Script.padding = #0.45
     \\override RehearsalMark.outside-staff-priority = #1500
@@ -461,13 +473,14 @@ def staff(p, parsed, top_marks):
             "va": "alto", "vc": "bass"}[pid]
     extra = []
     if pid == "vc":
-        extra += ["\\override DynamicLineSpanner.staff-padding = #4.2"]
+        # clear the accents under the low C2 hits
+        extra += ["\\override DynamicLineSpanner.padding = #1.7"]
     if pid in ("vox", "vn1"):
         extra += ["\\consists Mark_engraver",
                   "\\consists Staff_collecting_engraver",
                   "\\consists Metronome_mark_engraver"]
     name = p["name"]
-    notes = ly_notes(parsed[pid])
+    notes = ly_notes(parsed[pid], pid)
     glob = ly_global(with_marks=top_marks, spacer_rests=pid == "vn1") \
         if pid in ("vox", "vn1") \
         else ("s1*%d \\bar \"|.\"" % B.NBARS)
@@ -517,13 +530,14 @@ def ly_source():
       \\consists Measure_counter_engraver
       \\override MeasureCounter.font-encoding = #'latin1
       \\override MeasureCounter.font-series = #'bold
+      \\override MeasureCounter.font-family = #'sans
       \\override MeasureCounter.font-size = #0.5
       \\override MeasureCounter.outside-staff-priority = ##f
       \\override MeasureCounter.Y-offset = #0
       \\override MeasureCounter.stencil =
         #(make-stencil-boxer 0.1 0.45 ly:text-interface::print)
       \\override VerticalAxisGroup.nonstaff-relatedstaff-spacing =
-        #'((basic-distance . 7) (minimum-distance . 5) (padding . 1.5))
+        #'((basic-distance . 8.5) (minimum-distance . 6) (padding . 2))
     }} {{ \\startMeasureCount s1*{B.NBARS} \\stopMeasureCount }}
   >>
 {layout()}
