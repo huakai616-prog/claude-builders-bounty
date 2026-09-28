@@ -1568,7 +1568,7 @@ SOUNDS = {"picc": "wind.flutes.flute.piccolo", "fl": "wind.flutes.flute",
 
 
 def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
-           top_gap=None, margin=None, page_breaks=()):
+           top_gap=None, margin=None, page_breaks=(), tempo_sounds=True):
     """Page layout, one <instrument-sound> per part so Sibelius maps the
     right instrument, no per-note instrument changes, vocal dynamics above
     the staff (lyrics are below), words and rehearsal marks above."""
@@ -1628,7 +1628,7 @@ def polish(path, ids, big=True, breaks=SYSTEM_BREAKS, page=None,
         for x in n.findall("instrument"):
             n.remove(x)
     parts = r.findall("part")
-    if parts:
+    if parts and tempo_sounds:
         add_tempo_sounds(parts[0])
     for part in parts:
         if pid_of.get(part.get("id")) == "hpr":
@@ -1891,8 +1891,10 @@ def polish_hollywood(path, ids, cscore=True):
     """Score in C on 11x17 paper: title block with cue number, bar numbers
     on every bar, MusicXML 4.0 concert-score with the parts' transpositions,
     B-flat in the trumpet name."""
+    # the reading copy / PDF shows the click changes as text instead of a
+    # stack of metronome marks
     polish(path, ids, breaks=(), page=HW_PAGE, top_gap=300, margin=HW_MARGIN,
-           page_breaks=HW_PAGES)
+           page_breaks=HW_PAGES, tempo_sounds=not cscore)
     tree = ET.parse(path)
     r = tree.getroot()
     for c in r.findall("credit"):
