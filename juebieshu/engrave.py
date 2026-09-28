@@ -120,7 +120,39 @@ def ly_notes(p, events, part_mode=False):
         lines.append(" ".join(toks) + " |")
     if ott_on:
         lines.append("\\ottava #0")
+    if part_mode:
+        lines = merge_rest_bars(p, lines)
     return "\n    ".join(lines)
+
+
+def merge_rest_bars(p, lines):
+    """Parts: runs of empty bars become one multi-bar rest (R1*n). A run is
+    split where the part needs the bar on its own: rehearsal letters, tempo
+    words, forced line breaks, and bars that carry this part's dynamics,
+    hairpins, words or clef changes."""
+    split = (set(B.REHEARSAL) | {b for b, *_ in B.TEMPO_TEXT}
+             | set(B.PART_BREAKS.get(p["id"], ()))
+             | {b for b, *_ in p["dyn"]} | {b for b, *_ in p["text"]}
+             | {b for b, *_ in p["hair"]}
+             | {b for b, *_ in B.CLEFS.get(p["id"], [])})
+    out, run = [], 0
+
+    def flush():
+        if run:
+            out.append(f"R1*{run} |" if run > 1 else "R1 |")
+
+    for b, line in enumerate(lines[:B.NBARS], start=1):
+        if line == "R1 |" and not (run and b in split):
+            run += 1
+            continue
+        flush()
+        run = 0
+        if line == "R1 |":
+            run = 1
+        else:
+            out.append(line)
+    flush()
+    return out + lines[B.NBARS:]
 
 
 # ---------------------------------------------------------------------------
@@ -130,6 +162,8 @@ def spacer_line(att, pre=None):
     """att: list (len TOTAL+1) of post-events per 16th; pre: commands that
     go before the spacer (clefs)."""
     pre = pre or [[] for _ in range(TOTAL + 1)]
+    # empty stretches are one skip across barlines (a skip per bar would
+    # keep a part's multi-bar rests from compressing)
     out, run = [], 0
     for t in range(TOTAL):
         if att[t] or pre[t]:
@@ -139,12 +173,9 @@ def spacer_line(att, pre=None):
             out.append(" ".join(pre[t]) + " s16" + "".join(att[t]))
         else:
             run += 1
-        if (t + 1) % B.BAR16 == 0:
-            if run:
-                out.append(f"s16*{run}")
-                run = 0
-            out.append("|\n    ")
-    return " ".join(out)
+    if run:
+        out.append(f"s16*{run}")
+    return "\n    ".join(out)
 
 
 DYN_WORDS = {"sfz", "fp", "sf", "ppp", "pp", "p", "mp", "mf", "f", "ff",
@@ -216,23 +247,24 @@ def ly_global(score=True):
         for b in B.PART_BREAKS.get(score if isinstance(score, str) else "",
                                    ()):
             att[pos(b, 0)].insert(0, "\\break")
-    out, run = [], 0
+    # each command rides on a skip that lasts until the next command, across
+    # barlines: a skip per bar would keep a part's multi-bar rests (R1*n)
+    # from compressing
+    out, run, pending = [], 0, []
+
+    def flush():
+        if run:
+            out.append(" ".join(pending + [f"s16*{run}"]))
+
     for t in range(TOTAL):
         cmds = list(att[t])
         if cmds:
-            if run:
-                out.append(f"s16*{run}")
-                run = 0
-            out.append(" ".join(cmds) + " s16")
-        else:
-            run += 1
-        if (t + 1) % B.BAR16 == 0:
-            if run:
-                out.append(f"s16*{run}")
-                run = 0
-            out.append("|\n    ")
+            flush()
+            run, pending = 0, cmds
+        run += 1
+    flush()
     out.append('\\bar "|."')
-    return " ".join(out)
+    return "\n    ".join(out)
 
 
 # ---------------------------------------------------------------------------
@@ -284,8 +316,10 @@ def paper_score(total):
 {PAGE_CMDS}
 \\paper {{
   #(set-paper-size "tabloid")
-  property-defaults.fonts.serif = "{LATIN_SERIF}, {CJK_SERIF}"
-  property-defaults.fonts.sans = "{LATIN_SANS}, {CJK_SANS}"
+  #(define fonts (set-global-fonts
+     #:roman "{LATIN_SERIF}, {CJK_SERIF}"
+     #:sans "{LATIN_SANS}, {CJK_SANS}"
+     #:factor (/ staff-height pt 20)))
   top-margin = 12\\mm
   bottom-margin = 10\\mm
   left-margin = 16\\mm
@@ -476,8 +510,10 @@ def paper_part(p, total):
 \\paper {{
   paper-width = 9\\in
   paper-height = 12\\in
-  property-defaults.fonts.serif = "{LATIN_SERIF}, {CJK_SERIF}"
-  property-defaults.fonts.sans = "{LATIN_SANS}, {CJK_SANS}"
+  #(define fonts (set-global-fonts
+     #:roman "{LATIN_SERIF}, {CJK_SERIF}"
+     #:sans "{LATIN_SANS}, {CJK_SANS}"
+     #:factor (/ staff-height pt 20)))
   top-margin = 10\\mm
   bottom-margin = 9\\mm
   left-margin = 14\\mm
@@ -564,6 +600,8 @@ def part_source(p, total):
       \\override RehearsalMark.padding = #2
       \\override BarNumber.font-size = #0.5
       \\override MultiMeasureRest.expand-limit = #1
+      \\override MultiMeasureRestNumber.outside-staff-priority = #50
+      \\override MetronomeMark.skyline-horizontal-padding = #2
       \\override Hairpin.to-barline = ##t
     }}
   }}
@@ -692,7 +730,84 @@ def render_cover(pdf_path, tmp):
 
 
 # ---------------------------------------------------------------------------
+# CJK fonts: LilyPond embeds a whole CFF face from the Noto .ttc files
+# (about 1 MB per face and per PDF), so we subset the faces to the
+# characters this score uses and give them private family names.
+# ---------------------------------------------------------------------------
+NOTO = "/usr/share/fonts/opentype/noto/"
+CJK_FACES = [  # (name used in the .ly source, ttc file, index, private family)
+    (f"{CJK_SERIF} Bold", "NotoSerifCJK-Bold.ttc", "JBS Serif SC", "Bold"),
+    (CJK_SERIF, "NotoSerifCJK-Regular.ttc", "JBS Serif SC", "Regular"),
+    (CJK_SANS, "NotoSansCJK-Regular.ttc", "JBS Sans SC", "Regular"),
+]
+
+
+def cjk_subset(src, tmp):
+    """Write subset fonts for the non-Latin characters of src into
+    tmp/fonts and return src rewritten to use them (unchanged if fontTools
+    or the Noto files are missing)."""
+    try:
+        from fontTools import subset
+        from fontTools.ttLib import TTCollection
+    except ImportError:
+        return src
+    import hashlib
+    chars = {c for c in src if ord(c) > 0x2000} | set("0123456789 ")
+    key = hashlib.md5("".join(sorted(chars)).encode()).hexdigest()[:10]
+    d = os.path.join(tmp, "fonts_" + key)
+    os.makedirs(d, exist_ok=True)
+    for used, ttc, fam, style in CJK_FACES:
+        path = os.path.join(NOTO, ttc)
+        if not os.path.exists(path):
+            return src
+        out = os.path.join(d, f"{fam.replace(' ', '')}-{style}.otf")
+        if not os.path.exists(out):
+            coll = TTCollection(path)
+            font = next(f for f in coll.fonts
+                        if f["name"].getDebugName(1).endswith("CJK SC"))
+            opts = subset.Options()
+            opts.layout_features = ["*"]
+            opts.name_IDs = ["*"]
+            opts.notdef_outline = True
+            sub = subset.Subsetter(opts)
+            sub.populate(unicodes=[ord(c) for c in chars])
+            sub.subset(font)
+            name = font["name"]
+            full = f"{fam} {style}" if style != "Regular" else fam
+            for rec in list(name.names):
+                if rec.nameID in (1, 16):
+                    rec.string = fam
+                elif rec.nameID in (2, 17):
+                    rec.string = style
+                elif rec.nameID == 4:
+                    rec.string = full
+                elif rec.nameID in (3, 6):
+                    rec.string = f"{fam.replace(' ', '')}-{style}"
+            psname = f"{fam.replace(' ', '')}-{style}"
+            if "CFF " in font:
+                cff = font["CFF "].cff
+                cff.fontNames = [psname]
+                top = cff.topDictIndex[0]
+                top.FullName = full
+                top.FamilyName = fam
+                if hasattr(top, "FDArray"):
+                    for fd in top.FDArray:
+                        if hasattr(fd, "FontName"):
+                            fd.FontName = psname
+            font.save(out)
+        src = src.replace(f'"{used}"', f'"{fam}' + (
+            f' {style}"' if style != "Regular" else '"'))
+        src = src.replace(f"{used},", f"{fam},").replace(
+            f", {used}\"", f", {fam}\"")
+    src = src.replace(", Noto Serif CJK SC\"", ", JBS Serif SC\"")
+    src = src.replace(", Noto Sans CJK SC\"", ", JBS Sans SC\"")
+    head = f'#(ly:font-config-add-directory "{d}")\n'
+    return src.replace('\\version "2.24.0"\n',
+                       '\\version "2.24.0"\n' + head, 1)
+
+
 def lilypond(src, tmp, name):
+    src = cjk_subset(src, tmp)
     ly = os.path.join(tmp, name + ".ly")
     with open(ly, "w", encoding="utf-8") as fh:
         fh.write(src)

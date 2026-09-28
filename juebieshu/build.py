@@ -118,11 +118,16 @@ TEMPO_TEXT = [(32, 8, "poco rit.", None), (33, 0, "a tempo", None),
 # system; page 1 = title block + 2 systems, then 3 systems per page
 SYSTEM_BREAKS = (5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49)
 PAGE_BREAKS = (9, 21, 33, 45)
-PART_BREAKS = {}        # part id -> bars that start a new line in the part
+# part id -> bars that start a new line in the part: four-bar phrases as
+# in the score (the intro's swells and the tempo words of 45-52 need the
+# room); the Contrabass rests in 1-7, so its first line is 1-8
+PART_BREAKS = {pid: tuple(range(5, NBARS, 4))
+               for pid in ("vn1", "vn2", "va", "vc")}
+PART_BREAKS["cb"] = tuple(range(9, NBARS, 4))
 CLEFS = {}              # part id -> [(bar, 16th, "tenor" / "treble" / ...)]
 # printed 8va lines (notation only; data and MIDI stay at sounding pitch):
 # part id -> [(bar, 16th, last bar, last 16th)]
-OTTAVA = {"vn1": [(27, 0, 31, 11), (49, 0, 52, 15)]}
+OTTAVA = {"vn1": [(27, 0, 31, 11), (37, 0, 40, 11), (49, 0, 52, 15)]}
 # <<< FORM
 
 # ---------------------------------------------------------------------------
@@ -130,28 +135,475 @@ OTTAVA = {"vn1": [(27, 0, 31, 11), (49, 0, 52, 15)]}
 # ---------------------------------------------------------------------------
 REST = "r/16"
 # >>> DATA (merged from the section drafts; edit here)
-VN1 = {}
-VN2 = {}
-VA = {}
-VC = {}
-CB = {}
-DYN = {"vn1": [], "vn2": [], "va": [], "vc": [], "cb": []}
-HAIR = {"vn1": [], "vn2": [], "va": [], "vc": [], "cb": []}
-TEXT = {"vn1": [], "vn2": [], "va": [], "vc": [], "cb": []}
+VN1 = {
+    # Intro 前奏 (1-8)
+    1: '(D5/2 A5/1 G5/1) A5/2_ r/2 r/8',
+    2: '(C5/2 G5/1 F5/1) G5/2_ r/2 r/8',
+    3: '(C5/2 G5/1 F5/1) G5/2_ r/2 r/8',
+    4: '(C6/2 F5/1 E5/1) F5/2_ r/2 r/8',
+    5: '(D5/2 A5/1 G5/1) A5/2_ r/2 r/8',
+    6: '(D6/2 G5/1 F5/1) G5/2_ r/2 r/8',
+    7: '(E6/2 G5/1 F5/1) G5/2_ r/2 r/8',
+    8: '(F6/2 E6/2 D6/12_)',
+    # A Theme 主题 (9-16)
+    9: '(D5/2 A5/1 G5/1 A5/2 G5/2) (A5/2 D6/2) (A5/2 G5/2)',
+    10: '(A5/1 G5/1 A5/1 G5/1) (A5/2 G5/2) C5/8_',
+    11: '(C5/2 G5/1 F5/1 G5/2 F5/2) (G5/2 C6/2) (C6/2 G5/2)',
+    12: '(G5/1 A5/1 G5/1 A5/1) (G5/2 E5/2) F5/8_',
+    13: '(D5/2 A5/1 G5/1 A5/2 G5/2) (A5/2 D6/2) (A5/2 G5/2)',
+    14: '(A5/1 G5/1 A5/1 G5/1) (A5/2 G5/2) C5/8_',
+    15: '(C5/2 G5/1 F5/1 G5/2 F5/2) (G5/2 C6/2) (C6/2 E6/2)',
+    16: '(D6/1 E6/1 D6/1 E6/1) (D6/2 C6/2) (D6/2 A5/2) D6/2 E6/2',
+    # B Chorus I 副歌·一 (17-24)
+    17: 'F6/10 (D6/2 E6/2 F6/2)',
+    18: 'A6/6 G6/10',
+    19: 'E6/6 C6/10',
+    20: 'A5/6 G5/10',
+    21: 'Bb5/12 (A5/2 Bb5/2)',
+    22: 'C6/6 Bb5/6 A5/4',
+    23: 'G5/6 F5/6 G5/4',
+    24: 'A5/4 F#5/4 G5/4 A5/4',
+    # C Chorus II 副歌·二 (25-32)
+    25: 'F6/10> (D6/2 E6/2 F6/2)',
+    26: 'A6/6 G6/10',
+    27: 'Bb6/6> A6/10',
+    28: 'G6/6 F6/10',
+    29: '(A6/2 G6/2) r/2 D6/10',
+    30: '(F6/2 E6/2) r/2 A5/10',
+    31: 'E6/12 (E5/4',
+    32: 'D5/16)',
+    # D Interlude 间奏 (33-40)
+    33: 'r/16',
+    34: 'r/16',
+    35: 'A5/16~',
+    36: 'A5/12 (A5/1 Bb5/1 C6/1 D6/1)',
+    37: 'E6/2> D6/2 A5/2 E6/2> D6/2 A5/2 D6/2> E6/2',
+    38: 'F6/2> E6/2 A5/2 F6/2> E6/2 A5/2 E6/2> F6/2',
+    39: 'G6/2> F6/2 A5/2 G6/2> F6/2 A5/2 F6/2> E6/2',
+    40: 'D6/12> r/4',
+    # E Reprise 再现 (41-48)
+    41: 'A5/2> D6/1 D6/1 D6/2> A5/1 A5/1 A5/2> F5/1 F5/1 F5/2> A5/2',
+    42: 'A5/2> G5/1 G5/1 G5/2> (F#5/2 G5/8)',
+    43: 'G5/2> C6/1 C6/1 C6/2> G5/1 G5/1 G5/2> E5/1 E5/1 E5/2> G5/2',
+    44: 'G5/2> F5/1 F5/1 F5/2> (E5/2 F5/8)',
+    45: 'C6/2> Bb5/2_ F5/2_ C6/4> Bb5/6_',
+    46: 'Bb5/6^ A5/6^ E5/4_',
+    47: 'E5/12_ (E5/4',
+    48: 'D5/16)',
+    # F Coda 尾声 (49-52)
+    49: '(D6/4 A6/2 G6/2 A6/4 G6/4)',
+    50: '(A6/4 D7/4 A6/4 G6/4)',
+    51: '(A6/2 G6/2 A6/2 G6/2) (A6/4 G6/4',
+    52: 'C7/16!)',
+}
+VN2 = {
+    # Intro 前奏 (1-8)
+    1: 'A4/16',
+    2: 'G4/16~',
+    3: 'G4/16',
+    4: 'A4/16',
+    5: 'r/2 A4/4 A4/2* r/2 A4/4 A4/2*',
+    6: 'r/2 G4/4 G4/2* r/2 G4/4 G4/2*',
+    7: 'r/2 G4/4 G4/2* r/2 G4/4 r/2',
+    8: '(A5/2 G5/2 F5/12_)',
+    # A Theme 主题 (9-16)
+    9: 'C5/16',
+    10: 'E5/8 G4/8',
+    11: 'A4/8 E5/8',
+    12: 'D5/8 (F4/2 C5/1 Bb4/1) C5/2_ r/2',
+    13: '(D4/2 A4/1 G4/1 A4/2 G4/2) (A4/2 D5/2) (A4/2 G4/2)',
+    14: '(A4/1 G4/1 A4/1 G4/1) (A4/2 G4/2) C4/8_',
+    15: '(C4/2 G4/1 F4/1 G4/2 F4/2) (G4/2 C5/2) (C5/2 E5/2)',
+    16: '(D5/1 E5/1 D5/1 E5/1) (D5/2 C5/2) (D5/2 A4/2) D5/2 E5/2',
+    # B Chorus I 副歌·一 (17-24)
+    17: 'F5+Bb5/16',
+    18: 'Db6/6_ Db6/10_',
+    19: 'C6/6 A5/10',
+    20: 'D5/6 D5/10',
+    21: 'D5+G5/12 (A4/2 Bb4/2)',
+    22: 'C#5+E5/6 C#5+E5/6 C#5+E5/4',
+    23: 'C5/6 C5/6 C5/4',
+    24: 'Eb5/4 Eb5/4 Eb5/4 F#5/4',
+    # C Chorus II 副歌·二 (25-32)
+    25: 'F5/10> (D5/2 E5/2 F5/2)',
+    26: 'A5/6 G5/10',
+    27: 'Bb5/6> A5/10',
+    28: 'G5/6 F5/10',
+    29: '(A5/2 G5/2) r/2 D5/10',
+    30: '(F5/2 E5/2) r/2 A4/10',
+    31: 'A5+C6/12 A4/4~',
+    32: 'A4/16',
+    # D Interlude 间奏 (33-40)
+    33: 'E5/2>* D5/2* A4/2* E5/2>* D5/2* A4/2* D5/2>* E5/2*',
+    34: 'F5/2>* E5/2* A4/2* F5/2>* E5/2* A4/2* E5/2>* F5/2*',
+    35: 'G5/2>* F5/2* A4/2* G5/2>* F5/2* A4/2* F5/2>* G5/2*',
+    36: 'F5/12_ r/4',
+    37: 'E5/2> D5/2 A4/2 E5/2> D5/2 A4/2 D5/2> E5/2',
+    38: 'F5/2> E5/2 A4/2 F5/2> E5/2 A4/2 E5/2> F5/2',
+    39: 'G5/2> F5/2 A4/2 G5/2> F5/2 A4/2 F5/2> E5/2',
+    40: 'A5/12> r/4',
+    # E Reprise 再现 (41-48)
+    41: 'A4/2> D5/1 D5/1 D5/2> A4/1 A4/1 A4/2> F4/1 F4/1 F4/2> A4/2',
+    42: 'A4/2> G4/1 G4/1 G4/2> (F#4/2 G4/8)',
+    43: 'G4/2> C5/1 C5/1 C5/2> G4/1 G4/1 G4/2> E4/1 E4/1 E4/2> G4/2',
+    44: 'G4/2> F4/1 F4/1 F4/2> (E4/2 F4/8)',
+    45: 'F4+C5/2> Bb4/2_ F4/2_ C5/4> Bb4/6_',
+    46: 'C#5+E5/6^ C#5+E5/6^ r/4',
+    47: 'C5/12_ A4/4~',
+    48: 'A4/16',
+    # F Coda 尾声 (49-52)
+    49: 'r/8 F5+A5/8',
+    50: 'r/4 F5+A5/8 F5+A5/4',
+    51: 'E5+G5/16~',
+    52: 'E5+G5/16!',
+}
+VA = {
+    # Intro 前奏 (1-8)
+    1: '(F4/16~',
+    2: 'F4/8 E4/8)',
+    3: '(D4/8 E4/8)',
+    4: 'F4/16',
+    5: 'r/2 F4/4 F4/2* r/2 F4/4 F4/2*',
+    6: 'r/2 F4/4 F4/2* r/2 E4/4 E4/2*',
+    7: 'r/2 D4/4 D4/2* r/2 E4/4 r/2',
+    8: '(G4/8 F4/8)',
+    # A Theme 主题 (9-16)
+    9: '(F3/2 Bb3/2 D4/2 A4/2) (F3/2 Bb3/2 D4/2 A4/2)',
+    10: '(G3/2 C4/2 E4/2 G4/2) Bb3/2* G4/2* E4/2* C4/2*',
+    11: '(A3/2 C4/2 G4/2 C4/2) (A3/2 E4/2 G4/2 C4/2)',
+    12: '(D4/2 F4/2 A4/2 F4/2) (D4/4 F4/4)',
+    13: '(F3/2 Bb3/2 D4/2 Bb3/2) (D3/2 F3/2 A3/2 D4/2)',
+    14: '(C3/2 E3/2 G3/2 C4/2) Bb3/2* G4/2* E4/2* C4/2*',
+    15: '(A3/2 C4/2 G3/2 C4/2) (A3/2 E3/2 G3/2 C4/2)',
+    16: '(D3/2 F3/2 A3/2 F3/2) (A3/1 Bb3/1 C4/1 D4/1) (E4/1 F4/1 G4/1 A4/1)',
+    # B Chorus I 副歌·一 (17-24)
+    17: 'Bb3+F4/16',
+    18: 'Bb3+E4/16',
+    19: 'A3+E4/16',
+    20: 'D4+A4/16',
+    21: 'D4+G4/16',
+    22: 'C#4+G4/16',
+    23: 'C4+F4/16',
+    24: 'C4+F#4/8 C4+A4/8',
+    # C Chorus II 副歌·二 (25-32)
+    25: 'Bb4+D5/16',
+    26: 'Bb4+Db5/6_ Bb4+Db5/2_ (Bb4/1 Db5/1 Bb4/1 Db5/1) (Bb4/1 Db5/1 '
+        'Bb4/1 Db5/1)',
+    27: '(C5/1 G4/1 C5/1 G4/1) (C5/1 G4/1 C5/1 A4/1) (C5/1 A4/1 C5/1 '
+        'A4/1) (C5/1 A4/1 C5/1 A4/1)',
+    28: '(D5/1 A4/1 D5/1 A4/1) (D5/1 A4/1 D5/1 A4/1) (D5/1 A4/1 D5/1 '
+        'A4/1) (D5/1 A4/1 D5/1 A4/1)',
+    29: '(D5/1 Bb4/1 D5/1 Bb4/1) (D5/1 Bb4/1 D5/1 Bb4/1) (D5/1 Bb4/1 '
+        'D5/1 Bb4/1) (D5/1 Bb4/1 D5/1 Bb4/1)',
+    30: '(G4/1 C#4/1 G4/1 C#4/1) (G4/1 C#4/1 G4/1 C#4/1) (G4/1 C#4/1 '
+        'G4/1 C#4/1) (G4/1 C#4/1 G4/1 C#4/1)',
+    31: 'F3+C4/12 F4/4~',
+    32: 'F4/16',
+    # D Interlude 间奏 (33-40)
+    33: 'F3+A3/6_ F3+A3/6_ F3+A3/4_',
+    34: 'A3+C4/6_ A3+C4/6_ A3+C4/4_',
+    35: 'A3+C4/6_ A3+C4/6_ A3+C4/4_',
+    36: 'A4+C5/12_ r/4',
+    37: 'Bb3/1> D4/1 Bb3/1 D4/1 Bb3/1 D4/1 Bb3/1> D4/1 Bb3/1 D4/1 Bb3/1 '
+        'D4/1 Bb3/1> D4/1 Bb3/1 D4/1',
+    38: 'A3/1> F4/1 A3/1 F4/1 A3/1 F4/1 A3/1> F4/1 A3/1 F4/1 A3/1 F4/1 '
+        'A3/1> F4/1 A3/1 F4/1',
+    39: 'D4/1> A4/1 D4/1 A4/1 D4/1 A4/1 D4/1> A4/1 D4/1 A4/1 D4/1 A4/1 '
+        'D4/1> A4/1 D4/1 A4/1',
+    40: 'A4/1> D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 r/4',
+    # E Reprise 再现 (41-48)
+    41: 'D4/1> F4/1 D4/1 F4/1 D4/1 F4/1 D4/1> F4/1 D4/1 F4/1 D4/1 F4/1 '
+        'D4/1> F4/1 D4/1 F4/1',
+    42: 'E4/1> C4/1 E4/1 C4/1 E4/1 C4/1 E4/1> C4/1 E4/1 C4/1 E4/1 C4/1 '
+        'E4/1> C4/1 E4/1 C4/1',
+    43: 'E4/1> A3/1 E4/1 A3/1 E4/1 A3/1 E4/1> A3/1 E4/1 A3/1 E4/1 A3/1 '
+        'E4/1> A3/1 E4/1 A3/1',
+    44: 'A3/1> D4/1 A3/1 D4/1 A3/1> D4/1 A3/1 D4/1 A3/1> D4/1 A3/1 D4/1 '
+        'A3/1> D4/1 A3/1 D4/1',
+    45: 'C4/2> Bb3/2_ F3/2_ C4/4> Bb3/6_',
+    46: 'G4+Bb4/6^ G4+Bb4/6^ r/4',
+    47: 'F3+C4/12_ F4/4~',
+    48: 'F4/16',
+    # F Coda 尾声 (49-52)
+    49: 'r/8 Bb4+D5/8',
+    50: '(Bb4/4 D5/8 Bb4/4)',
+    51: 'Bb4+C5/16~',
+    52: 'Bb4+C5/16!',
+}
+VC = {
+    # Intro 前奏 (1-8)
+    1: 'Bb3/16~',
+    2: 'Bb3/16',
+    3: 'A3/16',
+    4: '(D3/12 C3/4)',
+    5: 'Bb2/4_ r/4 Bb2/4_ r/4',
+    6: 'Bb2/4_ r/4 Bb2/4_ r/4',
+    7: 'A2/4_ r/4 A2/4_ r/2 A2/2',
+    8: 'D3/4_ D3+A3/4_ D3/4_ C3/4_',
+    # A Theme 主题 (9-16)
+    9: 'Bb2/16',
+    10: 'Bb2/16',
+    11: 'A2/16',
+    12: 'D3/4_ D3+A3/4_ D3/4_ C3/4_',
+    13: 'Bb2/6_ Bb2/6_ Bb2/4_',
+    14: 'Bb2/6_ Bb2/6_ Bb2/4_',
+    15: 'A2/6_ A2/6_ A2/4_',
+    16: 'D3/4_ D3+A3/4_ D3/2> C3/2> Bb2/2> A2/2>',
+    # B Chorus I 副歌·一 (17-24)
+    17: 'G2/4 (Bb3/2 D4/2 F4/2 Bb3/2 D4/2) G2/2',
+    18: 'C3/4 (E3/2 G3/2 Bb3/2 G3/2 E3/2 C3/2)',
+    19: 'F2/2 (F3/2 A3/2 C4/2 E4/2 C4/2 A3/2) F2/2',
+    20: 'Bb2/2 (Bb3/2 D4/2 F4/2 A4/2 F4/2 D4/2) Bb2/2',
+    21: 'E3/6 E3+Bb3/6 r/2 E3/2',
+    22: 'A2/4 (C#3/2 E3/2 G3/2 E3/2 C#3/2 A2/2)',
+    23: 'D3/6 D3+A3/6 A2/4',
+    24: 'D3/4 F#3+C4/4 D3/2> C3/2> Bb2/2> A2/2>',
+    # C Chorus II 副歌·二 (25-32)
+    25: 'G2/4> (Bb3/2 D4/2 F4/2) (Bb3/2 D4/2) G2/2',
+    26: 'C3/4 (E3/2 G3/2 Bb3/2) (G3/2 E3/2) C3/2',
+    27: 'F2/2> (F3/2 A3/2 C4/2 E4/2) (C4/2 A3/2) F3/2',
+    28: 'Bb2/6> D3+A3/6> Bb2/4',
+    29: 'E2/6> G3+D4/6> E2/4',
+    30: 'A2/6> E3+C#4/6> A2/4',
+    31: '(D3/4 A3/4 E4/4) r/4',
+    32: 'D3+C4/8 C3/8',
+    # D Interlude 间奏 (33-40)
+    33: 'Bb2/2* r/4 Bb2/2* r/4 Bb2/2* r/2',
+    34: 'C3/2* r/4 C3/2* r/4 C3/2* r/2',
+    35: 'D3/2* r/4 D3/2* r/4 D3/2* r/2',
+    36: 'D3/4_ D3+A3/4_ D3/4_ C3/4_',
+    37: 'Bb2/6> Bb2/6> Bb2/4>',
+    38: 'C3/6> C3/6> C3/4>',
+    39: 'D3/2> D3/2 D3/2 D3/2> D3/2 D3/2 D3/2> D3/2',
+    40: 'D3/4^ D3+A3/4^ D3/4^ r/4',
+    # E Reprise 再现 (41-48)
+    41: 'Bb2/2> r/4 D3+A3/4> r/2 D3+A3/4>',
+    42: 'Bb2/2> E3+C4/4> E3+C4/2 Bb3/2>* G4/2>* E4/2>* C4/2>*',
+    43: 'A2/2> E3+C4/4> E3+C4/2 A2/2 E3+C4/4> A2/2',
+    44: 'D3/4> F3+C4/4 D3/2> C3/2> Bb2/2> A2/2>',
+    45: 'G2/2> (D3/2 G3/2 Bb3/2 F4/2) Bb3/4_ E2/2>',
+    46: 'A2+E3/6^ A2+E3/6^ r/2 A2/2_',
+    47: '(D3/4 A3/4 E4/4) r/4',
+    48: 'D3+C4/8_ C3/8_',
+    # F Coda 尾声 (49-52)
+    49: 'Bb2/8 r/8',
+    50: 'r/16',
+    51: 'Bb2/16~',
+    52: 'Bb2/16!',
+}
+CB = {
+    # Intro 前奏 (1-8)
+    1: 'r/16',
+    2: 'r/16',
+    3: 'r/16',
+    4: 'r/16',
+    5: 'r/16',
+    6: 'r/16',
+    7: 'r/16',
+    8: 'D2/4_ r/4 D2/4_ C2/4_',
+    # A Theme 主题 (9-16)
+    9: 'Bb1/16',
+    10: 'Bb1/16',
+    11: 'A1/16',
+    12: 'D2/4_ r/4 D2/4_ C2/4_',
+    13: 'Bb1/6_ Bb1/6_ Bb1/4_',
+    14: 'Bb1/6_ Bb1/6_ Bb1/4_',
+    15: 'A1/6_ A1/6_ A1/4_',
+    16: 'D2/4_ r/4 D2/2> C2/2> Bb1/2> A1/2>',
+    # B Chorus I 副歌·一 (17-24)
+    17: 'G1/16',
+    18: 'C2/16',
+    19: 'F1/16',
+    20: 'Bb1/16',
+    21: 'E2/12 r/2 E2/2',
+    22: 'A1/16',
+    23: 'D2/12 A1/4',
+    24: 'D2/4 r/4 D2/2> C2/2> Bb1/2> A1/2>',
+    # C Chorus II 副歌·二 (25-32)
+    25: 'G1/16>',
+    26: 'C2/16',
+    27: 'F1/16>',
+    28: 'Bb1/12> Bb1/4',
+    29: 'E1/12> E1/4',
+    30: 'A1/12> A1/4',
+    31: 'D2/12 r/4',
+    32: 'D2/8 C2/8',
+    # D Interlude 间奏 (33-40)
+    33: 'Bb1/2* r/4 Bb1/2* r/4 Bb1/2* r/2',
+    34: 'C2/2* r/4 C2/2* r/4 C2/2* r/2',
+    35: 'D2/2* r/4 D2/2* r/4 D2/2* r/2',
+    36: 'D2/4* r/4 D2/4* C2/4*',
+    37: 'Bb1/6> Bb1/6> Bb1/4>',
+    38: 'C2/6> C2/6> C2/4>',
+    39: 'D2/6> D2/6> D2/4>',
+    40: 'D2/4^ D2/4^ D2/4^ r/4',
+    # E Reprise 再现 (41-48)
+    41: 'Bb1/6> Bb1/6> Bb1/4>',
+    42: 'Bb1/6> Bb1/6> Bb1/4>',
+    43: 'A1/6> A1/6> A1/4>',
+    44: 'D2/8> D2/2> C2/2> Bb1/2> A1/2>',
+    45: 'G1/14> E1/2>',
+    46: 'A1/6^ A1/6^ r/2 A1/2_',
+    47: 'D2/12_ r/4',
+    48: 'D2/8_ C2/8_',
+    # F Coda 尾声 (49-52)
+    49: 'Bb1/8 r/8',
+    50: 'r/16',
+    51: 'Bb1/16~',
+    52: 'Bb1/16!',
+}
+DYN = {
+    'vn1': [(1, 0, 'p'), (8, 4, 'mf'), (8, 12, 'p'), (9, 0, 'mp'),
+         (11, 12, 'mf'), (12, 8, 'p'), (13, 0, 'mf'), (17, 0, 'f'),
+         (19, 0, 'f'), (21, 0, 'mf'), (22, 12, 'f'), (23, 0, 'mf'),
+         (25, 0, 'ff'), (27, 0, 'ff'), (29, 0, 'f'), (31, 0, 'mf'),
+         (32, 0, 'p'), (35, 0, 'pp'), (37, 0, 'mf'), (38, 0, 'f'),
+         (40, 0, 'ff'), (41, 0, 'ff'), (43, 0, 'ff'), (45, 0, 'fff'),
+         (47, 0, 'f'), (49, 0, 'pp'), (50, 4, 'p'), (51, 0, 'pp'),
+         (52, 12, 'ppp')],
+    'vn2': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
+         (3, 12, 'p'), (4, 0, 'pp'), (5, 2, 'p'), (8, 4, 'mf'), (8, 12, 'p'),
+         (13, 0, 'mf'), (17, 0, 'f'), (19, 0, 'f'), (21, 0, 'mf'),
+         (22, 12, 'f'), (23, 0, 'mf'), (25, 0, 'ff'), (27, 0, 'ff'),
+         (29, 0, 'f'), (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'mp'),
+         (37, 0, 'mf'), (38, 0, 'f'), (40, 0, 'ff'), (41, 0, 'ff'),
+         (43, 0, 'ff'), (45, 0, 'fff'), (47, 0, 'mf'), (49, 8, 'pp'),
+         (50, 4, 'pp'), (51, 0, 'ppp')],
+    'va': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
+         (3, 12, 'p'), (4, 0, 'pp'), (5, 2, 'p'), (8, 0, 'mp'), (9, 0, 'p'),
+         (13, 0, 'mp'), (17, 0, 'f'), (18, 0, 'mf'), (22, 12, 'f'),
+         (23, 0, 'mf'), (25, 0, 'ff'), (26, 0, 'f'), (27, 0, 'ff'),
+         (29, 0, 'mf'), (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'p'),
+         (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'ff'), (41, 0, 'ff'),
+         (42, 0, 'f'), (45, 0, 'fff'), (47, 0, 'mf'), (49, 8, 'pp'),
+         (51, 0, 'ppp')],
+    'vc': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
+         (3, 12, 'p'), (4, 0, 'pp'), (5, 0, 'p'), (8, 0, 'mp'), (9, 0, 'p'),
+         (13, 0, 'mp'), (17, 0, 'f'), (18, 0, 'mf'), (21, 0, 'mp'),
+         (22, 12, 'f'), (23, 0, 'mp'), (25, 0, 'ff'), (26, 0, 'f'),
+         (27, 0, 'ff'), (29, 0, 'mf'), (31, 0, 'mp'), (32, 0, 'pp'),
+         (33, 0, 'p'), (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'ff'),
+         (41, 0, 'ff'), (45, 0, 'fff'), (46, 14, 'mf'), (48, 0, 'p'),
+         (49, 0, 'pp'), (51, 0, 'ppp')],
+    'cb': [(8, 0, 'pp'), (8, 8, 'mp'), (9, 0, 'p'), (13, 0, 'mp'), (17, 0, 'f'),
+         (18, 0, 'mf'), (21, 0, 'mp'), (22, 12, 'f'), (23, 0, 'mp'),
+         (25, 0, 'ff'), (26, 0, 'f'), (27, 0, 'ff'), (29, 0, 'mf'),
+         (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'p'), (37, 0, 'mp'),
+         (38, 0, 'mf'), (40, 0, 'ff'), (41, 0, 'ff'), (45, 0, 'fff'),
+         (46, 14, 'mf'), (48, 0, 'p'), (49, 0, 'pp'), (51, 0, 'ppp')],
+}
+HAIR = {
+    'vn1': [(7, 0, 8, 3, 'cresc'), (8, 4, 8, 11, 'dim'),
+         (11, 0, 11, 11, 'cresc'), (11, 12, 12, 7, 'dim'),
+         (15, 0, 16, 15, 'cresc'), (18, 0, 18, 7, 'cresc'),
+         (18, 8, 18, 15, 'dim'), (20, 8, 20, 15, 'dim'),
+         (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
+         (26, 6, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
+         (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
+         (35, 0, 36, 15, 'cresc'), (39, 0, 39, 15, 'cresc'),
+         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 15, 'cresc'),
+         (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
+         (49, 8, 50, 3, 'cresc'), (50, 4, 50, 15, 'dim'),
+         (51, 12, 52, 11, 'dim')],
+    'vn2': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
+         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 5, 1, 'cresc'),
+         (7, 0, 8, 3, 'cresc'), (8, 4, 8, 11, 'dim'),
+         (15, 0, 16, 15, 'cresc'), (18, 0, 18, 7, 'cresc'),
+         (18, 8, 18, 15, 'dim'), (20, 8, 20, 15, 'dim'),
+         (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
+         (26, 6, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
+         (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
+         (35, 0, 36, 11, 'cresc'), (39, 0, 39, 15, 'cresc'),
+         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 15, 'cresc'),
+         (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
+         (50, 4, 50, 15, 'dim')],
+    'va': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
+         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 5, 1, 'cresc'),
+         (7, 0, 7, 15, 'cresc'), (8, 8, 8, 15, 'dim'),
+         (12, 8, 12, 15, 'cresc'), (15, 0, 16, 15, 'cresc'),
+         (17, 4, 17, 15, 'dim'), (22, 0, 22, 11, 'cresc'),
+         (24, 0, 24, 15, 'cresc'), (25, 0, 25, 15, 'dim'),
+         (26, 8, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
+         (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
+         (35, 0, 36, 11, 'cresc'), (39, 0, 39, 15, 'cresc'),
+         (40, 0, 40, 11, 'cresc'), (41, 2, 41, 15, 'dim'),
+         (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
+         (50, 4, 50, 15, 'dim')],
+    'vc': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
+         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'),
+         (4, 8, 4, 15, 'cresc'), (7, 0, 7, 15, 'cresc'), (8, 8, 8, 15, 'dim'),
+         (12, 8, 12, 15, 'cresc'), (15, 0, 16, 15, 'cresc'),
+         (17, 4, 17, 15, 'dim'), (20, 8, 20, 15, 'dim'),
+         (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
+         (25, 0, 25, 15, 'dim'), (26, 0, 26, 15, 'cresc'),
+         (28, 6, 28, 15, 'dim'), (30, 6, 30, 15, 'dim'),
+         (31, 0, 31, 11, 'dim'), (35, 0, 36, 15, 'cresc'),
+         (39, 0, 39, 15, 'cresc'), (40, 0, 40, 11, 'cresc'),
+         (44, 0, 44, 15, 'cresc'), (47, 0, 47, 11, 'dim'),
+         (48, 0, 48, 15, 'dim')],
+    'cb': [(8, 0, 8, 7, 'cresc'), (8, 8, 8, 15, 'dim'),
+         (12, 8, 12, 15, 'cresc'), (15, 0, 16, 15, 'cresc'),
+         (17, 4, 17, 15, 'dim'), (20, 8, 20, 15, 'dim'),
+         (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
+         (25, 0, 25, 15, 'dim'), (26, 0, 26, 15, 'cresc'),
+         (28, 6, 28, 15, 'dim'), (30, 6, 30, 15, 'dim'),
+         (31, 0, 31, 11, 'dim'), (35, 0, 36, 15, 'cresc'),
+         (39, 0, 39, 15, 'cresc'), (40, 0, 40, 11, 'cresc'),
+         (44, 0, 44, 15, 'cresc'), (48, 0, 48, 15, 'dim')],
+}
+TEXT = {
+    'vn1': [(1, 0, 'espr.'), (9, 0, 'espr.'), (17, 0, 'largamente'),
+         (21, 0, 'espr.'), (27, 0, 'con tutta forza'), (32, 0, 'dolce'),
+         (40, 12, 'G.P.'), (49, 0, 'lontano')],
+    'vn2': [(5, 2, 'leggiero'), (12, 8, 'dolce'), (17, 0, 'div.'),
+         (18, 0, 'unis. espr.'), (21, 0, 'div.'), (21, 12, 'unis.'),
+         (27, 0, 'con tutta forza'), (31, 0, 'div.'), (31, 12, 'unis.'),
+         (33, 0, 'leggiero'), (40, 12, 'G.P.'), (49, 8, 'div.')],
+    'va': [(5, 2, 'leggiero'), (17, 0, 'div.'),
+         (26, 8, 'unis.'), (27, 0, 'con tutta forza'), (31, 0, 'div.'),
+         (31, 12, 'unis.'), (33, 0, 'div.'), (37, 0, 'unis.'),
+         (40, 12, 'G.P.'), (47, 0, 'div.'),
+         (47, 12, 'unis.'), (51, 0, 'div.')],
+    'vc': [(17, 4, 'cantabile'), (27, 0, 'con tutta forza'), (33, 0, 'leggiero'),
+         (37, 0, 'marcato'), (40, 12, 'G.P.')],
+    'cb': [(27, 0, 'con tutta forza'), (33, 0, 'secco'), (37, 0, 'marcato'),
+         (40, 12, 'G.P.')],
+}
 # <<< DATA
 
 # >>> CHECK-ALLOW (intentional exceptions, each with a reason)
-# (bar, part, part): minor 2nd / minor 9th that is meant
-CLASH_ALLOW = {}
+# (bar, part, part): minor 2nd / minor 9th that is meant. Only the chart's
+# own b9 colours (PLAN.md §6.3); nothing else may be added.
+CLASH_ALLOW = {
+    (18, "vn2", "vc"): "Db6 over the C bass: the chart's C7(b9) / borrowed Bbm6 over C",
+    (18, "vn2", "cb"): "Db6 over the C bass: the chart's C7(b9) / borrowed Bbm6 over C",
+    (22, "vn1", "cb"): "melody Bb5 over the A bass: the chart's A7(b9)",
+    (24, "vn2", "vc"): "Eb5 over the D bass: the chart's D7(b9)",
+    (24, "vn2", "cb"): "Eb5 over the D bass: the chart's D7(b9)",
+    (26, "va", "vc"): "Db5 over the C bass: the chart's C7(b9) (borrowed iv now in the viola)",
+    (26, "va", "cb"): "Db5 over the C bass: the chart's C7(b9) (borrowed iv now in the viola)",
+    (27, "vn1", "vc"): "Bb6 appoggiatura against the chart's LH arpeggio A3 (pos 4-6)",
+    (27, "vn2", "vc"): "Bb5 appoggiatura against the chart's LH arpeggio A3 (pos 4-6)",
+    (46, "vn1", "vc"): "melody Bb5 over the A bass: the chart's A7(b9)",
+    (46, "vn1", "cb"): "melody Bb5 over the A bass: the chart's A7(b9)",
+    (46, "va", "vc"): "Bb4 over the A bass: the chart's A7(b9) (its RH Bb4)",
+    (46, "va", "cb"): "Bb4 over the A bass: the chart's A7(b9) (its RH Bb4)",
+}
 # (part, part, first bar, last bar): intentional octave / unison doublings,
-# excluded from the parallel-octave check
-DOUBLINGS = []
+# excluded from the parallel-octave check (PLAN.md §6.4)
+DOUBLINGS = [("vn1", "vn2", 13, 16), ("vn1", "vn2", 21, 21), ("vn1", "vn2", 25, 30),
+             ("vn1", "vn2", 37, 39), ("vn1", "vn2", 41, 45), ("vn2", "va", 45, 45),
+             ("vn1", "va", 45, 45), ("vc", "cb", 8, 52)]
 # bar -> [(part, octave shift in semitones)]: who carries the chart's melody
-MELODY = {}
+MELODY = {b: [("vn1", 0)] for b in range(1, NBARS + 1)}
+for _b in (13, 14, 15, 16, 25, 26, 27, 28, 29, 30, 37, 38, 39, 41, 42, 43, 44):
+    MELODY[_b] = [("vn1", 0), ("vn2", -12)]
+for _b in (33, 34, 35):
+    MELODY[_b] = [("vn2", 0)]
+MELODY[45] = [("vn1", 0), ("vn2", -12), ("va", -24)]
 # bars where the melody part deliberately departs from the chart: reason
-MELODY_FREE = {}
-# bars / half bars where the bass deliberately departs from the chart
-# ((bar, half) -> reason, half = 0 or 1)
+MELODY_FREE = {36: "A5 held over from b.35 in Vln I (sky pedal)"}
+# (bar, half) -> reason: the bass deliberately departs from the chart
 BASS_FREE = {}
 # <<< CHECK-ALLOW
 
@@ -590,7 +1042,6 @@ def make_m21(p, events):
     ins.partAbbreviation = p["abbr"]
     part.insert(0, ins)
     woct = p.get("written_octave", 0)
-    notes_at = {}
     slur_open = None
     measures = {}
     by_bar = {}
@@ -654,7 +1105,6 @@ def make_m21(p, events):
                         n.expressions.append(f)
                 m.append(n)
                 objs.append(n)
-            notes_at.setdefault(e["abs"], objs[0])
             e["m21"] = objs
             tied_prev = e["tie"] and e["pitches"] is not None
             if e["slur_start"]:
@@ -690,28 +1140,13 @@ def make_m21(p, events):
         measures[b] = m
         part.append(m)
 
-    def obj_at(bb, s, forward=True):
-        a = (bb - 1) * BAR16 + s
-        cands = sorted(notes_at)
-        if forward:
-            for k in cands:
-                if k >= a:
-                    return notes_at[k]
-        else:
-            for k in reversed(cands):
-                if k <= a:
-                    return notes_at[k]
-        return None
-
     for bb, s, mark in p["dyn"]:
         d = dynamics.Dynamic(mark)
         measures[bb].insert(s / 4, d)
-    for bb, s, bb2, s2, kind in p["hair"]:
-        n1, n2 = obj_at(bb, s), obj_at(bb2, s2, forward=False)
-        if n1 is not None and n2 is not None and n1 is not n2:
-            sp = (dynamics.Crescendo if kind == "cresc"
-                  else dynamics.Diminuendo)(n1, n2)
-            part.insert(0, sp)
+    # hairpins are written by polish() (add_wedges), at their exact
+    # positions: many start or end inside a held note (the pad swells,
+    # the settles on whole notes), where note-anchored spanners would be
+    # dropped or come out reversed
     for bb, s, txt in p["text"]:
         te = expressions.TextExpression(txt)
         te.style.fontStyle = "italic"
@@ -875,6 +1310,7 @@ def polish(path):
                         el.find("direction-type/rehearsal") is not None or \
                         el.find("direction-type/metronome") is not None:
                     el.set("placement", "above")
+    add_wedges(r)
     # one bold tempo mark: "Moderato con moto ♩ = 112"
     first_measure = r.find("part/measure")
     for dr in first_measure.findall("direction"):
@@ -895,6 +1331,60 @@ def polish(path):
             "MusicXML 4.0 Partwise//EN\" "
             "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
         open(path, "w", encoding="utf-8").write(xml)
+
+
+def add_wedges(r):
+    """Write every HAIR entry as a pair of <direction><wedge> elements at its
+    exact position: the start at (bar, 16th), the stop at the end of its
+    last 16th. Each direction goes in front of the note that sounds at that
+    moment, with an <offset> into it, so no <forward> / <backup> (which some
+    importers turn into hidden rests in a second voice) is needed."""
+    ids = {sp.findtext("part-name"): sp.get("id")
+           for sp in r.iter("score-part")}
+    div = int(r.find("part/measure/attributes/divisions").text)
+    per16 = div // 4
+
+    def wedge(kind, number):
+        d = ET.Element("direction", placement="below")
+        dt = ET.SubElement(d, "direction-type")
+        ET.SubElement(dt, "wedge", type=kind, number=str(number))
+        return d
+
+    def place(meas, s16, el):
+        """Put el into meas at 16th position s16 (0..16)."""
+        t, target = 0, s16 * per16
+        best = None
+        for i, x in enumerate(list(meas)):
+            if x.tag == "note":
+                if x.find("chord") is not None or x.find("grace") is not None:
+                    continue
+                if t <= target and (best is None or t >= best[1]):
+                    best = (i, t)
+                t += int(x.findtext("duration"))
+            elif x.tag == "backup":
+                t -= int(x.findtext("duration"))
+            elif x.tag == "forward":
+                t += int(x.findtext("duration"))
+        if target >= t or best is None:          # the end of the bar
+            kids = list(meas)
+            at = len(kids)
+            while at and kids[at - 1].tag == "barline":
+                at -= 1
+            meas.insert(at, el)
+            return
+        i, onset = best
+        if target > onset:
+            ET.SubElement(el, "offset").text = str(target - onset)
+        meas.insert(i, el)
+
+    for p in PARTS:
+        part = r.find(f"part[@id='{ids[p['sib']]}']")
+        ms = {int(m.get("number")): m for m in part.findall("measure")}
+        for n, (b1, s1, b2, s2, kind) in enumerate(sorted(p["hair"])):
+            num = 1 + n % 2
+            place(ms[b1], s1, wedge(
+                "crescendo" if kind == "cresc" else "diminuendo", num))
+            place(ms[b2], s2 + 1, wedge("stop", num))
 
 
 def verify_bars(path):
@@ -950,18 +1440,24 @@ def dyn_curve(p):
         end = pts[i + 1][0] if i + 1 < len(pts) else total + 1
         for t in range(a, end):
             v[t] = val
-    for b, s, b2, s2, kind in p["hair"]:
+    # hairpins in time order; each one ramps to the next printed dynamic
+    # (its target) and that level holds until the dynamic is reached, so
+    # a < > swell's > starts from the peak of its < and the curve never
+    # drops back to the old level in a rest before the target
+    for b, s, b2, s2, kind in sorted(p["hair"]):
         a = (b - 1) * BAR16 + s
         z = min(total, (b2 - 1) * BAR16 + s2)
         v0 = v[a]
-        nxt = [val for t, val in pts if t > z]
-        v1 = nxt[0] if nxt else v0 + (-16 if kind == "dim" else 16)
+        nxt = [(t, val) for t, val in pts if t > z]
+        v1 = nxt[0][1] if nxt else v0 + (-16 if kind == "dim" else 16)
         if kind == "cresc" and v1 <= v0:
             v1 = v0 + 12
         if kind == "dim" and v1 >= v0:
             v1 = v0 - 12
         for t in range(a, z + 1):
             v[t] = round(v0 + (v1 - v0) * (t - a) / max(1, z - a))
+        for t in range(z + 1, nxt[0][0] if nxt else z + 1):
+            v[t] = v1
     return [max(1, min(127, x)) for x in v]
 
 
