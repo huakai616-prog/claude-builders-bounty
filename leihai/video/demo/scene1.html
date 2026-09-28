@@ -1,0 +1,91 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="paint.js"></script>
+<script>
+// 《还给海》 19–27 s：「让我的泪流向海」——窗边鱼缸，一滴水光，倒影里的回忆
+seed(7);
+paper('#f3e7d3');
+// room wall: warm, gently darker at the edges
+vgrad(0, 0, W, H, [[0, '#f0dcc2'], [0.7, '#e9cfb0'], [1, '#d9b797']]);
+blooms(0, 0, W, H, '#dcb899', 10, 220, 0.012);
+wash(rectPts(-80, -60, 230, H + 120), '#c9a080', { layers: 10, alpha: 0.05, spread: 0.06 });
+
+// window view: sky -> sun -> sea
+const WX0 = 250, WX1 = 1030, WY0 = 50, WY1 = 600, HOR = 400;
+ctx.save(); ctx.beginPath(); ctx.rect(WX0, WY0, WX1 - WX0, WY1 - WY0); ctx.clip();
+vgrad(WX0, WY0, WX1 - WX0, HOR, [[0, '#b7c3da'], [0.45, '#e6cfc4'], [0.8, '#f6d9ae'], [1, '#fbe3b8']]);
+blooms(WX0, WY0, WX1, HOR, '#f2c9a8', 10, 120, 0.05);
+glow(860, HOR - 8, 220, '#fff3d0', 0.6);
+ctx.fillStyle = '#f9d489'; ctx.beginPath(); ctx.arc(860, HOR, 30, Math.PI, 0); ctx.fill();
+wash(ellipsePts(430, 150, 150, 22), '#fbf4ea', { layers: 14, alpha: 0.12, blend: 'source-over' });
+wash(ellipsePts(720, 215, 115, 16), '#f9ece2', { layers: 12, alpha: 0.12, blend: 'source-over' });
+vgrad(WX0, HOR, WX1 - WX0, WY1, [[0, '#8fb3be'], [1, '#5f8ea3']]);
+blooms(WX0, HOR, WX1, WY1, '#4d7c92', 10, 110, 0.05);
+ctx.globalCompositeOperation = 'screen';
+for (let i = 0; i < 90; i++) { const y = HOR + 5 + Math.pow(rnd(), 1.7) * 200, x = 860 + gauss() * (16 + (y - HOR) * 0.45), l = 8 + rnd() * 26; ctx.strokeStyle = rgba('#ffe7b5', 0.35 + rnd() * 0.45); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - l / 2, y); ctx.lineTo(x + l / 2, y); ctx.stroke(); }
+ctx.restore();
+ink([[WX0, HOR], [WX1, HOR]], { w: 1.1, color: '#5b6d78', jitter: 0.3 });
+// window frame + mullion
+ctx.save(); ctx.fillStyle = '#efe0c8';
+ctx.fillRect(WX0 - 26, WY0 - 26, WX1 - WX0 + 52, 26); ctx.fillRect(WX0 - 26, WY0, 26, WY1 - WY0);
+ctx.fillRect(WX1, WY0, 26, WY1 - WY0); ctx.fillRect(640 - 11, WY0, 22, WY1 - WY0); ctx.restore();
+ink(rectPts(WX0, WY0, WX1 - WX0, WY1 - WY0), { closed: true, w: 3 });
+ink(rectPts(WX0 - 26, WY0 - 26, WX1 - WX0 + 52, WY1 - WY0 + 26), { closed: true, w: 3 });
+ink([[629, WY0], [629, WY1]], { w: 2.6 }); ink([[651, WY0], [651, WY1]], { w: 2.6 });
+// sill
+const SILL = 600;
+flat(rectPts(WX0 - 60, SILL, WX1 - WX0 + 130, 40), '#e2cba8'); ink(rectPts(WX0 - 60, SILL, WX1 - WX0 + 130, 40), { closed: true, w: 3 });
+wash(rectPts(WX0 - 60, SILL + 40, WX1 - WX0 + 130, 22), '#a98567', { layers: 8, alpha: 0.08, spread: 0.02 });
+
+// two books, Clawd sitting on them, leaning a little toward the bowl
+box(600, 578, 230, 22, '#8fa7a0'); box(612, 556, 206, 22, '#d9b98a');
+ctx.save(); ctx.translate(705, 450); ctx.rotate(-0.07);
+box(-62, 80, 24, 30, mix(ORANGE, '#5a3a2a', 0.15)); box(38, 80, 24, 30, mix(ORANGE, '#5a3a2a', 0.15));
+box(-95, -110, 190, 195, ORANGE);
+eye(-80, -84, 1.2);
+ctx.fillStyle = 'rgba(200,232,244,0.95)'; ctx.beginPath(); ctx.ellipse(-76, -55, 3.5, 5, 0, 0, Math.PI * 2); ctx.fill();
+ctx.restore();
+arm(612, 505, 52, 24, ORANGE, 0.35);
+
+// fish bowl (drawn over Clawd's edge so the glass reads as in front)
+const BX = 465, BY = 455, BR = 142, MOUTH = 350, WATER = 378;
+wash(ellipsePts(BX + 20, SILL + 4, 140, 12), '#8a6a50', { layers: 8, alpha: 0.08 });
+const surfW = Math.sqrt(BR * BR - (WATER - BY) ** 2), mouthW = Math.sqrt(BR * BR - (MOUTH - BY) ** 2);
+ctx.save(); ctx.beginPath(); ctx.arc(BX, BY, BR, 0, Math.PI * 2); ctx.clip();
+ctx.fillStyle = 'rgba(255,255,255,0.10)'; ctx.fillRect(BX - BR, BY - BR, 2 * BR, 2 * BR);
+ctx.beginPath(); ctx.rect(BX - BR, WATER, 2 * BR, 2 * BR); ctx.clip();
+ctx.fillStyle = 'rgba(150,200,210,0.45)'; ctx.fillRect(BX - BR, WATER, 2 * BR, 2 * BR);
+// memory reflection: tide-pool rocks, two small figures, the blue one lifting a jar
+ctx.globalAlpha = 0.75;
+wash(ellipsePts(BX, 560, 160, 36), '#6d93a3', { layers: 8, alpha: 0.12, blend: 'source-over' });
+wash(ellipsePts(BX - 80, 548, 50, 24), '#5d7d8c', { layers: 8, alpha: 0.14, blend: 'source-over' });
+wash(ellipsePts(BX + 92, 550, 46, 22), '#5d7d8c', { layers: 8, alpha: 0.14, blend: 'source-over' });
+wash(ellipsePts(BX + 5, 566, 62, 11), '#d9f0f4', { layers: 8, alpha: 0.18, blend: 'source-over' });
+clawdSide(BX - 66, 490, 44, 40, mix(ORANGE, '#b8d4dc', 0.22), 1, { legLen: 12 });
+clawdSide(BX + 20, 484, 44, 46, mix(BLUE, '#b8d4dc', 0.30), -1, { legLen: 12 });
+arm(BX + 22, 494, 18, 9, mix(BLUE, '#b8d4dc', 0.3), -1.15);
+ctx.strokeStyle = 'rgba(245,252,255,0.95)'; ctx.lineWidth = 2; ctx.strokeRect(BX + 4, 452, 14, 19);
+ctx.fillStyle = '#4f78c4'; ctx.fillRect(BX + 7, 463, 8, 4);
+ctx.globalAlpha = 1;
+ctx.fillStyle = 'rgba(210,235,242,0.28)'; ctx.fillRect(BX - BR, WATER, 2 * BR, 2 * BR);
+fish(BX - 48, 432, 1.05, -0.12);
+ctx.restore();
+// surface, ripple from the drop
+inkEllipse(BX, WATER, surfW, 10, { w: 1.6, color: '#4b7684', jitter: 0.4 });
+for (const r of [9, 19, 31]) inkEllipse(540, WATER + 1, r, r * 0.25, { w: 1.3, color: 'rgba(255,255,255,0.95)', jitter: 0.25 });
+// glass
+ink([...Array(97)].map((_, i) => { const a0 = -Math.PI / 2 + Math.asin(mouthW / BR), a1 = 1.5 * Math.PI - Math.asin(mouthW / BR); const t = a0 + (a1 - a0) * i / 96; return [BX + Math.cos(t) * BR, BY + Math.sin(t) * BR]; }), { w: 3 });
+inkEllipse(BX, MOUTH, mouthW, 11, { w: 2.6 });
+ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineCap = 'round';
+ctx.lineWidth = 7; ctx.beginPath(); ctx.arc(BX, BY, BR - 17, Math.PI * 1.02, Math.PI * 1.28); ctx.stroke();
+ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(BX, BY, BR - 17, Math.PI * 1.34, Math.PI * 1.40); ctx.stroke(); ctx.restore();
+// the falling drop
+ctx.save(); ctx.translate(552, 352); ctx.fillStyle = 'rgba(185,225,242,0.98)';
+ctx.beginPath(); ctx.moveTo(0, -11); ctx.quadraticCurveTo(7, 3, 0, 8); ctx.quadraticCurveTo(-7, 3, 0, -11); ctx.fill();
+ink([[0, -11], [6, 2], [0, 8], [-6, 2], [0, -11]], { w: 1.2, color: '#4b7684', jitter: 0.1 });
+ctx.fillStyle = '#fff'; ctx.fillRect(-2, -1, 2, 3); ctx.restore();
+
+glow(780, 470, 380, '#ffdca8', 0.16);
+grain(10);
+document.title = 'done';
+</script></body></html>

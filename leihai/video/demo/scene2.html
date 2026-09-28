@@ -1,0 +1,120 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c" width="1080" height="840"></canvas>
+<script src="paint.js"></script>
+<script>
+// 《还给海》 60.0–61.0 s：弦乐全停、清唱「你怎么」——时间静止，浪停在半空，她倾斜鱼缸
+seed(21);
+paper('#f1e6d4');
+const HOR = 430, SHORE = 650;
+// sky
+vgrad(0, 0, W, HOR, [[0, '#6e78a4'], [0.35, '#b98ea0'], [0.7, '#e9ab8c'], [1, '#f7cd8f']]);
+blooms(0, 0, W, HOR, '#f0b9a0', 8, 200, 0.018);
+glow(250, HOR - 10, 300, '#ffe6b8', 0.55);
+ctx.fillStyle = '#fbd98f'; ctx.beginPath(); ctx.arc(250, HOR, 44, Math.PI, 0); ctx.fill();
+for (const [x, y, rx] of [[180, 120, 190], [620, 90, 170], [470, 230, 150], [900, 190, 160]]) {
+  wash(ellipsePts(x, y, rx, 22), '#f6c9b2', { layers: 12, alpha: 0.10, blend: 'source-over' });
+  wash(ellipsePts(x + 10, y + 8, rx * 0.8, 10), '#ffe2b8', { layers: 8, alpha: 0.10, blend: 'source-over' });
+}
+// sea
+vgrad(0, HOR, W, SHORE, [[0, '#6f97a7'], [1, '#3f6d84']]);
+blooms(0, HOR, W, SHORE, '#2f5a72', 6, 160, 0.02);
+ctx.save(); ctx.globalCompositeOperation = 'screen';
+for (let i = 0; i < 120; i++) { const y = HOR + 4 + Math.pow(rnd(), 1.5) * (SHORE - HOR), x = 250 + gauss() * (14 + (y - HOR) * 0.5), l = 10 + rnd() * 30; ctx.strokeStyle = rgba('#ffe2a8', 0.35 + rnd() * 0.45); ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(x - l / 2, y); ctx.lineTo(x + l / 2, y); ctx.stroke(); }
+ctx.restore();
+ink([[0, HOR], [W, HOR]], { w: 1.1, color: '#4d5c70', jitter: 0.3 });
+// wet sand + shallow water in front
+vgrad(0, SHORE, W, H, [[0, '#9ab7bb'], [0.35, '#c9b89a'], [1, '#d8c29c']]);
+blooms(0, SHORE, W, H, '#b89e7c', 6, 180, 0.02);
+ctx.save(); ctx.globalCompositeOperation = 'screen';
+for (let i = 0; i < 60; i++) { const y = SHORE + 10 + rnd() * 120, x = 250 + gauss() * 90, l = 10 + rnd() * 34; ctx.strokeStyle = rgba('#ffe0a8', 0.25 + rnd() * 0.3); ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - l / 2, y); ctx.lineTo(x + l / 2, y); ctx.stroke(); }
+ctx.restore();
+for (const y of [SHORE + 6, SHORE + 58]) ink([...Array(30)].map((_, i) => [i * 40 - 20, y + Math.sin(i * 1.3) * 5]), { w: 1.6, color: 'rgba(250,250,245,0.9)', jitter: 1.2 });
+
+// the frozen wave (right): smooth curling breaker, lit through by the low sun
+function wavePath() {
+  ctx.beginPath(); ctx.moveTo(600, SHORE + 10);
+  ctx.bezierCurveTo(690, 620, 735, 520, 748, 430);
+  ctx.bezierCurveTo(756, 372, 742, 338, 704, 328);
+  ctx.bezierCurveTo(680, 322, 664, 334, 674, 352);
+  ctx.bezierCurveTo(700, 342, 732, 326, 784, 298);
+  ctx.bezierCurveTo(860, 262, 980, 272, 1100, 296);
+  ctx.lineTo(1100, SHORE + 10); ctx.closePath();
+}
+ctx.save(); wavePath(); ctx.clip();
+vgrad(560, 250, 560, SHORE + 12, [[0, '#b7e6da'], [0.3, '#7cc0bf'], [0.65, '#43869a'], [1, '#2d607a']]);
+glow(830, 350, 200, '#effff8', 0.4);
+// streaks following the face of the wave
+ctx.lineCap = 'round';
+for (let k = 0; k < 16; k++) {
+  const dx = 18 + k * 24, a = 0.12 + 0.18 * rnd();
+  ctx.strokeStyle = k % 3 === 0 ? rgba('#e9fbf6', a + 0.1) : rgba('#2c6179', a);
+  ctx.lineWidth = 2 + rnd() * 2;
+  ctx.beginPath(); ctx.moveTo(600 + dx, SHORE + 10);
+  ctx.bezierCurveTo(690 + dx, 620, 735 + dx * 0.9, 520, 748 + dx * 0.8, 430 - dx * 0.35);
+  ctx.bezierCurveTo(756 + dx * 0.7, 372 - dx * 0.45, 760 + dx * 0.6, 330 - dx * 0.3, 784 + dx * 0.9, 300 - dx * 0.05);
+  ctx.stroke();
+}
+ctx.restore();
+// foam along the lip and the crest
+ctx.save(); ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineCap = 'round';
+for (let k = 0; k < 7; k++) {
+  ctx.lineWidth = 9 - k; ctx.globalAlpha = 0.18 + 0.1 * rnd();
+  ctx.beginPath(); ctx.moveTo(674 + gauss() * 2, 352 + k * 1.5);
+  ctx.bezierCurveTo(700, 342 + k * 2, 732, 326 + k * 2, 784, 298 + k * 2);
+  ctx.bezierCurveTo(860, 262 + k * 3, 980, 272 + k * 3, 1100, 296 + k * 3); ctx.stroke();
+}
+ctx.globalAlpha = 0.85; ctx.lineWidth = 6;
+ctx.beginPath(); ctx.moveTo(704, 328); ctx.bezierCurveTo(680, 322, 664, 334, 674, 352); ctx.stroke();
+ctx.restore();
+// the hollow under the lip
+wash([[682, 352], [712, 346], [742, 364], [748, 420], [736, 470], [722, 430], [706, 380]], '#3a7890', { layers: 10, alpha: 0.03 });
+ctx.save(); wavePath(); ctx.strokeStyle = INK; ctx.lineWidth = 2.6; ctx.stroke(); ctx.restore();
+// suspended spray: hanging droplets (time is stopped)
+for (let i = 0; i < 70; i++) {
+  const a = rnd() * Math.PI, r = 40 + rnd() * 120, x = 700 + Math.cos(a) * r * 1.2 - 20, y = 330 - Math.sin(a) * r * 0.8;
+  const d = 2 + rnd() * 5; ctx.fillStyle = rgba('#f3fbfb', 0.7 + rnd() * 0.3); ctx.beginPath(); ctx.arc(x, y, d, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(60,110,130,0.5)'; ctx.lineWidth = 0.8; ctx.stroke();
+}
+
+// Clawd, ankle-deep, facing the wave, holding the bowl out and tilting it
+const CX = 330, CY = 470, CW = 160, CH = 150;
+box(CX + 30, CY + CH - 4, 22, 34, mix(ORANGE, '#5a3a2a', 0.15)); box(CX + 104, CY + CH - 4, 22, 34, mix(ORANGE, '#5a3a2a', 0.15));
+// water over the feet
+ctx.save(); ctx.fillStyle = 'rgba(120,165,175,0.75)'; ctx.fillRect(CX + 10, CY + CH + 14, 140, 20);
+ink([[CX + 6, CY + CH + 14], [CX + 150, CY + CH + 14]], { w: 1.6, color: 'rgba(250,250,245,0.95)', jitter: 1 }); ctx.restore();
+box(CX, CY, CW, CH, ORANGE);
+eye(CX + CW - 26, CY + 26, 1.15);
+// rim light from the sun behind
+ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(255,220,160,0.6)'; ctx.lineWidth = 5;
+ctx.beginPath(); ctx.moveTo(CX + 4, CY + 6); ctx.lineTo(CX + 4, CY + CH - 6); ctx.stroke(); ctx.restore();
+// reflection in the wet sand
+ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = ORANGE; ctx.fillRect(CX + 6, CY + CH + 40, CW - 12, 60); ctx.restore();
+// arms held straight out, the bowl at their ends, tilted toward the sea
+arm(CX + CW - 6, CY + 78, 64, 22, ORANGE, -0.08);
+arm(CX + CW - 6, CY + 112, 62, 22, ORANGE, -0.2);
+ctx.save(); ctx.translate(CX + CW + 102, CY + 62); ctx.rotate(0.62);
+ctx.save(); ctx.beginPath(); ctx.arc(0, 0, 60, 0, Math.PI * 2); ctx.clip();
+ctx.fillStyle = 'rgba(240,248,248,0.25)'; ctx.fillRect(-60, -60, 120, 120);
+ctx.fillStyle = 'rgba(150,205,212,0.6)'; ctx.fillRect(-60, 8, 120, 60); ctx.restore();
+const mw = Math.sqrt(60 * 60 - 44 * 44);
+ink([...Array(61)].map((_, i) => { const a0 = -Math.PI / 2 + Math.asin(mw / 60), a1 = 1.5 * Math.PI - Math.asin(mw / 60); const t = a0 + (a1 - a0) * i / 60; return [Math.cos(t) * 60, Math.sin(t) * 60]; }), { w: 2.6 });
+inkEllipse(0, -44, mw, 6, { w: 2.2 });
+ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+ctx.beginPath(); ctx.arc(0, 0, 50, Math.PI * 1.05, Math.PI * 1.3); ctx.stroke(); ctx.restore();
+ctx.restore();
+// hands over the glass
+box(CX + CW + 50, CY + 66, 16, 20, ORANGE); box(CX + CW + 46, CY + 100, 16, 20, ORANGE);
+// frozen pour: a ribbon of droplets arcing from the rim toward the sea
+for (let i = 0; i < 26; i++) {
+  const t = i / 25, x = 575 + t * 110, y = 468 - Math.sin(t * Math.PI * 0.9) * 60 + t * 50;
+  const d = 3 + rnd() * 4; ctx.fillStyle = 'rgba(200,236,240,0.95)'; ctx.beginPath(); ctx.arc(x + gauss() * 3, y + gauss() * 3, d, 0, Math.PI * 2); ctx.fill();
+}
+// the little blue fish, mid-leap, frozen, looking back at her
+fish(626, 410, 1.15, 0.45 + Math.PI, '#4f78c4');
+
+// time-stop: a gentle cool veil over everything except the warm light
+ctx.save(); ctx.globalCompositeOperation = 'saturation'; ctx.fillStyle = 'rgba(128,128,128,0.18)'; ctx.fillRect(0, 0, W, H); ctx.restore();
+glow(250, HOR - 10, 360, '#ffd9a0', 0.15);
+grain(10);
+document.title = 'done';
+</script></body></html>
