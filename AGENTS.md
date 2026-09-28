@@ -18,7 +18,7 @@
 
 | 歌 | 编制 · 调 · 速度 | 分支 | 目录 | 状态 |
 |---|---|---|---|---|
-| 泪海（副歌，许茹芸） | 人声 + 弦乐四重奏 · F 大调 · ♩=59 | `main`（已合并） | `leihai/` | 编配已完成，用户已在 Logic 混好 MP3。**动画视频进行中**，见 `leihai/video/PLAN.md` |
+| 泪海（副歌，许茹芸） | 人声 + 弦乐四重奏 · F 大调 · ♩=59 | `main`（已合并） | `leihai/` | 编配已完成，用户已在 Logic 混好 MP3。**动画视频进行中**：画面改用 TapNow 生成，制作包在 `leihai/video/tapnow/`，背景见 `leihai/video/PLAN.md` |
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
@@ -115,7 +115,11 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 
 ## 待办 / 待确认
 
-- **泪海动画视频（进行中，最优先）**：在用户的 Mac 上做，需要显卡和上次《甲乙丙丁·下一站》的本地工程。方案、素材、已核对的时间和开工前要问用户的 4 个问题，都在 `leihai/video/PLAN.md`。
+- **泪海动画视频（进行中，最优先）**：用户嫌代码画的画质不够，改成在 TapNow 里生成画面。已定：主角小狗《等潮》、A2 版式、日系手绘动画电影感。
+  - 用户照 `leihai/video/tapnow/分镜与提示词.md` 在 TapNow 里逐镜头生成，片段命名 `S01.mp4`… 放进 `leihai/video/tapnow/clips/`。
+  - `leihai/video/tapnow/assemble.py` 把片段按 MP3 的秒数拼成 1080×1920 成片，带歌词、滚动谱和署名。步骤见同目录 `README.md`。
+  - 云端连不上 TapNow（没有连接器，网络也不通），只能由用户在 TapNow 里操作。
+  - 下半部分的谱面还是印刷谱加抖动的占位，换成 GPT 的 Inkpen2 手写谱要在 Mac 上做，见 `leihai/video/PLAN.md`。
 - **泪海唱几遍**：用户已经按唱两遍的版本做完 ACE 渲染和 Logic 混音，这件事视为定了。
 - **合并分支**：甲乙丙丁、茉莉花、Clawd 动画是否合并进 `main`，由用户决定。
 

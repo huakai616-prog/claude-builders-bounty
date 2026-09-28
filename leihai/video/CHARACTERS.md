@@ -1,6 +1,6 @@
 # 泪海 · 主角参考和对应的故事脚本
 
-参考图：`demo/角色参考_四选一.png`，由 `demo/characters.html` 生成。**用户还没选。**
+参考图：`demo/角色参考_四选一.png`，由 `demo/characters.html` 生成。**用户 2026-09-28 选了 ③ 小狗《等潮》，画面用 TapNow 生成，见 `tapnow/`。**
 
 ## 小女孩和小狗的精修参考图
 
