@@ -19,7 +19,7 @@
 | 歌 | 编制 · 调 · 速度 | 分支 | 目录 | 状态 |
 |---|---|---|---|---|
 | 泪海（副歌，许茹芸） | 人声 + 弦乐四重奏 · F 大调 · ♩=59 | `claude/elegant-pascal-83rncr`（已合并进 `main`） | `leihai/` | 已完成。待确认副歌唱一遍还是两遍，待在 ACE Studio 渲染 |
-| 情歌（最后一遍副歌，梁静茹） | 人声 + 弦乐四重奏 · F 大调 · ♩=70 | `claude/serene-darwin-2l4jy4` | `qingge/` | 已完成。只唱一遍（用户图 3 那段），加了前奏和尾奏。待在 ACE Studio 渲染 |
+| 情歌（最后一遍副歌，梁静茹） | 人声 + 弦乐四重奏 · F 大调 · ♩=70 | `claude/serene-darwin-2l4jy4` | `qingge/` | 已完成。只唱一遍（用户图 3 那段），加了前奏和尾奏。2026-09-28 按用户发回的 MIDI 修订：弦乐照用户版，人声带 3 个 br 气口。待在 ACE Studio 渲染 |
 | 甲乙丙丁（副歌，李佳薇） | 人声 + 弦乐五重奏 · F 大调 · ♩=65 | `claude/loving-bell-wsnmgy` | `jiayibingding/` | 已完成，另有字幕和 Clawd 动画视频片段 |
 | 茉莉花 | 人声 + 弦乐五重奏 · F 大调 | `claude/sleepy-wozniak-g09dmt` | `jasmine-flower/` | 已完成，交付的是单个 `.mxl` |
 | Clawd 弹钢琴动画 | — | `claude/focused-volta-ve5ka6` | `claude-piano-pet/` | 5 秒循环动画 |
@@ -95,7 +95,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - `~` 连音线，`>` 重音，`( )` 圆滑线；
   - `=字` 歌词，`g:G4` 倚音。
 - 改完必须先 `--check` 干净（没有 RANGE / CLASH / PARALLEL 输出），再生成。
-- **PDF 总谱用 `engrave.py`（LilyPond）生成**，它读同一份 `build.py` 数据，排出带封面的好莱坞标准总谱（模板见 `qingge/engrave.py`，新歌复制过去改顶部的换行、排练号和时长设置）。Ubuntu 上先装 `apt-get install lilypond fonts-noto-cjk fonts-texgyre`，然后 `python3 qingge/engrave.py --png /tmp/pg`，逐页看 PNG，确认没有碰撞、超出页边、单独一行被拉满整页。
+- **PDF 总谱用 `engrave.py`（LilyPond）生成**，它读同一份 `build.py` 数据，排出带封面的好莱坞标准总谱（模板见 `qingge/engrave.py`，新歌复制过去改顶部的换行、排练号和时长设置）。Ubuntu 上先装 `apt-get install lilypond fonts-noto-cjk fonts-texgyre` 和 `pip install fonttools`，然后 `python3 qingge/engrave.py --png /tmp/pg`，逐页看 PNG，确认没有碰撞、超出页边、单独一行被拉满整页。
 - 署名（改编、制谱：花开当富贵）写在 `build.py` 顶部的 `ARRANGER` / `ENGRAVER`，MusicXML 首页的 credit 和 PDF 都从这里取。MusicXML 首页的 credit 每个位置只放一个多行文字块，分开写会被导入软件叠在一起。
 - mp3 不在 `build.py` 里，需要另外渲染。泪海的 PDF 还是旧的 MuseScore 预览（下面的命令），以后重做时换成 `engrave.py`。Ubuntu 上先装 `apt-get install musescore3 fluidsynth fluid-soundfont-gm ffmpeg`，然后：
 
@@ -122,6 +122,9 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **歌词 MIDI**：每个字一个 lyrics meta 事件；拖腔音符写 `-`；倚音带那个字，主音写 `-`。
 - **简谱的高音点不一定是实际八度**：情歌的简谱把副歌整段写在高音点上，照字面是 F5–C6，女声唱不了。按实际演唱音高放（女声副歌大致在 C4–D5），同时保留谱里点与点之间的相对高低。
 - **原曲自带的不协和**：前奏钩子里的倚音这类原曲本来就有的小九度，写进 `CLASH_ALLOW` 白名单并在 README 说明，不要为了过检查去改原曲旋律。
+- **LilyPond 的中文字形**：LilyPond 2.24 读 `.ttc` 字体集合时忽略字形编号，永远用第 0 个。Noto CJK 的第 0 个是日文，「直」「骨」等字会变成日文写法。`engrave.py` 用 fontTools 把简体中文那一个抽成独立字体（`QG Serif SC` / `QG Sans SC`，缓存在 `~/.cache/qingge-fonts`）。字体设置要用 2.24 的 `set-global-fonts`，`property-defaults.fonts` 是 2.25 的写法，2.24 会静默忽略。交付前用 `grep -a -o "/FontName */[A-Za-z+_-]*" 总谱.pdf` 确认没有 `jp` 字体。
+- **MusicXML 给西贝柳斯的细节**：music21 写出的十六分音符符杠会在拍中间断开，八分音符按拍分组，和 PDF 不一样；起止落在同一个音上的渐强渐弱线会被丢掉。`build.py` 的 `finish_parts()` 负责重算符杠、按准确位置写渐强渐弱线、拖腔加延长线、渐慢写成 `<sound tempo>`。
+- **用户发回的 MIDI 优先**：用户在 ACE Studio 里改过的 MIDI 是弦乐的最终版本，照它逐音改 `build.py`，不要自作主张再改回去。人声里 `br` 是用户加的气口，保留并在谱上显示；其余节奏按原谱校准。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
 
 ## 待办 / 待确认
