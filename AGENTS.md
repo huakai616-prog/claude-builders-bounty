@@ -29,6 +29,16 @@
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
 
+## 交付硬性要求（用户明确要求，每次都必须做到）
+
+1. **西贝柳斯工程**：交 MusicXML（`.sib` 只能在西贝柳斯里另存，外部生成不了，回复里要说明「打开后另存为 .sib」）。
+2. **PDF 总谱按好莱坞标准制作，要有封面**，排版要精益求精、看起来精致：
+   - 封面：曲名、副标题、Full Score / Score in C、词曲原唱、改编、制谱、编制、调和速度、时长。
+   - 正文：首页标题区和「Score in C」，每小节都有小节号，排练号加框并在人声和弦乐上方各出现一次，速度和表情记号清楚，从第 2 页起每页有页眉（曲名 + 页码），首页页脚写署名。
+   - 用 LilyPond 排版（`engrave.py`），不用 MuseScore 的预览 PDF。交付前逐页出 PNG 自己看一遍，有碰撞、挤压、空白过多就改。
+3. **改编和制谱一律署名「花开当富贵」**：PDF 封面和首页、MusicXML 的 arranger 和制谱信息都要写。
+4. **MIDI 至少两份**：一份弦乐总的（所有弦乐声部在一个文件里），一份人声带逐字歌词的。其他 MIDI（全轨、GBK 备用、不带歌词的人声）可以额外附上。
+
 ## 用户怎么提需求
 
 - 典型原话：「给图二副歌像之前一样写弦乐伴奏，这次要弦乐四重奏，1小提，2小提，中提，大提，和弦简单而高级，综艺编曲抒情高燃风格，我需要西贝柳斯工程，带歌词的人声midi」。中途追加过：「最终呈现改成F大调」。
@@ -67,7 +77,7 @@
 | `…_人声_素.mid` | 不带歌词的人声 MIDI |
 | `…_全轨.mid` | 给 ACE 用。音轨名为 `Vocal 人声` / `Violin I` / `Violin II` / `Viola` / `Violoncello` |
 | `…_弦乐四重奏_伴奏.mid` | 只有弦乐声部 |
-| `…_总谱预览.pdf` | MuseScore 3 渲染的预览 |
+| `…_总谱.pdf` | **好莱坞标准总谱，带封面**，LilyPond 排版（`engrave.py` 生成），署名「花开当富贵」 |
 | `粗略试听_GM音色_非ACE效果.mp3` | FluidSynth + GM 音色渲染，只用来核对音符 |
 | `…_歌词字幕.srt` | 歌词字幕，时间从第 1 小节算起 |
 
@@ -85,7 +95,9 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - `~` 连音线，`>` 重音，`( )` 圆滑线；
   - `=字` 歌词，`g:G4` 倚音。
 - 改完必须先 `--check` 干净（没有 RANGE / CLASH / PARALLEL 输出），再生成。
-- PDF 和 mp3 不在 `build.py` 里，需要另外渲染。Ubuntu 上先装 `apt-get install musescore3 fluidsynth fluid-soundfont-gm ffmpeg`，然后：
+- **PDF 总谱用 `engrave.py`（LilyPond）生成**，它读同一份 `build.py` 数据，排出带封面的好莱坞标准总谱（模板见 `qingge/engrave.py`，新歌复制过去改顶部的换行、排练号和时长设置）。Ubuntu 上先装 `apt-get install lilypond fonts-noto-cjk fonts-texgyre`，然后 `python3 qingge/engrave.py --png /tmp/pg`，逐页看 PNG，确认没有碰撞、超出页边、单独一行被拉满整页。
+- 署名（改编、制谱：花开当富贵）写在 `build.py` 顶部的 `ARRANGER` / `ENGRAVER`，MusicXML 首页的 credit 和 PDF 都从这里取。MusicXML 首页的 credit 每个位置只放一个多行文字块，分开写会被导入软件叠在一起。
+- mp3 不在 `build.py` 里，需要另外渲染。泪海的 PDF 还是旧的 MuseScore 预览（下面的命令），以后重做时换成 `engrave.py`。Ubuntu 上先装 `apt-get install musescore3 fluidsynth fluid-soundfont-gm ffmpeg`，然后：
 
   ```bash
   cd leihai/output

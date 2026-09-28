@@ -1,0 +1,489 @@
+#!/usr/bin/env python3
+"""情歌 — 好莱坞标准总谱 PDF（LilyPond 排版，带封面）
+
+Reads the score from build.py (single source of truth) and engraves
+output/情歌_总谱.pdf with LilyPond:
+  * cover page: title, Full Score / Score in C, credits, instrumentation
+  * page-1 title block with "Score in C" and the credits
+  * a bar number centred under every bar, boxed rehearsal letters and
+    tempo marks above both the voice and the strings
+  * running header (title + page number) from page 2, credit footer on
+    page 1
+
+Needs: apt-get install lilypond fonts-noto-cjk fonts-texgyre
+Usage: python3 engrave.py            (writes the PDF)
+       python3 engrave.py --png DIR  (also one PNG per page, for proofing)
+"""
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+import build as B
+
+LY_DUR = {1: "16", 2: "8", 3: "8.", 4: "4", 6: "4.", 8: "2", 12: "2.",
+          16: "1"}
+TOTAL = B.NBARS * B.BAR16
+
+# Engraving choices for this score
+STAFF_SIZE = 18
+BREAKS = (5, 9, 12)             # bars that start a new system
+PAGE_BREAKS = ()                # bars that start a new page
+SHORT = {"vox": "Vo.", "vn1": "Vln. I", "vn2": "Vln. II", "va": "Vla.",
+         "vc": "Vc."}
+MARKS = {5: ("A", "副歌前半"), 9: ("B", "副歌后半 · 全奏"), 13: ("C", "Coda")}
+DURATION = "0′56″"
+LATIN_SERIF = "TeX Gyre Pagella"
+# words printed next to the dynamic below the staff instead of above it
+WITH_DYNAMIC = {("vn1", 13, 8)}
+CJK_SERIF = "Noto Serif CJK SC"
+CJK_SANS = "Noto Sans CJK SC"
+
+
+def pos(bar, s16):
+    return (bar - 1) * B.BAR16 + s16
+
+
+def ly_pitch(p):
+    s, acc, o = re.fullmatch(r"([A-G])([#b]?)(-?\d)", p).groups()
+    o = int(o)
+    return (s.lower() + {"#": "is", "b": "es", "": ""}[acc]
+            + ("'" * (o - 3) if o >= 3 else "," * (3 - o)))
+
+
+def ly_str(t):
+    return '"' + t.replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+# ---------------------------------------------------------------------------
+# Notes
+# ---------------------------------------------------------------------------
+def ly_notes(events):
+    """One LilyPond line per bar."""
+    by_bar = {}
+    for e in events:
+        by_bar.setdefault(e["bar"], []).append(e)
+    lines = []
+    for b in range(1, B.NBARS + 1):
+        evs = by_bar[b]
+        last_bar = b == B.NBARS
+        if len(evs) == 1 and evs[0]["pitches"] is None:
+            lines.append("R1" + ("\\fermata" if last_bar else "") + " |")
+            continue
+        toks = []
+        for e in evs:
+            if e["grace"]:
+                toks.append(f"\\slashedGrace {{ {ly_pitch(e['grace'])}16 }}")
+            pieces = (B.split_rest if e["pitches"] is None
+                      else B.split_dur)(e["pos"], e["dur"])
+            for i, d in enumerate(pieces):
+                first, last = i == 0, i == len(pieces) - 1
+                if e["pitches"] is None:
+                    toks.append("r" + LY_DUR[d])
+                    continue
+                ps = [ly_pitch(x) for x in e["pitches"]]
+                t = (ps[0] if len(ps) == 1 else "<" + " ".join(ps) + ">")
+                t += LY_DUR[d]
+                if not last or e["tie"]:
+                    t += "~"
+                if first and e["accent"]:
+                    t += "->"
+                if last_bar and last:
+                    t += "\\fermata"
+                if first and e["slur_start"]:
+                    t += "("
+                if last and e["slur_end"]:
+                    t += ")"
+                toks.append(t)
+        lines.append(" ".join(toks) + " |")
+    return "\n  ".join(lines)
+
+
+def ly_lyrics(events):
+    out = []
+    for e in events:
+        if e["lyric"]:
+            out.append(e["lyric"] + (" __" if e["slur_start"] else ""))
+    return " ".join(out)
+
+
+# ---------------------------------------------------------------------------
+# Spacer voices: dynamics / hairpins / words per part, and the global line
+# ---------------------------------------------------------------------------
+def spacer_line(att):
+    """att: list (len TOTAL+1) of lists of post-events per 16th."""
+    out, run = [], 0
+    for t in range(TOTAL):
+        if att[t]:
+            if run:
+                out.append(f"s16*{run}")
+                run = 0
+            out.append("s16" + "".join(att[t]))
+        else:
+            run += 1
+        if (t + 1) % B.BAR16 == 0:
+            if run:
+                out.append(f"s16*{run}")
+                run = 0
+            out.append("|\n  ")
+    return " ".join(out)
+
+
+def ly_dynamics(p):
+    att = [[] for _ in range(TOTAL + 1)]
+    dyn_at = {pos(b, s) for b, s, _ in p["dyn"]}
+    starts = {pos(b, s) for b, s, *_ in p["hair"]}
+    joined = {(b, s): t for b, s, t in p["text"]
+              if (p["id"], b, s) in WITH_DYNAMIC}
+    for b, s, mark in p["dyn"]:
+        if (b, s) in joined:
+            att[pos(b, s)].append(
+                "-#(make-dynamic-script (markup #:dynamic "
+                f"\"{mark}\" #:normal-text #:italic \" {joined[b, s]}\"))")
+        else:
+            att[pos(b, s)].append("\\" + mark)
+    for b, s, b2, s2, kind in p["hair"]:
+        a, z = pos(b, s), pos(b2, s2)
+        att[a].append("\\<" if kind == "cresc" else "\\>")
+        end = z + 1
+        if end >= TOTAL:
+            att[z].append("\\!")
+        elif end not in dyn_at and end not in starts:
+            att[end].append("\\!")
+    for b, s, txt in p["text"]:
+        if (b, s) in joined:
+            continue
+        att[pos(b, s)].append(
+            f"^\\markup \\whiteout \\italic {ly_str(txt)}")
+    return spacer_line(att)
+
+
+def tempo_markup(text, bpm=None):
+    if bpm is None:
+        return f"\\tempo \\markup \\bold {ly_str(text)}"
+    return ("\\tempo \\markup { \\bold " + ly_str(text) + " \\hspace #1.2 "
+            "\\concat { \\fontsize #-1.5 \\general-align #Y #DOWN "
+            "\\note {4} #UP \\normal-text \" = " + str(bpm) + "\" } }")
+
+
+def ly_global(with_marks):
+    att = [[] for _ in range(TOTAL + 1)]
+    att[0].append(tempo_markup(B.TEMPO_MARK, B.TEMPI[0][2]))
+    for b, s, txt in B.TEMPO_TEXT:
+        att[pos(b, s)].append(tempo_markup(txt))
+    if with_marks:
+        for b, (letter, label) in MARKS.items():
+            att[pos(b, 0)].append(
+                "\\mark \\markup \\concat { \\box \\pad-markup #0.35 "
+                f"\\sans \\bold \\fontsize #3 {ly_str(letter)} "
+                "\\hspace #1.2 "
+                f"\\sans \\fontsize #-1 {ly_str(label)} }}")
+    for b in range(2, B.NBARS + 1):
+        if b in PAGE_BREAKS:
+            att[pos(b, 0)].insert(0, "\\pageBreak ")
+        elif b in BREAKS:
+            att[pos(b, 0)].insert(0, "\\break ")
+        else:
+            att[pos(b, 0)].insert(0, "\\noBreak ")
+    # post-events have to follow the spacer; commands go before it
+    out, run = [], 0
+    for t in range(TOTAL):
+        cmds = [x for x in att[t]]
+        if cmds:
+            if run:
+                out.append(f"s16*{run}")
+                run = 0
+            out.append(" ".join(cmds) + " s16")
+        else:
+            run += 1
+        if (t + 1) % B.BAR16 == 0:
+            if run:
+                out.append(f"s16*{run}")
+                run = 0
+            out.append("|\n  ")
+    out.append('\\bar "|."')
+    return " ".join(out)
+
+
+# ---------------------------------------------------------------------------
+# Pages
+# ---------------------------------------------------------------------------
+def cover():
+    inst = " · ".join(p["name"] for p in B.PARTS)
+    credit_rows = [("作词", B.LYRICIST), ("作曲", B.COMPOSER),
+                   ("原唱", B.SINGER), ("改编", B.ARRANGER),
+                   ("制谱", B.ENGRAVER)]
+    labels = " ".join(ly_str(a) for a, _ in credit_rows)
+    names = " ".join(ly_str(n) for _, n in credit_rows)
+    return f"""\\markup {{
+  \\override #'(baseline-skip . 3.2)
+  \\column {{
+    \\vspace #1
+    \\fill-line {{ \\sans \\fontsize #0.5 \\override #'(word-space . 1.6)
+      \\line {{ F U L L \\hspace #2 S C O R E }} }}
+    \\vspace #0.6
+    \\fill-line {{ \\sans \\fontsize #-1 "Score in C" }}
+    \\vspace #9
+    \\fill-line {{ \\override #'(font-name . "{CJK_SERIF} Bold")
+      \\abs-fontsize #60 {ly_str(" ".join(B.TITLE))} }}
+    \\vspace #2.2
+    \\fill-line {{ \\override #'(font-name . "{CJK_SERIF}")
+      \\abs-fontsize #15 {ly_str(B.SUBTITLE)} }}
+    \\vspace #0.4
+    \\fill-line {{ \\abs-fontsize #12.5 \\italic {ly_str(B.SUBTITLE_EN)} }}
+    \\vspace #3.2
+    \\fill-line {{ \\draw-line #'(22 . 0) }}
+    \\vspace #3.2
+    \\fill-line {{ \\override #'(baseline-skip . 3.4)
+      \\line {{
+        \\override #'(font-name . "{CJK_SANS} Light")
+        \\abs-fontsize #11 \\right-column {{ {labels} }}
+        \\hspace #3
+        \\override #'(font-name . "{CJK_SERIF}")
+        \\abs-fontsize #11 \\left-column {{ {names} }}
+      }} }}
+    \\vspace #13
+    \\fill-line {{ \\draw-line #'(60 . 0) }}
+    \\vspace #1.2
+    \\fill-line {{ \\abs-fontsize #10 {ly_str(inst)} }}
+    \\vspace #0.3
+    \\fill-line {{ \\abs-fontsize #10 \\concat {{
+      "F major · " \\fontsize #-2 \\general-align #Y #DOWN \\note {{4}} #UP
+      " = {B.TEMPI[0][2]} · ca. {DURATION}" }} }}
+  }}
+}}
+\\pageBreak
+"""
+
+
+def title_block():
+    return f"""\\markup {{
+  \\override #'(baseline-skip . 3)
+  \\column {{
+    \\fill-line {{
+      \\sans \\bold \\fontsize #0.5 "Score in C"
+      \\override #'(font-name . "{CJK_SERIF} Bold") \\abs-fontsize #26
+        {ly_str(B.TITLE)}
+      \\sans \\fontsize #-1 "Full Score"
+    }}
+    \\vspace #0.2
+    \\fill-line {{ \\override #'(font-name . "{CJK_SERIF}")
+      \\abs-fontsize #11.5 {ly_str(B.SUBTITLE)} }}
+    \\vspace #0.8
+    \\fill-line {{
+      \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #9.5
+        \\left-column {{ {ly_str("词：" + B.LYRICIST)}
+                         {ly_str("原唱：" + B.SINGER)} }}
+      \\null
+      \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #9.5
+        \\right-column {{ {ly_str("曲：" + B.COMPOSER)}
+                          {ly_str("改编：" + B.ARRANGER)}
+                          {ly_str("制谱：" + B.ENGRAVER)} }}
+    }}
+  }}
+}}
+"""
+
+
+def paper():
+    footer = (f"{B.TITLE} · {B.SUBTITLE}　　原曲：{B.LYRICIST} 词 · "
+              f"{B.COMPOSER} 曲 · {B.SINGER} 演唱　　"
+              f"改编 · 制谱：{B.ARRANGER}")
+    return f"""
+#(define-markup-command (from-page layout props n arg) (number? markup?)
+   (if (>= (chain-assoc-get 'page:page-number props 0) n)
+       (interpret-markup layout props arg)
+       empty-stencil))
+#(define-markup-command (on-page layout props n arg) (number? markup?)
+   (if (= (chain-assoc-get 'page:page-number props 0) n)
+       (interpret-markup layout props arg)
+       empty-stencil))
+
+\\paper {{
+  #(set-paper-size "a4")
+  property-defaults.fonts.serif = "{LATIN_SERIF}, {CJK_SERIF}"
+  property-defaults.fonts.sans = "TeX Gyre Heros, {CJK_SANS}"
+  top-margin = 12\\mm
+  bottom-margin = 12\\mm
+  left-margin = 15\\mm
+  right-margin = 13\\mm
+  indent = 21\\mm
+  short-indent = 11\\mm
+  first-page-number = 0
+  print-first-page-number = ##f
+  bookTitleMarkup = ##f
+  scoreTitleMarkup = ##f
+  ragged-last = ##f
+  ragged-bottom = ##f
+  ragged-last-bottom = ##f
+  markup-system-spacing = #'((basic-distance . 10) (minimum-distance . 6)
+                             (padding . 3) (stretchability . 4))
+  system-system-spacing = #'((basic-distance . 16) (minimum-distance . 10)
+                             (padding . 5) (stretchability . 40))
+  last-bottom-spacing = #'((basic-distance . 6) (minimum-distance . 4)
+                           (padding . 2) (stretchability . 30))
+  oddHeaderMarkup = \\markup \\from-page #2 \\fill-line {{
+    \\sans \\fontsize #-2 \\concat {{ {ly_str(B.TITLE)} " · Full Score" }}
+    \\sans \\bold \\fontsize #1 \\fromproperty #'page:page-number-string
+  }}
+  evenHeaderMarkup = \\markup \\from-page #2 \\fill-line {{
+    \\sans \\bold \\fontsize #1 \\fromproperty #'page:page-number-string
+    \\sans \\fontsize #-2 \\concat {{ {ly_str(B.TITLE)} " · Full Score" }}
+  }}
+  oddFooterMarkup = \\markup \\on-page #1 \\fill-line {{
+    \\override #'(font-name . "{CJK_SERIF}") \\abs-fontsize #7.5
+      {ly_str(footer)}
+  }}
+  evenFooterMarkup = \\markup \\on-page #1 \\fill-line {{ \\null }}
+}}
+"""
+
+
+def layout():
+    return """
+\\layout {
+  \\context {
+    \\Score
+    \\remove Bar_number_engraver
+    \\remove Metronome_mark_engraver
+    \\remove Mark_engraver
+    \\remove Staff_collecting_engraver
+    \\override SpacingSpanner.base-shortest-duration = #(ly:make-moment 1/32)
+    \\override RehearsalMark.self-alignment-X = #LEFT
+    \\override RehearsalMark.padding = #1.6
+    \\override MetronomeMark.padding = #1.2
+    \\override RehearsalMark.outside-staff-priority = #1500
+    \\override MetronomeMark.outside-staff-priority = #1400
+    \\override TextScript.outside-staff-priority = #450
+    \\override Hairpin.minimum-length = #4
+    \\override Hairpin.to-barline = ##t
+    \\override DynamicTextSpanner.style = #'none
+    \\override StaffGrouper.staffgroup-staff-spacing =
+      #'((basic-distance . 11) (minimum-distance . 8) (padding . 1.6))
+    \\override StaffGrouper.staff-staff-spacing =
+      #'((basic-distance . 10) (minimum-distance . 7.5) (padding . 1.4))
+  }
+  \\context {
+    \\Staff
+    \\override InstrumentName.self-alignment-X = #RIGHT
+    \\override InstrumentName.padding = #0.8
+  }
+  \\context {
+    \\Lyrics
+    \\override LyricText.font-size = #0.6
+    \\override LyricText.font-name = "Noto Serif CJK SC"
+    \\override LyricExtender.thickness = #1.2
+    \\override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.2
+  }
+}
+"""
+
+
+def staff(p, parsed, top_marks):
+    pid = p["id"]
+    clef = {"vox": "treble", "vn1": "treble", "vn2": "treble",
+            "va": "alto", "vc": "bass"}[pid]
+    extra = []
+    if pid in ("vox", "vn1"):
+        extra += ["\\consists Mark_engraver",
+                  "\\consists Staff_collecting_engraver",
+                  "\\consists Metronome_mark_engraver"]
+    name = p["name"]
+    notes = ly_notes(parsed[pid])
+    glob = ly_global(with_marks=top_marks) if pid in ("vox", "vn1") \
+        else ("s1*%d \\bar \"|.\"" % B.NBARS)
+    dyn_up = "\\dynamicUp " if pid == "vox" else ""
+    voice_name = f'= "{pid}"'
+    return f"""
+    \\new Staff = "{pid}" \\with {{
+      instrumentName = {ly_str(name)}
+      shortInstrumentName = {ly_str(SHORT[pid])}
+      {" ".join(extra)}
+    }} <<
+      \\new Voice {voice_name} {{
+        \\clef {clef} \\key f \\major \\numericTimeSignature \\time 4/4
+        {notes}
+      }}
+      \\new Voice {{ {dyn_up}
+        {ly_dynamics(p)}
+      }}
+      \\new Voice {{
+        {glob}
+      }}
+    >>"""
+
+
+def ly_source():
+    parsed = {p["id"]: B.parse_part(p["data"]) for p in B.PARTS}
+    parts = {p["id"]: p for p in B.PARTS}
+    vox = staff(parts["vox"], parsed, True)
+    lyr = ly_lyrics(parsed["vox"])
+    strings = "".join(staff(parts[x], parsed, x == "vn1")
+                      for x in ("vn1", "vn2", "va", "vc"))
+    return f"""\\version "2.24.0"
+#(set-global-staff-size {STAFF_SIZE})
+{paper()}
+\\book {{
+{cover()}
+{title_block()}
+\\score {{
+  <<
+{vox}
+    \\new Lyrics \\lyricsto "vox" {{ {lyr} }}
+    \\new StaffGroup \\with {{ systemStartDelimiter = #'SystemStartBracket }}
+    <<{strings}
+    >>
+    \\new Dynamics \\with {{
+      \\consists Measure_counter_engraver
+      \\override MeasureCounter.font-encoding = #'latin1
+      \\override MeasureCounter.font-series = #'bold
+      \\override MeasureCounter.font-size = #0.5
+      \\override MeasureCounter.outside-staff-priority = ##f
+      \\override MeasureCounter.Y-offset = #0
+      \\override MeasureCounter.stencil =
+        #(make-stencil-boxer 0.1 0.45 ly:text-interface::print)
+      \\override VerticalAxisGroup.nonstaff-relatedstaff-spacing =
+        #'((basic-distance . 7) (minimum-distance . 5) (padding . 1.5))
+    }} {{ \\startMeasureCount s1*{B.NBARS} \\stopMeasureCount }}
+  >>
+{layout()}
+}}
+}}
+"""
+
+
+def main():
+    os.makedirs(B.OUT, exist_ok=True)
+    pdf = os.path.join(B.OUT, f"{B.NAME}_总谱.pdf")
+    with tempfile.TemporaryDirectory() as tmp:
+        ly = os.path.join(tmp, "score.ly")
+        with open(ly, "w", encoding="utf-8") as fh:
+            fh.write(ly_source())
+        if "--ly" in sys.argv:
+            shutil.copy(ly, sys.argv[sys.argv.index("--ly") + 1])
+        r = subprocess.run(["lilypond", "-dno-point-and-click", "-o",
+                            os.path.join(tmp, "score"), ly],
+                           capture_output=True, text=True)
+        log = r.stderr
+        warn = [x for x in log.splitlines()
+                if "warning" in x.lower() or "error" in x.lower()]
+        for x in warn:
+            print(x)
+        if r.returncode != 0:
+            print(log)
+            sys.exit(1)
+        shutil.copy(os.path.join(tmp, "score.pdf"), pdf)
+        if "--png" in sys.argv:
+            d = sys.argv[sys.argv.index("--png") + 1]
+            os.makedirs(d, exist_ok=True)
+            subprocess.run(["lilypond", "-dno-point-and-click", "--png",
+                            "-dresolution=150", "-o",
+                            os.path.join(d, "page"), ly],
+                           capture_output=True, text=True, check=True)
+    print("written", pdf)
+
+
+if __name__ == "__main__":
+    main()

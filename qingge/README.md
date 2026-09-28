@@ -3,19 +3,20 @@
 原曲：陈没 词，伍冠谚 曲，梁静茹 演唱（电视剧《败犬女王》插曲）。
 原谱标的是「(F#) 男调(B♭) 女调(F)」，这里用女调 **F 大调（1=F）**，4/4，♩=70（slow soul，16 beat）。
 编制：人声 + Violin I / Violin II / Viola / Violoncello（弦乐四重奏）。
+改编、制谱：花开当富贵。
 范围：图 3 那一段，也就是最后一遍副歌，从弱起「你写」唱到「天长地久」，只唱一遍。前面加了 4 小节弦乐前奏，后面加了 2 小节尾奏。
 
 ## 文件（`output/`）
 
 | 文件 | 用途 |
 |---|---|
-| `情歌_副歌_人声弦乐四重奏.musicxml` | **西贝柳斯工程用**：总谱，带歌词、力度、连线、重音、排练号。已按 MusicXML 4.0 官方 schema 校验通过，ACE Studio 也能直接导入 |
+| `情歌_副歌_人声弦乐四重奏.musicxml` | **西贝柳斯工程用**：总谱，带歌词、力度、连线、重音、排练号，首页有标题和署名（改编、制谱：花开当富贵）。已按 MusicXML 4.0 官方 schema 校验通过，ACE Studio 也能直接导入 |
+| `情歌_总谱.pdf` | **好莱坞标准总谱**：封面（Full Score / Score in C、词曲原唱、改编、制谱、编制、调、速度、时长），首页标题区和署名，每小节都有小节号，排练号加框并在人声和弦乐上方各出现一次，第 2 页起有页眉。LilyPond 排版，共 3 页（封面 + 2 页谱） |
+| `情歌_弦乐四重奏_伴奏.mid` | **弦乐总 MIDI**：四个弦乐声部在一个文件里，带速度变化 |
 | `情歌_人声_带歌词.mid` | **人声 MIDI，带逐字歌词**（UTF-8）。拖腔音符的歌词是 `-` |
 | `情歌_人声_带歌词_GBK编码备用.mid` | 导入后歌词是乱码时换用这个 |
 | `情歌_人声_素.mid` | 人声 MIDI，不带歌词 |
 | `情歌_副歌_人声弦乐四重奏_全轨.mid` | ACE Studio 用：人声 + 四个弦乐声部共 5 轨，带速度变化（「天长地」起渐慢） |
-| `情歌_弦乐四重奏_伴奏.mid` | 只有四个弦乐声部 |
-| `情歌_副歌_总谱预览.pdf` | MuseScore 排的预览，方便在手机上看；正式排版以西贝柳斯为准 |
 | `粗略试听_GM音色_非ACE效果.mp3` | 用普通 GM 音源渲染的试听，只用来检查音符，**不是最终音效** |
 | `情歌_副歌_歌词字幕.srt` | 歌词字幕，时间从第 1 小节算起（每句提前 0.2 秒出现） |
 
@@ -110,11 +111,13 @@ python3 build.py --check  # 只检查音域、声部冲突和平行五八度
 ```
 
 乐谱数据都写在 `build.py` 里，每小节一行，时值以十六分音符为单位。改一处，MusicXML、MIDI 和字幕会一起更新。
-PDF 预览和试听 mp3 是用 MuseScore 3 和 FluidSynth 另外渲染的：
+PDF 总谱用 LilyPond 排（读的是同一份 `build.py` 数据），试听 mp3 用 FluidSynth 另外渲染：
 
 ```bash
+apt-get install lilypond fonts-noto-cjk fonts-texgyre fluidsynth fluid-soundfont-gm ffmpeg
+python3 engrave.py                 # 生成 output/情歌_总谱.pdf
+python3 engrave.py --png /tmp/pg   # 另外按页出 PNG，用来逐页检查排版
 cd output
-QT_QPA_PLATFORM=offscreen mscore3 -o 情歌_副歌_总谱预览.pdf 情歌_副歌_人声弦乐四重奏.musicxml
 fluidsynth -ni -g 0.6 -F /tmp/p.wav /usr/share/sounds/sf2/FluidR3_GM.sf2 情歌_副歌_人声弦乐四重奏_全轨.mid
 ffmpeg -y -i /tmp/p.wav -af loudnorm=I=-16:TP=-1.5 -b:a 160k 粗略试听_GM音色_非ACE效果.mp3
 ```

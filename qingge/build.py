@@ -78,6 +78,16 @@ DRIVE = (0, 3, 6)  # 3+3+2 accents inside a half bar of 16ths
 # ---------------------------------------------------------------------------
 REST = "r/16"
 
+# Credits. Standing rule from the user: 改编 and 制谱 are always 花开当富贵.
+TITLE = "情歌"
+SUBTITLE = "最后一遍副歌 · 人声与弦乐四重奏"
+SUBTITLE_EN = "Final Chorus · for Voice and String Quartet"
+LYRICIST = "陈没"
+COMPOSER = "伍冠谚"
+SINGER = "梁静茹"
+ARRANGER = "花开当富贵"
+ENGRAVER = "花开当富贵"
+
 VOCAL = {b: REST for b in range(1, NBARS + 1)}
 VOCAL.update({
     4: "r/12 A4/2=你 (G4/1=写 F4/1)",
@@ -295,6 +305,21 @@ def split_dur(pos, dur):
     return pieces
 
 
+def split_rest(pos, dur):
+    """Rests: no dotted values, beats 1 and 3 stay visible."""
+    pieces = []
+    while dur > 0:
+        allowed = ([16, 8, 4, 2, 1] if pos == 0 else
+                   [8, 4, 2, 1] if pos == 8 else
+                   [4, 2, 1] if pos % 4 == 0 else
+                   [2, 1] if pos % 2 == 0 else [1])
+        d = next(x for x in allowed if x <= dur)
+        pieces.append(d)
+        pos += d
+        dur -= d
+    return pieces
+
+
 QL = {1: 0.25, 2: 0.5, 3: 0.75, 4: 1.0, 6: 1.5, 8: 2.0, 12: 3.0, 16: 4.0}
 
 
@@ -332,7 +357,8 @@ def make_m21(p, events):
                 g = g.getGrace()
                 g.duration.slash = True
                 m.append(g)
-            pieces = split_dur(e["pos"], e["dur"])
+            pieces = (split_rest if e["pitches"] is None else split_dur)(
+                e["pos"], e["dur"])
             objs = []
             for i, d in enumerate(pieces):
                 if e["pitches"] is None:
@@ -414,11 +440,11 @@ def make_m21(p, events):
 def build_score(parsed):
     sc = stream.Score()
     md = metadata.Metadata()
-    md.title = "情歌（最后一遍副歌）"
-    md.movementName = "情歌（副歌）· 人声与弦乐四重奏"
-    md.composer = "伍冠谚 曲"
-    md.lyricist = "陈没 词"
-    md.add("arranger", "人声与弦乐四重奏 · F大调")
+    md.title = TITLE
+    md.movementName = TITLE
+    md.composer = COMPOSER
+    md.lyricist = LYRICIST
+    md.add("arranger", ARRANGER)
     sc.insert(0, md)
     for p in PARTS:
         sc.insert(0, make_m21(p, parsed[p["id"]]))
@@ -466,6 +492,46 @@ def polish(path):
         "</defaults>")
     for i, x in enumerate(new):
         d.insert(i, x)
+    # identification: who engraved it (制谱)
+    ident = r.find("identification")
+    enc = ident.find("encoding")
+    for x in enc.findall("encoder"):
+        enc.remove(x)
+    e = ET.Element("encoder")
+    e.text = ENGRAVER
+    enc.insert(1, e)  # after encoding-date
+    # page-1 credits, so Sibelius shows title and the credits as page text
+    for x in r.findall("credit"):
+        r.remove(x)
+    W, H, M = 1400, 1980, 70
+    # one text block per position: some importers stack separate credits
+    # that share a position on top of each other
+    credits = [  # (types, runs [(text, size, bold)], x, y, justify)
+        (("title", "subtitle"), [(TITLE, 26, True), ("\n" + SUBTITLE, 12,
+                                                      False)],
+         W / 2, H - M, "center"),
+        (("lyricist",), [("Score in C", 10, True),
+                         (f"\n\n词：{LYRICIST}\n原唱：{SINGER}", 10,
+                          False)], 80, H - M, "left"),
+        (("composer", "arranger"),
+         [(f"曲：{COMPOSER}\n改编：{ARRANGER}\n制谱：{ENGRAVER}", 10,
+           False)], W - 60, H - M - 110, "right"),
+    ]
+    at = list(r).index(r.find("part-list"))
+    for i, (types, runs, x, y, just) in enumerate(credits):
+        c = ET.Element("credit", page="1")
+        for t in types:
+            ET.SubElement(c, "credit-type").text = t
+        for k, (text, size, bold) in enumerate(runs):
+            w = ET.SubElement(c, "credit-words", {"font-size": str(size)})
+            if k == 0:
+                w.attrib = {"default-x": f"{x:g}", "default-y": f"{y:g}",
+                            "font-size": str(size), "justify": just,
+                            "valign": "top"}
+            if bold:
+                w.set("font-weight", "bold")
+            w.text = text
+        r.insert(at + i, c)
     for sp in r.iter("score-part"):
         pname = sp.findtext("part-name")
         iname, snd = SOUNDS[pname]
@@ -487,6 +553,17 @@ def polish(path):
     for part in r.findall("part"):
         vocal = names[part.get("id")] == "Voice"
         for m in part.findall("measure"):
+            if m.get("number") == "1":
+                # room for the credits; a bar number on every bar
+                pr = m.find("print")
+                if pr is None:
+                    pr = ET.Element("print")
+                    m.insert(0, pr)
+                for x in list(pr):
+                    pr.remove(x)
+                sl = ET.SubElement(pr, "system-layout")
+                ET.SubElement(sl, "top-system-distance").text = "290"
+                ET.SubElement(pr, "measure-numbering").text = "measure"
             if int(m.get("number")) in SYSTEM_BREAKS:
                 pr = m.find("print")
                 if pr is None:

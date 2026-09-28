@@ -2,15 +2,16 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-title>情歌（最后一遍副歌）</work-title>
+    <work-title>情歌</work-title>
   </work>
-  <movement-title>情歌（副歌）· 人声与弦乐四重奏</movement-title>
+  <movement-title>情歌</movement-title>
   <identification>
-    <creator type="composer">伍冠谚 曲</creator>
-    <creator type="lyricist">陈没 词</creator>
-    <creator type="arranger">人声与弦乐四重奏 · F大调</creator>
+    <creator type="composer">伍冠谚</creator>
+    <creator type="lyricist">陈没</creator>
+    <creator type="arranger">花开当富贵</creator>
     <encoding>
       <encoding-date>2026-09-28</encoding-date>
+      <encoder>花开当富贵</encoder>
       <software>music21 v.10.5.0</software>
       <supports element="beam" type="yes" />
       <supports element="stem" type="yes" />
@@ -44,16 +45,38 @@
       <staff-distance>75</staff-distance>
     </staff-layout>
   </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-type>subtitle</credit-type>
+    <credit-words default-x="700" default-y="1910" font-size="26" justify="center" valign="top" font-weight="bold">情歌</credit-words>
+    <credit-words font-size="12">
+最后一遍副歌 · 人声与弦乐四重奏</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>lyricist</credit-type>
+    <credit-words default-x="80" default-y="1910" font-size="10" justify="left" valign="top" font-weight="bold">Score in C</credit-words>
+    <credit-words font-size="10">
+
+词：陈没
+原唱：梁静茹</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-type>arranger</credit-type>
+    <credit-words default-x="1340" default-y="1800" font-size="10" justify="right" valign="top">曲：伍冠谚
+改编：花开当富贵
+制谱：花开当富贵</credit-words>
+  </credit>
   <part-list>
-    <score-part id="P51594397c80bbe9b5bd0c3f854ef5047">
+    <score-part id="Pd6b0ef5e852858c5d812af9875d4c58b">
       <part-name>Voice</part-name>
       <part-abbreviation>V.</part-abbreviation>
-      <score-instrument id="I57e4e6f3a5109447cba0cd8f50a25f29">
+      <score-instrument id="I77aa915c7c7fb10fa2a09463a0f7f0f3">
         <instrument-name>Voice</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
         <instrument-sound>voice.vocals</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I57e4e6f3a5109447cba0cd8f50a25f29">
+      <midi-instrument id="I77aa915c7c7fb10fa2a09463a0f7f0f3">
         <midi-channel>1</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
@@ -63,62 +86,68 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P9b57d2f996de51df1ede829cf417203f">
+    <score-part id="P3b654257cd3ac94bcf6c7fc517b83396">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="I83fb273b753ea981a993f52a71952d02">
+      <score-instrument id="Ia9b8c0ae3cceb8de3fc7bf44e692cd7e">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I83fb273b753ea981a993f52a71952d02">
+      <midi-instrument id="Ia9b8c0ae3cceb8de3fc7bf44e692cd7e">
         <midi-channel>2</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P4995da6f9d17d0fc3b4f04c52494becc">
+    <score-part id="Pc1eb827514c32978bbe58c5e9c5f2350">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="Ia6480bcae2bbb6b97452db6507959c5d">
+      <score-instrument id="Ia55d7a725f3164fbd6a075b5d011356d">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ia6480bcae2bbb6b97452db6507959c5d">
+      <midi-instrument id="Ia55d7a725f3164fbd6a075b5d011356d">
         <midi-channel>3</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pafb55abc09fc8e2b18fae604039fb684">
+    <score-part id="Pd959b5be1072e2b01713afebfbb94234">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="Ib1bfe448141a4ad89c92f749c8efd7d5">
+      <score-instrument id="Ieae3254186f917e1f0608f0278649cfd">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ib1bfe448141a4ad89c92f749c8efd7d5">
+      <midi-instrument id="Ieae3254186f917e1f0608f0278649cfd">
         <midi-channel>4</midi-channel>
         <midi-program>42</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P06c520cc36951cc180adf0a88a160055">
+    <score-part id="P7553138665b0d7df08de00550314e552">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="If34c394cb28ac395c8261c7cd054fda0">
+      <score-instrument id="Ib9f783c4a9a19fb3a44b24292b6c20cb">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="If34c394cb28ac395c8261c7cd054fda0">
+      <midi-instrument id="Ib9f783c4a9a19fb3a44b24292b6c20cb">
         <midi-channel>5</midi-channel>
         <midi-program>43</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="P51594397c80bbe9b5bd0c3f854ef5047">
+  <part id="Pd6b0ef5e852858c5d812af9875d4c58b">
     <measure implicit="no" number="1">
+      <print>
+        <system-layout>
+          <top-system-distance>290</top-system-distance>
+        </system-layout>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
@@ -173,9 +202,13 @@
     <measure implicit="no" number="4">
       <note>
         <rest />
-        <duration>30240</duration>
+        <duration>20160</duration>
         <type>half</type>
-        <dot />
+      </note>
+      <note>
+        <rest />
+        <duration>10080</duration>
+        <type>quarter</type>
       </note>
       <direction placement="above">
         <direction-type>
@@ -1312,8 +1345,14 @@
       </barline>
     </measure>
   </part>
-  <part id="P9b57d2f996de51df1ede829cf417203f">
+  <part id="P3b654257cd3ac94bcf6c7fc517b83396">
     <measure implicit="no" number="1">
+      <print>
+        <system-layout>
+          <top-system-distance>290</top-system-distance>
+        </system-layout>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
@@ -2185,8 +2224,14 @@
       </barline>
     </measure>
   </part>
-  <part id="P4995da6f9d17d0fc3b4f04c52494becc">
+  <part id="Pc1eb827514c32978bbe58c5e9c5f2350">
     <measure implicit="no" number="1">
+      <print>
+        <system-layout>
+          <top-system-distance>290</top-system-distance>
+        </system-layout>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
@@ -3401,8 +3446,14 @@
       </barline>
     </measure>
   </part>
-  <part id="Pafb55abc09fc8e2b18fae604039fb684">
+  <part id="Pd959b5be1072e2b01713afebfbb94234">
     <measure implicit="no" number="1">
+      <print>
+        <system-layout>
+          <top-system-distance>290</top-system-distance>
+        </system-layout>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
@@ -4900,8 +4951,14 @@
       </barline>
     </measure>
   </part>
-  <part id="P06c520cc36951cc180adf0a88a160055">
+  <part id="P7553138665b0d7df08de00550314e552">
     <measure implicit="no" number="1">
+      <print>
+        <system-layout>
+          <top-system-distance>290</top-system-distance>
+        </system-layout>
+        <measure-numbering>measure</measure-numbering>
+      </print>
       <attributes>
         <divisions>10080</divisions>
         <key>
