@@ -5,3 +5,4 @@ __pycache__/
 juebieshu/source/pages/
 juebieshu/source/crops/
 juebieshu/transcription/work/scratch/
+juebieshu/transcription/work/*.png
