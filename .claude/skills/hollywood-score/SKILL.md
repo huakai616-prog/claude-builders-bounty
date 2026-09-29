@@ -93,6 +93,43 @@ apt-get install -y fonts-noto-cjk fonts-ebgaramond fonts-ebgaramond-extra popple
 - **Chromium**: found under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`, or set `CHROME=/path`.
 - On the user's Mac: MuseScore 4 at `/Applications/MuseScore 4.app`, Chrome at `/Applications/Google Chrome.app`. Both are picked up automatically.
 
+## Instrumental works and parts
+
+Not every job is a song.  An instrumental piece (the first one: `alla-turca/`,
+Mozart's Rondo alla Turca for string quartet, from a piano score PDF) follows
+the same standard with these differences:
+
+- **The four main files** are the Sibelius MusicXML, the Hollywood PDF, the
+  strings MIDI (one track per instrument, for ACE) and a **parts PDF**
+  (`<名>_分谱.pdf`) in place of the vocal MIDI.  In `tools/deliver/catalog.py`
+  give the entry `main=dict(musicxml=…, pdf=…, strings=…, parts=…)`, plus
+  `other_note` and `howto` for its 说明.txt.  No SRT, no GBK file.
+- **Credits**: set `META["original"]` (e.g. "A大调钢琴奏鸣曲 K.331 第三乐章");
+  it prints as 原曲 on the cover and in the title block, where a song has
+  作词 / 原唱.
+- **Parts**: `hollywood.polish_musicxml(path, META, part=("Violin I",
+  "第一小提琴"))` lays a one-instrument MusicXML out as a 9 × 12 in part
+  (`hollywood_part.mss`: same fonts, boxed bar numbers, multi-rests), and
+  `hollywood.render_parts_pdf([(xml, en, zh), …], out, META)` engraves them
+  into one PDF with a bookmark per instrument and the instrument named in
+  every header and footer.  Give every part the tempo mark and the
+  rehearsal letters (`make_m21(…, lead=True)` in `alla-turca/build.py`).
+- **Transcribing a printed score** (not jianpu): keep the piano original
+  in `<piece>/source_piano.py` and let `--check` compare the arrangement
+  with it (melody attacked, bass on every downbeat, no pitch class foreign
+  to the bar, no minor 2nd / 9th the original lacks).  Deliberate
+  departures go into `ALLOW`, keyed by the original's bar numbers.
+- **Repeats**: written out (`FORM`), so the second time can be scored
+  differently and the MIDI needs no unrolling; `ALIAS` reuses a strain's
+  data for its reprise.
+
+## Song-specific style values
+
+`META["style"] = {"measureSpacing": 1.3}` (and `META["part_style"]` for the
+parts) replaces or adds keys of the house style for one piece only;
+`render_pdf` writes a temporary copy of `hollywood.mss`.  Use it sparingly:
+the house values are the standard.
+
 ## Choosing system breaks (3 systems per page)
 
 On 11 × 17 at 7.2 mm staves:
@@ -101,6 +138,15 @@ On 11 × 17 at 7.2 mm staves:
 - **Height**: 5 staves + lyrics = one system. The first page holds the title block + 3 systems; the other pages hold 3.
 - Count the systems and make the total a multiple of 3 (page 1 counts as 3). Move one break if the last page would get 1–2 lonely systems. Start systems at rehearsal letters where possible.
 - Explicit breaks that are too full make MS4 wrap a bar on its own. If you see a one-bar system, take a bar out of that system.
+- To see the real layout without eyeballing every page, read the boxed bar
+  numbers back from the PDF: `pdftotext -bbox <pdf> -` gives each number's
+  position; group them by y (systems are 100+ pt apart) to list the bars of
+  every system on every page.  A lowered `measureSpacing` does not help when
+  the systems are already at their minimum width; take bars out or make
+  them narrower.
+- Instrumental 2/4 music (the string quartet): Mozart's 8-bar phrases fit one
+  system; 16th-note passages 4 bars; the first system (full instrument
+  names) holds about 6.
 
 ## QA before delivering (look at every page)
 

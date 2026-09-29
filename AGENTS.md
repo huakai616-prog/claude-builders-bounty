@@ -34,10 +34,11 @@
 | 情歌（最后一遍副歌，梁静茹） | 人声 + 弦乐四重奏 · F 大调 · ♩=70 | `claude/serene-darwin-2l4jy4` | `qingge/` | 已完成，带封面 PDF（LilyPond 排的 A4，不是 `tools/hollywood` 的 11×17）。有三处八度 / 节奏待用户确认 |
 | 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `main`（原 `claude/magical-meitner-wj6g5j`） | `chatang/` | 已完成，带前奏尾奏，好莱坞总谱 PDF（封面 + 3 页）。待用户确认调（保留原调 A）和转写八度（1 记作 A3），待在 ACE Studio 渲染 |
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
+| 土耳其进行曲（全曲，莫扎特 K.331 第三乐章） | 弦乐四重奏，不用钢琴，古典风格 · a 小调 / A 大调（原调） · ♩=120 | `main`（原 `claude/epic-ramanujan-6iapv9`） | `alla-turca/` | 已完成：用户给的是钢琴谱 PDF（五线谱，不是简谱）。反复全部写开、第二遍换配器，好莱坞总谱 13 页 + 分谱。待用户确认 m52 / m55 两处照谱还是照原典版；拨弦段在 ACE 里要手动改演奏法 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 泪海、我不难过、茶汤、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
+- 泪海、我不难过、茶汤、土耳其进行曲、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
 - 情歌、大东北、泪海、甲乙丙丁、茉莉花的 PDF 或署名还没按好莱坞标准重做。用户要的时候，用 `tools/hollywood` 重出，再更新交付中心。
 - 茶汤那一轮给模板加了几项：封面居中、排练号加粗和段落名独立一行、十六分音符连梁、PDF 文字层修正、页眉页脚细节，`chatang/build.py` 还修了长音上的渐强渐弱（hairpin 不再丢）。新歌的代码从 `chatang/build.py` 接。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
@@ -155,6 +156,9 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - 导入的署名位置会乱（作曲跑到顶上，作词掉进谱里）。
   - 这两个 `tools/hollywood/hollywood.py` 都已经处理了。
   - pypdf 报 `_cffi_backend` 时 `pip install cffi`。
+- **MS4 一行放不下时**：它会把最后一两小节挤到下一行单独成行，调小 `measureSpacing` 没用（已经是最小宽度）。先看实际分行：`pdftotext -bbox` 读出每页的方框小节号、按纵坐标分组，就知道每行是哪几小节。解决办法是每行少放小节，或者去掉占宽的东西（土耳其进行曲把大提琴的三个倚音琶音改成了琶音和弦）。
+- **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。
+- **纯器乐曲 / 钢琴谱转弦乐**：照 `alla-turca/build.py` 做。钢琴原谱逐小节转写成 `source_piano.py`，`--check` 会拿编配和原谱对照（旋律、低音、和声外音、原谱没有的小二度冲突）；反复用 `FORM` 写开、`ALIAS` 复用；分谱用 `hollywood.render_parts_pdf`。
 - **给用户 Mac 写的 shell 脚本**：macOS 的 `/bin/bash` 是 3.2，UTF-8 下它把 0x80–0xFF 的字节当字母，`"「$NAME」"` 会把「」」的第一个字节吞进变量名，打印出「??」。变量后面紧跟中文时一律写 `${NAME}`。在 Linux 上可以用 `localedef -i en_US -f ISO-8859-1` 造一个 Latin-1 locale（`LOCPATH=… LC_ALL=en_US.ISO-8859-1`）复现。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 
