@@ -3,16 +3,18 @@
 Texture
 - 16 (subito f) and 18 (f): the piano's 3+3+2 chord hits (dotted 8th,
   dotted 8th, 8th | dotted 8th, 16th, quarter) spread over Vn I / Vn II /
-  Va as double stops, marcato, retaken down-bows (the 16th before the last
-  hit up-bow).  16 is the bare open fifth G–D: Vn I D5+G5, Vn II D4+G4,
-  Va G3+D4 on its open strings.  18 adds the A3/B-flat3 cluster, split
+  Va as double stops, marcato, bowed down-down-up | down-up-down (group
+  heads on down-bows, one retake fewer than all down-bows).  16 is the
+  bare open fifth G–D: Vn I D5+G5, Vn II D4+G4, Va G3+D4 on its open
+  strings.  18 adds the A3/B-flat3 cluster, split
   between Va (A3+D4) and Vn II (B-flat3+G4).  Vc = the LH's G 16th figure
   on the open G string, interlocking with the hits.
-- 17 (mp): Vn I = the RH high 16ths at pitch (3rd position, string
+- 17 (mp / p): Vn I = the RH high 16ths at pitch (3rd position, string
   crossings, one slur per 3+3+2 group, tenuto on the group heads); Va = the
   LH 16ths at pitch (B-flat4 G4 A4, first position around the open A);
   Vn II holds the RH's D4+G4 and Vc the G (octave down) — both tied over
-  from the last hit of 16, as in the piano, fading into mp.
+  from the last hit of 16, as in the piano, fading to p (the pedal tail,
+  one step under the moving mp 16ths).
 - 19–22 (ff): the riff.  Vn I = the RH top line (tenuto B-flat6 / G6 as in
   the piano), then the top of the RH chords (D5 C5 D5 / D5 B-flat5 A5);
   Vn II = the RH's lower octave (D5 B-flat5 D5 G5, then D5 B-flat4 G4) and
@@ -25,11 +27,12 @@ Texture
   (16th, held, 16th).
 - 23: the transition.  Vn I rests and only gives the A5 pickup into the
   verse (p); Vn II = the RH's syncopated G4+B-flat4 / G4 / C5; Vc keeps the
-  LH 16ths on the open G string (spiccato); Va plays the D in the LH rhythm
-  for half a bar, then just holds it (thinning out).  Everybody dim. to p.
+  LH 16ths on the open G string; Va plays the D in the LH rhythm for half
+  a bar, then just holds it (thinning out).  Va and Vc both spicc. for the
+  16ths.  Everybody dim. to p, arriving together on beat 4.
 """
 
-_HIT16 = ("{c}/12!db {c}/12!db {c}/8!db {c}/12!db {c}/4!ub {c}/16!db{t}")
+_HIT16 = ("{c}/12!db {c}/12!db {c}/8!ub {c}/12!db {c}/4!ub {c}/16!db{t}")
 _G16 = ("G2/4 G2/4 G2/4 r/4 G2/4 G2/4 r/4 G2/4 "
         "r/4 G2/4 G2/4 r/4 r/4 G2/4 G2/8{t}")
 
@@ -87,32 +90,33 @@ VC = {
 DYN = {
     "vn1": [(16, 0, "f"), (17, 0, "mp"), (18, 0, "f"), (19, 0, "ff"),
             (23, 56, "p")],
-    "vn2": [(16, 0, "f"), (17, 0, "mp"), (18, 0, "f"), (19, 0, "ff"),
+    "vn2": [(16, 0, "f"), (17, 0, "p"), (18, 0, "f"), (19, 0, "ff"),
             (23, 56, "p")],
     "va": [(16, 0, "f"), (17, 0, "mp"), (18, 0, "f"), (19, 0, "ff"),
-           (23, 32, "p")],
-    "vc": [(16, 0, "f"), (17, 0, "mp"), (18, 0, "f"), (19, 0, "ff"),
+           (23, 56, "p")],
+    "vc": [(16, 0, "f"), (17, 0, "p"), (18, 0, "f"), (19, 0, "ff"),
            (23, 56, "p")],
 }
 
 HAIR = {
-    # 18: swell on the last beat into the ff riff; 23: the piano's
-    # decrescendo across the transition bar
-    "vn1": [(18, 48, 18, 63, "cresc")],
-    # 16: the tied last hit / G fades into the mp of 17 (piano: the chord
+    # 18: no swell under the marcato last hit (piano: f straight to
+    # subito ff); only the cello's G pickup drives into 19.
+    # 23: the piano's decrescendo across the transition bar, same span in
+    # every part that plays.
+    "vn1": [],
+    # 16: the tied last hit / G fades into the p of 17 (piano: the chord
     # simply decays under the pedal)
-    "vn2": [(16, 48, 16, 63, "dim"), (18, 48, 18, 63, "cresc"),
-            (23, 0, 23, 52, "dim")],
-    # 23: the viola's 16ths fade out, its held D is already p
-    "va": [(18, 48, 18, 63, "cresc"), (23, 0, 23, 28, "dim")],
-    "vc": [(16, 52, 16, 63, "dim"), (18, 48, 18, 63, "cresc"),
+    "vn2": [(16, 48, 16, 63, "dim"), (23, 0, 23, 52, "dim")],
+    # 23: the viola's 16ths and then its held D thin out with the others
+    "va": [(23, 0, 23, 52, "dim")],
+    "vc": [(16, 52, 16, 63, "dim"), (18, 52, 18, 63, "cresc"),
            (23, 0, 23, 52, "dim")],
 }
 
 TEXT = {
     "vn1": [(16, 0, "subito"), (17, 0, "legato")],
     "vn2": [(16, 0, "subito")],
-    "va": [(16, 0, "subito"), (17, 0, "legato")],
+    "va": [(16, 0, "subito"), (17, 0, "legato"), (23, 0, "spicc.")],
     "vc": [(16, 0, "subito"), (23, 0, "spicc.")],
 }
 

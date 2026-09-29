@@ -77,9 +77,9 @@ VC = {
     59: "G3/64",
     60: "F3/64",
     61: "G3/64",
-    62: "Eb3/16 Eb2/16 Eb3/16 Eb2/16",
-    63: "G3/16 G2/16 G3/16 G2/16",
-    64: "F3/16 F2/16 F3/16 F2/16",
+    62: "Eb2/16 Eb3/16 Eb2/16 Eb3/16",
+    63: "G2/16 G3/16 G2/16 G3/16",
+    64: "F2/16 F3/16 F2/16 F3/16",
     65: "G3/16 G2/16 G2+D3+Bb3/12!db G2+D3+Bb3/12!db G2+D3+Bb3/8!db",
 }
 
@@ -105,14 +105,14 @@ TEXT = {
 }
 
 CLEFS = {
-    "va": [(58, 0, "treble"), (62, 0, "alto")],
+    "va": [(62, 0, "alto")],
 }
 
 # The piano's 8va covers 58-61 (to pos 48), then only the upper half of
-# 62-64 and beats 1-2 of 65.  The engine takes whole bars, so the line
-# covers 58-61 (the loco pickup B-flat5 at 61/56 is the one note under it)
-# and 62-65 are written at pitch, so the hits and double stops read loco.
-OTTAVA = [("vn1", 58, 61)]
+# 62-64 and beats 1-2 of 65.  Here the line covers 58 up to the loco pickup
+# B-flat5 at 61/56, and 62-65 are written at pitch, so the half-bar octave
+# leaps, hits and double stops read loco.
+OTTAVA = [("vn1", 58, 0, 61, 56)]
 
 # 58-61: the cello holds each bar's LH root (Eb3, G3, F3, G3, the LH's own
 # pitch) as a whole note: that is the piano's pedal (the LH strikes Eb3 /

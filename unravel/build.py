@@ -184,20 +184,38 @@ PARTS = [
     dict(id="vc", name="Violoncello", abbr="Vc.", data=VC,
          inst=instrument.Violoncello, clef="bass", program=42),
 ]
-for _p in PARTS:
-    _p["dyn"] = DYN[_p["id"]]
-    _p["hair"] = HAIR[_p["id"]]
-    _p["text"] = TEXT[_p["id"]]
-    _p["clefs"] = CLEFS.get(_p["id"], [])
-
-CLEF = {"treble": clef.TrebleClef, "alto": clef.AltoClef,
-        "tenor": clef.TenorClef, "bass": clef.BassClef}
-
 VEL = {"ppp": 26, "pp": 34, "p": 46, "mp": 60, "mf": 74, "f": 90, "ff": 104,
        "fff": 116}
 ACCENT = 12
 MARCATO = 18
 SFZ = 22
+
+
+def _dedup_dyn(marks, hairs):
+    """Drop a dynamic that repeats the level already in force (sections
+    each mark their first notes, so a level can be restated at a section
+    seam) unless a hairpin lies in between."""
+    out, cur, cur_t = [], None, None
+    for b, s, m in sorted(marks, key=lambda x: OFFS[x[0]] + x[1]):
+        t = OFFS[b] + s
+        hair_between = cur_t is not None and any(
+            cur_t <= OFFS[hb] + hs <= t for hb, hs, _, _, _ in hairs)
+        if m == cur and not hair_between and m not in ("sfz", "sf", "fp"):
+            continue
+        out.append((b, s, m))
+        if m in VEL:
+            cur, cur_t = m, t
+    return out
+
+
+for _p in PARTS:
+    _p["hair"] = HAIR[_p["id"]]
+    _p["dyn"] = _dedup_dyn(DYN[_p["id"]], _p["hair"])
+    _p["text"] = TEXT[_p["id"]]
+    _p["clefs"] = CLEFS.get(_p["id"], [])
+
+CLEF = {"treble": clef.TrebleClef, "alto": clef.AltoClef,
+        "tenor": clef.TenorClef, "bass": clef.BassClef}
 
 META = dict(
     title="Unravel", title_latin="东京喰种 OP",
@@ -588,25 +606,43 @@ def tick(abs64):
 
 
 def dyn_curve(p):
-    """velocity at each 64th of the score."""
-    pts = sorted((OFFS[b] + s, m) for b, s, m in p["dyn"])
+    """velocity at each 64th of the score: dynamic marks set the level,
+    a hairpin ramps from the current level to the next mark after it (or
+    one step up / down), and the level stays where the hairpin left it."""
+    marks = {}
+    for b, s, m in p["dyn"]:
+        if m in VEL:
+            marks[OFFS[b] + s] = VEL[m]
+    hairs = sorted((OFFS[b] + s, OFFS[b2] + s2, kind)
+                   for b, s, b2, s2, kind in p["hair"])
     level = [VEL["p"]] * (SCORE_LEN + 1)
-    lv = [(a, m) for a, m in pts if m in VEL]
-    for i, (a, m) in enumerate(lv):
-        end = lv[i + 1][0] if i + 1 < len(lv) else SCORE_LEN + 1
-        for t in range(a, end):
-            level[t] = VEL[m]
-    for b, s, b2, s2, kind in p["hair"]:
-        a, z = OFFS[b] + s, OFFS[b2] + s2
-        v0 = level[a]
-        nxt = [VEL[m] for t, m in lv if t > z]
-        v1 = nxt[0] if nxt else v0 + (-12 if kind == "dim" else 12)
-        if kind == "cresc" and v1 <= v0:
-            v1 = v0 + 10
-        if kind == "dim" and v1 >= v0:
-            v1 = v0 - 10
-        for t in range(a, min(z + 1, SCORE_LEN)):
-            level[t] = round(v0 + (v1 - v0) * (t - a) / max(1, z - a))
+    cur = VEL["p"]
+    ramp = {}
+    for a, z, kind in hairs:
+        ramp.setdefault(a, (z, kind))
+    t = 0
+    while t <= SCORE_LEN:
+        if t in marks:
+            cur = marks[t]
+        if t in ramp:
+            z, kind = ramp[t]
+            z = min(z, SCORE_LEN)
+            nxt = [v for u, v in sorted(marks.items()) if u > z]
+            v1 = nxt[0] if nxt else cur + (-12 if kind == "dim" else 12)
+            if kind == "cresc" and v1 <= cur:
+                v1 = cur + 10
+            if kind == "dim" and v1 >= cur:
+                v1 = cur - 10
+            v0 = cur
+            for u in range(t, z + 1):
+                if u in marks and u != t:
+                    break
+                level[u] = round(v0 + (v1 - v0) * (u - t) / max(1, z - t))
+            cur = v1
+            t = z + 1
+            continue
+        level[t] = cur
+        t += 1
     sfz = {OFFS[b] + s for b, s, m in p["dyn"] if m in ("sfz", "sf", "fp")}
     return level, sfz
 

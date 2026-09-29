@@ -60,7 +60,12 @@ SECTIONS = [
 # Tempo map (bar, pos, bpm) and printed tempo words (bar, pos, text)
 TEMPI = [(0, 0, 134)]
 TEMPO_TEXT = []
-SYSTEM_BREAKS = ()
-PAGE_BREAKS = ()
+# Hollywood layout: 3 systems per page, every rehearsal letter starts a
+# system (planned with layout.py, budget 74; the coda split by hand so the
+# last page also has three systems)
+SYSTEM_BREAKS = (6, 11, 19, 21, 28, 32, 40, 44, 50, 52, 58, 60, 66, 68, 72,
+                 74, 78, 80, 84, 87, 92, 94, 99, 101, 106, 108, 114, 118,
+                 126, 129)
+PAGE_BREAKS = (16, 24, 36, 47, 55, 63, 70, 76, 82, 90, 97, 104, 111, 123)
 # Accepted check items live in the section files as ALLOW:
 # ("mel"|"bass"|"foreign", bar) or ("stop", part, bar), each with a reason

@@ -103,7 +103,7 @@ TEXT = {
     "vc": [(50, 0, "sostenuto")],
 }
 
-CLEFS = {}
+CLEFS = {"va": [(57, 32, "treble")]}  # the run into the bridge (S07 returns to alto at 62)
 
 OTTAVA = []
 
