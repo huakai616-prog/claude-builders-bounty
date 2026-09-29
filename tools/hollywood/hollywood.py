@@ -584,8 +584,10 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
             letter-spacing: .08em; }
 .hd .l .x { color: #555; margin-left: 10pt; font-size: 8.5pt;
             letter-spacing: .25em; text-transform: uppercase; }
+/* page number: a real bold face with lining figures (EB Garamond has no
+   bold here, so Chromium would fake one) */
 .hd .r { position: absolute; right: 0; bottom: 3pt; font-size: 21pt;
-         font-weight: 700; }
+         font-family: 'Noto Serif CJK SC', serif; font-weight: 700; }
 /* one flex row, baseline-aligned: the credit line and "PAGE n OF N" have
    different sizes but must share a baseline */
 .ft { position: absolute; bottom: .38in; left: .6in; right: .6in;
@@ -595,8 +597,8 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
 .ft .l .cjk { letter-spacing: .08em; }
 .ft .l .en { color: #555; margin-left: 8pt; font-style: italic; }
 .ft .l .en .nm { font-style: normal; }  /* no fake-italic Chinese */
-.ft .r { letter-spacing: .2em; text-transform: uppercase; font-size: 8pt;
-         color: #333; }
+.ft .r { letter-spacing: .2em; margin-right: -.2em; /* flush with the rule */
+         text-transform: uppercase; font-size: 8pt; color: #333; }
 """
 
 

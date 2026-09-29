@@ -119,6 +119,8 @@
     <titleFontStyle>1</titleFontStyle>
     <subTitleFontFace>Noto Serif CJK SC</subTitleFontFace>
     <subTitleFontSize>14</subTitleFontSize>
+    <!-- MS4's default (10 mm) leaves the 30 pt title touching the subtitle -->
+    <subTitleOffset x="0" y="13"/>
     <composerFontFace>Noto Serif CJK SC</composerFontFace>
     <composerFontSize>10.5</composerFontSize>
     <lyricistFontFace>Noto Serif CJK SC</lyricistFontFace>

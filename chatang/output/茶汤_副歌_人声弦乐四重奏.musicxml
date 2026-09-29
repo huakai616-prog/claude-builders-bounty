@@ -65,15 +65,15 @@
 制谱：花开当富贵</credit-words>
   </credit>
   <part-list>
-    <score-part id="P1a4a144b8ae67e7b3342a2f7dc8c476e">
+    <score-part id="P11239c41e24f09b52fd9e21b9b0f34ed">
       <part-name>Voice</part-name>
       <part-abbreviation>V.</part-abbreviation>
-      <score-instrument id="I7a5adda00abca4b1157c862e1af0c4c5">
+      <score-instrument id="I5760bf450f4f87cac6e439060b6ede29">
         <instrument-name>Voice</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
         <instrument-sound>voice.vocals</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I7a5adda00abca4b1157c862e1af0c4c5">
+      <midi-instrument id="I5760bf450f4f87cac6e439060b6ede29">
         <midi-channel>1</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
@@ -83,61 +83,61 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P48773d03a1a66a110f4b5bcc95df016c">
+    <score-part id="Pecab7fe4d81143855660229071a3d96b">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="I7d4df19dc46b9335241eafb7991db696">
+      <score-instrument id="I07f760b590d4ab41120414a1485b8a68">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I7d4df19dc46b9335241eafb7991db696">
+      <midi-instrument id="I07f760b590d4ab41120414a1485b8a68">
         <midi-channel>2</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pc948a6a258abcd2ea5afcd205b799679">
+    <score-part id="P47a0aa8589605629e440b682dc15f7cb">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="I4156486033f03827333a352cf9c17d6f">
+      <score-instrument id="Id6bf1300ecf4c405e21dff68b18b8a68">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I4156486033f03827333a352cf9c17d6f">
+      <midi-instrument id="Id6bf1300ecf4c405e21dff68b18b8a68">
         <midi-channel>3</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pb067be9ab703e1886e45a374632d9b2d">
+    <score-part id="P564737e95b7b4f34a0c4ab27bbc7a757">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I68a2f0cee05c4c91e7fb4ba4695b37ac">
+      <score-instrument id="Ia4a7d008cb4292e83069859eafeed878">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I68a2f0cee05c4c91e7fb4ba4695b37ac">
+      <midi-instrument id="Ia4a7d008cb4292e83069859eafeed878">
         <midi-channel>4</midi-channel>
         <midi-program>42</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P24c62251b760fd45c27cb56297fe49f7">
+    <score-part id="P64e471d418fa003ea1dc6f47e59cd675">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="Ibef317e531b4a54a8857380823e8e127">
+      <score-instrument id="I82d85d9ff1b1ee209a26124d58d4df9a">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ibef317e531b4a54a8857380823e8e127">
+      <midi-instrument id="I82d85d9ff1b1ee209a26124d58d4df9a">
         <midi-channel>5</midi-channel>
         <midi-program>43</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="P1a4a144b8ae67e7b3342a2f7dc8c476e">
+  <part id="P11239c41e24f09b52fd9e21b9b0f34ed">
     <measure implicit="no" number="1">
       <print>
         <measure-numbering>measure</measure-numbering>
@@ -1660,7 +1660,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P48773d03a1a66a110f4b5bcc95df016c">
+  <part id="Pecab7fe4d81143855660229071a3d96b">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -2002,6 +2002,11 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2014,20 +2019,6 @@
           <tied type="start" />
         </notations>
       </note>
-      <backup>
-        <duration>40320</duration>
-      </backup>
-      <forward>
-        <duration>20160</duration>
-      </forward>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="3" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
-      <forward>
-        <duration>20160</duration>
-      </forward>
     </measure>
     <measure implicit="no" number="9">
       <note>
@@ -2042,25 +2033,16 @@
           <tied type="stop" />
         </notations>
       </note>
-      <note>
-        <rest />
-        <duration>20160</duration>
-        <type>half</type>
-      </note>
-      <backup>
-        <duration>40320</duration>
-      </backup>
-      <forward>
-        <duration>20160</duration>
-      </forward>
       <direction placement="below">
         <direction-type>
           <wedge number="3" spread="0" type="stop" />
         </direction-type>
       </direction>
-      <forward>
+      <note>
+        <rest />
         <duration>20160</duration>
-      </forward>
+        <type>half</type>
+      </note>
     </measure>
     <measure implicit="no" number="10">
       <print new-system="yes" />
@@ -2262,6 +2244,11 @@
         </direction-type>
         <sound dynamics="69" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -2270,11 +2257,6 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -2807,17 +2789,17 @@
           <slur number="3" type="stop" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="1" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <rest />
         <duration>15120</duration>
         <type>quarter</type>
         <dot />
       </note>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="1" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -2945,7 +2927,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pc948a6a258abcd2ea5afcd205b799679">
+  <part id="P47a0aa8589605629e440b682dc15f7cb">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -3092,6 +3074,25 @@
           <slur number="1" type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>40320</duration>
+      </backup>
+      <forward>
+        <duration>30240</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
+      <forward>
+        <duration>10080</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="6">
       <print new-system="yes" />
@@ -3183,7 +3184,7 @@
     <measure implicit="no" number="7">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -3210,7 +3211,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -3223,6 +3224,11 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -3234,11 +3240,6 @@
           <slur number="3" type="start" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="4" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -3271,7 +3272,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="stop" />
+          <wedge number="5" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -3414,7 +3415,7 @@
       </backup>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <forward>
@@ -3422,7 +3423,7 @@
       </forward>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -3435,6 +3436,11 @@
         </direction-type>
         <sound dynamics="69" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="1" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -3443,11 +3449,6 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -3547,7 +3548,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="1" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -3872,7 +3873,7 @@
     <measure implicit="no" number="21">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -3976,7 +3977,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -4908,17 +4909,17 @@
           <slur number="1" type="stop" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="2" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <rest />
         <duration>15120</duration>
         <type>quarter</type>
         <dot />
       </note>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -4971,7 +4972,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="stop" />
+          <wedge number="3" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -5050,7 +5051,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pb067be9ab703e1886e45a374632d9b2d">
+  <part id="P564737e95b7b4f34a0c4ab27bbc7a757">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -5089,7 +5090,7 @@
       </backup>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <forward>
@@ -5097,7 +5098,7 @@
       </forward>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -5149,6 +5150,25 @@
         <duration>40320</duration>
         <type>whole</type>
       </note>
+      <backup>
+        <duration>40320</duration>
+      </backup>
+      <forward>
+        <duration>20160</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
+      <forward>
+        <duration>20160</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="15" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="6">
       <print new-system="yes" />
@@ -5263,7 +5283,7 @@
     <measure implicit="no" number="7">
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -5363,7 +5383,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -5375,6 +5395,11 @@
           </dynamics>
         </direction-type>
         <sound dynamics="88" />
+      </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="1" spread="15" type="diminuendo" />
+        </direction-type>
       </direction>
       <note>
         <pitch>
@@ -5425,11 +5450,6 @@
           <slur number="2" type="stop" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="5" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -5576,7 +5596,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="stop" />
+          <wedge number="1" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -6184,7 +6204,7 @@
     <measure implicit="no" number="16">
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -6283,7 +6303,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -6296,6 +6316,11 @@
         </direction-type>
         <sound dynamics="69" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -6305,11 +6330,6 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -6402,7 +6422,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="3" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -6717,7 +6737,7 @@
     <measure implicit="no" number="21">
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -6816,7 +6836,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -7481,7 +7501,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="diminuendo" />
+          <wedge number="5" spread="15" type="diminuendo" />
         </direction-type>
       </direction>
       <note>
@@ -7630,7 +7650,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="stop" />
+          <wedge number="5" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -7721,7 +7741,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P24c62251b760fd45c27cb56297fe49f7">
+  <part id="P64e471d418fa003ea1dc6f47e59cd675">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -7759,7 +7779,7 @@
       </backup>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <forward>
@@ -7767,7 +7787,7 @@
       </forward>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -7845,6 +7865,25 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
+      <backup>
+        <duration>40320</duration>
+      </backup>
+      <forward>
+        <duration>30240</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="1" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
+      <forward>
+        <duration>10080</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="1" spread="15" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="6">
       <print new-system="yes" />
@@ -7888,7 +7927,7 @@
       </backup>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="0" type="crescendo" />
+          <wedge number="2" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <forward>
@@ -7896,7 +7935,7 @@
       </forward>
       <direction placement="below">
         <direction-type>
-          <wedge number="5" spread="15" type="stop" />
+          <wedge number="2" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -7909,6 +7948,11 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="3" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -7918,11 +7962,6 @@
         <duration>20160</duration>
         <type>half</type>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="6" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -7943,7 +7982,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="6" spread="0" type="stop" />
+          <wedge number="3" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -8119,7 +8158,7 @@
     <measure implicit="no" number="16">
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="0" type="crescendo" />
+          <wedge number="4" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -8158,7 +8197,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="1" spread="15" type="stop" />
+          <wedge number="4" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -8171,6 +8210,11 @@
         </direction-type>
         <sound dynamics="69" />
       </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="0" type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -8179,11 +8223,6 @@
         <duration>10080</duration>
         <type>quarter</type>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="2" spread="0" type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -8282,7 +8321,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="2" spread="15" type="stop" />
+          <wedge number="5" spread="15" type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -8569,7 +8608,7 @@
     <measure implicit="no" number="21">
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="0" type="crescendo" />
+          <wedge number="6" spread="0" type="crescendo" />
         </direction-type>
       </direction>
       <note>
@@ -8654,7 +8693,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="3" spread="15" type="stop" />
+          <wedge number="6" spread="15" type="stop" />
         </direction-type>
       </direction>
     </measure>
@@ -9071,7 +9110,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="15" type="diminuendo" />
+          <wedge number="1" spread="15" type="diminuendo" />
         </direction-type>
       </direction>
       <note>
@@ -9094,7 +9133,7 @@
       </note>
       <direction placement="below">
         <direction-type>
-          <wedge number="4" spread="0" type="stop" />
+          <wedge number="1" spread="0" type="stop" />
         </direction-type>
       </direction>
     </measure>
