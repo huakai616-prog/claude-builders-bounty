@@ -23,6 +23,25 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="wohewodezuguo", section="song", ref=None,
+        title="我和我的祖国", subtitle="全曲 · 四声部独唱与弦乐四重奏",
+        artist="李谷一", key="♭E 大调（原谱调）", tempo="♩.=56",
+        instrumentation="S.A.T.B. 四声部独唱 + 弦乐四重奏",
+        src="wohewodezuguo/output", layout="standard",
+        main=dict(musicxml="我和我的祖国_全曲_四声部人声弦乐四重奏.musicxml",
+                  pdf="我和我的祖国_全曲_总谱.pdf",
+                  strings="我和我的祖国_弦乐四重奏_伴奏.mid",
+                  vocal="我和我的祖国_四声部人声_带歌词.mid"),
+        labels=dict(vocal="四声部人声带歌词 MIDI"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="四个声部各一位歌手（单人合唱）。先看压缩包里的「使用说明.md」：ACE 导入、拨弦位置、气口 br、多音字。",
+        questions=[
+            "第一段主歌交给女低音独唱（旋律 ♭B3–F5 正好在她的音区），女高音留到副歌「我最亲爱的祖国」才第一次开口。想让女高音从头唱，告诉我。",
+            "歌词：原谱第 54 小节印的「浪的忧愁」按通行歌词唱成「海的忧愁」。第 27 小节「紧贴着」（常见是「紧依着」）、第 11–12 小节「分隔」（常见是「分割」）照原谱没改，要改告诉我。",
+            "速度定的是附点四分音符 = 56（Moderato）。想贴合某个录音的速度，告诉我。",
+            "每个乐句前有一个歌词为 br 的短音标换气。如果 ACE 把它唱成字，删掉这些短音即可。",
+        ]),
+    dict(
         slug="unravel", section="song", ref=None,
         title="Unravel", subtitle="全曲 · 弦乐四重奏 · 东京喰种 OP · 依 Animenz 钢琴版改编",
         artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
