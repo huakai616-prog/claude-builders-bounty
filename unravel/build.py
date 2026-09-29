@@ -226,8 +226,8 @@ def _fits(pos, d):
         return pos in (0, 8, 32, 40)
     if d == 16:
         return pos % 16 == 0 or pos in (8, 40)
-    if d == 12:
-        return pos % 16 in (0, 4)
+    if d == 12:          # also the 3+3+2 dotted 8th on the "e" of 1 / 3
+        return pos % 16 in (0, 4) or pos % 32 == 12
     if d == 8:
         return pos % 8 == 0
     if d == 6:
@@ -481,6 +481,7 @@ def polish(path):
     names = {s.get("id"): s.findtext("part-name")
              for s in r.iter("score-part")}
     ids = {p["name"]: p["id"] for p in PARTS}
+    divs = int(r.find("part/measure/attributes/divisions").text)
     for part in r.findall("part"):
         pid = ids[names[part.get("id")]]
         ms = {int(m.get("number")): m for m in part.findall("measure")}
@@ -501,19 +502,34 @@ def polish(path):
                 elif el.find("direction-type/words") is not None or \
                         el.find("direction-type/rehearsal") is not None:
                     el.set("placement", "above")
-        for opid, b1, b2 in OTTAVA:
-            if opid != pid:
+        for ot in OTTAVA:
+            # (part, first bar, last bar) or
+            # (part, bar1, pos1, bar2, pos2): notes starting at/after pos1
+            # in bar1 up to (not including) pos2 in bar2
+            if ot[0] != pid:
                 continue
-            first, last = ms[b1], ms[b2]
+            if len(ot) == 3:
+                b1, p1, b2, p2 = ot[1], 0, ot[2], blen(ot[2])
+            else:
+                b1, p1, b2, p2 = ot[1:]
+            first = _voice1_notes(ms[b1], divs)
+            last = _voice1_notes(ms[b2], divs)
+            a = next(el for pos, el in first if pos >= p1)
+            z = [el for pos, el in last if pos < p2][-1]
             start = ET.fromstring(
                 '<direction placement="above"><direction-type>'
                 '<octave-shift type="down" size="8"/></direction-type>'
                 '</direction>')
-            first.insert(list(first).index(first.find("note")), start)
+            ms[b1].insert(list(ms[b1]).index(a), start)
             stop = ET.fromstring(
                 '<direction><direction-type><octave-shift type="stop" '
                 'size="8"/></direction-type></direction>')
-            last.insert(list(last).index(last.findall("note")[-1]) + 1, stop)
+            kids = list(ms[b2])
+            i = kids.index(z) + 1
+            while i < len(kids) and kids[i].tag == "note" and \
+                    kids[i].find("chord") is not None:
+                i += 1          # after the whole chord
+            ms[b2].insert(i, stop)
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()
@@ -524,6 +540,27 @@ def polish(path):
             "MusicXML 4.0 Partwise//EN\" "
             "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
         open(path, "w", encoding="utf-8").write(xml)
+
+
+def _voice1_notes(measure, divs):
+    """[(pos in 64ths, <note>)] for the non-chord, non-grace notes and
+    rests of voice 1 in a MusicXML measure."""
+    out, t, last = [], 0, 0
+    for el in measure:
+        if el.tag == "backup":
+            t -= int(el.findtext("duration"))
+        elif el.tag == "forward":
+            t += int(el.findtext("duration"))
+        elif el.tag == "note":
+            if el.find("grace") is not None:
+                continue
+            if el.find("chord") is not None:
+                continue
+            d = int(el.findtext("duration"))
+            if (el.findtext("voice") or "1") == "1":
+                out.append((Fr(t * 16, divs), el))
+            t += d
+    return out
 
 
 def verify_bars(path):

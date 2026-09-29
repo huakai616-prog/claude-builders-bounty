@@ -61,7 +61,8 @@ DYN = {"vn1": [(24, 0, "p")], "vn2": [...], "va": [...], "vc": [...]}
 HAIR = {"vn1": [(23, 0, 23, 63, "dim")], ...}      # (bar, pos, bar2, pos2, kind)
 TEXT = {"vn1": [(24, 0, "espressivo")], ...}        # also "pizz." / "arco"
 CLEFS = {"va": [(58, 0, "treble"), (62, 0, "alto")]} # (bar, pos, clef)
-OTTAVA = [("vn1", 1, 4)]                             # (part, first bar, last bar)
+OTTAVA = [("vn1", 1, 4),                             # (part, first bar, last bar)
+          ("vn1", 62, 24, 62, 48)]                   # or (part, bar1, pos1, bar2, pos2)
 ```
 
 Token syntax is in the docstring of `build.py` (64th-note units: 16th = 4,
