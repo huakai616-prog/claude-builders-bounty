@@ -18,18 +18,22 @@ Quartet:
   the RH's inner 16ths (A4 F4 D4 / Bb4 F4 D4 / A4 F4), slurred.
 - Va: the LH middle layer, one player: the stabs an octave up (Eb3,
   Bb3+Eb4 …; 43 at pitch like 39) and the descending arpeggio an octave up
-  (Eb5 Bb4 G4 Eb4 Bb3 Eb3), détaché.  44–47: the LH's three off-beat 16ths
+  (Eb5 Bb4 G4 Eb4 Bb3 Eb3), détaché.  43: the arpeggio at pitch too
+  (D4 A3 F3 D3, the last two A2 F2 folded up to A3 F3) so the viola stays
+  under the low melody (A4/F4).  44–47: the LH's three off-beat 16ths
   of every beat (+8ve), the cello taking the accented beat.  48: doubles
   the cello's sweep an octave higher from beat 2.  49: the LH chord
   (A3+F4) held under the sus chord.
-- Vc: the LH low octaves as sustained octave double stops (Eb2+Eb3, F2+F3,
-  G2+G3 on the open G, D2+D3) = the piano pedal, plus the low 8th that ends
-  each LH arpeggio.  44–47: the LH's accented low notes, marcato 8ths.
-  48: the whole up/down sweep (Eb2 Eb3 … G4 … Eb3, Eb2).  49: F octave
-  held, re-struck on beat 4.
-Dynamics: ff tutti; the held chord of 42 relaxes in the violins, 43 f with a
-crescendo into the second half (44 ff); swell on the sweep (48); 49 dies
-away toward the mp interlude.
+- Vc: the LH low whole notes as sustained single low notes (Eb2, F2, D2 on
+  the C string; an Eb2+Eb3-type octave across C/G strings needs thumb
+  position) = the piano pedal; G2+G3 octaves on the open G (38, 42).  Plus
+  the low 8th that ends each LH arpeggio.  44–47: the LH's accented low
+  notes, marcato 8ths.  48: the whole up/down sweep (Eb2 Eb3 … G4 … Eb3,
+  Eb2).  49: low F held, re-struck (unaccented) on beat 4.
+Dynamics: ff tutti; the held chord of 42 relaxes in all four parts, 43 f
+with a crescendo into the second half (44 ff); swell on the up-sweep (48,
+the level then held through the climax); only 49 dies away toward the mp
+interlude.
 """
 
 VN1 = {
@@ -57,7 +61,7 @@ VN2 = {
     40: "Bb5+Eb6/12 Bb5+D6/12 F5+Bb5/8>~ F5+Bb5/8 D5+F5/16 Bb4/8",
     41: "C5+F5/16 A4/8 C5+F5/8>~ C5+F5/8 A4/16 D5+G5/8>~",
     42: "D5+G5/48 r/16",
-    43: "(A4/4 F4/4 D4/4) (Bb4/4 F4/4 D4/4) (A4/4 F4/4) r/8 r/16 D4/8",
+    43: "(A4/4 F4/4 D4/4) (Bb4/4 F4/4 D4/4) (A4/4 F4/4) r/16 r/8 D4/8",
     44: "G5+Bb5/8 C5/4 Eb5+G5/4>~ Eb5+G5/8 C5/8 Eb5+G5/8 Bb4/4 "
         "Eb5+G5/4>~ Eb5+G5/8 Bb4/8",
     45: "C5+F5/12 Bb4/12 C5+F5/8>~ C5+F5/8 A4+C5/16 D4/8",
@@ -90,8 +94,10 @@ VA = {
     40: _stab_arp("Eb3", "Bb3+Eb4", "Eb5", "Bb4", "G4", "Eb4", "Bb3", "Eb3"),
     41: _stab_arp("F3", "C4+F4", "F5", "C5", "A4", "F4", "C4", "F3"),
     42: _stab_arp("G3", "D4+G4", "G5", "D5", "Bb4", "G4", "D4", "G3"),
-    # 43: the LH stabs are single notes (D3, A3) — played at pitch
-    43: _stab_arp("D3", "A3", "D5", "A4", "F4", "D4", "A3", "F3"),
+    # 43: the LH stabs are single notes (D3, A3) — played at pitch; the
+    # arpeggio at pitch as well (A2 F2 folded up) so it stays under the
+    # low melody A4/F4 instead of above it
+    43: _stab_arp("D3", "A3", "D4", "A3", "F3", "D3", "A3", "F3"),
     44: _rock("Eb4", "Bb3", "Eb3"),
     45: _rock("F4", "C4", "F3"),
     46: _rock("G4", "D4", "G3"),
@@ -103,21 +109,23 @@ VA = {
 }
 
 VC = {
-    36: "Eb2+Eb3/56> Eb2/8",
-    37: "F2+F3/56> F2/8",
+    # single low notes: octaves from the C string to the G string need
+    # thumb position; only the open-G octave (38, 42) is kept
+    36: "Eb2/56> Eb2/8",
+    37: "F2/56> F2/8",
     38: "G2+G3/56> G2/8",
-    39: "D2+D3/56> D2/8",
-    40: "Eb2+Eb3/56> Eb2/8",
-    41: "F2+F3/56> F2/8",
+    39: "D2/56> D2/8",
+    40: "Eb2/56> Eb2/8",
+    41: "F2/56> F2/8",
     42: "G2+G3/56> G2/8",
-    43: "D2+D3/56> D2/8",
+    43: "D2/56> D2/8",
     44: "Eb2/8! r/8 Eb2/8! r/8 Eb2/8! r/8 Eb2/8! r/8",
     45: "F2/8! r/8 F2/8! r/8 F2/8! r/8 F2/8! r/8",
     46: "G2/8! r/8 G2/8! r/8 G2/8! r/8 G2/8! r/8",
     47: "D2/8! r/8 D2/8! r/8 D2/8! r/8 D2/8! r/8",
     48: "Eb2/4 Eb3/4 Eb2/4 Eb3/4 Bb2/4 Eb3/4 Bb3/4 Eb4/4 "
         "G4/4 Eb4/4 Bb3/4 Eb3/4 Eb2/16>",
-    49: "F2+F3/48> F2+F3/16>",
+    49: "F2/48> F2/16",
 }
 
 DYN = {
@@ -128,23 +136,25 @@ DYN = {
 }
 
 HAIR = {
-    # the held chord of 42 relaxes like the piano's; 43 grows into 44;
-    # 49 dies away toward the mp interlude
+    # 42: all four parts relax to the f of 43 (violins on the held chord,
+    # va/vc on the arpeggio); 43 grows into 44; 48: the lower parts swell
+    # on the up-sweep and keep the level under the violins' G6 climax;
+    # only 49 dies away toward the mp interlude
     "vn1": [(42, 8, 42, 44, "dim"), (43, 24, 43, 60, "cresc"),
             (49, 40, 49, 60, "dim")],
     "vn2": [(42, 8, 42, 44, "dim"), (43, 24, 43, 60, "cresc"),
             (49, 40, 49, 60, "dim")],
-    "va": [(43, 24, 43, 60, "cresc"), (48, 4, 48, 28, "cresc"),
-           (48, 32, 48, 60, "dim"), (49, 24, 49, 44, "dim")],
-    "vc": [(43, 24, 43, 60, "cresc"), (48, 0, 48, 28, "cresc"),
-           (48, 32, 48, 60, "dim"), (49, 40, 49, 60, "dim")],
+    "va": [(42, 32, 42, 56, "dim"), (43, 24, 43, 60, "cresc"),
+           (48, 4, 48, 28, "cresc"), (49, 24, 49, 44, "dim")],
+    "vc": [(42, 32, 42, 60, "dim"), (43, 24, 43, 60, "cresc"),
+           (48, 0, 48, 28, "cresc"), (49, 40, 49, 60, "dim")],
 }
 
 TEXT = {
-    "vn1": [(36, 0, "cantabile, con forza")],
+    "vn1": [(36, 0, "con forza")],
     "vn2": [(36, 0, "marcato"), (43, 0, "legato"), (44, 0, "marcato")],
     "va": [(36, 8, "détaché")],
-    "vc": [(36, 0, "sostenuto"), (44, 0, "marcato")],
+    "vc": [(36, 0, "sostenuto")],
 }
 
 CLEFS = {}

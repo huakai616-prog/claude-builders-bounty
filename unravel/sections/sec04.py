@@ -16,7 +16,11 @@
        (G3 D4 F4, rising into Bb4) goes to Va, slurred, over the cello's
        held open-G octave (the piano's tied "bloom"); beats 3–4: the
        Gm7 and F chords spread over four, accented (Vn I Bb5+D6 / A5+C6 =
-       the RH top, Vn II D5+F5 / C5+F5, Va Bb4 → A4, Vc F2+F3 on beat 4).
+       the RH top, Vn II D5+F5 / C5+F5, Va Bb4 → A4, Vc on beat 4 the
+       rolled triple stop F2+C3+F3 in first position: 4th finger across C
+       and G strings, 2nd on D, which keeps the LH F octave; a plain F2+F3
+       octave is a 4th stretch and not playable low on the cello).  Both
+       chords retaken down-bow, the Va triplet an up-bow lift.
        Cresc. through 34–35 in all parts into the ff of the chorus (36).
 """
 
@@ -27,14 +31,14 @@ VN1 = {
     32: "r/16 r/8 A4/8 (Bb4/8 A4/4) A4/4 r/16",
     33: "r/16 r/8 A4/8 (Bb4/8 A4/4) A4/4 r/16",
     34: "r/16 r/8 A4+D5/8 Bb4+C5/8 r/4 A4+D5/8 r/4 A4+D5/8~",
-    35: "A4+D5/16 r/16 Bb5+D6/16> A5+C6/16>",
+    35: "A4+D5/16 r/16 Bb5+D6/16>db A5+C6/16>db",
 }
 
 VN2 = {
     32: "F4/8 D4/4 D4/4 r/8 D4/8 (C4/8 D4/4) D4/4 r/8 F4/8",
     33: "F4/8 D4/4 D4/4 r/8 D4/8 (C4/8 D4/4) D4/4 r/8 F4/8",
     34: "F4/8 D4/4 D4/4 r/8 D4+F4/8 C4+F4/8 r/4 D4+F4/8 r/4 D4+F4/8~",
-    35: "D4+F4/16 r/16 D5+F5/16> C5+F5/16>",
+    35: "D4+F4/16 r/16 D5+F5/16>db C5+F5/16>db",
 }
 
 VA = {
@@ -43,14 +47,14 @@ VA = {
     34: "r/4 G3/4 F3/4 G3/4 D3/4 F3/4 G3/4 A3/4 "
         "Bb3/8 r/4 G3+D4/8 r/4 G3+D4/8~",
     # tied open-string chord, breath, then the LH triplet rising into Bb4
-    35: "G3+D4/16 r/8 {3:2 (G3/4 D4/4 F4/4) } Bb4/16> A4/16>",
+    35: "G3+D4/16 r/8 {3:2 (G3/4ub D4/4 F4/4) } Bb4/16>db A4/16>db",
 }
 
 VC = {
     32: "G2/64",                        # open G, the pedal
     33: "G2/64",
     34: "G2/32 r/8 r/4 G2+G3/8 r/4 G2+G3/8~",
-    35: "G2+G3/48 F2+F3/16>",           # held under the triplet, then F
+    35: "G2+G3/48 F2+C3+F3/16>db",      # held under the triplet, then rolled F
 }
 
 DYN = {

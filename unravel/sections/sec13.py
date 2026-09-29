@@ -6,8 +6,9 @@ Texture
     cantabile, slurred by phrase; the repeated C6/Bb5 of 98/100 detached.
   - Vn II: the RH chord tones under the melody as double stops, in the
     piano's own chord rhythm (the syncopated "chord . chord- ." of the even
-    bars; chord on 1 and on the "and" of 2 in the odd bars), resting where
-    the RH is a single melody note.  103: the anticipated G-minor chord
+    bars; chord on 1 in the odd bars, plus the "and" of 2 in 99 and 101
+    where the RH has a chord there), resting where the RH is a single
+    melody note (97 beats 2-4).  103: the anticipated G-minor chord
     (D5+G5) on the last eighth, released at the barline.
   - Va: the LH middle layer at pitch.  97: continues its 16th arpeggio from
     96 (D4 F4 A3 ... D3).  98–102: the LH's repeated 16ths (Eb4 Eb4 Eb4 +
@@ -16,20 +17,27 @@ Texture
     one hand position.  103: the LH 16th run F3 ... F5 ... F3 across all
     four strings.
   - Vc: the LH bass an octave down on beats 1 and 3 as half notes (D2+A2
-    open-string-like fifth in 97, where the piano holds D3+A3 for the whole
-    bar; single roots in 98–103 because the piano's fifth is only a 16th).
-  - Small swell 101 -> 102 (the chorus peak G6), dim. through 103 into the
-    interlude.
+    in 97, where the piano holds D3+A3 for the whole bar: a stopped fifth,
+    one flat first finger across the C and G strings, kept for the weight
+    of the chorus downbeat; single roots in 98–103 because the piano's
+    fifth is only a 16th).  103: F2 sustained through beat 3 under the
+    viola's descending run (the piano's pedal holds the F), re-struck on
+    the LH's beat-4 F.
+  - Swell through 101, dim. from the chorus peak (G6, 102) through 103
+    into the interlude.
 - 104–107 (interlude, mp -> cresc. into the final chorus):
   - Vn I: holds the tied Bb5 of the 103 chord through 104 (dim.), rests in
     105, re-enters with the pickup Bb5 and sings the RH melody (C6 Bb5 C6 ...
-    D6) espressivo.
+    D6) espressivo.  Bowing: pickup up, (C6 Bb5 C6) down, (Bb5 C6~C6) up,
+    D6 down (its own bow for the cresc.), Bb5 up, so 108 starts down-bow.
   - Vn II: the RH 16th broken figure (104 rh2, 105 rh, 106–107 rh2) at
     pitch, leggiero spiccato, one player; its top notes meet the melody in
     unison where the piano shares noteheads.
   - Va: the LH upper voice at pitch (dotted-8th rest, Eb3 Eb3, half-note
     dyad G3+Bb3 etc.).
   - Vc: the LH whole-note bass (Eb2 F2 G2 D2), sustained.
+  - The three lower parts start their cresc. together at 107 (not under the
+    melody's re-entry in 106).
 """
 
 VN1 = {
@@ -43,11 +51,11 @@ VN1 = {
     104: "Bb5/64",
     105: "r/56 Bb5/8",
     106: "(C6/12 Bb5/12 C6/16) (Bb5/16 C6/8~",
-    107: "C6/8 D6/48) Bb5/8",
+    107: "C6/8) D6/48 Bb5/8",
 }
 
 VN2 = {
-    97: "D5+F5/12 r/12 D5/16 r/24",
+    97: "D5+F5/12 r/4 r/16 r/32",
     98: "Eb5+G5/8 r/4 Eb5+G5/12 r/8 Eb5+G5/8 r/4 Eb5+G5/12 r/8",
     99: "C5+F5/12 r/12 C5+F5/16 r/24",
     100: "F5+Bb5/8 r/4 F5+Bb5/12 r/8 F5+Bb5/8 r/4 F5/12 r/8",
@@ -92,7 +100,7 @@ VC = {
     100: "G2/32 G2/32",
     101: "D2/32 D2/32",
     102: "Eb2/32 Eb2/32",
-    103: "F2/32 r/16 F2/16",
+    103: "F2/48 F2/16",
     104: "Eb2/64",
     105: "F2/64",
     106: "G2/64",
@@ -107,23 +115,25 @@ DYN = {
 }
 
 HAIR = {
-    # swell into the chorus peak (G6 at 102), dim. into the interlude,
-    # then cresc. through 106-107 into the final chorus
-    "vn1": [(101, 0, 102, 12, "cresc"), (102, 12, 104, 32, "dim"),
+    # swell through 101 (each cresc. ends on the last note before the
+    # barline), dim. from the chorus peak (G6 downbeat of 102) into the
+    # interlude; then all four cresc. together in 107 (Vn I from its D6)
+    # into the ff of the final chorus
+    "vn1": [(101, 0, 101, 63, "cresc"), (102, 0, 104, 63, "dim"),
             (107, 8, 107, 56, "cresc")],
-    "vn2": [(101, 0, 102, 12, "cresc"), (102, 12, 103, 56, "dim"),
-            (106, 32, 107, 56, "cresc")],
-    "va": [(101, 0, 102, 12, "cresc"), (102, 12, 103, 63, "dim"),
-           (106, 32, 107, 63, "cresc")],
-    "vc": [(101, 0, 102, 12, "cresc"), (102, 12, 103, 63, "dim"),
-           (106, 0, 107, 63, "cresc")],
+    "vn2": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 56, "dim"),
+            (107, 0, 107, 56, "cresc")],
+    "va": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 63, "dim"),
+           (107, 0, 107, 63, "cresc")],
+    "vc": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 63, "dim"),
+           (107, 0, 107, 63, "cresc")],
 }
 
 TEXT = {
     "vn1": [(97, 0, "cantabile"), (105, 56, "espressivo")],
     "vn2": [(104, 4, "leggiero, spicc.")],
     "va": [(98, 0, "détaché")],
-    "vc": [(104, 0, "sostenuto")],
+    "vc": [],
 }
 
 CLEFS = {}

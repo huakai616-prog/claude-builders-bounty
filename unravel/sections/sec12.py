@@ -3,9 +3,12 @@
 Texture
 - Vn I: the RH top-note melody (dotted-8th rhythm), one octave below the
   piano's 8va throughout (its peak F7/G7 in 93–94 is out of range, and one
-  octave for the whole section keeps the contour: D6 ... G6).  Dolce, phrase
-  slurs; the repeated B-flats of 94 as louré.  96: holds B-flat5, then the
-  pickup B-flat5 into the chorus at the piano's own pitch.
+  octave for the whole section keeps the contour: D6 ... G6).  Dolce;
+  half-bar bows (down/up every half bar 90-95, the peak G6 of 94 on a
+  down-bow), the repeated notes of 90/92 portato and the repeated B-flats
+  of 94 louré.  95/56: the syncopated B-flat5 (the piano's new chord
+  attack) on its own up-bow, p, tied through 96 with the crescendo; then
+  the pickup B-flat5 (ub, retaken) into the chorus at the piano's own pitch.
 - Vn II: the RH 16th music-box figure, the same octave as Vn I (so its top
   notes meet the melody in unison, like the piano's shared noteheads),
   leggiero spiccato, one player.  95/96: the syncopated B-flat4+D5 chord
@@ -22,13 +25,13 @@ and back, then p/pp < into the chorus at 97.
 """
 
 VN1 = {
-    90: "(D6/12 C6/12) C6/8 (C6/12 Bb5/12) Bb5/8",
-    91: "(A5/12 Bb5/12 A5/8~ A5/8 F5/24)",
-    92: "(D6/12 C6/12) C6/8 (C6/12 Bb5/12) Bb5/8",
-    93: "(A5/12 Bb5/12 F6/8~ F6/8 A5/24)",
+    90: "(D6/12 C6/12 C6/8-) (C6/12 Bb5/12 Bb5/8-)",
+    91: "(A5/12 Bb5/12 A5/8~ A5/8) F5/24",
+    92: "(D6/12 C6/12 C6/8-) (C6/12 Bb5/12 Bb5/8-)",
+    93: "(A5/12 Bb5/12 F6/8~ F6/8) A5/24",
     94: "(G6/12 F6/12 D6/8~ D6/8) (Bb5/16- Bb5/8-)",
-    95: "(Bb5/16 A5/8 G5/8~ G5/8 A5/16 Bb5/8~",
-    96: "Bb5/48) r/8 Bb5/8-",
+    95: "(Bb5/16 A5/8 G5/8~ G5/8 A5/16) Bb5/8~",
+    96: "Bb5/48 r/8 Bb5/8-ub",
 }
 
 VN2 = {
@@ -69,26 +72,28 @@ VC = {
 }
 
 DYN = {
-    "vn1": [(90, 0, "p"), (94, 0, "mp"), (96, 0, "p")],
+    "vn1": [(90, 0, "p"), (94, 0, "mp"), (95, 56, "p")],
     "vn2": [(90, 0, "pp"), (94, 0, "p"), (95, 56, "pp")],
     "va": [(90, 12, "pp"), (94, 12, "p"), (96, 4, "pp")],
     "vc": [(90, 0, "pp"), (94, 0, "p"), (96, 0, "pp")],
 }
 
 HAIR = {
-    # swell to the phrase peak (F7/G7 in the piano) and back
-    "vn1": [(93, 0, 93, 63, "cresc"), (94, 16, 95, 56, "dim"),
+    # one shared swell to the phrase peak (F7/G7 in the piano) and back,
+    # aligned across the parts (Va starts after its rest / on its half
+    # note); the final crescendo from 96 (Va from its first note, 96/4)
+    "vn1": [(93, 0, 93, 63, "cresc"), (94, 16, 95, 48, "dim"),
             (96, 0, 96, 63, "cresc")],
     "vn2": [(93, 0, 93, 63, "cresc"), (94, 16, 95, 48, "dim"),
-            (95, 56, 96, 47, "cresc")],
-    "va": [(93, 12, 93, 63, "cresc"), (94, 32, 95, 60, "dim"),
+            (96, 0, 96, 47, "cresc")],
+    "va": [(93, 12, 93, 63, "cresc"), (94, 32, 95, 48, "dim"),
            (96, 4, 96, 63, "cresc")],
-    "vc": [(93, 0, 93, 63, "cresc"), (94, 16, 95, 60, "dim"),
+    "vc": [(93, 0, 93, 63, "cresc"), (94, 16, 95, 48, "dim"),
            (96, 0, 96, 63, "cresc")],
 }
 
 TEXT = {
-    "vn1": [(90, 0, "dolce, cantabile")],
+    "vn1": [(90, 0, "dolce")],
     "vn2": [(90, 0, "leggiero, spicc.")],
     "va": [(90, 12, "sul tasto"), (96, 4, "ord.")],
     "vc": [(90, 0, "sul tasto"), (96, 0, "ord.")],

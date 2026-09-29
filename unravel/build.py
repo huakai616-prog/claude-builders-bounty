@@ -726,7 +726,9 @@ STRINGS = {"vn1": ["G3", "D4", "A4", "E5"], "vn2": ["G3", "D4", "A4", "E5"],
 
 def playable(pid, pitches):
     """One note per adjacent string, each within reach above its string,
-    stopped notes within one hand position."""
+    and the stopped notes inside one hand frame: a fourth for violin and
+    viola (a little more high up), a major third in the cello's neck
+    positions, a fourth in thumb position."""
     opens = [midi_of(s) for s in STRINGS[pid]]
     ps = sorted(midi_of(x) for x in pitches)
     n = len(ps)
@@ -739,9 +741,15 @@ def playable(pid, pitches):
         if any(p - s > 17 for p, s in zip(ps, strs)):
             continue
         stopped = [p - s for p, s in zip(ps, strs) if p != s]
-        if stopped and max(stopped) - min(stopped) > 7:
-            continue
-        return True
+        if not stopped:
+            return True
+        spread = max(stopped) - min(stopped)
+        if pid == "vc":
+            frame = 5 if min(stopped) >= 10 else 4
+        else:
+            frame = 6 if min(stopped) >= 7 else 5
+        if spread <= frame:
+            return True
     return False
 
 

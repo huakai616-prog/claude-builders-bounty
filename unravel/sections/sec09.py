@@ -7,13 +7,16 @@ Texture
 - Vn I: the RH upper voice, the 3+3+2 dotted-8th melody (D6. B-flat5. G5,
   C6. A5. F5, ...), at the piano's sounding pitch (the 8va of 76 gives
   B-flat6 A6 F6, still <= C7).  74-75 legato, one slur per half bar with
-  pressure accents on the dotted notes; 76-77 (the lift) separate bows,
-  accented, the repeated B-flats / Ds sung out.
+  portato (tenuto under the slur) on the dotted notes, no accents (the
+  piano has no marks here); 76-77 (the lift) separate bows, the dotted
+  notes accented, the repeated B-flats / Ds sung out.  The accents are
+  kept for the lift so the 8va step is marked by articulation as well as
+  by bowing.
 - Vn II: the RH 16th arpeggio figure, one player, one slur per beat
-  (string crossings), at pitch in 74/75/77 so its top notes meet the
-  melody in unison (the piano's shared noteheads); in 76 an octave below
-  the piano's 8va (B-flat6 is above Vn II's range), so the violins open up
-  to two octaves while Vn I climbs.
+  (string crossings; the slurs say legato, so no text), at pitch in
+  74/75/77 so its top notes meet the melody in unison (the piano's shared
+  noteheads); in 76 an octave below the piano's 8va (B-flat6 is above
+  Vn II's range), so the violins open up to two octaves while Vn I climbs.
 - Va: the pedal, sustained chord tones as half notes in the empty middle
   register between the cello's arpeggio and Vn II's figure: the LH top
   notes D4 C4 D4 D4 as the lower voice, under a rising upper voice G4 F4
@@ -30,10 +33,10 @@ and a further crescendo through 77 into 78.
 """
 
 VN1 = {
-    74: "(D6/12> Bb5/12> G5/8) (D6/12> Bb5/12> G5/8)",
-    75: "(C6/12> A5/12> F5/8) (C6/12> A5/12> F5/8)",
-    76: "Bb6/12> Bb6/12> Bb6/8- Bb6/12> A6/12> F6/8-",
-    77: "D6/12> D6/12> D6/8- D6/12> C6/12> D6/8-",
+    74: "(D6/12- Bb5/12- G5/8) (D6/12- Bb5/12- G5/8)",
+    75: "(C6/12- A5/12- F5/8) (C6/12- A5/12- F5/8)",
+    76: "Bb6/12> Bb6/12> Bb6/8 Bb6/12> A6/12> F6/8",
+    77: "D6/12> D6/12> D6/8 D6/12> C6/12> D6/8",
 }
 
 VN2 = {
@@ -82,7 +85,6 @@ HAIR = {
 
 TEXT = {
     "vn1": [(74, 0, "espressivo")],
-    "vn2": [(74, 0, "legato")],
     "va": [(74, 0, "sostenuto")],
     "vc": [(74, 0, "legato")],
 }

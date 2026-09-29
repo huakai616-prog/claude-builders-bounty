@@ -25,15 +25,22 @@ Quartet:
   Vn I Bb5+D6, Vn II D5+G5.  Vn II rests in the odd bars (breath).
 - Vc = the LH: the low octave as an accented boom on beat 1 (open-string
   fifth / octave where it lies well: Eb2+Bb2, F2+C3, G2+G3, D2), then the
-  3+3+2 rhythm, and the beat-3 stab as a double stop with the piano's
-  lowest chord note on the bottom (Bb2+G3, F3+A3, D3+Bb3, F3+A3).  In the
-  odd bars the Va joins the stab (C4) before its descending group.
+  3+3+2 rhythm, and the beat-3 stab as a double stop of the piano's two
+  lowest stab notes (Bb2+Eb3, F3+A3, D3+G3, F3+A3), so the root sounds on
+  beat 3 (Eb2 / G2 are stopped or gone by then).  In the odd bars the Va
+  joins the stab (C4, tenuto like the cello) before its descending group.
+- Dynamics: f, restated at every wave and every relay entry so each hairpin
+  has an anchor (held chord f >, run entry f <; Vn II's hand-off G5 recedes
+  under Vn I; Va f at the odd-bar stab, mf for the last falling group, which
+  continues Vn I's diminuendo).  The even-bar chords are down-bow (the
+  dotted-8th rest at the end of each odd bar gives time to retake), so the
+  sextuplet rises up-bow and the accented apex falls on a down-bow.
 """
 
 _BOOM = "{b}/12> {n}/12- {n}/8 {s}/12- {n}/12- {n}/8"
 
-_UP_VN1 = "{c}/48 {{6:4 (G5/4 A5/4 Bb5/4 D6/4 G6/4 A6/4) }}"
-_UP_VN2 = "{c}/32 {{6:4 (D5/4 D4/4 G4/4 A4/4 Bb4/4 D5/4 }} G5/16)"
+_UP_VN1 = "{c}/48db {{6:4 (G5/4 A5/4 Bb5/4 D6/4 G6/4 A6/4) }}"
+_UP_VN2 = "{c}/32db {{6:4 (D5/4 D4/4 G4/4 A4/4 Bb4/4 D5/4 }} G5/16)"
 _UP_VA = ("{5:4 r/8 (D3/4 G3/4 A3/4) } "
           "{5:4 (Bb3/4 D4/4 G4/4 A4/4 Bb4/4 } D5/32)")
 
@@ -43,15 +50,15 @@ _DOWN_F = ("{5:4 (Bb6/4> C7/4 Bb6/4 F6/4 C6/4) } "
 _DOWN_D = ("{5:4 (C7/4> D7/4 C7/4 Bb6/4 F6/4) } "
            "{5:4 (C6/4> D6/4 C6/4 Bb5/4 F5/4) } "
            "{5:4 (C6/4> Bb5/4 A5/4 F5/4 C5/4 } Bb4/4) r/4 r/8")
-_VA_F = "r/32 C4/12 r/4 {5:4 (F4/4 C4/4 Bb3/4 A3/4) r/4 }"
-_VA_D = "r/32 C4/12 r/4 {5:4 (Bb4/4 A4/4 F4/4 C4/4) r/4 }"
+_VA_F = "r/32 C4/12- r/4 {5:4 (F4/4 C4/4 Bb3/4 A3/4) r/4 }"
+_VA_D = "r/32 C4/12- r/4 {5:4 (Bb4/4 A4/4 F4/4 C4/4) r/4 }"
 
 VN1, VN2, VA, VC = {}, {}, {}, {}
 for _b in (66, 70):
     VN1[_b] = _UP_VN1.format(c="Bb5+G6")
     VN2[_b] = _UP_VN2.format(c="A5+D6")
     VA[_b] = _UP_VA
-    VC[_b] = _BOOM.format(b="Eb2+Bb2", n="Eb2", s="Bb2+G3")
+    VC[_b] = _BOOM.format(b="Eb2+Bb2", n="Eb2", s="Bb2+Eb3")
 for _b in (67, 71):
     VN1[_b] = _DOWN_F
     VA[_b] = _VA_F
@@ -60,26 +67,31 @@ for _b in (68, 72):
     VN1[_b] = _UP_VN1.format(c="Bb5+D6")
     VN2[_b] = _UP_VN2.format(c="D5+G5")
     VA[_b] = _UP_VA
-    VC[_b] = _BOOM.format(b="G2+G3", n="G2", s="D3+Bb3")
+    VC[_b] = _BOOM.format(b="G2+G3", n="G2", s="D3+G3")
 for _b in (69, 73):
     VN1[_b] = _DOWN_D
     VA[_b] = _VA_D
     VC[_b] = _BOOM.format(b="D2", n="D2", s="F3+A3")
 
-DYN = {
-    "vn1": [(66, 0, "f")],
-    "vn2": [(66, 0, "f")],
-    "va": [(66, 0, "f")],
-    "vc": [(66, 0, "f")],
-}
+DYN = {"vn1": [], "vn2": [], "va": [], "vc": [(66, 0, "f")]}
+for _b in (66, 68, 70, 72):
+    # restate the level at every wave and every relay entry, so no entry
+    # comes out of the previous hairpin (the run must not dip at hand-offs)
+    DYN["vn1"] += [(_b, 0, "f"), (_b, 48, "f")]      # chord, run entry
+    DYN["vn2"] += [(_b, 0, "f"), (_b, 32, "f")]      # chord, run entry
+    DYN["va"] += [(_b, 0, "f"),                      # run
+                  (_b + 1, 32, "f"),                 # stab with the Vc
+                  (_b + 1, 48, "mf")]                # takes over Vn I's dim.
 
 HAIR = {"vn1": [], "vn2": [], "va": [], "vc": []}
 for _b in (66, 68, 70, 72):
     # held chord decays, the run swells to the top; Va swells up its
     # part of the run, then lets the held D5 recede under the violins
     HAIR["vn1"] += [(_b, 0, _b, 44, "dim"), (_b, 48, _b, 63, "cresc")]
-    HAIR["vn2"] += [(_b, 0, _b, 28, "dim"), (_b, 32, _b, 48, "cresc")]
-    HAIR["va"] += [(_b, 0, _b, 30, "cresc"), (_b, 32, _b, 60, "dim")]
+    # (Vn II's held hand-off G5 recedes so Vn I's entry on G5 comes through)
+    HAIR["vn2"] += [(_b, 0, _b, 28, "dim"), (_b, 32, _b, 48, "cresc"),
+                    (_b, 48, _b, 60, "dim")]
+    HAIR["va"] += [(_b, 6, _b, 30, "cresc"), (_b, 32, _b, 60, "dim")]
 for _b in (67, 69, 71, 73):
     # the falling quintuplets relax, Va lands softly at the bottom
     HAIR["vn1"] += [(_b, 0, _b, 48, "dim")]
