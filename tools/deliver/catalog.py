@@ -20,6 +20,20 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="wohewodezuguo", section="song", ref=None,
+        title="我和我的祖国", subtitle="全曲 · 四声部独唱与弦乐四重奏",
+        artist="李谷一", key="♭E 大调（原谱调）", tempo="♩.=56",
+        instrumentation="S.A.T.B. 四声部独唱 + 弦乐四重奏",
+        src="wohewodezuguo/output", layout="standard",
+        main=dict(musicxml="我和我的祖国_全曲_四声部人声弦乐四重奏.musicxml",
+                  pdf="我和我的祖国_全曲_总谱.pdf",
+                  strings="我和我的祖国_弦乐四重奏_伴奏.mid",
+                  vocal="我和我的祖国_四声部人声_带歌词.mid"),
+        labels=dict(vocal="四声部人声带歌词 MIDI"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="四个声部各一位歌手（单人合唱）。先看压缩包里的「使用说明.md」：ACE 导入、拨弦位置、气口 br、多音字。",
+        questions=[]),
+    dict(
         slug="wobunanguo", section="song", ref=None,
         title="我不难过", subtitle="副歌 · 人声与弦乐四重奏",
         artist="孙燕姿", key="♭E 大调", tempo="♩=68",
