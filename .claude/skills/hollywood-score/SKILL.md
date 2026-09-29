@@ -134,6 +134,11 @@ The page is `tools/deliver/center.html`, published at https://claude.ai/artifact
 - It serves each work's files from `files/<slug>/`.
 - 「下载到电脑」 builds `<歌名>_编曲交付.zip` in the browser from `bundle.json` and saves it through the `downloads` capability. The zip has `说明.txt`, `1_四样主文件/` and `2_其他文件/`. (The artifact host refuses to serve .zip, .mid or .musicxml files, so small files travel base64 inside `bundle.json`; PDF, mp3, mp4, png and fonts are served as themselves.)
 - 「全部歌曲一次下载」 merges every song into one zip.
+- 「选择文件」 opens a file browser inside the card. Folders are collapsed; clicking a folder's name opens it. Every folder and file has a checkbox and its own 下载 / 删除; the bar at the bottom downloads or deletes the selection, and 「删除整个…」 deletes the whole work.
+  - The save dialog only takes some types (pdf, zip, mp4, txt, json, png, jpg …). A single MIDI / MusicXML / mp3 / srt goes out as `<name>.zip`; several files go out as one zip.
+  - Every delete opens an in-page confirmation first (`window.confirm` is blocked in artifacts).
+  - Deletes never touch the published files. They go on the work's db row: `removed` holds paths relative to the bundle's top folder, and `deleted: true` hides the whole work. The 「已删除」 section at the bottom restores either.
+  - Deleted files are left out of every zip, and the PDF / video buttons hide when those files are removed.
 
 To add or update a work, after its files are built and committed:
 
@@ -147,7 +152,7 @@ To add or update a work, after its files are built and committed:
    - `file_path` = `tools/deliver/center.html`;
    - `files` = the printed map.
    Files you leave out are kept. Omit `capabilities` and `icon` so they stay as they are.
-5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`.
+5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row, because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
 6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
 7. Reply to the user with the page link first, then what changed.
 8. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.

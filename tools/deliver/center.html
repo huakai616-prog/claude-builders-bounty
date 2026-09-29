@@ -20,6 +20,9 @@
   --warn-bg: #f6ecdb;
   --idle: #5f6673;
   --idle-bg: #e8eaee;
+  --danger: #a3372c;
+  --danger-ink: #ffffff;
+  --danger-bg: #f7e4e1;
   --shadow: 0 1px 2px rgba(20, 30, 50, .06);
   --display: "Noto Serif SC", "Songti SC", "STSong", serif;
   --body: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
@@ -31,6 +34,7 @@
     --rule: #2c323a; --accent: #92b8ee; --accent-ink: #0e1a2c;
     --ok: #74d09c; --ok-bg: #173226; --warn: #f0b765; --warn-bg: #362a17;
     --idle: #aab1bc; --idle-bg: #262b32; --shadow: none; color-scheme: dark;
+    --danger: #f0978c; --danger-ink: #2a100c; --danger-bg: #3a1e1a;
   }
 }
 :root[data-theme="dark"] {
@@ -38,6 +42,7 @@
   --rule: #2c323a; --accent: #92b8ee; --accent-ink: #0e1a2c;
   --ok: #74d09c; --ok-bg: #173226; --warn: #f0b765; --warn-bg: #362a17;
   --idle: #aab1bc; --idle-bg: #262b32; --shadow: none; color-scheme: dark;
+    --danger: #f0978c; --danger-ink: #2a100c; --danger-bg: #3a1e1a;
 }
 * { box-sizing: border-box; }
 body { background: var(--paper); color: var(--ink); font-family: var(--body);
@@ -152,6 +157,77 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
   .dock-body { padding-left: 16px; }
 }
 
+/* file browser inside a card: folders collapse, every row has a checkbox */
+.btn.danger { color: var(--danger); border-color: var(--danger); background: transparent; }
+.btn.danger-solid { background: var(--danger); border-color: var(--danger); color: var(--danger-ink); }
+.caret { display: inline-block; transition: transform .15s ease; }
+[aria-expanded="true"] > .caret { transform: rotate(180deg); }
+.files { border: 1px solid var(--rule); border-radius: 8px; background: var(--surface);
+         display: grid; gap: 0; overflow: hidden; }
+.files > .loading { padding: 12px 14px; color: var(--muted); font-size: 14px; }
+.tree, .dir-files { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 4px 10px;
+       align-items: center; padding: 7px 12px; border-top: 1px solid var(--rule);
+       font-size: 14px; }
+.tree > li:first-child > .row, .tree > .row:first-child { border-top: 0; }
+.row input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+.row.all { background: var(--paper); font-weight: 500; }
+.dir-files .row { padding-left: 40px; grid-template-columns: 18px minmax(0, 1fr) auto; }
+.fname { min-width: 0; overflow-wrap: anywhere; cursor: pointer; }
+.fsz { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap;
+       margin-left: 6px; font-variant-numeric: tabular-nums; }
+.dir-name { justify-self: start; min-width: 0; display: inline-flex; align-items: center;
+            gap: 6px; border: 0; background: none; padding: 0; color: var(--ink);
+            font-weight: 500; text-align: left; flex-wrap: wrap; overflow-wrap: break-word; }
+.dir-name .caret { color: var(--muted); font-size: 11px; transform: rotate(-90deg); }
+.dir-name[aria-expanded="true"] .caret { transform: none; }
+.dir-name svg { flex: none; color: var(--accent); }
+.dir-name:hover .dname { text-decoration: underline; text-underline-offset: 3px; }
+.row-acts { display: flex; gap: 2px; justify-self: end; }
+.mini { border: 0; background: none; color: var(--accent); font-size: 13px; padding: 3px 7px;
+        border-radius: 4px; white-space: nowrap; }
+.mini:hover { background: var(--paper); }
+.mini.danger { color: var(--danger); }
+.mini.danger:hover { background: var(--danger-bg); }
+.mini:focus-visible, .dir-name:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.selbar { position: sticky; bottom: env(safe-area-inset-bottom, 0px); display: flex;
+          flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 12px;
+          border-top: 1px solid var(--rule); background: var(--surface); font-size: 14px; }
+.selbar .count { font-weight: 500; margin-right: auto; }
+.selbar .btn { padding: 6px 12px; font-size: 13.5px; }
+.panel-foot { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center;
+              justify-content: space-between; padding: 8px 12px 10px;
+              border-top: 1px solid var(--rule); background: var(--paper); }
+.hint { font-size: 12.5px; color: var(--muted); margin: 0; }
+@media (max-width: 560px) {
+  /* the panel takes the whole card width, under the thumbnail */
+  .files { margin-left: -90px; }
+  .row { padding-inline: 10px; }
+  .dir-files .row { padding-left: 30px; }
+  .mini { padding: 3px 5px; }
+}
+
+/* confirmation dialog (the viewer blocks window.confirm) */
+dialog { border: 1px solid var(--rule); border-radius: 10px; background: var(--surface);
+         color: var(--ink); padding: 20px; width: min(440px, calc(100% - 32px));
+         box-shadow: 0 10px 40px rgba(0, 0, 0, .25); }
+dialog::backdrop { background: rgba(15, 20, 30, .45); }
+dialog h3 { font-family: var(--display); font-size: 19px; margin: 0 0 10px; text-wrap: balance; }
+.cf-list { margin: 0 0 12px; padding-left: 1.2em; display: grid; gap: 2px; font-size: 14px;
+           max-height: 40vh; overflow: auto; overflow-wrap: anywhere; }
+.cf-acts { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; margin-top: 16px; }
+
+/* recently deleted */
+.trash { list-style: none; margin: 0; padding: 0; display: grid; border-top: 1px solid var(--rule); }
+.trash > li { display: grid; gap: 6px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.trash .thead { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.trash .thead strong { font-family: var(--display); font-size: 17px; }
+.trash .thead .btn { margin-left: auto; padding: 5px 12px; font-size: 13.5px; }
+.tfiles { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 13.5px;
+          color: var(--muted); }
+.tfiles li { display: flex; gap: 8px; align-items: baseline; justify-content: space-between; }
+.tfiles .fname { cursor: default; }
+
 .empty { padding: 28px 20px; border: 1px dashed var(--rule); color: var(--muted);
          text-align: left; display: grid; gap: 6px; }
 .empty strong { color: var(--ink); font-weight: 500; }
@@ -205,6 +281,12 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     <div class="list" id="media"></div>
   </section>
 
+  <section id="trash-sec" hidden>
+    <div class="sec-head"><span class="mark">C</span><h2>已删除</h2></div>
+    <p class="hint">这里是你从交付中心删掉的作品和文件。点「恢复」就放回原处。</p>
+    <ul class="trash" id="trash"></ul>
+  </section>
+
   <details class="dock" id="dock">
     <summary>
       <img src="files/macapp/icon.png" alt="" width="44" height="44">
@@ -238,6 +320,15 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     <span>所有文件在 GitHub 仓库 huakai616-prog/claude-builders-bounty 里也有一份备份，平时不需要打开。</span>
   </footer>
 </div>
+<dialog id="confirm" aria-labelledby="cf-title">
+  <h3 id="cf-title"></h3>
+  <ul class="cf-list" id="cf-list"></ul>
+  <p class="note">删除后，交付中心和下载的压缩包里都不再有它们。GitHub 上的备份不受影响，随时可以在页面底部「已删除」里恢复。</p>
+  <div class="cf-acts">
+    <button class="btn ghost" type="button" id="cf-cancel">取消</button>
+    <button class="btn danger-solid" type="button" id="cf-ok">确认删除</button>
+  </div>
+</dialog>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -283,58 +374,94 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     return as === "json" ? res.json() : as === "buf" ? res.arrayBuffer() : res.blob();
   }
 
-  // A work's files arrive as bundle.json (small files inline, media by
-  // reference); the zip itself is assembled here in the browser.
-  async function addBundle(zip, href, prefix) {
-    const b = await get(href, "json");
-    for (const f of b.files) {
-      const data = f.b64 ? bytes(f.b64) : new Uint8Array(await get(f.href, "buf"));
-      zip.file(prefix + f.path, data, { binary: true, createFolders: false });
+  // ---- a work's files ----
+  // bundle.json lists every file of a work under one top folder (small
+  // files inline as base64, media by href); zips are built here in the
+  // browser. What the user deletes is kept on the work's db row: `removed`
+  // (paths relative to the top folder) and `deleted` (the whole work). The
+  // published files themselves are never touched, so everything can be
+  // restored.
+  const SAVE_AS_IS = new Set(["pdf", "zip", "mp4", "webm", "txt", "json", "md", "png", "jpg",
+    "jpeg", "gif", "webp", "svg", "csv", "html", "ttf", "docx", "pptx", "xlsx", "epub"]);
+  const FOLDER_SVG = '<svg width="16" height="14" viewBox="0 0 16 14" aria-hidden="true"><path d="M1 2.2C1 1.5 1.5 1 2.2 1h3.6l1.6 1.8h6.4c.7 0 1.2.5 1.2 1.2v7.8c0 .7-.5 1.2-1.2 1.2H2.2C1.5 13 1 12.5 1 11.8z" fill="currentColor" opacity=".85"/></svg>';
+  const bundles = {};
+  const openPanels = new Set();
+  const openDirs = new Set();
+  const picked = {};
+  let db = null;
+  let live = false;
+
+  const ext = (n) => ((/\.([^./]+)$/.exec(n) || [])[1] || "").toLowerCase();
+  const removedOf = (w) => new Set(Array.isArray(w.removed) ? w.removed : []);
+  const bySlug = (slug) => works.find((w) => w.slug === slug);
+  const pickOf = (slug) => picked[slug] || (picked[slug] = new Set());
+  const canEdit = () => !!db && live;
+  const sum = (fs) => fs.reduce((n, f) => n + (f.size || 0), 0);
+
+  function b64size(b) {
+    return Math.floor(b.length * 3 / 4) - (b.endsWith("==") ? 2 : b.endsWith("=") ? 1 : 0);
+  }
+
+  async function loadBundle(w) {
+    if (bundles[w.slug]) return bundles[w.slug];
+    const b = await get(w.zip.href, "json");
+    const top = b.top ? b.top + "/" : "";
+    const files = b.files.map((f, i) => {
+      const rel = top && f.path.startsWith(top) ? f.path.slice(top.length) : f.path;
+      const cut = rel.lastIndexOf("/");
+      return { i, rel, dir: cut < 0 ? "" : rel.slice(0, cut), name: rel.slice(cut + 1),
+               b64: f.b64, href: f.href, size: f.b64 ? b64size(f.b64) : 0 };
+    });
+    const dirs = [...new Set(files.map((f) => f.dir))].filter(Boolean).sort();
+    const entry = { top: b.top || w.title, files, dirs };
+    bundles[w.slug] = entry;
+    const slug = w.slug;
+    Promise.all(files.filter((f) => f.href).map((f) =>
+      fetch(f.href, { method: "HEAD" })
+        .then((r) => { f.size = Number(r.headers.get("content-length")) || 0; })
+        .catch(() => { /* size stays unknown */ })))
+      .then(() => { const cur = bySlug(slug); if (cur && openPanels.has(slug)) drawPanel(cur); });
+    return entry;
+  }
+
+  const liveFiles = (w, b) => {
+    const gone = removedOf(w);
+    return b.files.filter((f) => !gone.has(f.rel));
+  };
+
+  async function fileData(f) {
+    return f.b64 ? bytes(f.b64) : new Uint8Array(await get(f.href, "buf"));
+  }
+
+  async function addFiles(zip, files, folder, strip) {
+    for (const f of files) {
+      const rel = strip && f.rel.startsWith(strip) ? f.rel.slice(strip.length) : f.rel;
+      zip.file(folder + rel, await fileData(f), { binary: true, createFolders: false });
     }
   }
 
-  // Save through the page's downloads capability; when that is missing or
-  // refuses for any reason but the user's own "cancel", fall back to a
-  // plain browser download link.
-  async function deliver(blob, filename) {
+  const zipBlob = (zip) => zip.generateAsync({ type: "blob", compression: "DEFLATE",
+                                               compressionOptions: { level: 6 } });
+
+  async function saveBlob(blob, filename) {
     const dl = await dlP;
-    if (dl) {
-      try { await dl.save({ filename, data: blob }); return; }
-      catch (e) { if (e && e.code === "declined") throw e; }
-    }
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+    if (!dl) throw { code: "unavailable" };
+    await dl.save({ filename, data: blob });
   }
 
-  async function save(href, filename, btn, kind) {
-    if (kind === "zip" && !window.JSZip) { toast("打包组件没加载出来，刷新页面再试；也可以先下载总谱 PDF。"); return; }
+  // Runs one download behind a button: busy label, then a toast either way.
+  async function busy(btn, fn) {
     const label = btn.innerHTML;
     btn.disabled = true;
     btn.textContent = "准备中…";
     try {
-      let blob;
-      if (kind === "b64") {
-        const j = await get(href, "json");
-        blob = new Blob([bytes(j.b64)], { type: "application/zip" });
-      } else if (kind === "zip") {
-        const zip = new JSZip();
-        await addBundle(zip, href, "");
-        blob = await zip.generateAsync({ type: "blob", compression: "DEFLATE",
-                                         compressionOptions: { level: 6 } });
-      } else {
-        blob = await get(href, "blob");
-      }
-      await deliver(blob, filename);
-      toast("已保存：" + filename + "（在「下载」文件夹里）");
+      const name = await fn((t) => { btn.textContent = t; });
+      if (name) toast("已保存：" + name + "（在「下载」文件夹里）");
     } catch (e) {
       const code = e && e.code;
       if (code === "declined") toast("已取消。");
       else if (code === "fetch") toast("文件没取到，刷新页面再试一次。");
+      else if (code === "nozip") toast("打包组件没加载出来，刷新页面再试一次。");
       else toast(REASON[code] || "这里不能下载。请在 Claude 网页或 App 里打开这个页面。");
     } finally {
       btn.disabled = false;
@@ -342,34 +469,248 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     }
   }
 
+  // One file whose type the save dialog accepts goes out as itself; anything
+  // else (MIDI, MusicXML, mp3 …) or several files go out as one zip.
+  async function downloadFiles(files, base, strip) {
+    if (!files.length) throw { code: "fetch" };
+    if (files.length === 1) {
+      const f = files[0];
+      if (SAVE_AS_IS.has(ext(f.name))) {
+        await saveBlob(new Blob([await fileData(f)]), f.name);
+        return f.name;
+      }
+      if (!window.JSZip) throw { code: "nozip" };
+      const zip = new JSZip();
+      await addFiles(zip, [f], "", f.dir ? f.dir + "/" : "");
+      await saveBlob(await zipBlob(zip), f.name + ".zip");
+      return f.name + ".zip";
+    }
+    if (!window.JSZip) throw { code: "nozip" };
+    const zip = new JSZip();
+    await addFiles(zip, files, base + "/", strip);
+    await saveBlob(await zipBlob(zip), base + ".zip");
+    return base + ".zip";
+  }
+
+  async function downloadWork(w, btn) {
+    await busy(btn, async () => {
+      if (!window.JSZip) throw { code: "nozip" };
+      const b = await loadBundle(w);
+      const zip = new JSZip();
+      await addFiles(zip, liveFiles(w, b), b.top + "/", "");
+      await saveBlob(await zipBlob(zip), w.zip.name);
+      return w.zip.name;
+    });
+  }
+
   async function saveAll(btn) {
-    if (!window.JSZip) { toast("打包组件没加载出来，刷新页面再试一次。"); return; }
-    const songs = works.filter((w) => w.section === "song");
-    const label = btn.innerHTML;
-    btn.disabled = true;
-    try {
+    const songs = works.filter((w) => w.section === "song" && !w.deleted);
+    await busy(btn, async (say) => {
+      if (!window.JSZip) throw { code: "nozip" };
       const out = new JSZip();
       const root = "花开当富贵_编曲交付/";
       for (let i = 0; i < songs.length; i++) {
-        btn.textContent = `打包中 ${i + 1}/${songs.length}…`;
-        await addBundle(out, songs[i].zip.href, root);
+        say(`打包中 ${i + 1}/${songs.length}…`);
+        const b = await loadBundle(songs[i]);
+        await addFiles(out, liveFiles(songs[i], b), root + b.top + "/", "");
       }
-      btn.textContent = "生成压缩包…";
-      const blob = await out.generateAsync({ type: "blob", compression: "DEFLATE",
-                                             compressionOptions: { level: 6 } });
+      say("生成压缩包…");
       const day = new Date().toISOString().slice(0, 10);
-      await deliver(blob, `花开当富贵_编曲交付_全部歌曲_${day}.zip`);
-      toast("已保存全部歌曲。");
+      const name = `花开当富贵_编曲交付_全部歌曲_${day}.zip`;
+      await saveBlob(await zipBlob(out), name);
+      return name;
+    });
+  }
+
+  async function save(href, filename, btn, kind) {
+    await busy(btn, async () => {
+      let blob;
+      if (kind === "b64") {
+        const j = await get(href, "json");
+        blob = new Blob([bytes(j.b64)], { type: "application/zip" });
+      } else {
+        blob = await get(href, "blob");
+      }
+      await saveBlob(blob, filename);
+      return filename;
+    });
+  }
+
+  // ---- the file panel of one work ----
+  function fileRow(w, f, pick, edit) {
+    const id = `ck-${w.slug}-${f.i}`;
+    const at = `data-slug="${esc(w.slug)}" data-i="${f.i}"`;
+    return `<li class="row">
+      <input type="checkbox" id="${id}" data-act="pick" ${at} ${pick.has(f.rel) ? "checked" : ""}>
+      <label for="${id}" class="fname">${esc(f.name)}<span class="fsz">${size(f.size)}</span></label>
+      <span class="row-acts">
+        <button class="mini" type="button" data-act="dl-file" ${at} aria-label="下载 ${esc(f.name)}">下载</button>
+        ${edit ? `<button class="mini danger" type="button" data-act="rm-file" ${at} aria-label="删除 ${esc(f.name)}">删除</button>` : ""}
+      </span>
+    </li>`;
+  }
+
+  function tickState(fs, pick) {
+    const n = fs.filter((f) => pick.has(f.rel)).length;
+    return n === 0 ? "" : n === fs.length ? "checked" : "data-mixed";
+  }
+
+  function panelHtml(w, b) {
+    const edit = canEdit();
+    const files = liveFiles(w, b);
+    const pick = pickOf(w.slug);
+    for (const r of [...pick]) if (!files.some((f) => f.rel === r)) pick.delete(r);
+    const at = `data-slug="${esc(w.slug)}"`;
+    if (!files.length) {
+      return `<div class="loading">这里的文件都删掉了。可以在页面底部「已删除」里恢复。</div>`;
+    }
+    const loose = files.filter((f) => !f.dir).map((f) => fileRow(w, f, pick, edit)).join("");
+    const dirs = b.dirs.map((d, k) => {
+      const fs = files.filter((f) => f.dir === d);
+      if (!fs.length) return "";
+      const open = openDirs.has(w.slug + "\n" + d);
+      const dat = `${at} data-k="${k}"`;
+      return `<li class="dir">
+        <div class="row">
+          <input type="checkbox" id="dk-${esc(w.slug)}-${k}" data-act="pick-dir" ${dat} ${tickState(fs, pick)} aria-label="选中文件夹 ${esc(d)}">
+          <button class="dir-name" type="button" data-act="dir" ${dat} aria-expanded="${open}">
+            <span class="caret" aria-hidden="true">▼</span>${FOLDER_SVG}<span class="dname">${esc(d)}</span><span class="fsz">${fs.length} 个文件 · ${size(sum(fs))}</span>
+          </button>
+          <span class="row-acts">
+            <button class="mini" type="button" data-act="dl-dir" ${dat} aria-label="下载文件夹 ${esc(d)}">下载</button>
+            ${edit ? `<button class="mini danger" type="button" data-act="rm-dir" ${dat} aria-label="删除文件夹 ${esc(d)}">删除</button>` : ""}
+          </span>
+        </div>
+        <ul class="dir-files" ${open ? "" : "hidden"}>${fs.map((f) => fileRow(w, f, pick, edit)).join("")}</ul>
+      </li>`;
+    }).join("");
+    const sel = files.filter((f) => pick.has(f.rel));
+    const bar = sel.length
+      ? `<span class="count">已选 ${sel.length} 个文件<span class="fsz">${size(sum(sel))}</span></span>
+         <button class="btn" type="button" data-act="dl-sel" ${at}>下载所选</button>
+         ${edit ? `<button class="btn danger" type="button" data-act="rm-sel" ${at}>删除所选</button>` : ""}
+         <button class="mini" type="button" data-act="clear" ${at}>取消选择</button>`
+      : `<span class="hint">勾选文件夹或文件，可以一次下载${edit ? "或删除" : ""}好几个。点文件夹的名字打开它。</span>`;
+    return `<ul class="tree">
+        <li class="row all">
+          <input type="checkbox" id="ak-${esc(w.slug)}" data-act="pick-all" ${at} ${tickState(files, pick)}>
+          <label for="ak-${esc(w.slug)}" class="fname">全选<span class="fsz">${files.length} 个文件 · ${size(sum(files))}</span></label>
+          <span></span>
+        </li>
+        ${loose}${dirs}
+      </ul>
+      <div class="selbar">${bar}</div>
+      <div class="panel-foot">
+        <p class="hint">MIDI、西贝柳斯、mp3 这类文件单个下载时会装进同名压缩包，Mac 上双击就解开。</p>
+        ${edit ? `<button class="mini danger" type="button" data-act="rm-work" ${at}>删除整个「${esc(w.title)}」</button>` : ""}
+      </div>`;
+  }
+
+  function drawPanel(w) {
+    const el = $("fp-" + w.slug);
+    if (!el) return;
+    const b = bundles[w.slug];
+    if (!b) { el.innerHTML = `<div class="loading">正在读取文件列表…</div>`; return; }
+    const focusId = document.activeElement && el.contains(document.activeElement)
+      ? document.activeElement.id : "";
+    el.innerHTML = panelHtml(w, b);
+    el.querySelectorAll("[data-mixed]").forEach((c) => { c.indeterminate = true; });
+    if (focusId && $(focusId)) $(focusId).focus();
+  }
+
+  async function togglePanel(w, btn) {
+    const el = $("fp-" + w.slug);
+    const open = !openPanels.has(w.slug);
+    if (open) openPanels.add(w.slug); else openPanels.delete(w.slug);
+    btn.setAttribute("aria-expanded", String(open));
+    el.hidden = !open;
+    if (!open) return;
+    drawPanel(w);
+    try {
+      await loadBundle(w);
+      const cur = bySlug(w.slug);
+      if (cur) drawPanel(cur);
     } catch (e) {
-      const code = e && e.code;
-      toast(code === "declined" ? "已取消。" : (REASON[code] || "打包没成功，刷新页面再试一次。"));
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = label;
+      el.innerHTML = `<div class="loading">文件列表没读到，刷新页面再试一次。</div>`;
     }
   }
 
+  // ---- delete / restore (stored on the work's db row) ----
+  const dlg = $("confirm");
+  let dlgDone = null;
+  function confirmDelete(title, names, okLabel) {
+    $("cf-title").textContent = title;
+    const shown = names.slice(0, 8).map((n) => `<li>${esc(n)}</li>`).join("");
+    $("cf-list").innerHTML = shown + (names.length > 8 ? `<li>……还有 ${names.length - 8} 个</li>` : "");
+    $("cf-ok").textContent = okLabel;
+    return new Promise((resolve) => {
+      dlgDone = resolve;
+      dlg.showModal();
+      $("cf-cancel").focus();
+    });
+  }
+  function closeDialog(ok) {
+    if (dlg.open) dlg.close();
+    if (dlgDone) { const r = dlgDone; dlgDone = null; r(ok); }
+  }
+  $("cf-cancel").addEventListener("click", () => closeDialog(false));
+  $("cf-ok").addEventListener("click", () => closeDialog(true));
+  dlg.addEventListener("close", () => closeDialog(false));
+
+  async function writeRow(w, patch, done) {
+    if (!canEdit()) { toast("现在改不了：作品库还没连上，刷新页面再试。"); return false; }
+    try {
+      await db.doc("works/" + w.slug).update(patch);
+      if (done) toast(done);
+      return true;
+    } catch (e) {
+      toast(e && e.code === "invalid_argument"
+        ? "没改成：这个账号只能查看交付中心，不能删除。" : "没改成，刷新页面再试一次。");
+      return false;
+    }
+  }
+
+  async function removeFiles(w, files, title) {
+    if (!files.length) return;
+    const ok = await confirmDelete(title, files.map((f) => f.rel),
+                                   files.length > 1 ? `确认删除 ${files.length} 个文件` : "确认删除");
+    if (!ok) return;
+    const next = [...new Set([...removedOf(w), ...files.map((f) => f.rel)])];
+    if (await writeRow(w, { removed: next },
+        `已删除 ${files.length} 个文件。在页面底部「已删除」里可以恢复。`)) {
+      files.forEach((f) => pickOf(w.slug).delete(f.rel));
+    }
+  }
+
+  async function removeWork(w) {
+    const ok = await confirmDelete(`从交付中心删除「${w.title}」？`,
+      [`整个作品：${w.title}（${w.subtitle || ""}）`], "确认删除整个作品");
+    if (!ok) return;
+    if (await writeRow(w, { deleted: true },
+        `已删除「${w.title}」。在页面底部「已删除」里可以恢复。`)) {
+      openPanels.delete(w.slug);
+    }
+  }
+
+  function trashHtml() {
+    return works.filter((w) => w.deleted || removedOf(w).size).map((w) => {
+      const gone = [...removedOf(w)].sort();
+      const at = `data-slug="${esc(w.slug)}"`;
+      return `<li>
+        <div class="thead"><strong>${esc(w.title)}</strong>
+          ${w.deleted ? `<span class="pill old">整个作品已删除</span>`
+                      : `<span class="meta">删了 ${gone.length} 个文件</span>`}
+          <button class="btn ghost" type="button" data-act="restore" ${at}>${w.deleted ? "恢复这个作品" : "全部恢复"}</button>
+        </div>
+        ${gone.length ? `<ul class="tfiles">${gone.map((r) => `<li><span class="fname">${esc(r)}</span>
+          <button class="mini" type="button" data-act="restore-file" ${at} data-rel="${esc(r)}">恢复</button></li>`).join("")}</ul>` : ""}
+      </li>`;
+    }).join("");
+  }
+
   function card(w) {
+    const gone = removedOf(w);
+    const goneName = (n) => [...gone].some((r) => r === n || r.endsWith("/" + n));
     const checks = (w.main || []).map((m) =>
       `<li class="${m.ok ? "ok" : "no"}">${esc(m.label)}</li>`).join("");
     const pdfLabel = w.pdf_kind === "hollywood" ? "总谱 PDF" : "总谱 PDF（旧版预览）";
@@ -378,6 +719,10 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
       ? `<img src="${esc(w.cover)}" alt="${esc(w.title)} 总谱第一页" loading="lazy">`
       : `<span class="glyph" aria-hidden="true">${esc((w.title || "").replace(/[《》]/g, "").slice(0, 1))}</span>`;
     const zipLabel = w.section === "song" ? "下载到电脑" : "下载文件";
+    const pdf = w.pdf && !goneName(w.pdf.name) ? w.pdf : null;
+    const video = w.video && !goneName(w.video.name) ? w.video : null;
+    const open = openPanels.has(w.slug);
+    const at = `data-slug="${esc(w.slug)}"`;
     return `<article class="work" id="${esc(w.slug)}">
       <div class="thumb">${thumb}</div>
       <div class="body">
@@ -388,12 +733,14 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
                  : `<div class="meta">更新 ${esc(w.updated)}</div>`}
         ${checks ? `<ul class="checks" aria-label="四样主文件">${checks}</ul>` : ""}
         ${w.note ? `<p class="note">${esc(w.note)}</p>` : ""}
-        ${w.video ? `<video controls playsinline preload="metadata" src="${esc(w.video.href)}"></video>` : ""}
+        ${video ? `<video controls playsinline preload="metadata" src="${esc(video.href)}"></video>` : ""}
         <div class="actions">
-          <button class="btn" type="button" data-kind="zip" data-href="${esc(w.zip.href)}" data-name="${esc(w.zip.name)}">${zipLabel} <span class="sz">${size(w.zip.size)}</span></button>
-          ${w.pdf ? `<button class="btn ghost" type="button" data-href="${esc(w.pdf.href)}" data-name="${esc(w.pdf.name)}">${pdfLabel} <span class="sz">${size(w.pdf.size)}</span></button>` : ""}
-          ${w.video ? `<button class="btn ghost" type="button" data-href="${esc(w.video.href)}" data-name="${esc(w.video.name)}">下载视频 <span class="sz">${size(w.video.size)}</span></button>` : ""}
+          <button class="btn" type="button" data-act="dl-work" ${at}>${zipLabel} <span class="sz">${gone.size ? "" : size(w.zip.size)}</span></button>
+          <button class="btn ghost" type="button" data-act="files" ${at} aria-expanded="${open}" aria-controls="fp-${esc(w.slug)}">选择文件 <span class="caret" aria-hidden="true">▾</span></button>
+          ${pdf ? `<button class="btn ghost" type="button" data-href="${esc(pdf.href)}" data-name="${esc(pdf.name)}">${pdfLabel} <span class="sz">${size(pdf.size)}</span></button>` : ""}
+          ${video ? `<button class="btn ghost" type="button" data-href="${esc(video.href)}" data-name="${esc(video.name)}">下载视频 <span class="sz">${size(video.size)}</span></button>` : ""}
         </div>
+        <div class="files" id="fp-${esc(w.slug)}" ${open ? "" : "hidden"}></div>
         ${w.audio ? `<audio controls preload="none" src="${esc(w.audio)}" aria-label="${esc(w.title)} 试听"></audio>` : ""}
         ${qs.length ? `<details><summary>待你确认 ${qs.length} 条</summary><ul>${qs.map((q) => `<li>${esc(q)}</li>`).join("")}</ul></details>` : ""}
       </div>
@@ -402,18 +749,84 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
 
   function render() {
     const byNew = (a, b) => String(b.sort).localeCompare(String(a.sort));
-    const songs = works.filter((w) => w.section === "song").sort(byNew);
-    const media = works.filter((w) => w.section !== "song").sort(byNew);
+    const shown = works.filter((w) => !w.deleted);
+    const songs = shown.filter((w) => w.section === "song").sort(byNew);
+    const media = shown.filter((w) => w.section !== "song").sort(byNew);
     $("songs").innerHTML = songs.length ? songs.map(card).join("")
       : `<div class="empty"><strong>还没有作品</strong><span>做完第一首歌后会出现在这里。</span></div>`;
     $("media").innerHTML = media.map(card).join("");
     $("media-sec").hidden = !media.length;
+    shown.forEach((w) => { if (openPanels.has(w.slug)) drawPanel(w); });
+    const trash = canEdit() ? trashHtml() : "";
+    $("trash").innerHTML = trash;
+    $("trash-sec").hidden = !trash;
     const total = songs.reduce((n, w) => n + (w.zip ? w.zip.size : 0), 0);
     $("all-size").textContent = size(total);
     $("all").hidden = !(songs.length > 1 && window.JSZip);
-    const latest = works.map((w) => w.updated).sort().pop();
+    const latest = shown.map((w) => w.updated).sort().pop();
     $("summary").textContent = `${songs.length} 首歌 · ${media.length} 个视频与动画`
       + (latest ? ` · 最近更新 ${latest}` : "");
+  }
+
+  // ---- clicks and ticks ----
+  async function onAct(el) {
+    const act = el.dataset.act;
+    const w = bySlug(el.dataset.slug);
+    if (!w) return;
+    const b = bundles[w.slug];
+    const files = b ? liveFiles(w, b) : [];
+    const fileAt = () => files.find((f) => f.i === Number(el.dataset.i));
+    const dirAt = () => b.dirs[Number(el.dataset.k)];
+    const inDir = (d) => files.filter((f) => f.dir === d);
+    switch (act) {
+      case "dl-work": return downloadWork(w, el);
+      case "files": return togglePanel(w, el);
+      case "dir": {
+        const key = w.slug + "\n" + dirAt();
+        if (openDirs.has(key)) openDirs.delete(key); else openDirs.add(key);
+        return drawPanel(w);
+      }
+      case "dl-file": { const f = fileAt(); return f && busy(el, () => downloadFiles([f])); }
+      case "dl-dir": {
+        const d = dirAt();
+        return busy(el, () => downloadFiles(inDir(d), `${b.top}_${d.replace(/\//g, "_")}`, d + "/"));
+      }
+      case "dl-sel": {
+        const sel = files.filter((f) => pickOf(w.slug).has(f.rel));
+        return busy(el, () => downloadFiles(sel, `${b.top}_所选文件`, ""));
+      }
+      case "clear": pickOf(w.slug).clear(); return drawPanel(w);
+      case "rm-file": { const f = fileAt(); return f && removeFiles(w, [f], `删除「${f.name}」？`); }
+      case "rm-dir": {
+        const d = dirAt();
+        return removeFiles(w, inDir(d), `删除文件夹「${d}」里的 ${inDir(d).length} 个文件？`);
+      }
+      case "rm-sel": {
+        const sel = files.filter((f) => pickOf(w.slug).has(f.rel));
+        return removeFiles(w, sel, `删除选中的 ${sel.length} 个文件？`);
+      }
+      case "rm-work": return removeWork(w);
+      case "restore":
+        return writeRow(w, w.deleted ? { deleted: false } : { removed: [] },
+                        w.deleted ? `已恢复「${w.title}」。` : `已恢复「${w.title}」的全部文件。`);
+      case "restore-file": {
+        const rel = el.dataset.rel;
+        return writeRow(w, { removed: [...removedOf(w)].filter((r) => r !== rel) }, "已恢复：" + rel);
+      }
+    }
+  }
+
+  function onTick(el) {
+    const w = bySlug(el.dataset.slug);
+    const b = w && bundles[w.slug];
+    if (!b) return;
+    const pick = pickOf(w.slug);
+    const files = liveFiles(w, b);
+    const group = el.dataset.act === "pick" ? files.filter((f) => f.i === Number(el.dataset.i))
+      : el.dataset.act === "pick-dir" ? files.filter((f) => f.dir === b.dirs[Number(el.dataset.k)])
+      : files;
+    group.forEach((f) => { if (el.checked) pick.add(f.rel); else pick.delete(f.rel); });
+    drawPanel(w);
   }
 
   // ---- Mac Dock app: download the installer, then one Terminal command ----
@@ -456,7 +869,13 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     try { localStorage.setItem("dock-open", dock.open ? "1" : "0"); } catch (e) { /* ignore */ }
   });
 
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("input[data-act]")) onTick(e.target);
+  });
+
   document.addEventListener("click", (e) => {
+    const a = e.target.closest("button[data-act]");
+    if (a) { onAct(a); return; }
     const b = e.target.closest("button[data-href]");
     if (b) { save(b.dataset.href, b.dataset.name, b, b.dataset.kind); return; }
     if (e.target.closest("#mac-copy")) { copyCmd(); return; }
@@ -465,22 +884,23 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
 
   // The list lives in the page database; files/works.json is a published
   // snapshot of it, shown until (or instead of, if it never comes) the
-  // database answers.
-  let live = false;
+  // database answers. Deleting needs the live database.
   get("files/works.json", "json").then((rows) => {
     if (live) return;
     works = Object.values(rows || {});
     if (works.length) render();
   }).catch(() => { /* the database is the source of truth */ });
 
-  dbP.then((db) => {
+  dbP.then((d) => {
     const fail = () => {
-      if (works.length) return;
+      live = false;
+      if (works.length) { render(); return; }
       $("summary").textContent = "作品列表没读到，刷新页面再试一次。";
       $("empty").innerHTML = "<strong>这里看不到作品列表</strong><span>刷新一下页面；还不行的话，在 Claude 网页或 App 里打开这个页面。</span>";
     };
-    if (!db) { fail(); return; }
-    db.collection("works").onSnapshot((snap) => {
+    if (!d) { fail(); return; }
+    db = d;
+    d.collection("works").onSnapshot((snap) => {
       const rows = snap.docs.filter((d) => d.exists).map((d) => d.data());
       if (!rows.length && works.length) return;
       live = true;
