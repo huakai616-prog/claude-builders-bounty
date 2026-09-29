@@ -1,11 +1,13 @@
 ---
 name: hollywood-score
-description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), the Hollywood layout (tools/hollywood), and the hand-off: every finished work goes into the pinned 编曲交付中心 page (tools/deliver) and is merged into main. Follow it without asking the user about layout, credits, deliverables or merging.
+description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), the Hollywood layout (tools/hollywood), and the hand-off: every finished work goes into the pinned 编曲交付中心 page (tools/deliver) and is merged into main. Follow it without asking the user about layout, credits, deliverables or merging. It fixes the delivery format only; the music (texture, harmony, structure) must be conceived fresh for each song, never copied from an earlier one.
 ---
 
 # Hollywood score delivery
 
 The user set these rules once and does not want to be asked again.
+
+**This skill is about the delivery format, not the music.** When the user says 「像之前一样」, they mean the same delivery: the files, the PDF, the credits and the delivery center. They do not mean the same arrangement. 我不难过 copied 泪海's textures and chords almost one for one, and the user called it 难听. Conceive each song's texture, harmony, intro and ending from that song itself, and say in the README how it differs from earlier work. The full rule is in `AGENTS.md` under 「用户怎么提需求」.
 
 ## Standing rules
 
