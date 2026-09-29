@@ -70,54 +70,54 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>no</group-barline>
     </part-group>
-    <score-part id="Pd59702a7fb357412f2de12fd2996180a">
+    <score-part id="P11a33487c771b2621ee02a14878384d1">
       <part-name>Soprano</part-name>
       <part-abbreviation>S.</part-abbreviation>
-      <score-instrument id="Ie1b8ba21c148b75c8b97f2407b158548">
+      <score-instrument id="I8d08a03648e44121da86871c4fde73f0">
         <instrument-name>Soprano</instrument-name>
         <instrument-abbreviation>S</instrument-abbreviation>
         <instrument-sound>voice.soprano</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ie1b8ba21c148b75c8b97f2407b158548">
+      <midi-instrument id="I8d08a03648e44121da86871c4fde73f0">
         <midi-channel>1</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P61d3de7e66b4264c9ec30c30f9a98a5c">
+    <score-part id="Pbd45b57e41834904bd684d57c369c29c">
       <part-name>Alto</part-name>
       <part-abbreviation>A.</part-abbreviation>
-      <score-instrument id="Id11e6be9b9381e01b9a7785fb620ab2c">
+      <score-instrument id="I1f1df2b974c2d0a241b877e6ddbd8170">
         <instrument-name>Alto</instrument-name>
         <instrument-abbreviation>A</instrument-abbreviation>
         <instrument-sound>voice.alto</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id11e6be9b9381e01b9a7785fb620ab2c">
+      <midi-instrument id="I1f1df2b974c2d0a241b877e6ddbd8170">
         <midi-channel>2</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P1b473975d8a6ce89d17142ba5be84113">
+    <score-part id="Pca369426d63e5a1ec59997b617a5597c">
       <part-name>Tenor</part-name>
       <part-abbreviation>T.</part-abbreviation>
-      <score-instrument id="I76b7aab7bd93415844918d615101cc9b">
+      <score-instrument id="Ie5cf5372f1d0f32df42c15d999da73fc">
         <instrument-name>Tenor</instrument-name>
         <instrument-abbreviation>T</instrument-abbreviation>
         <instrument-sound>voice.tenor</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I76b7aab7bd93415844918d615101cc9b">
+      <midi-instrument id="Ie5cf5372f1d0f32df42c15d999da73fc">
         <midi-channel>3</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P787e34b00a37ce7164be5fb0c16ca969">
+    <score-part id="Pf9b2dfa72e57043c5d81b7865363150f">
       <part-name>Bass</part-name>
       <part-abbreviation>B.</part-abbreviation>
-      <score-instrument id="Ie545ecabf0f5c3876be643b9c7b0a684">
+      <score-instrument id="If74ba7d5a789e2b085f910f599472fef">
         <instrument-name>Bass</instrument-name>
         <instrument-abbreviation>B</instrument-abbreviation>
         <instrument-sound>voice.bass</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ie545ecabf0f5c3876be643b9c7b0a684">
+      <midi-instrument id="If74ba7d5a789e2b085f910f599472fef">
         <midi-channel>4</midi-channel>
         <midi-program>54</midi-program>
       </midi-instrument>
@@ -128,61 +128,61 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P7fa0e8a030e5a3bd6e5b9066e52c5350">
+    <score-part id="P2ea3767cc512808461b9625562b62917">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="Iac63036a15060f5afa0d38de8b99e62c">
+      <score-instrument id="I17157624f8c2152200e48b87f421c172">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Iac63036a15060f5afa0d38de8b99e62c">
+      <midi-instrument id="I17157624f8c2152200e48b87f421c172">
         <midi-channel>5</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P40624b5472c1c1a147da99e4c5d010d3">
+    <score-part id="P081f33b8b6909c6f5a720b5def13090e">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="Id88024e1d93994a5e1c5b8a464335b83">
+      <score-instrument id="I4c89ba316bb1b5695b4d91d0533c7e9e">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Id88024e1d93994a5e1c5b8a464335b83">
+      <midi-instrument id="I4c89ba316bb1b5695b4d91d0533c7e9e">
         <midi-channel>6</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P246e9584f876b88d9d4b6b3c3d69327f">
+    <score-part id="Pd65722b18d13285e178366b1e70ce72a">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="Ia5eea2378d83b8876790264f598126c5">
+      <score-instrument id="I903fe173589387170a706b3b581e7605">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ia5eea2378d83b8876790264f598126c5">
+      <midi-instrument id="I903fe173589387170a706b3b581e7605">
         <midi-channel>7</midi-channel>
         <midi-program>42</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P0ae8f35fef1049c06f3e3804f93b2a18">
+    <score-part id="P3a99ba37b65ea0bfa7ade91a638616a3">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="I61c53f459f5ee775311940c02d2d1692">
+      <score-instrument id="I20e8842186dfbf47a02a25885b131768">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I61c53f459f5ee775311940c02d2d1692">
+      <midi-instrument id="I20e8842186dfbf47a02a25885b131768">
         <midi-channel>8</midi-channel>
         <midi-program>43</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="2" type="stop" />
   </part-list>
-  <part id="Pd59702a7fb357412f2de12fd2996180a">
+  <part id="P11a33487c771b2621ee02a14878384d1">
     <measure implicit="no" number="1">
       <print>
         <measure-numbering>measure</measure-numbering>
@@ -540,29 +540,11 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -573,7 +555,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="2" type="stop" />
         </notations>
@@ -714,34 +696,15 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -752,7 +715,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>心</text>
@@ -1039,6 +1002,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -1051,7 +1015,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -1064,6 +1027,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -1076,7 +1040,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <rest measure="yes" />
         <duration>30240</duration>
@@ -1223,7 +1186,8 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>15120</duration>
@@ -1299,33 +1263,15 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>花</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -1336,7 +1282,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>一</text>
@@ -1690,33 +1636,15 @@
           <step>F</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -1728,7 +1656,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>漩</text>
@@ -2112,29 +2040,11 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -2145,7 +2055,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="3" type="stop" />
         </notations>
@@ -2166,6 +2076,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -2264,7 +2175,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -2291,34 +2201,15 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>不</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -2329,7 +2220,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>干</text>
@@ -2350,6 +2241,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -2483,7 +2375,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>C</step>
@@ -2683,33 +2574,15 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -2720,7 +2593,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
@@ -2863,34 +2736,15 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -2901,7 +2755,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
@@ -3004,13 +2858,12 @@
     <measure implicit="no" number="70">
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
+          <step>D</step>
+          <octave>5</octave>
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <beam number="1">begin</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
@@ -3019,13 +2872,12 @@
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <beam number="1">continue</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
@@ -3034,12 +2886,13 @@
       </note>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>5040</duration>
         <type>eighth</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <beam number="1">end</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
@@ -3048,8 +2901,7 @@
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>G</step>
           <octave>5</octave>
         </pitch>
         <duration>15120</duration>
@@ -3181,7 +3033,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P61d3de7e66b4264c9ec30c30f9a98a5c">
+  <part id="Pbd45b57e41834904bd684d57c369c29c">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -3471,33 +3323,15 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>能</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -3508,7 +3342,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>分</text>
@@ -3715,34 +3549,15 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>首</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -3753,7 +3568,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>赞</text>
@@ -3959,33 +3774,15 @@
           <step>F</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>一</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -3997,7 +3794,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>条</text>
@@ -4373,29 +4170,11 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -4407,7 +4186,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="5" type="stop" />
         </notations>
@@ -4551,33 +4330,15 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -4588,7 +4349,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>心</text>
@@ -4856,6 +4617,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -4868,7 +4630,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -4881,6 +4642,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -4893,7 +4655,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <rest measure="yes" />
         <duration>30240</duration>
@@ -5108,33 +4869,15 @@
           <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>花</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -5145,7 +4888,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>一</text>
@@ -5513,33 +5256,15 @@
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -5551,7 +5276,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>漩</text>
@@ -5928,29 +5653,11 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -5962,7 +5669,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="1" type="stop" />
         </notations>
@@ -5983,6 +5690,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -6062,7 +5770,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -6089,33 +5796,15 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>不</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -6126,7 +5815,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>干</text>
@@ -6148,6 +5837,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -6279,7 +5969,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -6462,33 +6151,15 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -6500,7 +6171,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
@@ -6646,33 +6317,15 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -6683,7 +6336,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>啦</text>
@@ -6940,7 +6593,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P1b473975d8a6ce89d17142ba5be84113">
+  <part id="Pca369426d63e5a1ec59997b617a5597c">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -7286,29 +6939,11 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -7320,7 +6955,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="4" type="stop" />
         </notations>
@@ -7481,14 +7116,11 @@
           <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
@@ -7501,26 +7133,10 @@
           <octave>3</octave>
         </pitch>
         <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>心</text>
@@ -7804,6 +7420,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -7816,7 +7433,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -7829,6 +7445,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -7841,7 +7458,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <rest measure="yes" />
         <duration>30240</duration>
@@ -8209,14 +7825,11 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
@@ -8228,25 +7841,10 @@
           <octave>3</octave>
         </pitch>
         <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>漩</text>
@@ -8599,29 +8197,11 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -8633,7 +8213,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="1" type="stop" />
         </notations>
@@ -8669,6 +8249,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -8748,7 +8329,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -8774,33 +8354,15 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>不</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -8812,7 +8374,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>干</text>
@@ -8850,6 +8412,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -8981,7 +8544,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>E</step>
@@ -9572,7 +9134,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P787e34b00a37ce7164be5fb0c16ca969">
+  <part id="Pf9b2dfa72e57043c5d81b7865363150f">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -10072,14 +9634,11 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
@@ -10091,25 +9650,10 @@
           <octave>2</octave>
         </pitch>
         <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>2520</duration>
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>心</text>
@@ -10398,6 +9942,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -10410,7 +9955,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -10423,6 +9967,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -10435,7 +9980,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <rest measure="yes" />
         <duration>30240</duration>
@@ -10671,34 +10215,15 @@
           <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
         </lyric>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -10709,7 +10234,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>依</text>
@@ -10875,14 +10400,11 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>的</text>
@@ -10894,25 +10416,10 @@
           <octave>2</octave>
         </pitch>
         <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>2520</duration>
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>漩</text>
@@ -11276,6 +10783,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -11334,7 +10842,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -11360,14 +10867,11 @@
           <step>G</step>
           <octave>2</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>不</text>
@@ -11379,25 +10883,10 @@
           <octave>2</octave>
         </pitch>
         <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>2520</duration>
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <lyric name="1" number="1">
           <syllabic>single</syllabic>
           <text>干</text>
@@ -11434,6 +10923,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -11569,7 +11059,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -12164,7 +11653,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P7fa0e8a030e5a3bd6e5b9066e52c5350">
+  <part id="P2ea3767cc512808461b9625562b62917">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -12313,30 +11802,11 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -12347,7 +11817,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="3" type="stop" />
         </notations>
@@ -12601,29 +12071,11 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -12634,7 +12086,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="1" type="stop" />
         </notations>
@@ -12880,29 +12332,11 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -12913,7 +12347,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
       <note>
         <pitch>
@@ -12973,30 +12407,11 @@
           <alter>-1</alter>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -13007,7 +12422,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
       <note>
         <pitch>
@@ -13330,29 +12745,11 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -13363,7 +12760,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="4" type="stop" />
         </notations>
@@ -13380,6 +12777,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -13456,7 +12854,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -13482,30 +12879,11 @@
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -13516,7 +12894,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="6" type="stop" />
         </notations>
@@ -13532,6 +12910,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -13541,10 +12920,10 @@
       <direction placement="below">
         <direction-type>
           <dynamics default-x="-36" default-y="-80">
-            <mf />
+            <mp />
           </dynamics>
         </direction-type>
-        <sound dynamics="69" />
+        <sound dynamics="57" />
       </direction>
       <direction placement="below">
         <direction-type>
@@ -13562,7 +12941,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -14131,6 +13509,11 @@
     </measure>
     <measure implicit="no" number="57">
       <print new-system="yes" />
+      <direction placement="above">
+        <direction-type>
+          <octave-shift type="down" size="8" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -14225,29 +13608,11 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -14258,7 +13623,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="3" type="stop" />
         </notations>
@@ -14292,29 +13657,11 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -14325,13 +13672,14 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="4" type="stop" />
         </notations>
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -14408,7 +13756,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -14434,30 +13781,11 @@
           <alter>-1</alter>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -14468,7 +13796,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="6" type="stop" />
         </notations>
@@ -14501,29 +13829,11 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -14536,13 +13846,19 @@
         <accidental>natural</accidental>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="1" type="stop" />
         </notations>
       </note>
+      <direction>
+        <direction-type>
+          <octave-shift type="stop" size="8" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -14655,7 +13971,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -14808,6 +14123,11 @@
         </direction-type>
         <sound dynamics="107" />
       </direction>
+      <direction placement="above">
+        <direction-type>
+          <octave-shift type="down" size="8" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -14908,29 +14228,11 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -14941,7 +14243,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="2" type="stop" />
         </notations>
@@ -15082,30 +14384,11 @@
           <alter>-1</alter>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -15116,7 +14399,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="6" type="stop" />
         </notations>
@@ -15280,11 +14563,6 @@
         </direction-type>
         <sound dynamics="88" />
       </direction>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="6" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -15299,6 +14577,22 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="6" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
+      <forward>
+        <duration>30240</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="6" spread="0" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="73">
       <direction placement="below">
@@ -15324,23 +14618,23 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="6" spread="0" type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <rest />
         <duration>15120</duration>
         <type>quarter</type>
         <dot />
       </note>
+      <direction>
+        <direction-type>
+          <octave-shift type="stop" size="8" />
+        </direction-type>
+      </direction>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
-  <part id="P40624b5472c1c1a147da99e4c5d010d3">
+  <part id="P081f33b8b6909c6f5a720b5def13090e">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -17156,6 +16450,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -17304,7 +16599,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -17521,6 +16815,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -17530,10 +16825,10 @@
       <direction placement="below">
         <direction-type>
           <dynamics default-x="-36" default-y="-80">
-            <mf />
+            <mp />
           </dynamics>
         </direction-type>
-        <sound dynamics="69" />
+        <sound dynamics="57" />
       </direction>
       <direction placement="below">
         <direction-type>
@@ -17680,7 +16975,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>G</step>
@@ -18762,6 +18056,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -18909,7 +18204,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -19124,6 +18418,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -19302,8 +18597,9 @@
       </note>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>4</octave>
         </pitch>
         <duration>2520</duration>
         <type>16th</type>
@@ -19416,7 +18712,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -19779,29 +19074,11 @@
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -19813,7 +19090,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="2" type="stop" />
         </notations>
@@ -19897,29 +19174,11 @@
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>down</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -19930,7 +19189,7 @@
         <type>16th</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="4" type="stop" />
         </notations>
@@ -20140,6 +19399,11 @@
       <forward>
         <duration>30240</duration>
       </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="6" spread="0" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="73">
       <direction placement="below">
@@ -20168,26 +19432,12 @@
         <type>quarter</type>
         <dot />
       </note>
-      <backup>
-        <duration>30240</duration>
-      </backup>
-      <forward>
-        <duration>15120</duration>
-      </forward>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="6" spread="0" type="stop" />
-        </direction-type>
-      </direction>
-      <forward>
-        <duration>15120</duration>
-      </forward>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
-  <part id="P246e9584f876b88d9d4b6b3c3d69327f">
+  <part id="Pd65722b18d13285e178366b1e70ce72a">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -20311,29 +19561,11 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -20344,7 +19576,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
         <notations>
           <slur number="2" type="stop" />
         </notations>
@@ -21392,29 +20624,11 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -21425,7 +20639,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
       <note>
         <pitch>
@@ -21442,6 +20656,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -21469,7 +20684,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -21505,29 +20719,11 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>5040</duration>
-        <tie type="start" />
+        <duration>7560</duration>
         <type>eighth</type>
+        <dot />
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2520</duration>
-        <tie type="stop" />
-        <type>16th</type>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -21538,7 +20734,7 @@
         <type>16th</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <beam number="2">end</beam>
+        <beam number="2">backward hook</beam>
       </note>
       <note>
         <pitch>
@@ -21556,6 +20752,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -21565,10 +20762,10 @@
       <direction placement="below">
         <direction-type>
           <dynamics default-x="-36" default-y="-80">
-            <mf />
+            <mp />
           </dynamics>
         </direction-type>
-        <sound dynamics="69" />
+        <sound dynamics="57" />
       </direction>
       <direction placement="below">
         <direction-type>
@@ -21577,9 +20774,8 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>3</octave>
+          <step>D</step>
+          <octave>4</octave>
         </pitch>
         <duration>30240</duration>
         <type>half</type>
@@ -21587,7 +20783,6 @@
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>G</step>
@@ -21623,9 +20818,22 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>15120</duration>
+        <duration>10080</duration>
         <type>quarter</type>
-        <dot />
+        <notations>
+          <slur number="6" type="start" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5040</duration>
+        <type>eighth</type>
+        <notations>
+          <slur number="6" type="stop" />
+        </notations>
       </note>
       <direction placement="below">
         <direction-type>
@@ -21708,6 +20916,14 @@
         <direction-type>
           <words font-style="italic">dolce</words>
         </direction-type>
+      </direction>
+      <direction placement="below">
+        <direction-type>
+          <dynamics default-x="-36" default-y="-80">
+            <p />
+          </dynamics>
+        </direction-type>
+        <sound dynamics="44" />
       </direction>
       <note>
         <rest />
@@ -22089,6 +21305,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -22116,7 +21333,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -22145,6 +21361,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -22192,7 +21409,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>C</step>
@@ -22747,8 +21963,7 @@
     <measure implicit="no" number="71">
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>15120</duration>
@@ -22758,8 +21973,9 @@
       <note>
         <chord />
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
         </pitch>
         <duration>15120</duration>
         <type>quarter</type>
@@ -22890,6 +22106,11 @@
       <forward>
         <duration>30240</duration>
       </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="2" spread="0" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="73">
       <direction placement="below">
@@ -22930,26 +22151,12 @@
         <type>quarter</type>
         <dot />
       </note>
-      <backup>
-        <duration>30240</duration>
-      </backup>
-      <forward>
-        <duration>15120</duration>
-      </forward>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="2" spread="0" type="stop" />
-        </direction-type>
-      </direction>
-      <forward>
-        <duration>15120</duration>
-      </forward>
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
     </measure>
   </part>
-  <part id="P0ae8f35fef1049c06f3e3804f93b2a18">
+  <part id="P3a99ba37b65ea0bfa7ade91a638616a3">
     <measure implicit="no" number="1">
       <attributes>
         <divisions>10080</divisions>
@@ -23998,6 +23205,7 @@
       </note>
     </measure>
     <measure implicit="no" number="35">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -24041,7 +23249,6 @@
       </note>
     </measure>
     <measure implicit="no" number="36">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -24078,6 +23285,7 @@
       </note>
     </measure>
     <measure implicit="no" number="37">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -24113,7 +23321,7 @@
         <stem>down</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur number="6" type="start" />
+          <slur number="1" type="start" />
         </notations>
       </note>
       <note>
@@ -24146,12 +23354,11 @@
         <type>quarter</type>
         <dot />
         <notations>
-          <slur number="6" type="stop" />
+          <slur number="1" type="stop" />
         </notations>
       </note>
     </measure>
     <measure implicit="no" number="38">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>D</step>
@@ -24162,7 +23369,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         <notations>
-          <slur number="1" type="start" />
+          <slur number="2" type="start" />
         </notations>
       </note>
       <note>
@@ -24195,7 +23402,7 @@
         <type>quarter</type>
         <dot />
         <notations>
-          <slur number="1" type="stop" />
+          <slur number="2" type="stop" />
         </notations>
       </note>
     </measure>
@@ -24210,7 +23417,7 @@
         <type>quarter</type>
         <dot />
         <notations>
-          <slur number="2" type="start" />
+          <slur number="3" type="start" />
         </notations>
       </note>
       <note>
@@ -24230,7 +23437,7 @@
         <duration>5040</duration>
         <type>eighth</type>
         <notations>
-          <slur number="2" type="stop" />
+          <slur number="3" type="stop" />
         </notations>
       </note>
       <direction placement="below">
@@ -24514,55 +23721,14 @@
       </note>
     </measure>
     <measure implicit="no" number="47">
-      <direction placement="below">
-        <direction-type>
-          <dynamics default-x="-36" default-y="-80">
-            <mp />
-          </dynamics>
-        </direction-type>
-        <sound dynamics="57" />
-      </direction>
       <note>
         <pitch>
           <step>B</step>
           <alter>-1</alter>
           <octave>2</octave>
         </pitch>
-        <duration>5040</duration>
-        <type>eighth</type>
-        <stem>up</stem>
-        <beam number="1">begin</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>2</octave>
-        </pitch>
-        <duration>5040</duration>
-        <type>eighth</type>
-        <accidental>flat</accidental>
-        <stem>up</stem>
-        <beam number="1">continue</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>5040</duration>
-        <type>eighth</type>
-        <stem>up</stem>
-        <beam number="1">end</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>2</octave>
-        </pitch>
-        <duration>15120</duration>
-        <type>quarter</type>
+        <duration>30240</duration>
+        <type>half</type>
         <dot />
       </note>
     </measure>
@@ -25027,6 +24193,7 @@
       </note>
     </measure>
     <measure implicit="no" number="59">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -25054,7 +24221,6 @@
       </note>
     </measure>
     <measure implicit="no" number="60">
-      <print new-system="yes" />
       <attributes>
         <time>
           <beats>9</beats>
@@ -25090,6 +24256,7 @@
       </note>
     </measure>
     <measure implicit="no" number="61">
+      <print new-system="yes" />
       <attributes>
         <time>
           <beats>6</beats>
@@ -25137,7 +24304,6 @@
       </note>
     </measure>
     <measure implicit="no" number="63">
-      <print new-system="yes" />
       <note>
         <pitch>
           <step>A</step>
@@ -26004,11 +25170,6 @@
     </measure>
     <measure implicit="no" number="72">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <wedge number="5" spread="15" type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -26023,6 +25184,22 @@
           <tied type="start" />
         </notations>
       </note>
+      <backup>
+        <duration>30240</duration>
+      </backup>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="15" type="diminuendo" />
+        </direction-type>
+      </direction>
+      <forward>
+        <duration>30240</duration>
+      </forward>
+      <direction placement="below">
+        <direction-type>
+          <wedge number="5" spread="0" type="stop" />
+        </direction-type>
+      </direction>
     </measure>
     <measure implicit="no" number="73">
       <direction placement="below">
@@ -26048,11 +25225,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction placement="below">
-        <direction-type>
-          <wedge number="5" spread="0" type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <rest />
         <duration>15120</duration>

@@ -20,6 +20,7 @@ Token syntax and the engine: see engine.py.
     python3 build.py --mp3     # ... plus the GM preview mp3
 """
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -69,7 +70,7 @@ SOP = {
     31: "C5/6=和 Ab4/4=我 G4/2=诉",
     32: "G4/6~=说 G4/4 r/2",
     41: "(Bb4/2=我 C5/2) Bb4/2=的 (Ab4/2=祖 G4/2) F4/2=国",
-    42: "Eb4/6=和 G4/6=我",
+    42: "Eb4/6=和 Eb4/6=我",
     43: "Eb4/2=像 G4/2=海 Eb5/2=和 D5/2=浪 C5/3=花 G4/1=一",
     44: "Bb4/12=朵",
     45: "C5/2=浪 D5/2=是 C5/2=那 (Bb4/2=海 Ab4/2) G4/2=的",
@@ -93,7 +94,7 @@ SOP = {
     67: "Eb5/2=啦 F5/2=啦 G5/2=啦 F5/2=啦 Eb5/2=啦 C5/2=啦",
     68: "D5/2=啦 Bb4/3=啦 G4/1=啦 C5/12=啦",
     69: "G5/2=永 F5/2=远 Eb5/2=给 D5/6=我",
-    70: "Bb4/2=碧 Ab4/2=浪 G4/2=清 Eb5/6=波",
+    70: "D5/2=碧 C5/2=浪 Bb4/2=清 G5/6=波",
     71: "Bb4/6=心 F5/4^=中 Eb5/2=的",
     72: "Eb5/12~=歌",
     73: "Eb5/6^ r/6",
@@ -355,7 +356,7 @@ VN2 = {
     60: "Bb3/1 D4/1 G4/1 D4/1 Bb3/1 D4/1 Eb4/1 C4/1 G4/1 C5/1 G4/1 Eb4/1 "
         "A3/1 C4/1 Eb4/1 F4/1 Eb4/1 C4/1",
     61: "D4/1 F4/1 Bb4/1 F4/1 D4/1 F4/1 D4/1 F4/1 Ab4/1 Bb4/1 Ab4/1 F4/1",
-    62: "G4/1 Bb4/1 D5/1 Bb4/1 G4/1 Bb4/1 C4/1 Eb4/1 G4/1 C5/1 G4/1 Eb4/1",
+    62: "G4/1 Bb4/1 Ab4/1 Bb4/1 G4/1 Bb4/1 C4/1 Eb4/1 G4/1 C5/1 G4/1 Eb4/1",
     63: "Ab3/1 C4/1 Eb4/1 Ab4/1 Eb4/1 C4/1 D4/1 F4/1 Ab4/1 Bb4/1 G4/1 Eb4/1",
     64: "Eb4/4 r/2 (D5/1 Eb5/1 F5/1 G5/1 Ab5/1 Bb5/1)",
     65: "(G5/2 Ab5/2 Bb5/2) (Ab5/2 G5/2 Eb5/2)",
@@ -404,9 +405,9 @@ VA = {
     34: "Bb3/6 (Eb4/2 C4/3 G3/1 Bb3/6)",
     35: "Bb3/6 C4/6",
     36: "Bb3/6 (Eb4/2 C4/3 G3/1 A3/6)",
-    37: "Bb3/12",
+    37: "D4/12",
     38: "G3/6 C3/6",
-    39: "Eb3/6 F3/6",
+    39: "Eb3/6 (F3/4 G3/2)",
     40: "G3/12",
     49: "r/2 Eb3/2 G3/2 r/2 Ab3/2 C4/2",
     50: "r/2 C4/2 Eb4/2 r/2 Eb4/2 D4/2",
@@ -430,7 +431,7 @@ VA = {
     68: "Bb3+D4/4 Bb3+D4/2 C4+G4/4 C4+Eb4/2 A3+Eb4/4 A3+F4/2",
     69: "Bb3+F4/12",
     70: "Bb3+F4/6 C4+Eb4/6",
-    71: "Eb4+C5/6 D4+F4/4^ Eb4+G4/2",
+    71: "C4+Eb4/6 D4+F4/4^ Eb4+G4/2",
     72: "r/3 Eb4+Bb4/3 Eb4+Bb4/3 Eb4+Bb4/3",
     73: "Eb4+Bb4/6^ r/6",
 }
@@ -480,7 +481,7 @@ VC = {
     44: "Bb2/4 F3/2 Bb2/4 F3/2",
     45: "Ab2/4 Eb3/2 Ab2/4 Eb3/2",
     46: "A2/4 Eb3/2 A2/4 C3/2",
-    47: "Bb2/2 Ab2/2 G2/2 Bb2/6",
+    47: "Bb2/12",
     48: "Eb2/4 Bb2/2 B2/4 D3/2",
     49: "C3/4 Eb3/2 F2/4 C3/2",
     50: "Ab2/4 Eb3/2 Bb2/4 F3/2",
@@ -538,7 +539,7 @@ VOCAL_BREATHS = {
             (71, 0)],
 }
 
-_END_DIM = [(72, 0, 73, 5, "dim")]
+_END_DIM = [(72, 0, 72, 11, "dim")]
 VOCAL_DYN = {
     "sop": [(25, 0, "mf"), (29, 0, "p"), (41, 0, "mp"), (49, 0, "p"), (51, 0, "mf"),
             (57, 0, "f"), (61, 0, "mp"), (65, 0, "ff"), (72, 0, "f"),
@@ -572,25 +573,26 @@ VOCAL_TEXT = {
 STR_DYN = {
     "vn1": [(3, 0, "mp"), (5, 0, "mf"), (7, 0, "mp"), (12, 6, "p"),
             (20, 4, "pp"), (26, 6, "mp"), (32, 6, "mf"), (33, 0, "f"),
-            (37, 0, "mf"), (40, 0, "p"), (47, 0, "pp"), (50, 6, "p"),
+            (37, 0, "mp"), (40, 0, "p"), (47, 0, "pp"), (50, 6, "p"),
             (52, 0, "mp"), (53, 0, "mf"), (56, 10, "f"), (61, 0, "mf"),
             (64, 6, "f"), (65, 0, "ff"), (72, 0, "f"), (73, 0, "p")],
     "vn2": [(1, 0, "p"), (5, 0, "mf"), (7, 0, "mp"), (8, 0, "p"),
             (23, 0, "p"), (24, 7, "p"), (25, 0, "mp"),
-            (32, 6, "mf"), (33, 0, "f"), (37, 0, "mf"), (40, 0, "p"),
+            (32, 6, "mf"), (33, 0, "f"), (37, 0, "mp"), (40, 0, "p"),
             (47, 0, "pp"), (51, 0, "mp"), (56, 7, "mp"), (57, 0, "mf"),
             (61, 0, "mp"), (64, 6, "f"), (65, 0, "ff"), (72, 0, "f"),
             (73, 0, "p")],
     "va": [(1, 0, "mp"), (5, 0, "mf"), (7, 0, "mp"), (8, 0, "p"),
            (17, 0, "p"), (23, 0, "p"), (24, 4, "p"), (25, 0, "mp"),
-           (32, 0, "mf"), (33, 0, "f"), (37, 0, "mf"),
-           (40, 0, "p"), (51, 0, "mp"), (56, 4, "mp"), (57, 0, "mf"),
+           (32, 0, "mf"), (33, 0, "f"), (37, 0, "mp"),
+           (40, 0, "p"), (49, 0, "p"), (51, 0, "mp"), (56, 4, "mp"),
+           (57, 0, "mf"),
            (61, 0, "mp"), (64, 0, "mf"), (65, 0, "f"),
            (73, 0, "p")],
     "vc": [(1, 0, "p"), (5, 0, "mf"), (7, 0, "mp"), (8, 0, "p"),
            (17, 0, "p"), (23, 0, "p"), (24, 0, "mp"), (25, 0, "mf"),
            (29, 0, "mp"), (30, 0, "p"), (31, 0, "mp"), (32, 0, "mf"),
-           (33, 0, "f"), (37, 0, "mf"), (40, 0, "p"), (47, 0, "mp"),
+           (33, 0, "f"), (37, 0, "mf"), (40, 0, "p"),
            (51, 0, "mp"), (56, 0, "mf"), (57, 0, "f"), (61, 0, "mf"),
            (64, 0, "mf"), (65, 0, "f"), (73, 0, "p")],
 }
@@ -666,7 +668,7 @@ RANGES = {"sop": ("Bb3", "A5"), "alt": ("G3", "F5"), "ten": ("C3", "Bb4"),
 
 # (kind, part, part, bars) — deliberate exceptions to the checks
 ALLOW = [
-    ("parallel", "sop", "alt", {41, 42}),      # unison: two women, one line
+    ("parallel", "sop", "alt", {41, 42, 70}),  # unison / octaves: one line
     ("clash", "sop", "vn1", {32}), ("clash", "sop", "vn2", {32}),  # run
     ("clash", "ten", "vn1", {64}), ("clash", "ten", "vn2", {64}),  # run
 ]
@@ -683,8 +685,11 @@ SECTIONS = [(1, None, "Intro 前奏"), (9, "A", "Verse 1 主歌一"),
             (25, "B", "Chorus 1 副歌一"), (33, "C", "Interlude 间奏"),
             (41, "D", "Verse 2 主歌二"), (57, "E", "Chorus 2 副歌二"),
             (65, "F", "La-la 啦啦"), (69, "G", "Coda 尾声")]
-SYSTEM_BREAKS = (5, 9, 13, 17, 21, 25, 29, 33, 36, 38, 41, 45, 49, 53, 57,
-                 60, 63, 65, 67, 69, 72)   # 22 systems, 2 per page
+SYSTEM_BREAKS = (5, 9, 13, 17, 21, 25, 29, 33, 35, 37, 41, 45, 49, 53, 57,
+                 59, 61, 65, 67, 69, 72)   # 22 systems, 2 per page
+# 8va lines (notation only; the MusicXML pitches stay at concert pitch):
+# (part name, first bar, last bar)
+OTTAVA = [("Violin I", 57, 60), ("Violin I", 65, 73)]
 
 SUB_LINES = [
     ("我和我的祖国", "alt", 9, 10), ("一刻也不能分隔", "alt", 11, 12),
@@ -709,6 +714,14 @@ SUB_LINES = [
 SUB_LEAD = 0.2
 SUB_TAIL = 1.5
 
+def _mscx_hook(x):
+    """MS4 touch-up: bar 69 opens a system with a 6/8 change, so autoplace
+    lifts the letter G above its section title.  Nudge it left to sit
+    beside "Coda 尾声" like the other letters (PDF only)."""
+    return re.sub(r'<offset x="0"( y="-?[\d.]+"/>\s*<text><b>G</b>)',
+                  r'<offset x="-2"\1', x)
+
+
 META = dict(
     title="我和我的祖国", title_latin="Wǒ Hé Wǒ De Zǔguó",
     subtitle="全曲 · 四声部独唱与弦乐四重奏",
@@ -717,8 +730,8 @@ META = dict(
     composer="秦咏诚", lyricist="张藜", artist="李谷一",
     instrumentation=[("Vocal Quartet S.A.T.B. soli", "四声部独唱"),
                      ("String Quartet", "弦乐四重奏")],
-    key="E♭ Major · 降E大调", tempo="♩. = 56", duration="ca. 2′50″",
-    year="2026", tempo_text="Moderato")
+    key="E♭ Major · 降E大调", tempo="♩. = 56", duration="ca. 2′51″",
+    year="2026", tempo_text="Moderato", mscx_hook=_mscx_hook)
 
 LYRIC_TXT = {"sop": "1_女高音_歌词.txt", "alt": "2_女低音_歌词.txt",
              "ten": "3_男高音_歌词.txt", "bas": "4_男低音_歌词.txt"}

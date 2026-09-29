@@ -148,7 +148,7 @@ def split_dur(pos, dur, barlen):
             if pos == 0 and barlen == 18 and dur >= 18:
                 allowed = [12] + allowed  # dotted half + dotted quarter
         elif r == 2:
-            allowed = [4, 2, 1]
+            allowed = [4, 3, 2, 1]
         elif r == 4:
             allowed = [2, 1]
         elif r == 3:
@@ -404,6 +404,21 @@ def polish(path):
                         snd = ET.SubElement(el, "sound")
                     snd.set("pizzicato",
                             "yes" if w.text.strip() == "pizz." else "no")
+        for pname, b1, b2 in getattr(S, "OTTAVA", ()):
+            if names[part.get("id")] != pname:
+                continue
+            ms = {int(m.get("number")): m for m in part.findall("measure")}
+            first, last = ms[b1], ms[b2]
+            # pitches stay as they sound; the line shifts only the display
+            start = ET.fromstring(
+                '<direction placement="above"><direction-type>'
+                '<octave-shift type="down" size="8"/></direction-type>'
+                '</direction>')
+            first.insert(list(first).index(first.find("note")), start)
+            stop = ET.fromstring(
+                '<direction><direction-type><octave-shift type="stop" '
+                'size="8"/></direction-type></direction>')
+            last.insert(list(last).index(last.findall("note")[-1]) + 1, stop)
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()
