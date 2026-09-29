@@ -118,16 +118,6 @@ CLEFS = {}
 OTTAVA = []
 
 ALLOW = {
-    # The piano plays 5-15 with the pedal down: each bar's bass (Eb/G/F)
-    # rings under the broken chord.  The cello holds it as a whole note
-    # (ARRANGING "pedal -> sustain", brief S01), which the literal
-    # (unpedalled) FOREIGN window flags between the LH's re-strikes.
-    # Verified separately: without the cello these bars have no FOREIGN
-    # item, and every cello note is the LH's lowest pitch class of its bar.
-    # (Bar 8 needs no entry: the cello breathes with the RH on beat 4.)
-    ("foreign", 5), ("foreign", 6), ("foreign", 7),
-    ("foreign", 9), ("foreign", 10), ("foreign", 11), ("foreign", 12),
-    ("foreign", 13), ("foreign", 14), ("foreign", 15),
     # 10 +40 (Bb4) and 11 +16 (A4): the viola plays these LH notes (top of
     # the broken chord), but the RH counter-line in Vn II (G4 / F4, an
     # octave below sounding like the melody) crosses under it for one

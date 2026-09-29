@@ -109,6 +109,10 @@ OTTAVA = [("vn1", 78, 81)]
 # beat 2).  Checked: without these entries these are the only items in
 # 78-81; the cascades (beats 3-4), the bass and every other beat are clean.
 ALLOW = {
+    # The piano's two-note tremolo [Bb5+D6] <-> Bb6 over beats 1-2 is
+    # transcribed as two alternating quarters; the quartet sustains both
+    # layers (Vn I Bb6 tremolo, Vn II Bb5+D6 tremolo) for the whole half
+    # note, which the check reads as a missing attack / held D.
     ("mel", 78), ("mel", 79), ("mel", 80), ("mel", 81),
     ("foreign", 78), ("foreign", 79), ("foreign", 80), ("foreign", 81),
 }

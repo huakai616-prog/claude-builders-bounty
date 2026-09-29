@@ -109,9 +109,4 @@ OTTAVA = [("vn1", 58, 65)]
 # moved to other chord tones.  Checked: without these entries the only
 # FOREIGN items in 58-61 are exactly those roots (Eb / G / F / G); melody,
 # bass and every other part are clean.
-ALLOW = {
-    ("foreign", 58),   # Vc Eb2 pedal under the Eb(maj9) bar
-    ("foreign", 59),   # Vc G2 pedal under Gm(11)
-    ("foreign", 60),   # Vc F2 pedal under F(sus4)
-    ("foreign", 61),   # Vc G2 pedal under Gm(11)
-}
+ALLOW = set()  # the pedal model covers the held cello roots

@@ -145,7 +145,4 @@ OTTAVA = [("vn1", 129, 130)]
 # window flags between the LH's re-strikes of the root.  Verified
 # separately: without the cello these bars have no FOREIGN item, and every
 # cello note is the LH's lowest pitch class of its bar.
-ALLOW = {
-    ("foreign", 122), ("foreign", 123), ("foreign", 124),
-    ("foreign", 125), ("foreign", 126), ("foreign", 127),
-}
+ALLOW = set()  # the pedal model covers the held cello roots

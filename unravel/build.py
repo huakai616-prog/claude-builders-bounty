@@ -854,15 +854,21 @@ def check(parsed):
         if m % 12 not in got and ("bass", b) not in ALLOW:
             out.append(f"BASS: m{b} {_name(m)} at +{a - OFFS[b]} missing")
     pg = _grid(pe.values())
-    # the piano's pedal: a low left-hand bass note (below C4) keeps sounding
-    # until the next low bass attack or the barline, so a cello may hold it
-    lows = sorted((a, ps, b) for a, ps, b in _attacks(lh) if min(ps) < 60)
-    for i, (a, ps, b) in enumerate(lows):
+    # the piano's pedal: a low left-hand note (below C4) keeps sounding
+    # until a note at or below it is struck, or the barline — so a cello
+    # may hold the root under a broken-chord left hand
+    lows = sorted((a, min(ps), b) for a, ps, b in _attacks(lh)
+                  if min(ps) < 60)
+    for i, (a, m, b) in enumerate(lows):
         end = OFFS[b] + blen(b)
-        if i + 1 < len(lows):
-            end = min(end, lows[i + 1][0])
+        for a2, m2, b2 in lows[i + 1:]:
+            if a2 >= end:
+                break
+            if m2 <= m:
+                end = a2
+                break
         for t in range(int(floor(a)), int(ceil(end))):
-            pg.setdefault(t, set()).add(min(ps))
+            pg.setdefault(t, set()).add(m)
     qg = _grid([evs for evs in parsed.values()])
     for t0 in range(0, SCORE_LEN, 4):
         qp = {x % 12 for t in range(t0, t0 + 4) for x in qg.get(t, ())}
