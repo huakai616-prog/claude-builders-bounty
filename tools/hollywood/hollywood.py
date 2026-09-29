@@ -44,6 +44,8 @@ DEFAULT_META = {
     "composer": "",
     "lyricist": "",
     "artist": "",           # original performer
+    "source": "",           # 原曲, for an arrangement of an instrumental work
+                            # ("A大调钢琴奏鸣曲 K. 331 · 第三乐章")
     "arranger": ARRANGER,
     "engraver": ENGRAVER,
     "instrumentation": [],  # [("Voice", "人声"), ("Violin I", "第一小提琴"), ...]
@@ -145,7 +147,8 @@ def polish_musicxml(path, meta):
     top = round(H - _tenths(MARGIN_TOP), 1)
     left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
     lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
-               f"原唱：{m['artist']}" if m["artist"] else ""]
+               f"原唱：{m['artist']}" if m["artist"] else "",
+               f"原曲：{m['source']}" if m["source"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
@@ -617,6 +620,7 @@ def _sym(s):
 def cover_html(m):
     rows = [("作曲", "Music", m["composer"]), ("作词", "Lyrics", m["lyricist"]),
             ("原唱", "Original Artist", m["artist"]),
+            ("原曲", "Original Work", m["source"]),
             ("改编", "Arranged by", m["arranger"]),
             ("制谱", "Music Preparation", m["engraver"])]
     trs = "".join(
@@ -701,8 +705,10 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             w.add_page(pg)
         w.add_metadata({
             "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
-            "/Author": f"{m['composer']} 曲 / {m['lyricist']} 词 · "
-                       f"改编 {m['arranger']} · 制谱 {m['engraver']}",
+            "/Author": " / ".join(x for x in (
+                f"{m['composer']} 曲" if m["composer"] else "",
+                f"{m['lyricist']} 词" if m["lyricist"] else "") if x)
+                       + f" · 改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
         _fix_text_layer(w)

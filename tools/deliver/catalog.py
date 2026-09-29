@@ -20,6 +20,17 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="unravel", section="song", ref=None, instrumental=True,
+        title="Unravel", subtitle="全曲 · 弦乐四重奏（东京喰种 OP，Animenz 钢琴版改编）",
+        artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
+        instrumentation="弦乐四重奏 · 纯器乐",
+        src="unravel/output", layout="standard",
+        main=dict(musicxml="Unravel_全曲_弦乐四重奏.musicxml",
+                  pdf="Unravel_全曲_总谱.pdf",
+                  strings="Unravel_弦乐四重奏.mid"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        questions=[]),
+    dict(
         slug="wobunanguo", section="song", ref=None,
         title="我不难过", subtitle="副歌 · 人声与弦乐四重奏",
         artist="孙燕姿", key="♭E 大调", tempo="♩=68",

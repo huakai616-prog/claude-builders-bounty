@@ -52,6 +52,14 @@ MEDIA = {".pdf", ".mp3", ".mp4", ".webm", ".wav", ".ogg", ".png", ".jpg",
 LABELS = dict(musicxml="西贝柳斯工程", pdf="总谱 PDF", strings="弦乐总 MIDI",
               vocal="人声带歌词 MIDI")
 MAIN_DIR, OTHER_DIR = "1_四样主文件", "2_其他文件"
+INST_MAIN_DIR = "1_主文件"          # instrumental works: no vocal MIDI
+
+
+def main_keys(w):
+    """The must-have files: four for a song, three for an instrumental
+    work (catalog entry with instrumental=True)."""
+    return ("musicxml", "pdf", "strings") if w.get("instrumental") \
+        else ("musicxml", "pdf", "strings", "vocal")
 CREDIT = "花开当富贵"
 
 
@@ -106,15 +114,17 @@ def readme_txt(w, main_rel, layout_note):
         lines.append(f"改编、制谱：{CREDIT}")
     lines.append("")
     if main_rel:
-        lines.append("四样主文件：")
+        lines.append("主文件：" if w.get("instrumental") else "四样主文件：")
         for k, rel in main_rel:
             label = (w.get("labels") or {}).get(k, LABELS[k])
             lines.append(f"  · {label}：{rel if rel else '（这首还没有）'}")
         lines.append("")
+        ace = ("  · ACE Studio：导入弦乐 MIDI，四个声部各是一轨，每轨加载 String Section。"
+               if w.get("instrumental") else
+               "  · ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。")
         lines += ["怎么用：",
                   "  · 西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。",
-                  "  · ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。",
-                  ""]
+                  ace, ""]
     if layout_note:
         lines += [layout_note, ""]
     if w.get("note"):
@@ -156,14 +166,18 @@ def package(w):
         if w["layout"] == "standard":
             main = w["main"]
             main_names = {v for v in main.values() if v}
+            mdir = INST_MAIN_DIR if w.get("instrumental") else MAIN_DIR
             for f in files_under(src):
-                sub = MAIN_DIR if f in main_names else OTHER_DIR
+                sub = mdir if f in main_names else OTHER_DIR
                 entries.append((f"{top}/{sub}/{f}", os.path.join(src, f)))
-            entries.sort()  # 1_四样主文件 before 2_其他文件
-            for k in ("musicxml", "pdf", "strings", "vocal"):
+            entries.sort()  # 1_主文件 before 2_其他文件
+            for k in main_keys(w):
                 v = main.get(k)
-                main_rel.append((k, f"{MAIN_DIR}/{v}" if v else None))
-            note = (f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
+                main_rel.append((k, f"{mdir}/{v}" if v else None))
+            note = (f"「{mdir}」是西贝柳斯工程、总谱 PDF 和弦乐 MIDI（纯器乐，"
+                    f"没有人声），「{OTHER_DIR}」里是试听 mp3 等。"
+                    if w.get("instrumental") else
+                    f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
                     "全轨 MIDI、试听 mp3 和字幕。")
         else:
             inc = w.get("include")
@@ -269,9 +283,11 @@ def package(w):
                                 size=os.path.getsize(clip))
         if w["section"] == "song":
             have = [m["key"] for m in row["main"] if m["ok"]]
-            full = len(have) == 4
+            full = len(have) == len(main_keys(w))
             if full and w.get("pdf_kind") == "hollywood":
-                row["status"], row["status_zh"] = "ready", "四样齐全"
+                row["status"], row["status_zh"] = "ready", (
+                    "主文件齐全 · 纯器乐" if w.get("instrumental")
+                    else "四样齐全")
             elif full:
                 row["status"], row["status_zh"] = "old", "四样齐全 · PDF 是旧版预览"
             else:
