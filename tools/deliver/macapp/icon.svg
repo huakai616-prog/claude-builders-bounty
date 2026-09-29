@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a70b8"/><stop offset="1" stop-color="#16345f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0c766"/><stop offset="1" stop-color="#c98f25"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fdfaf2"/><stop offset="1" stop-color="#efe8d8"/>
+    </linearGradient>
+    <filter id="drop" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#000" flood-opacity=".30"/>
+    </filter>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#06142a" flood-opacity=".40"/>
+    </filter>
+  </defs>
+  <!-- macOS icon grid: 824 px body, 100 px margins -->
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#body)" filter="url(#drop)"/>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="none" stroke="#ffffff" stroke-opacity=".10" stroke-width="3"/>
+  <!-- full-score title page -->
+  <g filter="url(#soft)">
+    <rect x="292" y="196" width="440" height="604" rx="14" fill="url(#paper)"/>
+  </g>
+  <rect x="314" y="218" width="396" height="560" fill="none" stroke="#23508e" stroke-width="6"/>
+  <rect x="326" y="230" width="372" height="536" fill="none" stroke="#23508e" stroke-width="2"/>
+  <g stroke="#23508e" stroke-width="4"><line x1="330" x2="694" y1="476" y2="476"/><line x1="330" x2="694" y1="446" y2="446"/><line x1="330" x2="694" y1="416" y2="416"/><line x1="330" x2="694" y1="386" y2="386"/><line x1="330" x2="694" y1="356" y2="356"/></g>
+  <path fill="#23508e" transform="translate(318.7 476) scale(0.16043 -0.16043)" d="M434 2Q464 -103 464 -170Q464 -223 427.0 -257.0Q390 -291 337 -291Q287 -291 250.0 -261.5Q213 -232 213 -190Q213 -160 233.5 -133.5Q254 -107 283.5 -107.0Q313 -107 331.5 -128.5Q350 -150 350 -178Q350 -240 280 -240Q298 -268 338 -268Q353 -268 368.5 -263.5Q384 -259 401.0 -248.0Q418 -237 428.5 -213.5Q439 -190 439 -157Q439 -136 411 -6Q389 -12 356 -12Q259 -12 189.5 60.0Q120 132 120 232Q120 267 131.5 303.0Q143 339 157.5 366.5Q172 394 200.5 428.5Q229 463 248.5 483.5Q268 504 303 539Q280 621 280 689Q280 779 313.0 839.5Q346 900 379 900Q389 900 401.5 887.0Q414 874 426.0 851.0Q438 828 446.5 790.5Q455 753 455 710Q455 551 342 447L368 329Q384 332 397 332Q458 332 500.0 282.5Q542 233 542 162Q542 44 434 2ZM426 746Q426 801 394 801Q358 801 333.0 748.0Q308 695 308 630Q308 588 321 557Q359 580 392.5 639.5Q426 699 426 746ZM498 128Q498 183 466.0 216.0Q434 249 383 249L428 23Q498 52 498 128ZM407 17 361 247Q334 241 311.5 214.0Q289 187 289 158Q289 143 295.0 128.5Q301 114 309.5 104.0Q318 94 327.0 86.0Q336 78 342.0 74.5Q348 71 348 71L340 66Q307 75 277.5 106.0Q248 137 248 184Q248 231 277.5 270.5Q307 310 343 323L325 430Q168 299 168 177Q168 104 223.0 55.0Q278 6 348 6Q365 6 407 17Z"/>
+  <g fill="#23508e"><ellipse cx="476" cy="461" rx="17" ry="12.5" transform="rotate(-22 476 461)"/><rect x="488" y="342" width="5" height="117"/><ellipse cx="556" cy="431" rx="17" ry="12.5" transform="rotate(-22 556 431)"/><rect x="568" y="320" width="5" height="109"/><path d="M488 342 L573 320 L573 335 L488 357 Z"/><ellipse cx="640" cy="416" rx="17" ry="12.5" transform="rotate(-22 640 416)" fill="none" stroke="#23508e" stroke-width="6"/><rect x="652" y="324" width="5" height="90"/></g>
+  <rect x="382" y="574" width="260" height="22" rx="3" fill="#23508e"/>
+  <rect x="417" y="620" width="190" height="11" rx="2" fill="#23508e" fill-opacity=".45"/>
+  <rect x="442" y="646" width="140" height="11" rx="2" fill="#23508e" fill-opacity=".45"/>
+  <!-- delivery badge -->
+  <g filter="url(#soft)"><circle cx="722" cy="742" r="108" fill="url(#gold)"/></g>
+  <circle cx="722" cy="742" r="108" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="5"/>
+  <g stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M722 680 V772"/><path d="M682 734 L722 774 L762 734"/><path d="M676 800 H768"/>
+  </g>
+</svg>

@@ -151,4 +151,25 @@ To add or update a work, after its files are built and committed:
 6. Reply to the user with the page link first, then what changed.
 7. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
 
+### Mac Dock app
+
+The user asked for the delivery center as an app in the Mac Dock. The card at the top of the page, 「放进 Mac 程序坞」, handles it:
+
+- 「下载 Mac 应用」 saves `编曲交付中心_安装包.zip`. It contains a ready-made `编曲交付中心.app` (a shell-script launcher with the icon), `安装.sh`, and `安装说明.txt`.
+- 「复制安装命令」 copies a one-line `bash -c '…'` command. The command finds the newest download in `~/Downloads`, which is the zip for Chrome and the unpacked folder for Safari, and runs `安装.sh`.
+- `安装.sh` does the rest:
+  - builds a native applet with `osacompile` (`open location "<page URL>"`), so there is no Gatekeeper prompt and no Rosetta;
+  - swaps in the icon (removes `Assets.car` and `CFBundleIconName`) and re-signs it ad hoc;
+  - copies it to `/Applications` (or `~/Applications`);
+  - adds it to the Dock unless it is already there, then opens it once.
+- Without the Terminal, the user can drag the ready-made app into Applications. It is unsigned, so the first launch needs 「系统设置 → 隐私与安全性 → 仍要打开」. Safari 「文件 → 添加到程序坞…」 is the other fallback.
+
+The source is `tools/deliver/macapp/`: `build.py`, `install.sh`, `安装说明.txt`, `icon.svg`, `AppIcon.png` and `AppIcon.icns`. The app only opens the page URL, so it never needs rebuilding for new songs. Rebuild it only if the page URL, the scripts or the icon change:
+
+```bash
+python3 tools/deliver/macapp/build.py          # add --icon to redraw the icon (Playwright + Chromium)
+```
+
+Then publish `center.html` with the printed `files` map (`files/macapp/app.json`, `files/macapp/icon.png`). The install command itself lives in `center.html` as `MAC_CMD`.
+
 Works that live on other branches keep their branch name as `ref`. `package.py` reads them with `git archive`, so fetch first: `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.

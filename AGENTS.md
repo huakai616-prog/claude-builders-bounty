@@ -16,6 +16,7 @@
 
 **用户在「编曲交付中心」找文件**：https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN
 - 已经钉在用户 claude.ai 的左侧边栏。
+- 用户要过把它放进 Mac 程序坞：页面顶部的「放进 Mac 程序坞」卡片给一个安装包和一行终端命令，装好后点程序坞图标就用浏览器打开交付中心。源文件在 `tools/deliver/macapp/`（做法见 SKILL.md 的「Mac Dock app」）。用户问怎么装，就指这张卡片。
 - 每首歌点「下载到电脑」，就得到一个整理好的 zip。
 - 用户说过「我不太会用 GitHub」，所以别让用户去 GitHub 或分支里找文件。
 - 每次交付都要把作品加进交付中心，回复第一句给这个链接。步骤见 `.claude/skills/hollywood-score/SKILL.md` 的「Delivery center」。
