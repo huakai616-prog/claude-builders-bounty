@@ -36,10 +36,10 @@
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
 | 土耳其进行曲（全曲，莫扎特 K.331 第三乐章） | 弦乐四重奏，不用钢琴，古典风格 · a 小调 / A 大调（原调） · ♩=120 | `main`（原 `claude/epic-ramanujan-6iapv9`） | `alla-turca/` | 已完成：用户给的是钢琴谱 PDF（五线谱，不是简谱）。反复全部写开、第二遍换配器，好莱坞总谱 13 页 + 分谱。待用户确认 m52 / m55 两处照谱还是照原典版；拨弦段在 ACE 里要手动改演奏法 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
-| Unravel（全曲，东京喰种 OP，Animenz 钢琴版） | 弦乐四重奏 · 纯器乐 · g 小调（原调） · ♩=134 | `claude/vigilant-sagan-df1y75`（未合并） | `unravel/` | **用户叫停，暂停中**。编配全部写完、审过、`--check` 干净，output/ 里有 MusicXML、弦乐 MIDI、好莱坞 PDF（封面 + 15 页）、试听 mp3。还没做：逐页 QA（封面已查过并改好）、放进交付中心、合并进 main。钢琴转写数据不进仓库（版权），只在当时的 scratchpad 里，容器回收后需要重新转写才能跑和钢琴对照的检查 |
+| Unravel（全曲，东京喰种 OP，Animenz 钢琴版） | 弦乐四重奏 · 纯器乐 · g 小调（原调） · ♩=134 | `main`（原 `claude/vigilant-sagan-df1y75`） | `unravel/` | 已完成：好莱坞总谱 PDF（封面 + 15 页，逐页查过）、MusicXML、弦乐 MIDI（开头空一小节，小节线和总谱对齐）、分谱、试听 mp3。钢琴谱是五线谱，不是简谱；转写数据不进仓库（版权）。待用户确认八音盒段低八度、第 112 小节 fff；待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 泪海、我不难过、茶汤、土耳其进行曲、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
+- 泪海、我不难过、茶汤、土耳其进行曲、Unravel、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
 - 情歌、大东北、泪海、甲乙丙丁、茉莉花的 PDF 或署名还没按好莱坞标准重做。用户要的时候，用 `tools/hollywood` 重出，再更新交付中心。
 - 茶汤那一轮给模板加了几项：封面居中、排练号加粗和段落名独立一行、十六分音符连梁、PDF 文字层修正、页眉页脚细节，`chatang/build.py` 还修了长音上的渐强渐弱（hairpin 不再丢）。新歌的代码从 `chatang/build.py` 接。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
@@ -144,7 +144,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 
 ## 钢琴谱 → 弦乐四重奏（纯器乐，Unravel 的做法）
 
-用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，照 `unravel/` 做：
+用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，有两个现成的做法：`alla-turca/`（古典原作，原谱数据 `source_piano.py` 进仓库）和 `unravel/`（有版权的改编谱，全曲 133 小节，分段并行写）。Unravel 的做法：
 
 - **先问**：调（默认原调）、编制、范围（全曲 / 片段）、有没有人声、风格。用户选过「四重奏、原调、全曲、纯器乐、忠实原编配」。
 - **转写**：
@@ -167,10 +167,12 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   3. 再有一个人看整首的衔接和重复段落是否一致；
   4. `layout.py` 规划每页 3 行、排练号在行首；
   5. 逐页 QA。
+- **逐页 QA 查出的制谱问题**已经做进 `unravel/build.py`，新引擎照抄：连梁按拍 / 半小节重排、休止符不盖拍点、表情字放谱表下方并和力度合成一行、延音线按音符连、排练号后补力度（清单见 SKILL.md 的「Engraving rules learned on Unravel」）。
 - **交付**：
-  - 纯器乐只有三样主文件：MusicXML、总谱 PDF、弦乐 MIDI，没有人声 MIDI；
-  - 在 `tools/deliver/catalog.py` 里写 `instrumental=True`，交付中心会显示「主文件齐全 · 纯器乐」；
-  - 好莱坞模板 META 里用 `source`（改编自，例如「Animenz 钢琴版」）写明依据的版本，封面和首页标题栏会显示。
+  - 四样主文件：MusicXML、总谱 PDF、弦乐 MIDI、分谱 PDF（纯器乐没有人声 MIDI，用分谱代替，和土耳其进行曲一样）；
+  - `tools/deliver/catalog.py` 里 `main` 写这四样，另写 `other_note` 和 `howto`；
+  - 有弱起时 MIDI 开头空一小节，让小节线和总谱对齐，并在 `howto` 里写「ACE 第 N 小节 = 总谱第 N−1 小节」；
+  - 好莱坞模板 META 里用 `source`（改编自，例如「Animenz 钢琴版」）写明依据的版本，`original`（原曲）写原作，封面和首页标题栏会显示。
 
 ## 踩过的坑
 

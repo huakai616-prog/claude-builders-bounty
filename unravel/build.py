@@ -243,7 +243,8 @@ META = dict(
     # house layout tweaks: more air between the credits and the tempo mark;
     # letters and titles pinned on one row (some sections open under an
     # 8va or with tall chord stacks)
-    title_frame_sp=22, title_gap_sp=10, section_lift=9, section_pin=True)
+    title_frame_sp=22, title_gap_sp=10, section_lift=9, section_pin=True,
+    part_section_lift=4)
 
 
 # ---------------------------------------------------------------------------
@@ -344,7 +345,12 @@ def _decorate(n, e, first, last):
         n.expressions.append(f)
 
 
-def make_m21(p, events):
+def make_m21(p, events, lead=None):
+    """One part; `lead` (default: Violin I) carries the tempo mark, the
+    rehearsal letters and the section titles.  lead="parts": tempo and
+    letters only (every part PDF; a section title beside a letter in the
+    middle of a system stacks up with the technique words)."""
+    lead = p["id"] == "vn1" if lead is None else lead
     part = stream.Part(id=p["id"])
     ins = p["inst"]()
     ins.partName = p["name"]
@@ -369,7 +375,7 @@ def make_m21(p, events):
             m.insert(0, CLEF[p["clef"]]())
             m.insert(0, key.KeySignature(-2))
             m.insert(0, meter.TimeSignature("4/4"))
-            if p["id"] == "vn1":
+            if lead:
                 mm = tempo.MetronomeMark(number=BPM, referent=1.0)
                 mm.placement = "above"
                 m.insert(0, mm)
@@ -448,7 +454,7 @@ def make_m21(p, events):
         for cb, cpos, cname in p["clefs"]:
             if cb == b:
                 m.insert(_ql(cpos), CLEF[cname]())
-        if p["id"] == "vn1":
+        if lead:
             for sb, letter, title in SECTIONS:
                 # the unlettered intro keeps its name for the MIDI marker
                 # only: on the first page it would stack onto the tempo
@@ -457,7 +463,7 @@ def make_m21(p, events):
                         rm = expressions.RehearsalMark(letter)
                         rm.placement = "above"
                         m.insert(0, rm)
-                    if title:
+                    if title and lead != "parts":
                         te = expressions.TextExpression(title)
                         te.style.fontWeight = "bold"
                         te.placement = "above"
@@ -529,10 +535,10 @@ SOUNDS = {"Violin I": ("Violin", "strings.violin"),
           "Violoncello": ("Violoncello", "strings.cello")}
 
 
-def polish(path):
+def polish(path, breaks=True):
     """Implicit pickup, one <instrument-sound> per part, system / page
-    breaks, placements, 8va lines (display only: pitches stay as they
-    sound)."""
+    breaks (full score only: MuseScore lays out the parts), placements,
+    8va lines (display only: pitches stay as they sound)."""
     tree = ET.parse(path)
     r = tree.getroot()
     for sp in r.iter("score-part"):
@@ -559,7 +565,7 @@ def polish(path):
         for num, m in ms.items():
             if num in PICKUPS:
                 m.set("implicit", "yes")
-            if num in SYSTEM_BREAKS or num in PAGE_BREAKS:
+            if breaks and (num in SYSTEM_BREAKS or num in PAGE_BREAKS):
                 pr = m.find("print")
                 if pr is None:
                     pr = ET.Element("print")
@@ -825,8 +831,13 @@ ARP_T = TPQ // 24        # roll of an arpeggiated chord, per note
 STACC = 0.5
 
 
+# the MIDI starts with a whole empty bar holding the pickup at its end, so
+# its barlines match the score's (ACE bar N = score bar N-1)
+LEAD = FULL - blen(0)
+
+
 def tick(abs64):
-    return round(abs64 * T64)
+    return round((abs64 + LEAD) * T64)
 
 
 def dyn_curve(p):
@@ -987,8 +998,9 @@ def tempo_track():
           (0, mido.MetaMessage("time_signature", numerator=4, denominator=4)),
           (0, mido.MetaMessage("key_signature", key="Gm"))]
     for b, s, bpm in TEMPI:
-        ab.append((tick(OFFS[b] + s), mido.MetaMessage(
-            "set_tempo", tempo=mido.bpm2tempo(bpm))))
+        at = 0 if (b, s) == (0, 0) else tick(OFFS[b] + s)
+        ab.append((at, mido.MetaMessage("set_tempo",
+                                        tempo=mido.bpm2tempo(bpm))))
     for b, letter, title in SECTIONS:
         ab.append((tick(OFFS[b]), mido.MetaMessage(
             "marker", text=((letter + " ") if letter else "")
@@ -1216,6 +1228,7 @@ def main():
         write_mp3()
     if "--pdf" in sys.argv:
         write_pdf()
+        write_parts(parsed)
 
 
 def write_mp3():
@@ -1234,6 +1247,31 @@ def write_mp3():
                         "-af", "loudnorm=I=-16:TP=-1.5", "-b:a", "160k",
                         mp3], check=True)
     print("mp3:", mp3)
+
+
+def write_parts(parsed):
+    """Part PDFs (分谱), one bookmark per instrument, 9 x 12 in."""
+    import tempfile
+    zh = dict(META["instrumentation"])
+    with tempfile.TemporaryDirectory() as t:
+        xmls = []
+        for p in PARTS:
+            sc = stream.Score()
+            md = metadata.Metadata()
+            md.title = META["title"]
+            md.composer = META["composer"]
+            sc.insert(0, md)
+            sc.insert(0, make_m21(p, parsed[p["id"]], lead="parts"))
+            path = os.path.join(t, f"{p['id']}.musicxml")
+            sc.write("musicxml", fp=path)
+            polish(path, breaks=False)
+            hollywood.polish_musicxml(path, META, part=(p["name"],
+                                                        zh[p["name"]]))
+            rebeam(path)
+            xmls.append((path, p["name"], zh[p["name"]]))
+        dst = os.path.join(OUT, f"{NAME}_分谱.pdf")
+        n = hollywood.render_parts_pdf(xmls, dst, META)
+    print(f"parts: {dst} ({n} pages)")
 
 
 def write_pdf(png_dir=None):

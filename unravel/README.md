@@ -17,10 +17,11 @@
 |---|---|
 | `Unravel_全曲_弦乐四重奏.musicxml` | **西贝柳斯工程用**：总谱，带力度、渐强渐弱、连线、跳弓/保持音/重音、震音、8va、谱号变换、排练号和段落名，11×17 英寸好莱坞版面和署名（改编、制谱：花开当富贵）。已用 MusicXML 4.0 官方 schema 校验通过 |
 | `Unravel_全曲_总谱.pdf` | **好莱坞标准总谱 PDF**：封面 + 15 页总谱，C 调总谱，每页 3 行，每页有页眉页脚和「第几页 / 共几页」，每小节有方框小节号 |
-| `Unravel_弦乐四重奏.mid` | **弦乐 MIDI**，四轨：Violin I / Violin II / Viola / Violoncello。带力度曲线（CC1/CC11）、重音、断奏长度、颤音、震音、琶音和段落标记，给 ACE Studio 用 |
+| `Unravel_弦乐四重奏.mid` | **弦乐 MIDI**，四轨：Violin I / Violin II / Viola / Violoncello。带力度曲线（CC1/CC11）、重音、断奏长度、震音、琶音和段落标记，给 ACE Studio 用。开头空一小节，弱起在它最后一个八分音符上，所以 MIDI 的小节线和总谱对齐（ACE 第 N 小节 = 总谱第 N−1 小节） |
+| `Unravel_分谱.pdf` | **分谱**：四个声部各自一份（9×12 英寸，每页页眉页脚写声部名），PDF 书签按声部分开，带排练号和多小节休止，给演奏员用 |
 | `粗略试听_GM音色_非ACE效果.mp3` | 用普通 GM 音源渲染的试听，只用来核对音符，**不是最终音效** |
 
-这首是纯器乐，所以「人声带歌词 MIDI」和字幕不适用；弦乐 MIDI 就是全轨 MIDI。
+这首是纯器乐，所以「人声带歌词 MIDI」和字幕不适用，换成分谱；弦乐 MIDI 就是全轨 MIDI。
 西贝柳斯的 `.sib` 工程只能在西贝柳斯里另存，外部生成不了，所以交 MusicXML。
 
 ## 结构
@@ -79,10 +80,10 @@
 
 ## 在 ACE Studio 里呈现
 
-1. 在第 1 小节导入 `Unravel_弦乐四重奏.mid`（带速度 ♩=134；开头是一个八分音符的弱起）。
+1. 在第 1 小节导入 `Unravel_弦乐四重奏.mid`（带速度 ♩=134）。MIDI 开头空一小节，弱起的八分音符在它的最后，所以 ACE 的第 N 小节 = 总谱第 N−1 小节。
 2. 四轨分别加载 AI 乐器 **String Section**，speaker 选 Violins I / Violins II / Violas / Celli。如果 ACE 里有独奏小提琴、中提琴、大提琴，用独奏的更接近真正的四重奏。
 3. 演奏法保持智能模式。这版**没有拨弦**，也没有弱音器。
-4. 第 78–81 小节的震音在 MIDI 里写成了快速重复音。如果 ACE 有 tremolo 演奏法，可以把这几小节改成长音再选 tremolo。
+4. 第 78–81 小节（ACE 第 79–82 小节）的震音在 MIDI 里写成了快速重复音。如果 ACE 有 tremolo 演奏法，可以把这几小节改成长音再选 tremolo。
 5. 华彩（66–73）和崩落（78–81）是几个声部接力的音阶，渲染后听一下交接处是否连贯，必要时微调每轨的起音时间。
 6. 确认没有轨被静音或独奏，从头播放一遍，让所有轨都渲染。
 
@@ -91,13 +92,14 @@
 ```bash
 pip install music21 mido pypdf cffi
 UNRAVEL_PIANO=/path/to/piano_source.json python3 build.py --check   # 必须什么都不输出
-python3 build.py --mp3 --pdf     # MusicXML、MIDI、试听 mp3、好莱坞总谱 PDF
+python3 build.py --mp3 --pdf     # MusicXML、MIDI、试听 mp3、好莱坞总谱 PDF 和分谱
 ```
 
 - 乐谱数据在 `sections/sec01.py … sec15.py`，每段一个文件，每小节一行，时值以六十四分音符为单位（十六分 = 4，八分 = 8，四分 = 16）。语法见 `build.py` 开头。
 - `arrangement.py` 把各段合在一起，里面还有排练号、换行、换页。
 - 编配规范和各段分工：`ARRANGING.md`、`SECTIONS.md`。
 - 版面规划：`layout.py`。
+- 制谱细节（都在 `build.py` 里自动做）：连梁按拍、按半小节重排（3+3+2 的节奏一组，不跨第三拍）；休止符不盖住拍点；表情字（dolce、cantabile、subito、morendo 等）放在谱表下方，和同一拍的力度记号排成一行（「*f* subito」），演奏法（sul tasto、spicc.、marcato）放在上方；延音线按音符逐个连（和弦里新加的音会重新奏出）。只改谱面、不改声音的调整写在 `arrangement.py` 的 `STEMS`、`SLURS_BELOW`。
 - `--check` 查三类问题：
   - 各乐器音域；
   - 双音能不能按得到；
