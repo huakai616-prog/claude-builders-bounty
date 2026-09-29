@@ -6,7 +6,7 @@
   </work>
   <movement-title>土耳其进行曲（全曲 · 弦乐四重奏）</movement-title>
   <identification>
-    <creator type="composer">W. A. 莫扎特</creator>
+    <creator type="composer">W. A. 莫扎特 Mozart</creator>
     <creator type="arranger">花开当富贵</creator>
     <encoding>
       <encoder>花开当富贵</encoder>
@@ -54,11 +54,11 @@
   </credit>
   <credit page="1">
     <credit-type>lyricist</credit-type>
-    <credit-words default-x="84.7" default-y="2100.7" font-size="10.5" justify="left" valign="bottom" />
+    <credit-words default-x="84.7" default-y="2100.7" font-size="10.5" justify="left" valign="bottom">原曲：A大调钢琴奏鸣曲 K.331 第三乐章</credit-words>
   </credit>
   <credit page="1">
     <credit-type>composer</credit-type>
-    <credit-words default-x="1467.5" default-y="2100.7" font-size="10.5" justify="right" valign="bottom">作曲：W. A. 莫扎特
+    <credit-words default-x="1467.5" default-y="2100.7" font-size="10.5" justify="right" valign="bottom">作曲：W. A. 莫扎特 Mozart
 改编：花开当富贵
 制谱：花开当富贵</credit-words>
   </credit>
@@ -68,61 +68,61 @@
       <group-symbol>bracket</group-symbol>
       <group-barline>yes</group-barline>
     </part-group>
-    <score-part id="P699e64d0eb4399808f025f57f68afc5b">
+    <score-part id="Pe34aa168ba48d5352751d9fdb19ba7eb">
       <part-name>Violin I</part-name>
       <part-abbreviation>Vln. I</part-abbreviation>
-      <score-instrument id="Ie75dab5e0400ac7a78eacb06a11f2af2">
+      <score-instrument id="I93d77fbae144a912970e91d0f260e164">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="Ie75dab5e0400ac7a78eacb06a11f2af2">
+      <midi-instrument id="I93d77fbae144a912970e91d0f260e164">
         <midi-channel>1</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P8fd5091b9a61a69503edfc88dc31796e">
+    <score-part id="P44ce3573d61bc4be21cdc8747dcab7db">
       <part-name>Violin II</part-name>
       <part-abbreviation>Vln. II</part-abbreviation>
-      <score-instrument id="I5a3732dd02b8fc951eba2d2fda5b3291">
+      <score-instrument id="I7c5cf6f852dda71b06eea6a9a2633320">
         <instrument-name>Violin</instrument-name>
         <instrument-abbreviation>Vln</instrument-abbreviation>
         <instrument-sound>strings.violin</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I5a3732dd02b8fc951eba2d2fda5b3291">
+      <midi-instrument id="I7c5cf6f852dda71b06eea6a9a2633320">
         <midi-channel>2</midi-channel>
         <midi-program>41</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="P058a757f5e28f28056f00aa1f5119201">
+    <score-part id="Pb1f369ca19d02e4dd1a75aa4aae8219e">
       <part-name>Viola</part-name>
       <part-abbreviation>Vla.</part-abbreviation>
-      <score-instrument id="I3760ab999df731e9c174b5df97414f09">
+      <score-instrument id="If2a7746c7443f71f9753d8adc4252903">
         <instrument-name>Viola</instrument-name>
         <instrument-abbreviation>Vla</instrument-abbreviation>
         <instrument-sound>strings.viola</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I3760ab999df731e9c174b5df97414f09">
+      <midi-instrument id="If2a7746c7443f71f9753d8adc4252903">
         <midi-channel>3</midi-channel>
         <midi-program>42</midi-program>
       </midi-instrument>
     </score-part>
-    <score-part id="Pe6d440bb9cd5753abd34e4f58ab7ec6e">
+    <score-part id="P140cd2f14cdc4835c79432ef8ebcc91a">
       <part-name>Violoncello</part-name>
       <part-abbreviation>Vc.</part-abbreviation>
-      <score-instrument id="I18470905f0e46f3868903debed5e1fd9">
+      <score-instrument id="Ib3df71dddd8e51ed14fd0c321e6ea559">
         <instrument-name>Violoncello</instrument-name>
         <instrument-abbreviation>Vc</instrument-abbreviation>
         <instrument-sound>strings.cello</instrument-sound>
       </score-instrument>
-      <midi-instrument id="I18470905f0e46f3868903debed5e1fd9">
+      <midi-instrument id="Ib3df71dddd8e51ed14fd0c321e6ea559">
         <midi-channel>4</midi-channel>
         <midi-program>43</midi-program>
       </midi-instrument>
     </score-part>
     <part-group number="1" type="stop" />
   </part-list>
-  <part id="P699e64d0eb4399808f025f57f68afc5b">
+  <part id="Pe34aa168ba48d5352751d9fdb19ba7eb">
     <measure implicit="yes" number="0">
       <print>
         <measure-numbering>measure</measure-numbering>
@@ -16110,7 +16110,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P8fd5091b9a61a69503edfc88dc31796e">
+  <part id="P44ce3573d61bc4be21cdc8747dcab7db">
     <measure implicit="yes" number="0">
       <attributes>
         <divisions>10080</divisions>
@@ -28173,7 +28173,7 @@
       </barline>
     </measure>
   </part>
-  <part id="P058a757f5e28f28056f00aa1f5119201">
+  <part id="Pb1f369ca19d02e4dd1a75aa4aae8219e">
     <measure implicit="yes" number="0">
       <attributes>
         <divisions>10080</divisions>
@@ -31652,7 +31652,7 @@
           </articulations>
         </notations>
       </note>
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
           <words font-style="italic">dolce</words>
         </direction-type>
@@ -42277,7 +42277,7 @@
       </barline>
     </measure>
   </part>
-  <part id="Pe6d440bb9cd5753abd34e4f58ab7ec6e">
+  <part id="P140cd2f14cdc4835c79432ef8ebcc91a">
     <measure implicit="yes" number="0">
       <attributes>
         <divisions>10080</divisions>

@@ -635,17 +635,24 @@ def dyn_curve(events):
     return v
 
 
+# The MIDI starts with one silent beat, so the pickup falls on beat 2 of
+# the file's first 2/4 bar and every barline lines up with the score's:
+# bar N of the score is bar N + 1 in ACE Studio or a DAW.
+LEAD = TPQ
+
+
 def tempo_track(title):
-    ab = [(0, mido.MetaMessage("track_name", name=title)),
+    ab = [(0, mido.MetaMessage("track_name", name="Rondo alla Turca")),
           (0, mido.MetaMessage("time_signature", numerator=2, denominator=4))]
     for b, k in KEYS.items():
-        ab.append((bar_start(b) * T32, mido.MetaMessage(
-            "key_signature", key="Am" if k == "a" else "A")))
+        ab.append((0 if b == 0 else LEAD + bar_start(b) * T32,
+                   mido.MetaMessage("key_signature",
+                                    key="Am" if k == "a" else "A")))
     for b, s, bpm in TEMPI:
-        ab.append(((bar_start(b) + s) * T32, mido.MetaMessage(
-            "set_tempo", tempo=mido.bpm2tempo(bpm))))
+        ab.append((0 if b == 0 and s == 0 else LEAD + (bar_start(b) + s) * T32,
+                   mido.MetaMessage("set_tempo", tempo=mido.bpm2tempo(bpm))))
     for b, letter, name in SECTIONS:
-        ab.append((bar_start(b) * T32, mido.MetaMessage(
+        ab.append((LEAD + bar_start(b) * T32, mido.MetaMessage(
             "marker", text=(f"{letter} " if letter else "") + name)))
     ab.sort(key=lambda x: x[0])
     tr, last = mido.MidiTrack(), 0
@@ -753,6 +760,8 @@ def part_track(p, events, ch, gm_preview=True):
                                                 velocity=v)))
             ab.append((max(off, on + dt + 20), 3, mido.Message(
                 "note_off", channel=ch, note=midi_of(pit), velocity=0)))
+    # everything but the header (track name, first program) moves by LEAD
+    ab = [(t if (t == 0 and o < 2) else t + LEAD, o, m) for t, o, m in ab]
     ab.sort(key=lambda x: (x[0], x[1]))
     tr, last = mido.MidiTrack(), 0
     for t, _, m in ab:
@@ -1755,7 +1764,7 @@ def _systems():
 SYSTEM_STARTS = _systems()
 SYSTEM_BREAKS = tuple(SYSTEM_STARTS[1:])
 PAGE_BREAKS = tuple(SYSTEM_STARTS[3::3])
-BELOW_WORDS = {"cresc.", "dim.", "decresc.", "cresc", "cresco"}
+BELOW_WORDS = {"cresc.", "dim.", "decresc.", "cresc", "cresco", "dolce"}
 # Deliberate departures from the piano, by Urtext bar (aliases included):
 ALLOW = {
     # Violin II's sixths / thirds under the running 16ths (passing notes)
