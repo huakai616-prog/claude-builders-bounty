@@ -192,6 +192,19 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     <div class="summary" id="summary">正在读取作品列表…</div>
   </header>
 
+  <section id="songs-sec">
+    <div class="sec-head"><span class="mark">A</span><h2>歌曲</h2></div>
+    <div class="list" id="songs">
+      <div class="empty" id="empty"><strong>作品列表正在加载</strong>
+        <span>每首歌完成后会出现在这里，最新的在最上面。每首歌可以一键下载到电脑：西贝柳斯工程、总谱 PDF、弦乐总 MIDI、人声带歌词 MIDI，打包成一个文件。</span></div>
+    </div>
+  </section>
+
+  <section id="media-sec" hidden>
+    <div class="sec-head"><span class="mark">B</span><h2>视频与动画</h2></div>
+    <div class="list" id="media"></div>
+  </section>
+
   <details class="dock" id="dock">
     <summary>
       <img src="files/macapp/icon.png" alt="" width="44" height="44">
@@ -219,19 +232,6 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
       </details>
     </div>
   </details>
-
-  <section id="songs-sec">
-    <div class="sec-head"><span class="mark">A</span><h2>歌曲</h2></div>
-    <div class="list" id="songs">
-      <div class="empty" id="empty"><strong>作品列表正在加载</strong>
-        <span>每首歌完成后会出现在这里，最新的在最上面。每首歌可以一键下载到电脑：西贝柳斯工程、总谱 PDF、弦乐总 MIDI、人声带歌词 MIDI，打包成一个文件。</span></div>
-    </div>
-  </section>
-
-  <section id="media-sec" hidden>
-    <div class="sec-head"><span class="mark">B</span><h2>视频与动画</h2></div>
-    <div class="list" id="media"></div>
-  </section>
 
   <footer class="foot">
     <span>以后每做完一首歌，Claude 会把它放到这里的最上面，不用再去别处找。</span>
@@ -293,9 +293,25 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     }
   }
 
-  async function save(href, filename, btn, kind) {
+  // Save through the page's downloads capability; when that is missing or
+  // refuses for any reason but the user's own "cancel", fall back to a
+  // plain browser download link.
+  async function deliver(blob, filename) {
     const dl = await dlP;
-    if (!dl) { toast("这里不能下载。请在 Claude 网页或 App 里打开这个页面。"); return; }
+    if (dl) {
+      try { await dl.save({ filename, data: blob }); return; }
+      catch (e) { if (e && e.code === "declined") throw e; }
+    }
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+  }
+
+  async function save(href, filename, btn, kind) {
     if (kind === "zip" && !window.JSZip) { toast("打包组件没加载出来，刷新页面再试；也可以先下载总谱 PDF。"); return; }
     const label = btn.innerHTML;
     btn.disabled = true;
@@ -313,8 +329,8 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
       } else {
         blob = await get(href, "blob");
       }
-      await dl.save({ filename, data: blob });
-      toast("已保存：" + filename);
+      await deliver(blob, filename);
+      toast("已保存：" + filename + "（在「下载」文件夹里）");
     } catch (e) {
       const code = e && e.code;
       if (code === "declined") toast("已取消。");
@@ -327,8 +343,7 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
   }
 
   async function saveAll(btn) {
-    const dl = await dlP;
-    if (!dl || !window.JSZip) { toast("这里不能打包下载。请在 Claude 网页或 App 里打开。"); return; }
+    if (!window.JSZip) { toast("打包组件没加载出来，刷新页面再试一次。"); return; }
     const songs = works.filter((w) => w.section === "song");
     const label = btn.innerHTML;
     btn.disabled = true;
@@ -343,7 +358,7 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
       const blob = await out.generateAsync({ type: "blob", compression: "DEFLATE",
                                              compressionOptions: { level: 6 } });
       const day = new Date().toISOString().slice(0, 10);
-      await dl.save({ filename: `花开当富贵_编曲交付_全部歌曲_${day}.zip`, data: blob });
+      await deliver(blob, `花开当富贵_编曲交付_全部歌曲_${day}.zip`);
       toast("已保存全部歌曲。");
     } catch (e) {
       const code = e && e.code;
@@ -406,7 +421,7 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
   // zip, Safari unpacks it into a folder) and runs its 安装.sh. It sorts by
   // change time (unzipping back-dates mtimes), accepts only finished packages,
   // and says so when Terminal is not allowed to read Downloads.
-  const MAC_CMD = `bash -c 'cd ~/Downloads || exit 1; ls . >/dev/null 2>&1 || { echo "终端还不能读「下载」文件夹：打开「系统设置」→「隐私与安全性」→「文件与文件夹」→「终端」，打开「下载文件夹」，再粘贴一次这条命令。"; exit 1; }; p=$(ls -tdc 编曲交付中心_安装包*.zip 编曲交付中心_安装包*/安装.sh 2>/dev/null | head -1); p=${p%/安装.sh}; if [ -z "$p" ]; then echo "没找到安装包：请先在交付中心点「下载 Mac 应用」，再粘贴这条命令。"; exit 1; fi; case "$p" in *.zip) t=$(mktemp -d) && ditto -xk "$p" "$t" && p="$t/编曲交付中心_安装包";; esac; bash "$p/安装.sh"'`;
+  const MAC_CMD = `bash -c 'cd ~/Downloads || exit 1; ls . >/dev/null 2>&1 || { echo "终端还不能读「下载」文件夹：打开「系统设置」→「隐私与安全性」→「文件与文件夹」→「终端」，打开「下载文件夹」，再粘贴一次这条命令。"; exit 1; }; p=$(ls -tdc 编曲交付中心_安装包*.zip 编曲交付中心_安装包*/安装.sh 2>/dev/null | head -1); p=\${p%/安装.sh}; if [ -z "$p" ]; then echo "没找到安装包：请先在交付中心点「下载 Mac 应用」，再粘贴这条命令。"; exit 1; fi; case "$p" in *.zip) t=$(mktemp -d) && ditto -xk "$p" "$t" && p="$t/编曲交付中心_安装包";; esac; bash "$p/安装.sh"'`;
   $("mac-cmd").textContent = MAC_CMD;
 
   async function copyCmd() {
@@ -434,10 +449,9 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
   }
 
   const dock = $("dock");
-  const isMac = /Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints < 2;
   let dockPref = null;
   try { dockPref = localStorage.getItem("dock-open"); } catch (e) { /* private mode */ }
-  dock.open = dockPref === null ? isMac : dockPref === "1";
+  dock.open = dockPref === "1";
   dock.addEventListener("toggle", () => {
     try { localStorage.setItem("dock-open", dock.open ? "1" : "0"); } catch (e) { /* ignore */ }
   });
@@ -449,24 +463,30 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
     if (e.target.closest("#all")) saveAll($("all"));
   });
 
-  dbP.then((db) => {
-    if (!db) {
-      $("summary").textContent = "请在 Claude 里打开这个页面";
-      $("empty").innerHTML = "<strong>这里看不到作品列表</strong><span>这个页面要在 Claude 网页或 App 里打开，才能列出作品和下载。</span>";
-      return;
-    }
-    db.collection("works").onSnapshot((snap) => {
-      works = snap.docs.filter((d) => d.exists).map((d) => d.data());
-      render();
-    }, () => {
-      $("summary").textContent = "作品列表没读到，刷新页面再试一次。";
-    });
-  });
+  // The list lives in the page database; files/works.json is a published
+  // snapshot of it, shown until (or instead of, if it never comes) the
+  // database answers.
+  let live = false;
+  get("files/works.json", "json").then((rows) => {
+    if (live) return;
+    works = Object.values(rows || {});
+    if (works.length) render();
+  }).catch(() => { /* the database is the source of truth */ });
 
-  dlP.then((dl) => {
-    if (!dl) document.querySelectorAll(".steps").forEach((el) => {
-      el.insertAdjacentHTML("afterend", '<div class="summary">在这里打开不能下载；请在 Claude 网页或 App 里打开这个页面。</div>');
-    });
+  dbP.then((db) => {
+    const fail = () => {
+      if (works.length) return;
+      $("summary").textContent = "作品列表没读到，刷新页面再试一次。";
+      $("empty").innerHTML = "<strong>这里看不到作品列表</strong><span>刷新一下页面；还不行的话，在 Claude 网页或 App 里打开这个页面。</span>";
+    };
+    if (!db) { fail(); return; }
+    db.collection("works").onSnapshot((snap) => {
+      const rows = snap.docs.filter((d) => d.exists).map((d) => d.data());
+      if (!rows.length && works.length) return;
+      live = true;
+      works = rows;
+      render();
+    }, fail);
   });
 })();
 </script>

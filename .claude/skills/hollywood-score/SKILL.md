@@ -148,12 +148,21 @@ To add or update a work, after its files are built and committed:
    - `files` = the printed map.
    Files you leave out are kept. Omit `capabilities` and `icon` so they stay as they are.
 5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`.
-6. Reply to the user with the page link first, then what changed.
-7. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
+7. Reply to the user with the page link first, then what changed.
+8. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+
+Whenever you edit `center.html`, check that its script still parses before publishing. One syntax error and the page shows no songs and no download buttons at all:
+
+```bash
+python3 -c "s=open('tools/deliver/center.html',encoding='utf-8').read(); open('/tmp/page.js','w').write(s[s.index('<script>\n')+9:s.rindex('</script>')])" && node --check /tmp/page.js
+```
+
+Shell commands inside a JS template literal (`MAC_CMD`) must escape `${` as `\${`; an unescaped `${p%/…}` broke the page once.
 
 ### Mac Dock app
 
-The user asked for the delivery center as an app in the Mac Dock. The card at the top of the page, 「放进 Mac 程序坞」, handles it:
+The user asked for the delivery center as an app in the Mac Dock. The card below the song list, 「放进 Mac 程序坞」 (collapsed by default so the songs come first), handles it:
 
 - 「下载 Mac 应用」 saves `编曲交付中心_安装包.zip`. It contains a ready-made `编曲交付中心.app` (a shell-script launcher with the icon), `安装.sh`, and `安装说明.txt`.
 - 「复制安装命令」 copies a one-line `bash -c '…'` command. The command finds the newest download in `~/Downloads`, which is the zip for Chrome and the unpacked folder for Safari, and runs `安装.sh`.
