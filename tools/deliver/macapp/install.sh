@@ -16,7 +16,7 @@ DEST=/Applications
 [ -w "$DEST" ] || { DEST="$HOME/Applications"; mkdir -p "$DEST"; }
 APP="$DEST/$NAME.app"
 
-echo "正在安装「$NAME」到 $DEST …"
+echo "正在安装「${NAME}」到 ${DEST} …"
 TMP="$(mktemp -d)"
 NEW="$TMP/$NAME.app"
 if osacompile -o "$NEW" -e "open location \"$URL\"" 2>/dev/null; then
@@ -31,7 +31,7 @@ fi
 xattr -cr "$NEW" 2>/dev/null
 rm -rf "$APP"
 if ! ditto "$NEW" "$APP"; then
-  echo "没装上：没有权限写入 $DEST。"
+  echo "没装上：没有权限写入 ${DEST}。"
   rm -rf "$TMP"
   exit 1
 fi
@@ -48,4 +48,4 @@ else
 fi
 
 open "$APP"
-echo "装好了：以后点程序坞里的「$NAME」图标，就会打开交付中心（总是最新版）。"
+echo "装好了：以后点程序坞里的「${NAME}」图标，就会打开交付中心（总是最新版）。"
