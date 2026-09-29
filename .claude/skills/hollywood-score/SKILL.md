@@ -15,6 +15,7 @@ The user set these rules once and does not want to be asked again.
    - **Full strings MIDI**: all string parts in one file, `<歌名>_弦乐<编制>_伴奏.mid`.
    - **Vocal MIDI with per-syllable lyrics**: `<歌名>_人声_带歌词.mid`, plus the GBK fallback.
    - Also keep the usual extras: full-track MIDI for ACE, plain vocal MIDI, GM preview mp3, SRT.
+   - **Instrumental works** (no voice, e.g. `unravel/`): the must-haves are three — MusicXML, the Hollywood PDF, the strings MIDI. Put `instrumental=True` in the catalog entry, and use `META["source"]` (原曲, e.g. "Animenz 钢琴改编版") instead of lyricist / artist where there is no lyricist; the cover and the first-page title block show it.
 2. **Credits**: 改编 (arranger) and 制谱 (engraver / music preparation) are both **花开当富贵**. They appear on the cover, in the first-page title block, in every page footer, in the MusicXML `<creator type="arranger">` and `<encoder>`, and in the PDF metadata. `tools/hollywood` defaults to this; never leave either credit out.
 3. **Layout must be refined** (精益求精). Render, look at every page, and fix problems before you deliver (see the QA list below).
 4. **The user must be able to find the files without GitHub** (they said 「我不太会用 GitHub」). Every finished work goes into the pinned **编曲交付中心** page, and the first line of your reply is its link: https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN . There, one click saves a zip to the computer's Downloads folder. Never tell the user to look for files on a branch.
@@ -92,6 +93,8 @@ apt-get install -y fonts-noto-cjk fonts-ebgaramond fonts-ebgaramond-extra popple
 - On the user's Mac: MuseScore 4 at `/Applications/MuseScore 4.app`, Chrome at `/Applications/Google Chrome.app`. Both are picked up automatically.
 
 ## Choosing system breaks (3 systems per page)
+
+For a long score, `unravel/layout.py` plans the breaks automatically: it estimates each bar's width from its onsets, starts a system at every rehearsal letter, packs 3 systems per page and prints `SYSTEM_BREAKS` / `PAGE_BREAKS` (budget 74 fits MuseScore 4 on 11×17 with four staves). `build.py` there also supports `PAGE_BREAKS` and positional 8va lines (`(part, bar1, pos1, bar2, pos2)`).
 
 On 11 × 17 at 7.2 mm staves:
 

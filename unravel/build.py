@@ -437,13 +437,13 @@ def make_m21(p, events):
         d.placement = "below"
         measures[bb].insert(_ql(s), d)
     for bb, s, bb2, s2, kind in p["hair"]:
+        # every hairpin hangs on offset anchors: music21 writes anchor
+        # wedges in time order, but mixes them up with note-attached ones
+        # (a zero-length wedge at the barline, drawn as a stray ">")
         cls = dynamics.Crescendo if kind == "cresc" else dynamics.Diminuendo
-        n1 = notes_at.get(OFFS[bb] + s)
-        n2 = obj_at(OFFS[bb2] + s2, forward=False)
-        if n1 is None or n2 is None or n1 is n2:
-            n1, n2 = spanner.SpannerAnchor(), spanner.SpannerAnchor()
-            measures[bb].insert(_ql(s), n1)
-            measures[bb2].insert(_ql(min(s2 + 1, blen(bb2))), n2)
+        n1, n2 = spanner.SpannerAnchor(), spanner.SpannerAnchor()
+        measures[bb].insert(_ql(s), n1)
+        measures[bb2].insert(_ql(min(s2 + 1, blen(bb2) - 1)), n2)
         part.insert(0, cls(n1, n2))
     for bb, s, txt in p["text"]:
         te = expressions.TextExpression(txt)

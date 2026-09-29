@@ -90,5 +90,5 @@ TEXT = {
 }
 
 CLEFS = {}
-OTTAVA = []
+OTTAVA = [("vn1", 76, 76)]  # as the piano: Bb6/A6/F6 would need five ledger lines
 ALLOW = set()

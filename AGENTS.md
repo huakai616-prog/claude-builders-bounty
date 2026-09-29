@@ -6,7 +6,7 @@
 
 仓库名叫 claude-builders-bounty。根目录的 `README.md`（悬赏板）和 `LICENSE` 是早期留下的，跟现在的工作无关，不要改。
 
-现在的实际用途是**把流行歌的副歌编成「人声 + 弦乐」**。流程是：用户发一张简谱截图，AI 转写旋律和歌词，写弦乐伴奏，然后交付：
+现在的实际用途是**把流行歌的副歌编成「人声 + 弦乐」**（也做过把整首钢琴改编谱改成纯弦乐四重奏，见下文「钢琴谱 → 弦乐四重奏」）。流程是：用户发一张简谱截图，AI 转写旋律和歌词，写弦乐伴奏，然后交付：
 
 1. 西贝柳斯能打开的总谱（MusicXML）；
 2. 带逐字歌词的人声 MIDI，给 ACE Studio 合成人声用；
@@ -35,6 +35,7 @@
 | 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `main`（原 `claude/magical-meitner-wj6g5j`） | `chatang/` | 已完成，带前奏尾奏，好莱坞总谱 PDF（封面 + 3 页）。待用户确认调（保留原调 A）和转写八度（1 记作 A3），待在 ACE Studio 渲染 |
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
+| Unravel（全曲，东京喰种 OP，Animenz 钢琴版） | 弦乐四重奏 · 纯器乐 · g 小调（原调） · ♩=134 | `main`（原 `claude/vigilant-sagan-df1y75`） | `unravel/` | 已完成：好莱坞总谱 PDF（封面 + 15 页）、MusicXML、弦乐 MIDI、试听 mp3。钢琴谱是五线谱，不是简谱；转写数据不进仓库（版权） |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
 - 泪海、我不难过、茶汤、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
@@ -132,6 +133,36 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - schema 取 w3c/musicxml 仓库的 `schema/musicxml.xsd`；
   - 它 import 的 `xml.xsd` / `xlink.xsd` 要在本地放一份，或者写最小的桩；
   - MuseScore 3 的「not a valid MusicXML file」提示不可靠，不要以它为准。
+
+## 钢琴谱 → 弦乐四重奏（纯器乐，Unravel 的做法）
+
+用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，照 `unravel/` 做：
+
+- **先问**：调（默认原调）、编制、范围（全曲 / 片段）、有没有人声、风格。用户选过「四重奏、原调、全曲、纯器乐、忠实原编配」。
+- **转写**：
+  - 把 PDF 里的图抽出来，按行、按小节切图，放大 3–5 倍；
+  - 每行一个 agent，**两遍独立转写**，每遍在自己的文件夹里，不能互相看到；
+  - 再做一遍专门找漏音的核对：低音区全音符、第二、第三声部最容易漏。
+  - 同一个模型读同一张图，两遍经常一模一样，所以一致不等于没错，最后那遍找漏音不能省。
+- **钢琴原谱的转写数据不进公开仓库**（有版权），放在 scratchpad，用 `UNRAVEL_PIANO=…` 指给 `build.py --check`。
+- **引擎** `unravel/build.py`：
+  - 64 分音符为单位，支持连音（`{5:4 … }`）、震音、谱号变换、8va（可以从小节中间开始和结束）；
+  - 支持每段一个文件（`sections/secNN.py`）并行写，`check_section.py` 单段检查；
+  - `--check` 查三类问题：
+    - 音域；
+    - 双音能不能按到（大提琴琴颈上的八度双音按不到）；
+    - 和钢琴对照：旋律、低音有没有漏，有没有钢琴里没有的音（带踏板模型）。
+  - 新的钢琴改编谱照它复制。
+- **流程**：
+  1. 分段写（每段一个 agent，按 `SECTIONS.md` 的分工）；
+  2. 每段换一个人审（演奏员 + 编配两种视角），再换一个人改；
+  3. 再有一个人看整首的衔接和重复段落是否一致；
+  4. `layout.py` 规划每页 3 行、排练号在行首；
+  5. 逐页 QA。
+- **交付**：
+  - 纯器乐只有三样主文件：MusicXML、总谱 PDF、弦乐 MIDI，没有人声 MIDI；
+  - 在 `tools/deliver/catalog.py` 里写 `instrumental=True`，交付中心会显示「主文件齐全 · 纯器乐」；
+  - 好莱坞模板 META 里用 `source`（原曲）代替作词和原唱。
 
 ## 踩过的坑
 
