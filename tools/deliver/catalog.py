@@ -14,6 +14,9 @@ plus 说明.txt; `extra` adds files from elsewhere into a subfolder.
 `main` maps the four deliverables to file names inside src (None = missing):
     musicxml  西贝柳斯工程      pdf    总谱 PDF
     strings   弦乐总 MIDI       vocal  人声带歌词 MIDI
+An instrumental work has no vocal MIDI: give it `parts` (分谱 PDF) instead,
+plus `other_note` (what 2_其他文件 holds) and `howto` (the ACE line of
+说明.txt).
 To add a new song: append an entry here (newest work at the top is fine,
 the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 """
@@ -37,6 +40,45 @@ WORKS = [
             "歌词：原谱第 54 小节印的「浪的忧愁」按通行歌词唱成「海的忧愁」。第 27 小节「紧贴着」（常见是「紧依着」）、第 11–12 小节「分隔」（常见是「分割」）照原谱没改，要改告诉我。",
             "速度定的是附点四分音符 = 56（Moderato）。想贴合某个录音的速度，告诉我。",
             "每个乐句前有一个歌词为 br 的短音标换气。如果 ACE 把它唱成字，删掉这些短音即可。",
+        ]),
+    dict(
+        slug="unravel", section="song", ref=None,
+        title="Unravel", subtitle="全曲 · 弦乐四重奏 · 东京喰种 OP · 依 Animenz 钢琴版改编",
+        artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
+        instrumentation="弦乐四重奏 · 纯器乐",
+        src="unravel/output", layout="standard",
+        main=dict(musicxml="Unravel_全曲_弦乐四重奏.musicxml",
+                  pdf="Unravel_全曲_总谱.pdf",
+                  strings="Unravel_弦乐四重奏.mid",
+                  parts="Unravel_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF（封面 + 15 页）、弦乐总 MIDI 和分谱 PDF。全曲约 3 分 57 秒。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section（有独奏小提琴、中提琴、大提琴就用独奏的）。MIDI 开头空一小节，弱起在它的最后一个八分音符上，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "总谱第 78–81 小节（ACE 第 79–82 小节）的震音在 MIDI 里写成了快速重复音；ACE 有 tremolo 演奏法的话，可以改成长音再选 tremolo。"],
+        questions=[
+            "八音盒段（第 90–96、129–130 小节）钢琴原谱在 8va 下最高到 G7，小提琴拉不到，这里第一小提琴整体低八度拉，旋律形状不变。",
+            "终副歌第 112 小节用了 fff（钢琴原谱是 ff），让最后一次副歌成为全曲顶点；不要的话改回 ff。",
+        ]),
+    dict(
+        slug="alla-turca", section="song", ref=None,
+        title="土耳其进行曲", subtitle="全曲 · 弦乐四重奏",
+        artist="", key="a 小调 / A 大调（原调）", tempo="♩=120",
+        instrumentation="弦乐四重奏（莫扎特 K.331 第三乐章）",
+        src="alla-turca/output", layout="standard",
+        main=dict(musicxml="土耳其进行曲_弦乐四重奏.musicxml",
+                  pdf="土耳其进行曲_总谱.pdf",
+                  strings="土耳其进行曲_弦乐四重奏.mid",
+                  parts="土耳其进行曲_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐曲，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF、弦乐总 MIDI 和分谱 PDF。反复全部写开，第二遍换配器，全曲约 3 分 44 秒。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section。MIDI 开头空一拍，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "拨弦（pizz.）要在 ACE 里把演奏法改成 Pizzicato（ACE 小节号）：Violin I 74–81、106–108；Violin II 74–81、106–112；Viola 10–16、42–49、58–65、122–129、138–144、170–177；Violoncello 10–17、42–49、58–65、74–81、106–113、122–129、138–145、170–177。"],
+        questions=[
+            "谱上 m52（总谱第 92、108 小节）第 6 个十六分音符是 B♯5，原典版是 D6；m55（第 95、111 小节）第 4 个音是 F♯5，原典版是 A5。现在照你给的谱，要改成原典版告诉我。",
+            "速度按 Allegretto ♩=120，反复全部保留（约 3 分 44 秒）。想要更快或少几遍反复告诉我。",
+            "拨弦段落在 ACE 里要手动改成 Pizzicato，小节号写在压缩包的说明.txt 里。",
         ]),
     dict(
         slug="wobunanguo", section="song", ref=None,

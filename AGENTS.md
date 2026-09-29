@@ -6,7 +6,7 @@
 
 仓库名叫 claude-builders-bounty。根目录的 `README.md`（悬赏板）和 `LICENSE` 是早期留下的，跟现在的工作无关，不要改。
 
-现在的实际用途是**把流行歌的副歌编成「人声 + 弦乐」**。流程是：用户发一张简谱截图，AI 转写旋律和歌词，写弦乐伴奏，然后交付：
+现在的实际用途是**把流行歌的副歌编成「人声 + 弦乐」**（也做过把整首钢琴改编谱改成纯弦乐四重奏，见下文「钢琴谱 → 弦乐四重奏」）。流程是：用户发一张简谱截图，AI 转写旋律和歌词，写弦乐伴奏，然后交付：
 
 1. 西贝柳斯能打开的总谱（MusicXML）；
 2. 带逐字歌词的人声 MIDI，给 ACE Studio 合成人声用；
@@ -35,10 +35,12 @@
 | 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `main`（原 `claude/magical-meitner-wj6g5j`） | `chatang/` | 已完成，带前奏尾奏，好莱坞总谱 PDF（封面 + 3 页）。待用户确认调（保留原调 A）和转写八度（1 记作 A3），待在 ACE Studio 渲染 |
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
 | 我和我的祖国（全曲，李谷一首唱） | S.A.T.B. 四声部独唱（每声部一人）+ 弦乐四重奏 · ♭E 大调（原谱调） · ♩.=56，6/8 与 9/8 | `main`（原 `claude/wohewodezuguo-satb-quartet`） | `wohewodezuguo/` | 已完成，好莱坞总谱 PDF（封面 + 11 页）。第一首多声部人声 + 变拍子的歌：`wohewodezuguo/engine.py` 支持 6/8 与 9/8 混合拍子、多个人声声部（各自歌词）、MIDI 里的 br 气口、拨弦/拉弦、延长记号。做法经过两轮多视角审稿。待用户确认：主歌一由女低音唱、三处歌词出入（浪/海的忧愁已改，紧贴/紧依、分隔/分割照原谱）、速度 |
+| 土耳其进行曲（全曲，莫扎特 K.331 第三乐章） | 弦乐四重奏，不用钢琴，古典风格 · a 小调 / A 大调（原调） · ♩=120 | `main`（原 `claude/epic-ramanujan-6iapv9`） | `alla-turca/` | 已完成：用户给的是钢琴谱 PDF（五线谱，不是简谱）。反复全部写开、第二遍换配器，好莱坞总谱 13 页 + 分谱。待用户确认 m52 / m55 两处照谱还是照原典版；拨弦段在 ACE 里要手动改演奏法 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
+| Unravel（全曲，东京喰种 OP，Animenz 钢琴版） | 弦乐四重奏 · 纯器乐 · g 小调（原调） · ♩=134 | `main`（原 `claude/vigilant-sagan-df1y75`） | `unravel/` | 已完成：好莱坞总谱 PDF（封面 + 15 页，逐页查过）、MusicXML、弦乐 MIDI（开头空一小节，小节线和总谱对齐）、分谱、试听 mp3。钢琴谱是五线谱，不是简谱；转写数据不进仓库（版权）。待用户确认八音盒段低八度、第 112 小节 fff；待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 泪海、我不难过、茶汤、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
+- 泪海、我不难过、茶汤、土耳其进行曲、Unravel、我和我的祖国、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
 - 情歌、大东北、泪海、甲乙丙丁、茉莉花的 PDF 或署名还没按好莱坞标准重做。用户要的时候，用 `tools/hollywood` 重出，再更新交付中心。
 - 新歌如果是多个人声声部或 6/8、9/8 这类复合拍子，代码从 `wohewodezuguo/`（`build.py` + `engine.py`）接；单人声 4/4 的仍从 `chatang/build.py` 接。
 - 茶汤那一轮给模板加了几项：封面居中、排练号加粗和段落名独立一行、十六分音符连梁、PDF 文字层修正、页眉页脚细节，`chatang/build.py` 还修了长音上的渐强渐弱（hairpin 不再丢）。新歌的代码从 `chatang/build.py` 接。
@@ -142,6 +144,38 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - 它 import 的 `xml.xsd` / `xlink.xsd` 要在本地放一份，或者写最小的桩；
   - MuseScore 3 的「not a valid MusicXML file」提示不可靠，不要以它为准。
 
+## 钢琴谱 → 弦乐四重奏（纯器乐，Unravel 的做法）
+
+用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，有两个现成的做法：`alla-turca/`（古典原作，原谱数据 `source_piano.py` 进仓库）和 `unravel/`（有版权的改编谱，全曲 133 小节，分段并行写）。Unravel 的做法：
+
+- **先问**：调（默认原调）、编制、范围（全曲 / 片段）、有没有人声、风格。用户选过「四重奏、原调、全曲、纯器乐、忠实原编配」。
+- **转写**：
+  - 把 PDF 里的图抽出来，按行、按小节切图，放大 3–5 倍；
+  - 每行一个 agent，**两遍独立转写**，每遍在自己的文件夹里，不能互相看到；
+  - 再做一遍专门找漏音的核对：低音区全音符、第二、第三声部最容易漏。
+  - 同一个模型读同一张图，两遍经常一模一样，所以一致不等于没错，最后那遍找漏音不能省。
+- **钢琴原谱的转写数据不进公开仓库**（有版权），放在 scratchpad，用 `UNRAVEL_PIANO=…` 指给 `build.py --check`。
+- **引擎** `unravel/build.py`：
+  - 64 分音符为单位，支持连音（`{5:4 … }`）、震音、谱号变换、8va（可以从小节中间开始和结束）；
+  - 支持每段一个文件（`sections/secNN.py`）并行写，`check_section.py` 单段检查；
+  - `--check` 查三类问题：
+    - 音域；
+    - 双音能不能按到（大提琴琴颈上的八度双音按不到）；
+    - 和钢琴对照：旋律、低音有没有漏，有没有钢琴里没有的音（带踏板模型）。
+  - 新的钢琴改编谱照它复制。
+- **流程**：
+  1. 分段写（每段一个 agent，按 `SECTIONS.md` 的分工）；
+  2. 每段换一个人审（演奏员 + 编配两种视角），再换一个人改；
+  3. 再有一个人看整首的衔接和重复段落是否一致；
+  4. `layout.py` 规划每页 3 行、排练号在行首；
+  5. 逐页 QA。
+- **逐页 QA 查出的制谱问题**已经做进 `unravel/build.py`，新引擎照抄：连梁按拍 / 半小节重排、休止符不盖拍点、表情字放谱表下方并和力度合成一行、延音线按音符连、排练号后补力度（清单见 SKILL.md 的「Engraving rules learned on Unravel」）。
+- **交付**：
+  - 四样主文件：MusicXML、总谱 PDF、弦乐 MIDI、分谱 PDF（纯器乐没有人声 MIDI，用分谱代替，和土耳其进行曲一样）；
+  - `tools/deliver/catalog.py` 里 `main` 写这四样，另写 `other_note` 和 `howto`；
+  - 有弱起时 MIDI 开头空一小节，让小节线和总谱对齐，并在 `howto` 里写「ACE 第 N 小节 = 总谱第 N−1 小节」；
+  - 好莱坞模板 META 里用 `source`（改编自，例如「Animenz 钢琴版」）写明依据的版本，`original`（原曲）写原作，封面和首页标题栏会显示。
+
 ## 踩过的坑
 
 - **music21 插入顺序**：往 Measure 里先 `insert` 零时值元素（TempoText 等），再 `append` 音符，音符会从那个偏移之后开始排，整小节错位。文字、力度、速度字一律在音符之后插入。泪海第 24 小节出过这个 bug，现在 `verify_bars()` 会拦住。
@@ -157,6 +191,9 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - 导入的署名位置会乱（作曲跑到顶上，作词掉进谱里）。
   - 这两个 `tools/hollywood/hollywood.py` 都已经处理了。
   - pypdf 报 `_cffi_backend` 时 `pip install cffi`。
+- **MS4 一行放不下时**：它会把最后一两小节挤到下一行单独成行，调小 `measureSpacing` 没用（已经是最小宽度）。先看实际分行：`pdftotext -bbox` 读出每页的方框小节号、按纵坐标分组，就知道每行是哪几小节。解决办法是每行少放小节，或者去掉占宽的东西（土耳其进行曲把大提琴的三个倚音琶音改成了琶音和弦）。
+- **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。
+- **纯器乐曲 / 钢琴谱转弦乐**：照 `alla-turca/build.py` 做。钢琴原谱逐小节转写成 `source_piano.py`，`--check` 会拿编配和原谱对照（旋律、低音、和声外音、原谱没有的小二度冲突）；反复用 `FORM` 写开、`ALIAS` 复用；分谱用 `hollywood.render_parts_pdf`。
 - **给用户 Mac 写的 shell 脚本**：macOS 的 `/bin/bash` 是 3.2，UTF-8 下它把 0x80–0xFF 的字节当字母，`"「$NAME」"` 会把「」」的第一个字节吞进变量名，打印出「??」。变量后面紧跟中文时一律写 `${NAME}`。在 Linux 上可以用 `localedef -i en_US -f ISO-8859-1` 造一个 Latin-1 locale（`LOCPATH=… LC_ALL=en_US.ISO-8859-1`）复现。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 

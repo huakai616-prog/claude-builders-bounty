@@ -44,6 +44,10 @@ DEFAULT_META = {
     "composer": "",
     "lyricist": "",
     "artist": "",           # original performer
+    "source": "",           # 改编自: the version this arrangement is based
+                            # on, e.g. "Animenz 钢琴版" (instrumental works)
+    "original": "",         # instrumental works: the original piece
+                            # ("钢琴奏鸣曲 K.331 第三乐章"), shown as 原曲
     "arranger": ARRANGER,
     "engraver": ENGRAVER,
     "instrumentation": [],  # [("Voice", "人声"), ("Violin I", "第一小提琴"), ...]
@@ -59,6 +63,12 @@ PAGE_W, PAGE_H = 11.0, 17.0
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM = 0.6, 1.05, 0.95
 SPATIUM_MM = 1.8  # also <Spatium> in hollywood.mss
 
+# parts (分谱), must match hollywood_part.mss
+STYLE_PART = os.path.join(HERE, "hollywood_part.mss")
+PART_W, PART_H = 9.0, 12.0
+PART_MARGIN_X, PART_MARGIN_TOP, PART_MARGIN_BOTTOM = 0.55, 0.85, 0.8
+PART_SPATIUM_MM = 1.75
+
 
 def _meta(meta):
     m = dict(DEFAULT_META)
@@ -69,8 +79,8 @@ def _meta(meta):
 # ---------------------------------------------------------------------------
 # MusicXML: layout + credits (what Sibelius opens)
 # ---------------------------------------------------------------------------
-def _tenths(inches):
-    return round(inches * 25.4 / SPATIUM_MM * 10, 1)
+def _tenths(inches, sp=None):
+    return round(inches * 25.4 / (sp or SPATIUM_MM) * 10, 1)
 
 
 def _credit(page, ctype, text, x, y, size, justify, valign, weight=None):
@@ -85,9 +95,21 @@ def _credit(page, ctype, text, x, y, size, justify, valign, weight=None):
     return c
 
 
-def polish_musicxml(path, meta):
-    """Tabloid layout, spacing, credit block and creators for Sibelius."""
+def polish_musicxml(path, meta, part=None):
+    """Tabloid layout, spacing, credit block and creators for Sibelius.
+    part=("Violin I", "第一小提琴"): lay a one-instrument file out as a
+    9 x 12 in part instead (see render_parts_pdf)."""
     m = _meta(meta)
+    if part:
+        pw, ph, mx, mt, mb, sp = (PART_W, PART_H, PART_MARGIN_X,
+                                  PART_MARGIN_TOP, PART_MARGIN_BOTTOM,
+                                  PART_SPATIUM_MM)
+    else:
+        pw, ph, mx, mt, mb, sp = (PAGE_W, PAGE_H, MARGIN_X, MARGIN_TOP,
+                                  MARGIN_BOTTOM, SPATIUM_MM)
+
+    def tn(x):
+        return _tenths(x, sp)
     tree = ET.parse(path)
     r = tree.getroot()
 
@@ -120,16 +142,16 @@ def polish_musicxml(path, meta):
     for t in ("scaling", "page-layout", "system-layout", "staff-layout"):
         for x in d.findall(t):
             d.remove(x)
-    W, H = _tenths(PAGE_W), _tenths(PAGE_H)
+    W, H = tn(pw), tn(ph)
     new = ET.fromstring(
-        f"<defaults><scaling><millimeters>{SPATIUM_MM * 4}</millimeters>"
+        f"<defaults><scaling><millimeters>{round(sp * 4, 2)}</millimeters>"
         "<tenths>40</tenths></scaling><page-layout>"
         f"<page-height>{H}</page-height><page-width>{W}</page-width>"
         "<page-margins type=\"both\">"
-        f"<left-margin>{_tenths(MARGIN_X)}</left-margin>"
-        f"<right-margin>{_tenths(MARGIN_X)}</right-margin>"
-        f"<top-margin>{_tenths(MARGIN_TOP)}</top-margin>"
-        f"<bottom-margin>{_tenths(MARGIN_BOTTOM)}</bottom-margin>"
+        f"<left-margin>{tn(mx)}</left-margin>"
+        f"<right-margin>{tn(mx)}</right-margin>"
+        f"<top-margin>{tn(mt)}</top-margin>"
+        f"<bottom-margin>{tn(mb)}</bottom-margin>"
         "</page-margins></page-layout><system-layout><system-margins>"
         "<left-margin>0</left-margin><right-margin>0</right-margin>"
         "</system-margins><system-distance>100</system-distance>"
@@ -142,22 +164,38 @@ def polish_musicxml(path, meta):
     # credits: replace whatever music21 wrote with the house title block
     for c in r.findall("credit"):
         r.remove(c)
-    top = round(H - _tenths(MARGIN_TOP), 1)
-    left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
-    lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
-               f"原唱：{m['artist']}" if m["artist"] else ""]
+    top = round(H - tn(mt), 1)
+    left, right, mid = tn(mx), W - tn(mx), W / 2
+    lines_l = [f"原曲：{m['original']}" if m["original"] else "",
+               f"作词：{m['lyricist']}" if m["lyricist"] else "",
+               f"原唱：{m['artist']}" if m["artist"] else "",
+               f"改编自：{m['source']}" if m["source"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
-    credits = [
-        _credit(1, "title", m["title"], mid, top, 30, "center", "top", "bold"),
-        _credit(1, "subtitle", m["subtitle"], mid, round(top - 70, 1), 14,
-                "center", "top"),
-        _credit(1, "lyricist", "\n".join(x for x in lines_l if x),
-                left, base, 10.5, "left", "bottom"),
-        _credit(1, "composer", "\n".join(x for x in lines_r if x),
-                right, base, 10.5, "right", "bottom"),
-    ]
+    if part:
+        base = round(top - 110, 1)
+        credits = [
+            _credit(1, "title", m["title"], mid, top, 22, "center", "top",
+                    "bold"),
+            _credit(1, "subtitle", m["subtitle"], mid, round(top - 55, 1),
+                    11.5, "center", "top"),
+            _credit(1, "part name", f"{part[0]}\n{part[1]}", left, base, 13,
+                    "left", "bottom", "bold"),
+            _credit(1, "composer", "\n".join(x for x in lines_r if x),
+                    right, base, 9.5, "right", "bottom"),
+        ]
+    else:
+        credits = [
+            _credit(1, "title", m["title"], mid, top, 30, "center", "top",
+                    "bold"),
+            _credit(1, "subtitle", m["subtitle"], mid, round(top - 70, 1),
+                    14, "center", "top"),
+            _credit(1, "lyricist", "\n".join(x for x in lines_l if x),
+                    left, base, 10.5, "left", "bottom"),
+            _credit(1, "composer", "\n".join(x for x in lines_r if x),
+                    right, base, 10.5, "right", "bottom"),
+        ]
     at = list(r).index(r.find("part-list"))
     for c in reversed(credits):
         r.insert(at, c)
@@ -275,7 +313,7 @@ def _ms4(args):
 TITLE_FRAME_SP = 21  # height of the first-page title frame, in spaces
 
 
-def _fix_title_frame(mscz):
+def _fix_title_frame(mscz, height=None, gap=None):
     """MS4 imports MusicXML credits with odd offsets (composer drifts to the
     top, lyricist into the music).  Give the title frame a fixed height and
     let the style place each text: title / subtitle centred at the top,
@@ -290,7 +328,13 @@ def _fix_title_frame(mscz):
             def fix(mo):
                 box = mo.group(0)
                 box = re.sub(r"<height>[^<]*</height>",
-                             f"<height>{TITLE_FRAME_SP}</height>", box, 1)
+                             f"<height>{height or TITLE_FRAME_SP}</height>",
+                             box, 1)
+                if gap is not None:     # frame -> first system, in spaces
+                    box = re.sub(r"\s*<bottomGap>[^<]*</bottomGap>", "", box)
+                    box = box.replace(
+                        "</height>", f"</height>\n        <bottomGap>{gap}"
+                        "</bottomGap>", 1)
                 box = re.sub(r"\s*<offset [^>]*/>", "", box)
                 box = re.sub(r"\s*<align>[^<]*</align>", "", box)
                 return box
@@ -305,13 +349,20 @@ def _fix_title_frame(mscz):
 SECTION_LIFT_SP = 5  # rehearsal letter + section title sit above bar numbers
 
 
-def _lift_sections(mscz, lift=SECTION_LIFT_SP):
+def _lift_sections(mscz, lift=SECTION_LIFT_SP, pin=False):
     """Bar numbers are boxed above every bar, so a rehearsal letter and its
     bold section title ("A  Chorus 副歌") would share their row and run into
-    the section's first bar number.  Raise both onto a row of their own."""
+    the section's first bar number.  Raise both onto a row of their own.
+    pin=True sets the title a little right of the letter: a wide letter
+    (M, N, H) touching the title makes autoplace stack the two; with a lift
+    that clears the first chord's articulations and an 8va line, they then
+    stay on one row (autoplace stays on, so the page keeps room for them)."""
     if not lift:
         return
     off = f'\n            <offset x="0" y="{-lift}"/>'
+    title_off = off
+    if pin:
+        title_off = f'\n            <offset x="1" y="{-lift}"/>'
     with zipfile.ZipFile(mscz) as z:
         items = [(i, z.read(i.filename)) for i in z.infolist()]
     out = []
@@ -329,7 +380,7 @@ def _lift_sections(mscz, lift=SECTION_LIFT_SP):
                 return re.sub(
                     r"(<StaffText>\s*<eid>[^<]*</eid>\s*"
                     r"<text><b>[^<]*</b></text>)",
-                    lambda k: k.group(1) + off, meas)
+                    lambda k: k.group(1) + title_off, meas)
             x = re.sub(r"<Measure>.*?</Measure>", fix, x, flags=re.S)
             data = x.encode("utf-8")
         out.append((info, data))
@@ -347,7 +398,8 @@ def _engrave_fixes(mscz):
     * Chinese in staff / system texts ("Chorus 副歌") in Noto Serif CJK,
       not whatever fallback the text font finds;
     * 8va lines labelled "8va", not a bare "8" (MS4 turns the import's
-      ottavaNumbersOnly on, and -S does not reset it)."""
+      ottavaNumbersOnly on, and -S does not reset it), "(8va)" where a line
+      carries over a system break."""
     with zipfile.ZipFile(mscz) as z:
         items = [(i, z.read(i.filename)) for i in z.infolist()]
     out = []
@@ -368,6 +420,9 @@ def _engrave_fixes(mscz):
             data = x.encode("utf-8")
         elif info.filename.endswith(".mss"):
             x = data.decode("utf-8")
+            x = re.sub(r"<ottava8VAContinueText>[^<]*</ottava8VAContinueText>",
+                       "<ottava8VAContinueText>(&lt;sym&gt;ottavaAlta&lt;/sym&gt;)"
+                       "</ottava8VAContinueText>", x)
             if "<ottavaNumbersOnly>" in x:
                 x = re.sub(r"<ottavaNumbersOnly>\d</ottavaNumbersOnly>",
                            "<ottavaNumbersOnly>0</ottavaNumbersOnly>", x)
@@ -561,9 +616,9 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
               border-bottom: .4pt solid #bbb; }
 .credits tr:last-child td { border-bottom: none; }
 .credits .zh { font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
-               width: .75in; letter-spacing: .15em; }
+               width: .95in; letter-spacing: .15em; }
 .credits .en { font-size: 10pt; letter-spacing: .2em; text-transform: uppercase;
-               color: #555; width: 2.3in; }
+               color: #555; width: 2.2in; }
 .credits .nm { font-family: 'Noto Serif CJK SC', serif; font-size: 15pt;
                text-align: right; font-weight: 600; }
 .info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em;
@@ -615,8 +670,11 @@ def _sym(s):
 
 
 def cover_html(m):
-    rows = [("作曲", "Music", m["composer"]), ("作词", "Lyrics", m["lyricist"]),
+    rows = [("作曲", "Music", m["composer"]),
+            ("原曲", "Original", m["original"]),
+            ("作词", "Lyrics", m["lyricist"]),
             ("原唱", "Original Artist", m["artist"]),
+            ("改编自", "Based on", m["source"]),
             ("改编", "Arranged by", m["arranger"]),
             ("制谱", "Music Preparation", m["engraver"])]
     trs = "".join(
@@ -627,12 +685,15 @@ def cover_html(m):
     inst = "　·　".join(
         f"{_e(en)} <span class='cjk'>{_e(zh)}</span>"
         for en, zh in m["instrumentation"])
+    # CJK titles get wide tracking; a Latin-script title reads spaced out
+    latin_title = (" style='letter-spacing:.02em;padding-left:.02em'"
+                   if m["title"].isascii() else "")
     return f"""
 <div class='page cover'>
   <div class='frame'></div>
   <div class='cv kicker'>Full Score</div>
   <div class='cv kicker2'>Score in C · Concert Pitch</div>
-  <div class='cv title'>{_e(m['title'])}</div>
+  <div class='cv title'{latin_title}>{_e(m['title'])}</div>
   <div class='cv latin'>{_e(m['title_latin'])}</div>
   <div class='cv orn'><span></span><b></b><span></span></div>
   <div class='cv sub'>{_e(m['subtitle'])}</div>
@@ -668,6 +729,22 @@ def overlay_html(m, page, total):
 # ---------------------------------------------------------------------------
 # PDF
 # ---------------------------------------------------------------------------
+def _style_file(base, overrides, tmp):
+    """The house style with song-specific values (META["style"], e.g.
+    {"measureSpacing": 1.3}) replaced or added."""
+    if not overrides:
+        return base
+    x = open(base, encoding="utf-8").read()
+    for k, v in overrides.items():
+        if re.search(rf"<{k}>[^<]*</{k}>", x):
+            x = re.sub(rf"<{k}>[^<]*</{k}>", f"<{k}>{v}</{k}>", x)
+        else:
+            x = x.replace("</Style>", f"  <{k}>{v}</{k}>\n  </Style>", 1)
+    path = os.path.join(tmp, "style.mss")
+    open(path, "w", encoding="utf-8").write(x)
+    return path
+
+
 def render_pdf(musicxml, out_pdf, meta, png_dir=None):
     from pypdf import PdfReader, PdfWriter
     m = _meta(meta)
@@ -675,12 +752,15 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         mscz = os.path.join(tmp, "score.mscz")
         score_pdf = os.path.join(tmp, "score.pdf")
         _ms4(["-o", mscz, musicxml])            # import MusicXML
-        _fix_title_frame(mscz)
-        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+        _fix_title_frame(mscz, m.get("title_frame_sp", TITLE_FRAME_SP),
+                         m.get("title_gap_sp"))
+        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP),
+                       m.get("section_pin", False))
         _engrave_fixes(mscz)
         if m.get("mscx_hook"):  # song-specific touch-ups, see SKILL.md
             _edit_mscx(mscz, m["mscx_hook"])
-        _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
+        style = _style_file(STYLE, m.get("style"), tmp)
+        _ms4(["-S", style, "-o", score_pdf, mscz])  # engrave with house style
         score = PdfReader(score_pdf)
         n = len(score.pages)
         doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
@@ -701,8 +781,10 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             w.add_page(pg)
         w.add_metadata({
             "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
-            "/Author": f"{m['composer']} 曲 / {m['lyricist']} 词 · "
-                       f"改编 {m['arranger']} · 制谱 {m['engraver']}",
+            "/Author": " / ".join(x for x in (
+                f"{m['composer']} 曲" if m["composer"] else "",
+                f"{m['lyricist']} 词" if m["lyricist"] else "") if x)
+                       + f" · 改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
         _fix_text_layer(w)
@@ -715,6 +797,83 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             subprocess.run(["pdftoppm", "-r", "60", "-png", out_pdf,
                             os.path.join(png_dir, "page")], check=True)
     return n + 1
+
+
+PART_TITLE_SP = 17  # title frame height on the first page of a part
+
+
+def _part_css():
+    css = CSS.replace("size: 11in 17in", f"size: {PART_W:g}in {PART_H:g}in")
+    css = css.replace("width: 11in; height: 17in",
+                      f"width: {PART_W:g}in; height: {PART_H:g}in")
+    return css.replace("left: .6in; right: .6in",
+                       f"left: {PART_MARGIN_X}in; right: {PART_MARGIN_X}in")
+
+
+def part_overlay_html(m, en, zh, page, total):
+    who = (f"<span class='cjk'>改编 · 制谱　{_e(m['arranger'])}</span>"
+           "<span class='en'>Arranged &amp; Music Preparation by "
+           f"<span class='nm'>{_e(m['arranger'])}</span></span>")
+    return f"""
+<div class='page'>
+  <div class='hd'><div class='l'><span class='t'>{_e(m['title'])}</span>
+    <span class='x'>{_e(en)}</span> <span class='t'>{_e(zh)}</span></div>
+    <div class='r'>{page}</div></div>
+  <div class='ft'><div class='l'>{who}</div>
+    <div class='r'>{_e(en)} · Page {page} of {total}</div></div>
+</div>"""
+
+
+def render_parts_pdf(parts, out_pdf, meta):
+    """parts: [(musicxml, "Violin I", "第一小提琴"), ...], each a
+    one-instrument file polished with polish_musicxml(..., part=...).
+    MS4 engraves each with hollywood_part.mss (9 x 12 in); the running
+    header / footer name the instrument.  One PDF, one bookmark per part,
+    every part starting on a new page.  Returns the page count."""
+    from pypdf import PdfReader, PdfWriter
+    m = _meta(meta)
+    w = PdfWriter()
+    with tempfile.TemporaryDirectory() as tmp:
+        for k, (xml, en, zh) in enumerate(parts):
+            mscz = os.path.join(tmp, f"part{k}.mscz")
+            pdf = os.path.join(tmp, f"part{k}.pdf")
+            _ms4(["-o", mscz, xml])
+            _fix_title_frame(mscz, PART_TITLE_SP)
+            _lift_sections(mscz, m.get("part_section_lift",
+                                       m.get("section_lift", SECTION_LIFT_SP)),
+                           m.get("section_pin", False))
+            _engrave_fixes(mscz)
+            if m.get("mscx_part_hook"):
+                _edit_mscx(mscz, m["mscx_part_hook"])
+            style = _style_file(STYLE_PART, m.get("part_style"), tmp)
+            _ms4(["-S", style, "-o", pdf, mscz])
+            score = PdfReader(pdf)
+            n = len(score.pages)
+            doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
+                   + _part_css() + "</style></head><body>"
+                   + "".join(part_overlay_html(m, en, zh, i + 1, n)
+                             for i in range(n)) + "</body></html>")
+            hp = os.path.join(tmp, f"part{k}.html")
+            open(hp, "w", encoding="utf-8").write(doc)
+            ov_pdf = os.path.join(tmp, f"part{k}_ov.pdf")
+            _chrome_pdf(hp, ov_pdf)
+            ov = PdfReader(ov_pdf)
+            assert len(ov.pages) == n, (len(ov.pages), n)
+            first = len(w.pages)
+            for i in range(n):
+                pg = score.pages[i]
+                pg.merge_page(ov.pages[i])
+                w.add_page(pg)
+            w.add_outline_item(f"{en} {zh}", first)
+        w.add_metadata({
+            "/Title": f"{m['title']} — {m['subtitle']} (Parts 分谱)",
+            "/Author": f"{m['composer']} 曲 · 改编 {m['arranger']} · "
+                       f"制谱 {m['engraver']}",
+            "/Creator": "MuseScore Studio 4 + tools/hollywood"})
+        _fix_text_layer(w)
+        with open(out_pdf, "wb") as fh:
+            w.write(fh)
+    return len(w.pages)
 
 
 def _load_build(path):

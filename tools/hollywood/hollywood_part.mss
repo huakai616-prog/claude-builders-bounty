@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Hollywood full-score house style for MuseScore Studio 4.4 (partial style:
+  Hollywood part (分谱) house style, 9 x 12 in; derived from hollywood.mss:
+  same fonts, boxed bar numbers and rehearsal marks, smaller page.
+
+  Hollywood full-score house style (original notes) for MuseScore Studio 4.4 (partial style:
   only the keys listed here change, everything else stays at MS4 defaults).
 
   Applied by tools/hollywood/score_pdf.py as `-S hollywood.mss` on an .mscz
@@ -18,29 +21,31 @@
 <museScore version="4.40">
   <Style>
     <!-- page: 11 x 17 in, header zone 1.05 in, footer zone 0.95 in -->
-    <pageWidth>11</pageWidth>
-    <pageHeight>17</pageHeight>
-    <pagePrintableWidth>9.8</pagePrintableWidth>
-    <pageEvenLeftMargin>0.6</pageEvenLeftMargin>
-    <pageOddLeftMargin>0.6</pageOddLeftMargin>
-    <pageEvenTopMargin>1.05</pageEvenTopMargin>
-    <pageOddTopMargin>1.05</pageOddTopMargin>
-    <pageEvenBottomMargin>0.95</pageEvenBottomMargin>
-    <pageOddBottomMargin>0.95</pageOddBottomMargin>
+    <pageWidth>9</pageWidth>
+    <pageHeight>12</pageHeight>
+    <pagePrintableWidth>7.9</pagePrintableWidth>
+    <pageEvenLeftMargin>0.55</pageEvenLeftMargin>
+    <pageOddLeftMargin>0.55</pageOddLeftMargin>
+    <pageEvenTopMargin>0.85</pageEvenTopMargin>
+    <pageOddTopMargin>0.85</pageOddTopMargin>
+    <pageEvenBottomMargin>0.8</pageEvenBottomMargin>
+    <pageOddBottomMargin>0.8</pageOddBottomMargin>
     <pageTwosided>0</pageTwosided>
-    <Spatium>1.8</Spatium>
+    <Spatium>1.75</Spatium>
 
     <!-- vertical spacing: generous, systems spread to fill each page -->
     <staffDistance>7.5</staffDistance>
     <akkoladeDistance>6.5</akkoladeDistance>
-    <minSystemDistance>11</minSystemDistance>
-    <maxSystemDistance>20</maxSystemDistance>
+    <minSystemDistance>8.5</minSystemDistance>
+    <maxSystemDistance>14</maxSystemDistance>
     <enableVerticalSpread>1</enableVerticalSpread>
     <minSystemSpread>10</minSystemSpread>
     <maxSystemSpread>30</maxSystemSpread>
     <maxStaffSpread>10</maxStaffSpread>
     <maxPageFillSpread>10</maxPageFillSpread>
-    <lastSystemFillLimit>0</lastSystemFillLimit>
+    <lastSystemFillLimit>0.3</lastSystemFillLimit>
+    <createMultiMeasureRests>1</createMultiMeasureRests>
+    <minEmptyMeasures>2</minEmptyMeasures>
     <measureSpacing>1.5</measureSpacing>
     <minMeasureWidth>10</minMeasureWidth>
 
@@ -65,7 +70,7 @@
     <measureNumberVPlacement>0</measureNumberVPlacement>
     <measureNumberHPlacement>1</measureNumberHPlacement>
     <measureNumberFontFace>Edwin</measureNumberFontFace>
-    <measureNumberFontSize>10</measureNumberFontSize>
+    <measureNumberFontSize>8.5</measureNumberFontSize>
     <measureNumberFontStyle>1</measureNumberFontStyle>
     <measureNumberFrameType>1</measureNumberFrameType>
     <measureNumberFramePadding>0.35</measureNumberFramePadding>
@@ -75,15 +80,9 @@
          single box above its neighbours -->
     <measureNumberMinDistance>0.5</measureNumberMinDistance>
 
-    <!-- ties between the noteheads, so a phrase slur ending on a tied
-         note and the tie never meet in one point, and a chord's lower tie
-         clears a stem-down flag -->
-    <tiePlacementSingleNote>inside</tiePlacementSingleNote>
-    <tiePlacementChord>inside</tiePlacementChord>
-
     <!-- rehearsal marks: big, bold, boxed -->
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
-    <rehearsalMarkFontSize>16</rehearsalMarkFontSize>
+    <rehearsalMarkFontSize>14</rehearsalMarkFontSize>
     <rehearsalMarkFontStyle>1</rehearsalMarkFontStyle>
     <rehearsalMarkFrameType>1</rehearsalMarkFrameType>
     <rehearsalMarkFramePadding>0.6</rehearsalMarkFramePadding>
@@ -108,6 +107,7 @@
     <systemTextFontSize>11</systemTextFontSize>
     <longInstrumentFontFace>Edwin</longInstrumentFontFace>
     <longInstrumentFontSize>11</longInstrumentFontSize>
+    <hideInstrumentNameIfOneInstrument>1</hideInstrumentNameIfOneInstrument>
     <shortInstrumentFontFace>Edwin</shortInstrumentFontFace>
     <shortInstrumentFontSize>10</shortInstrumentFontSize>
 
@@ -121,12 +121,12 @@
 
     <!-- first-page title block (credits come from the MusicXML) -->
     <titleFontFace>Noto Serif CJK SC</titleFontFace>
-    <titleFontSize>30</titleFontSize>
+    <titleFontSize>22</titleFontSize>
     <titleFontStyle>1</titleFontStyle>
     <subTitleFontFace>Noto Serif CJK SC</subTitleFontFace>
-    <subTitleFontSize>14</subTitleFontSize>
+    <subTitleFontSize>11.5</subTitleFontSize>
     <!-- MS4's default (10 mm) leaves the 30 pt title touching the subtitle -->
-    <subTitleOffset x="0" y="13"/>
+    <subTitleOffset x="0" y="10"/>
     <composerFontFace>Noto Serif CJK SC</composerFontFace>
     <composerFontSize>10.5</composerFontSize>
     <lyricistFontFace>Noto Serif CJK SC</lyricistFontFace>
