@@ -39,7 +39,7 @@ Chorus II (b.25) doubles the tune in octaves. A 16th-note viola riser (b.26, bea
 
 Section D (b.33) resets to a heartbeat: pizzicato basses, a light 3+3+2 tresillo, and the chart's ostinato in Vln II. It rebuilds bar by bar: a sky pedal, then arco and 8va octaves, then a climbing viola bariolage, then the cello chug. At bar 40 the whole ensemble hammers three beats and then **stops for one beat**.
 
-The biggest climax, E (b.41), lands on the next downbeat with the fullest texture of the piece. A third launch walk (b.44) pushes it to its crest (b.45–46, fff, allargando): the melody in three octaves over the chart's G-minor sweep, then an A7(♭9) hammered in 3+3+2. It then releases into Dm9 (Largamente) and the chart's rit.
+The biggest climax, E (b.41), lands on the next downbeat with the fullest texture of the piece, and **an octave higher** than the chart (Vln I at 8va, Vln II at pitch, as in 37–39), so it opens above Chorus II's summit. A third launch walk (b.44) pushes it to its crest (b.45–46, fff, allargando): the melody in three octaves over the chart's G-minor sweep, then an A7(♭9) hammered in 3+3+2. It then releases into Dm9 (Largamente) and the chart's rit.
 
 In the coda the motto returns **one octave above** the intro, pp. The piece ends on bar 2's Lydian C/B♭ with C7 alone on top: IV with its 9th, never resolved to F.
 
@@ -141,12 +141,12 @@ In each table, **Chart** is the chart's harmony for each half bar, and **Strings
 | Bar | Chart | Strings | Melody | Vln I | Vln II | Vla | Vc | Cb | Dyn |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | B♭maj7 · B♭maj7 | B♭maj7 (pad F–A over B♭) | Vln I | motto D5 A5 G5 A5 (8,16,16,8), then rests | pad A4 w | pad F4 w | B♭3 w (chart octave) | tacet | Vln I *p espr.*; pad *pp* (n<) |
-| 2 | C/B♭ · C/B♭ | Csus4/B♭ → C/B♭ (F→E on beat 3, in the gap) | Vln I | C5 G5 F5 G5 | G4 w | F4 h → E4 h | B♭3 w | — | pad < > on beats 3–4 |
-| 3 | Am7 · Am7 | Am7(11) → Am7 (D→E on beat 3) | Vln I | C5 G5 F5 G5 | G4 w | D4 h → E4 h | A3 w | — | same |
+| 2 | C/B♭ · C/B♭ | Csus4/B♭ → C/B♭ (F→E on beat 3, in the gap) | Vln I | C5 G5 F5 G5 | G4 h → C5 h~ (into 3) | F4 h → E4 h | B♭3 w | — | pad < > on beats 3–4 |
+| 3 | Am7 · Am7 | Am7(11) → Am7 (D→E on beat 3) | Vln I | C5 G5 F5 G5 | C5 w | D4 h → E4 h | A3 w | — | same |
 | 4 | Dm7 · Dm7 (C on beat 4) | Dm7 · Dm7/C | Vln I | C6 F5 E5 F5 | A4 w | F4 w | D3 dh, C3 q | — | *poco* < |
 | 5 | B♭maj7 | B♭maj7 | Vln I | D5 A5 G5 A5 | **pulse** A4 | **pulse** F4 | B♭2 q on beats 1 and 3 (ten.), octave drop | — | *p*; pulse *p leggiero* |
-| 6 | C/B♭ | Csus4/B♭ → C/B♭ | Vln I | D6 G5 F5 G5 | pulse G4 | pulse F4 (1&, 2&) → E4 (3&, 4&) | B♭2 q, beats 1 and 3 | — | |
-| 7 | Am7 | Am7(11) → Am7 | Vln I | E6 G5 F5 G5 | pulse G4, no 4& hit | pulse D4 (1&, 2&) → E4 (3&), no 4& | A2 q (beat 1), A2 q (beat 3), A2 8 on 4& (chart pickup) | — | *poco cresc.* |
+| 6 | C/B♭ | Csus4/B♭ → C/B♭ | Vln I | D6 G5 F5 G5 | pulse G4+C5 | pulse F4 (1&, 2&) → E4 (3&, 4&) | B♭2 q, beats 1 and 3 | — | |
+| 7 | Am7 | Am7(11) → Am7 | Vln I | E6 G5 F5 G5 | pulse G4+C5, no 4& hit | pulse D4 (1&, 2&) → E4 (3&), no 4& | A2 q (beat 1), A2 q (beat 3), A2 8 on 4& (chart pickup) | — | *poco cresc.* |
 | 8 | Dm7 · Dm7 (C on 4) | Dm(sus4) → Dm7 · Dm7/C | Vln I top; Vln II the chart's lower sixth | F6 E6 D6 (8, 8, dh) | A5 G5 F5 (8, 8, dh) | G4 h → F4 h (4→3) | D3 q, D3+A3 q, D3 q, C3 q | **enters** D2 q, r, D2 q, C2 q | *mp*; violins < beats 1–2, > to *p* by beat 4; Cb *pp*<*mp* |
 
 Notes:
@@ -163,7 +163,7 @@ Notes:
 | 11 | Am7 | Am7, **no E on beats 1–2** | Vln I | C5 G5 F5 G5 F5 G5 C6 C6 G5 | A4 h → E5 h | A3 C4 G4 C4 · A3 E4 G4 C4 | A2 w | A1 w | |
 | 12 | Dm7 · Dm7/C | Dm7 · Dm7/C | Vln I | G5 A5 G5 A5 G5 E5, F5 h | D5 h → **motto answer** F4 C5 B♭4 C5 (8,16,16,8) + 8 rest, *p*, under the held F5 | D4 F4 A4 F4, D4 q, F4 q (**no A** while Vln II's B♭4 sounds, pos 11) | D3 q, D3+A3 q, D3 q, C3 q | D2 q, r, D2 q, C2 q | |
 | 13 | B♭maj7 | B♭maj7 | **Vln I + Vln II 8vb** (first octave doubling) | theme | melody 8vb (D4–D5), same bowing | broken 8ths moved down into C3–D4 (e.g. F3 B♭3 D4 B♭3 D3 F3 A3 D4) | 3+3+2 on B♭2, ten. ★ | 3+3+2 on B♭1 | *mf* |
-| 14 | C/B♭ | C/B♭ | 8ves | A5 G5 …, C5 h | … C4 h | C3 E3 G3 C4 + the staccato fill B♭3 G4 E4 C4 | 3+3+2 B♭2 | 3+3+2 B♭1 | |
+| 14 | C/B♭ | C/B♭ | 8ves | A5 G5 …, C5 h | … C4 h | G3 C4 E4 C4 + the staccato fill B♭3 G4 E4 C4 (no C3 over the B♭ bass) | 3+3+2 B♭2 | 3+3+2 B♭1 | |
 | 15 | Am7 | Am7, **no E on beats 1–2** | 8ves | … C6 C6 E6 | … C5 C5 E5 | A3 C4 G3 C4 · A3 E3 G3 C4 | 3+3+2 A2 (beat 4 = the chart's pickup) | 3+3+2 A1 | *cresc. poco a poco* |
 | 16 | Dm7 · walk D–C–B♭–A | Dm7 · Dm – Dm/C – B♭maj7 – Dm/A (passing) → Gm7 | 8ves to the barline | D6 E6 D6 E6 D6 C6 D6 A5 D6 E6 | 8vb D5 E5 D5 E5 D5 C5 D5 A4 D5 E5 | beats 1–2 D3 F3 A3 F3; beats 3–4 16th run **A3 B♭3 C4 D4 E4 F4 G4 A4** → B♭3+F4 at 17 | D3 q, D3+A3 q, **walk** D3 C3 B♭2 A2 (8ths, marcato) | D2 q, r q, **walk** D2 C2 B♭1 A1 | *cresc. molto* → **f**; **LAUNCH CUE 1** |
 
@@ -176,14 +176,14 @@ Notes:
 
 | Bar | Chart | Strings | Melody | Vln I | Vln II | Vla (guide tones, div.) | Vc (chart LH) | Cb | Dyn |
 |---|---|---|---|---|---|---|---|---|---|
-| 17 | Gm7 | Gm7 | Vln I | F6 held 10 16ths, then D6 E6 F6; *largamente*, full bows | F5+B♭5 w (div.) | B♭3+F4 w | G2 q, B♭3 D4 F4 **B♭3 D4** G2 (★ two notes swapped against a parallel octave with the melody) | G1 w | **f** |
+| 17 | Gm7 | Gm7 | Vln I | F6 held 10 16ths, then D6 E6 F6; *largamente*, full bows | F5+B♭5 w (div.) | B♭3+F4 w | G2 q > (the walk lands, as in 25), B♭3 D4 F4 **B♭3 D4** G2 (★ two notes swapped against a parallel octave with the melody) | G1 w > | **f** |
 | 18 | C7(♭9,13) | C7(♭9,13) = B♭m6/C, **no F in the upper strings** | Vln I | A6 dq, G6 dq~q | **D♭6** dq, D♭6 dq~q, *espr.* (the colour note) | B♭3+E4 w | C3 q, E3 G3 B♭3 G3 E3 C3 | C2 w | *f* < > |
 | 19 | Fmaj7 | Fmaj7 | Vln I | E6 dq, C6 dq~q | C6 dq, A5 dq~q | A3+E4 w | F2 F3 A3 C4 E4 C4 A3 F2 | F1 w | *f* |
 | 20 | B♭maj7 · B♭maj7(13) | B♭maj7(13) | Vln I | A5 dq, G5 dq~q | D5 dq, D5 dq~q | **D4+A4** w (open strings; never A3, which sits a semitone under the Vc's B♭3) | B♭2 B♭3 D4 F4 A4 F4 D4 B♭2 | B♭1 w | *f*, *poco dim.* |
 | 21 | Em7♭5 | Em7♭5 (A–B♭ passing octaves on beat 4) | Vln I (+ Vln II 8vb on beat 4) | B♭5 dh, A5 B♭5 (8ths) | D5+G5 dh, A4 B♭4 (8ths) | D4+G4 w | E3 dq, E3+B♭3 dq, r 8, E3 8 | E2 dh, r 8, E2 8 (pickup) | *mf, poco meno* (the saddest bar) |
 | 22 | A7(♯9) · A7(♭9) | A7(♯9→♭9) | Vln I | C6 B♭5 A5 (3+3+2) | C♯5+E5 3+3+2 | C♯4+G4 w | A2 q, C♯3 E3 G3 E3 C♯3 A2 | A1 w | *cresc.* → *f* |
 | 23 | Dm7(11) · Dm7 | Dm7(11) | Vln I | G5 F5 G5 (3+3+2) | C5 3+3+2 | C4+F4 w | D3 dq, D3+A3 dq, A2 q | D2 dh, A1 q | *subito mf* (a breath) |
-| 24 | D7(♭9) | D7(♭9) = V/ii | Vln I | A5 F♯5 G5 A5 (q) | **E♭5** q q q (re-struck with the chart's chords), F♯5 q | C4+F♯4 h → C4+A4 h (**no F♯ under the melody's G5**, beat 3) | D3 q, F♯3+C4 q, **walk** D3 C3 B♭2 A2 | D2 q, r q, **walk** D2 C2 B♭1 A1 | *cresc. molto* → **ff**; **LAUNCH CUE 2** |
+| 24 | D7(♭9) | D7(♭9) = V/ii | Vln I | A5 F♯5 G5 A5 (q) | **E♭5** q q q (re-struck with the chart's chords), F♯5 q | C4+A4 w (**no F♯ in the Vla**: the Vc's F♯3 has it, and none may sit under the melody's G5, beat 3) | D3 q, F♯3+C4 q, **walk** D3 C3 B♭2 A2 | D2 h (holds D under beat 2), **walk** D2 C2 B♭1 A1 | *cresc. molto* → **ff**; **LAUNCH CUE 2** |
 
 Notes:
 - The violins sing the chart's right hand as a choir, in the chart's rhythm. Ties are one merged note, never re-attacked.
@@ -197,7 +197,7 @@ Notes:
 |---|---|---|---|---|---|---|---|---|---|
 | 25 | Gm7 | Gm7 | **Vln I + Vln II 8vb** | as 17 | F5 (10 16ths), D5 E5 F5 | B♭4+D5 w | as 17 (same swap) | G1 w | **ff** |
 | 26 | C7(♭9,13) | as 18; the **D♭ moves to the Vla** (D5→D♭5, chromatic) | 8ves | A6 dq, G6 dq~q | A5 dq, G5 dq~q | B♭4+D♭5 dq, B♭4+D♭5 8, then **bariolage B♭4–D♭5** on beats 3–4 (the riser) | as 18, *cresc.* | C2 w, *cresc.* | *ff*; beats 3–4 *cresc. molto* (no subito p) |
-| 27 | Fmaj7(11) (= C7/F) → Fmaj7 | 4–3: **B♭6 → A6** over C–E | 8ves; Vln I = the chart's 8va | **B♭6** dq, A6 dq~q: THE SUMMIT, highest note of the body | B♭5 dq, A5 dq~q | bariolage G4–C5 (pos 0–5), then **C5–A4** (pos 6–15, upper note first): the A arrives with the resolution | F2 F3 A3 C4 E4 C4 A3 F3 (chart; its A3 at pos 4 is the chart's own rub, allowed) | F1 w | ***ff con tutta forza*** |
+| 27 | Fmaj7(11) (= C7/F) → Fmaj7 | 4–3: **B♭6 → A6** over C–E | 8ves; Vln I = the chart's 8va | **B♭6** dq, A6 dq~q: THE SUMMIT, highest note of the body | B♭5 dq, A5 dq~q | bariolage C5–E4 (pos 0–5; E4 is the chart's tritone under the B♭), then **C5–A4** (pos 6–15, upper note first): the A arrives with the resolution | F2 F3 A3 C4 E4 C4 A3 F3 (chart; its A3 at pos 4 is the chart's own rub, allowed) | F1 w | ***ff con tutta forza*** |
 | 28 | B♭maj7(13) · B♭maj7 | same (G→F) | 8ves | G6 dq, F6 dq~q | G5, F5 | bariolage A4–D5 | **chart's block LH:** B♭2 dq, D3+A3 dq, B♭2 q | B♭1 dh + B♭1 q | *ff* |
 | 29 | Em7♭5 | Em7♭5 | 8ves | A6 G6 (8ths), 8 rest, D6 dq~q | A5 G5, rest, D5 | bariolage B♭4–D5 (keeps moving through the violins' 8th rest) | E2 dq, G3+D4 dq, E2 q | E1 dh + E1 q (open E) | *f* |
 | 30 | (chart: A7(♭9)) | **A7(♭13)** (F→E over A) | 8ves | F6 E6, rest, A5 dq~q | F5 E5, rest, A4 | bariolage **C♯4–G4** (no E while F sounds; below Vln II's A4) | A2 dq, E3+C♯4 dq, A2 q | A1 dh + A1 q | *f*, *dim.* from beat 3 |
@@ -219,11 +219,11 @@ Notes:
 | 36 | Dm7 · Dm7 (C on 4) | Dm7 → Dm7/C | Vln I (the held A5; MELODY_FREE) | A5 held to beat 4; beat 4 16th **pickup A5 B♭5 C6 D6** → 37 | F5 dh, **rest on beat 4** | A4+C5 dh, **rest on beat 4** (nothing may rub against the pickup's B♭5) | D3 q, D3+A3 q, D3 q, C3 q | pizz. D2 q, r, D2 q, C2 q | *mp* < *mf* |
 | 37 | B♭maj7(♯11) | same | **Vln I (chart's 8va) + Vln II (chart's written pitch)** | ostinato E6 D6 A5 … (détaché 8ths, accents on the 3+3+2 notes) | ostinato E5 D5 A4 … | **bariolage B♭3–D4** (accents on 1, 2&, 4) | **arco**: 3+3+2 marcato B♭2 (dq, dq, q) | **arco**: 3+3+2 marcato B♭1 | *mf* |
 | 38 | Fmaj7/C | same | 8ves | F6 E6 A5 … | F5 E5 A4 … | bariolage A3–F4 | 3+3+2 C3 | 3+3+2 C2 | *f* |
-| 39 | Dm11 · Dm7 | same | 8ves | G6 F6 A5 G6 F6 A5 F6 E6 | G5 F5 A4 G5 F5 A4 F5 E5 | bariolage D4–A4 (open strings) | **8th chug** D3 ×8, accents 1, 2&, 4 (the last layer) | 3+3+2 D2 | *cresc. molto* |
-| 40 | D5 (no 3rd, as chart) · **G.P.** | same | Vln I | D6 dh, **rest** | A5 dh, **rest** | bariolage A4–D5 on beats 1–3, **rest** | D3 q, D3+A3 q, D3 q (marcato), **rest** | D2 q q q (marcato), **rest** ★ (chart's C on beat 4 dropped) | **ff** (< through beats 1–3); **beat 4 G.P.** |
+| 39 | Dm11 · Dm7 | same | 8ves | G6 F6 A5 G6 F6 A5 F6 E6 | G5 F5 A4 G5 F5 A4 F5 E5 | bariolage D4–C5 (the chart's Dm11 C) | **8th chug** D3 ×8, accents 1, 2&, 4 (the last layer) | 3+3+2 D2 | *cresc. molto* |
+| 40 | D5 (no 3rd, as chart) · **G.P.** | same | Vln I | D6 dh, **rest** | A5 dh, **rest** | bariolage A4–D5 on beats 1–3, **rest** | D3 q, D3+A3 q, D3 q (marcato), **rest** | D2 q q q (marcato), **rest** ★ (chart's C on beat 4 dropped) | ***f*** < through beats 1–3 into the G.P., ***ff*** at 41; **beat 4 G.P.** |
 
 Notes:
-- The ostinato's top note climbs E5 → F5 → G5 across 33–35 and reaches A5 in 36; phrase it so that this rise is heard. The viola bariolage in 37–40 repeats the climb on its upper notes: D4 → F4 → A4 → D5.
+- The ostinato's top note climbs E5 → F5 → G5 across 33–35 and reaches A5 in 36; phrase it so that this rise is heard. The viola bariolage in 37–40 repeats the climb on its upper notes: D4 → F4 → C5 → D5.
 - Vln I's 8ths in 37–39 are *non legato*, never slurred across the 3+3+2 groups, so that ACE picks détaché or spiccato.
 
 ### E · Reprise · 再现 (b.41–48): the biggest climax
@@ -232,18 +232,18 @@ E is one continuous climax. It **lands** at 41 (ff, fullest texture, straight af
 
 | Bar | Chart | Strings | Melody | Vln I | Vln II | Vla | Vc | Cb | Dyn |
 |---|---|---|---|---|---|---|---|---|---|
-| 41 | B♭maj7 | B♭maj7 | **Vln I + Vln II 8vb** | A5 D6 D6 D6 A5 A5 A5 F5 F5 F5 A5 (8, then 16-16-8 ×3, then 8): accented 8ths, lighter 16ths | 8vb (A4–D5) | **bariolage D4–F4** (below Vln II; not B♭3, which would rub against the Vc's A3) | **chart's LH strokes:** B♭2 8 (>), rest, D3+A3 q on 2&, rest, D3+A3 q on 4 | 3+3+2 B♭1, marcato | **ff** tutti (*Grandioso*) |
-| 42 | C/B♭ | C9/B♭ (F♯5 = chromatic lower neighbour, melody only) | 8ves | A5 G5 G5 G5 F♯5, G5 h (swell) | 8vb (F♯4) | bariolage E4–C4 (E first) | B♭2 8, E3+C4 q, E3+C4 8, then the **chart's fill** B♭3 G4 E4 C4 (marcato) inside the held G5 | 3+3+2 B♭1 | *ff* |
-| 43 | Am7 | Am7 | 8ves | G5 C6 C6 C6 G5 G5 G5 E5 E5 E5 G5 | 8vb | bariolage E4–A3 (E first) | chart pulse: A2 8, E3+C4 q, E3+C4 8, A2 8, E3+C4 q, A2 8 | 3+3+2 A1 | *ff* |
-| 44 | Dm7 · Dm7 | Dm7 · ★ walk Dm – Dm/C – B♭maj7 – Dm/A → Gm | 8ves | G5 F5 F5 F5 E5, F5 h | 8vb | bariolage A3–D4, *cresc. molto* | D3 q, F3+C4 q, **walk** D3 C3 B♭2 A2 | D2 h, **walk** D2 C2 B♭1 A1 | *cresc. molto*; **LAUNCH CUE 3** (★ added) |
-| 45 | Gm7(11) · Gm7 (E bass on 4&) | Gm7(11) | **melody in three octaves**: Vln I, Vln II 8vb, Vla 15mb (two octaves below) | C6 B♭5 F5 C6~C6 B♭5 (8, 8, 8, q, dq), *largamente* | C5 B♭4 F4 C5 B♭4 | C4 B♭3 F3 C4 B♭3 | **the chart's sweep** G2 D3 G3 B♭3 F4 (8ths), B♭3 q, E2 8 | G1 to 4&, then E1 8 | ***fff***, *allargando* |
-| 46 | A7(♭9) | A7(♭9) | Vln I | B♭5 dq >, A5 dq >, E5 q | C♯5+E5 dq, dq, **rest** | G4+B♭4 dq, dq, **rest** | A2+E3 dq, dq, r 8, A2 8 | A1 dq, dq, r 8, A1 8 | *fff*, *molto allarg.*; beat 4 thins (catch-breath) |
+| 41 | B♭maj7 | B♭maj7 | **Vln I (chart's 8va) + Vln II (chart's pitch)** | A6 D7 D7 D7 A6 A6 A6 F6 F6 F6 A6 (8, then 16-16-8 ×3, then 8): accented 8ths, lighter 16ths | A5 D6 D6 D6 A5 … (A5–D6) | **bariolage D4–F4** (below Vln II; not B♭3, which would rub against the Vc's A3) | **chart's LH strokes:** B♭2+F3 8 (>), rest, D3+A3 q on 2&, rest, D3+A3 q on 4 | 3+3+2 B♭1, marcato | **ff** tutti (*Grandioso*) |
+| 42 | C/B♭ | C9/B♭ (F♯5 = chromatic lower neighbour, melody only) | 8ves | A6 G6 G6 G6 F♯6, G6 h (swell) | A5 G5 G5 G5 F♯5, G5 h | bariolage E4–C4 (E first) on beats 1–2, **rest** on beats 3–4 (the Vc fill) | B♭2 8, E3+C4 q, E3+C4 8, then the **chart's fill** B♭3 G4 E4 C4 (marcato) inside the held G5 | 3+3+2 B♭1 | *ff* |
+| 43 | Am7 | Am7 | 8ves | G6 C7 C7 C7 G6 G6 G6 E6 E6 E6 G6 | G5 C6 … (chart pitch) | bariolage E4–A3 (E first) | chart pulse: A2 8, E3+C4 q, E3+C4 8, A2 8, E3+C4 q, A2 8 | 3+3+2 A1 | *ff* |
+| 44 | Dm7 · Dm7 | Dm7 · ★ walk Dm – Dm/C – B♭maj7 – Dm/A → Gm | 8ves | G6 F6 F6 F6 E6, F6 h | G5 F5 F5 F5 E5, F5 h | bariolage A3–D4, *cresc. molto* | D3 q, F3+C4 q, **walk** D3 C3 B♭2 A2 | D2 h, **walk** D2 C2 B♭1 A1 | *cresc. molto*; **LAUNCH CUE 3** (★ added) |
+| 45 | Gm7(11) · Gm7 (E bass on 4&) | Gm7(11) | **melody in three octaves**: Vln I (chart's 8va), Vln II (chart's pitch), Vla 8vb of Vln II | C7 B♭6 F6 C7 B♭6 (8, 8, 8, q, dq), *largamente* | F5+C6 B♭5 F5 C6 B♭5 | C5 B♭4 F4 C5 B♭4 | **the chart's sweep** G2 D3 G3 B♭3 F4 (8ths), B♭3 q, E2 8 | G1 to 4&, then E1 8 | ***fff***, *allargando* |
+| 46 | A7(♭9) | A7(♭9) | Vln I | B♭6 dq ^, A6 dq ^, E6 q (the 8va ends here; 47 *loco*) | E5+C♯6 dq, dq, **rest** | G4+B♭4 dq, dq, **rest** | A2+E3 dq, dq, r 8, A2 8 | A1 dq, dq, r 8, A1 8 | *fff*, *molto allarg.*; beat 4 thins (catch-breath) |
 | 47 | Dm9 | Dm9 | Vln I | **E5** dh, E5 q (the chart's octave, not E6) | C5 dh, A4 q | F3+C4 dh, F4 q | D3 A3 E4 (q), rest | D2 dh, rest | **Largamente**; *f* > |
 | 48 | Dm7 · Dm7/C | Dm7 → Dm7/C, **third kept** | Vln I | D5 w | A4 w | F4 w | D3 (+C4) h → C3 h, ten. | D2 h → C2 h | *p* → *pp*, *rit.* |
 
 Notes:
 - The chart's rolled chords (45, and 51 in the coda) are **not** imitated with grace notes or spreads; they become clean tutti downbeats.
-- The unison C on the downbeat of 45 is a sus4 "cry". The Vc sweep supplies the Gm7(11) harmony inside the bar. Optionally, the beat-1 note may be a double stop with an added F (Vln II F4+C5, or Vla C4+F4).
+- The unison C on the downbeat of 45 is a sus4 "cry". The Vc sweep supplies the Gm7(11) harmony inside the bar. Vln II adds the F under its downbeat C (F5+C6, *non div.*).
 
 ### F · Coda · 尾声 (b.49–52)
 
@@ -264,15 +264,15 @@ Final spacing: B♭1 · B♭2 · B♭4 C5 E5 G5 · C7. This is IV with its 9th a
 
 | Section | Vln I | Vln II | Vla | Vc | Cb |
 |---|---|---|---|---|---|
-| Intro 1–8 | motto D5–E6; b.8 F6–D6; alone on top | pad A4/G4 (1–4); pulse (5–7); lower sixth A5–F5 (8) | pad F4/E4/D4 with 4→3 sighs; pulse; G4→F4 (8) | the chart's bass octave B♭3/A3 (1–4), B♭2/A2 (5–7), D3 (8) | tacet → D2 at 8 |
+| Intro 1–8 | motto D5–E6; b.8 F6–D6; alone on top | pad A4, G4→C5, C5, A4 (1–4); pulse A4, G4+C5 (5–7); lower sixth A5–F5 (8) | pad F4/E4/D4 with 4→3 sighs; pulse; G4→F4 (8) | the chart's bass octave B♭3/A3 (1–4), B♭2/A2 (5–7), D3 (8) | tacet → D2 at 8 |
 | A 9–16 | theme D5–E6 | colour pad A4–E5 under the melody + b.12 answer; melody 8vb D4–E5 (13–16) | broken 8ths F3–A4 (9–12), C3–D4 (13–16); fills 10/14; run 16 | long roots; cadence quarters (12); 3+3+2 (13–15); walk | B♭1/A1 floor; walk |
 | B 17–24 | top of the chart's RH chords, A5–A6 | inner colour voice C5–D♭6 | guide-tone dyads B♭3–A4 (lament) | the chart's LH arpeggio G2–A4 at pitch; dyads in 21/23; walk | roots F1–E2 |
 | C 25–32 | as B, then the chart's 8va 27–31 (peak B♭6) | melody 8vb F5–A4 | dyads B♭4–D♭5 → 16th bariolage C♯4–D5 (26–30) | arpeggios 25–27; the chart's 3+3+2 blocks 28–30; D–A–E (31) | roots; E1 at 29 |
 | D 33–40 | tacet 33–34; sky pedal A5 + pickup; ostinato 8va E6–G6 (37–39); D6 (40) | ostinato at chart pitch E5–G5 (the tune in 33–35; 8vb double in 37–39) | low tenuto dyads F3–C4 (33–35), A4+C5 (36); climbing bariolage (37–40) | short arco tresillo; chart quarters (36); marcato tresillo; chug (39); hammer (40) | **pizz.** tresillo (33–36); arco marcato; hammer |
-| E 41–48 | reprise melody F5–D6; the C6 line (45); B♭5–E5 (46) | melody 8vb | bariolage A3–F4 (41–44), melody 15mb (45), A7(♭9) dyads (46), F3–F4 (47–48) | the chart's LH strokes and fill (41–43), walk (44), sweep (45), hammer (46), D–A–E (47) | tresillo (41–43), walk, G1→E1 (45), hammer (46) |
+| E 41–48 | reprise melody at the chart's 8va F6–D7; the C7 line (45); B♭6–E6 (46); E5 *loco* (47) | melody at the chart's pitch | bariolage A3–F4 (41–44, resting for the Vc fill in 42 beats 3–4), melody 8vb (45), A7(♭9) dyads (46), F3–F4 (47–48) | the chart's LH strokes and fill (41–43), walk (44), sweep (45), hammer (46), D–A–E (47) | tresillo (41–43), walk, G1→E1 (45), hammer (46) |
 | F 49–52 | coda line D6–D7, final C7 | chord F5+A5 → E5+G5 | B♭4+D5 → B♭4+C5 | B♭2 (49, 51–52) | B♭1 (49, 51–52) |
 
-Range contract (sounding): Vln I stays at or below A6 except B♭6 (b.27), D7 (b.50) and C7 (b.52). Vln II goes up to D♭6. Vla C3–D5 (alto clef throughout). Vc C2–A4 (A4 only in the b.20 arpeggio). Cb E1–D2 in this plan; G2 is available if a writer needs it.
+Range contract (sounding): Vln I stays at or below A6 except B♭6 (b.27), the reprise 41–46 (D7 in 41, C7 in 43 and 45), D7 (b.50) and C7 (b.52). Vln II goes up to D♭6. Vla C3–D5 (alto clef throughout). Vc C2–A4 (A4 only in the b.20 arpeggio). Cb E1–D2 in this plan; G2 is available if a writer needs it.
 
 ### 4.2 Articulation vocabulary (build.py token → score → what ACE's smart mode hears)
 
@@ -282,9 +282,9 @@ Range contract (sounding): Vln I stays at or below A6 except B♭6 (b.27), D7 (b
 | Held or syncopated chord note | `~` tie | tie | **one merged note**, never re-attacked (vital for 3+(3~2)) |
 | Détaché | plain token | — | 20-tick gap → détaché |
 | Spiccato / leggiero short | `*` | staccato dot | half length → short stroke |
-| Tenuto / portato | `_` | tenuto line | full length |
-| Accent | `>` | accent | +12 velocity |
-| Hammer (40, 46) | `^` | marcato | +12 velocity |
+| Tenuto / portato | `_` | tenuto line | full length; connected only to a stepwise next note, else the 20-tick détaché gap |
+| Accent | `>` | accent | +12 velocity; inside a crescendo it stays at least 6 below the note the crescendo lands on |
+| Hammer (40, 46) | `^` | marcato | +12 velocity (same crescendo cap) |
 | Final fermata | `!` | 𝄐 (b.52 only) | the tempo map stretches it |
 | 16th drive | written-out 16ths on **two alternating pitches** (bariolage) | plain 16ths | separate notes, which do not merge; the cleanest option in ACE |
 
@@ -303,7 +303,7 @@ Allowed expression text: *espr.*, *dolce*, *cantabile*, *leggiero*, *marcato*, *
 - **Notation:** a quarter rest in every staff, with the text **"G.P."** over it in every part: `TEXT[pid] += [(40, 12, "G.P.")]`. No fermata, no caesura, no tempo change.
 - **MIDI:** every note ends exactly at 40.12. Nothing is tied or slurred into beat 4. The b.40 crescendo hairpin ends at (40, 11), and the next dynamic mark is *ff* at (41, 0), so that the CC swell does not carry into the gap.
 - **What gets dropped:** the chart's passing C on beat 4 (★).
-- **Before and after:** beats 1–3 are hammered: Vc and Cb D–D–D (marcato), violins holding D6/A5 with a crescendo, Vla bariolage. On the downbeat of 41 all five attack together at *ff*: Vln I A5, Vln II A4, Vla D4, Vc B♭2, Cb B♭1.
+- **Before and after:** beats 1–3 are hammered at *f* with a crescendo into the cut-off: Vc and Cb D–D–D (marcato), violins holding D6/A5, Vla bariolage. On the downbeat of 41 all five attack together at *ff*, the level the crescendo reached: Vln I A6, Vln II A5, Vla D4, Vc B♭2+F3, Cb B♭1. (Round 1: 40 was *ff* < *ff*, which in the MIDI peaked before the G.P. and dropped at the landing; `--check` now reports any hairpin that does not lead to a louder / softer mark.)
 
 ### 4.4 Octave doublings and the peaks
 - **Vln I / Vln II octaves:**
@@ -311,11 +311,11 @@ Allowed expression text: *espr.*, *dolce*, *cantabile*, *leggiero*, *marcato*, *
   - 21, beat 4: the chart's own A–B♭ octaves;
   - 25–30: the lift to the summit;
   - 37–39: the drive;
-  - 41–45: grandioso.
+  - 41–45: grandioso, Vln I at the chart's 8va and Vln II at the chart's pitch (round 1).
 
   Vln II copies Vln I's rhythm, slurs, ties and accents exactly.
 - **Three octaves:** only in b.45, where the Vla joins two octaves below Vln I.
-- **Register peaks:** B♭6 in b.27 (*ff*, with B♭5 in Vln II) is the highest note of the body. D7 in b.50 is a *soft* peak. C7 in b.52 is the last sound. Nothing else in Vln I goes above A6.
+- **Register peaks:** B♭6 in b.27 (*ff*, with B♭5 in Vln II) is the summit of Chorus II. The reprise goes above it: D7 in 41, C7 in 43 and at the *fff* crest in 45, so the biggest climax is also the highest. D7 in b.50 is a *soft* peak. C7 in b.52 is the last sound.
 - **Bass octaves:** Vc and Cb play in octaves whenever both carry the bass: the walks (16, 24, 44), the tresillos (13–15, 33–43), and the hammers (40, 46).
 - **Parallel open fifths:** none are planned. The film concept's Vc "power fifths" were replaced by viola bariolage.
 
@@ -330,16 +330,16 @@ Allowed expression text: *espr.*, *dolce*, *cantabile*, *leggiero*, *marcato*, *
   - Vln II 17, 21, 31, 49–52;
   - Vla 17–24 (the lament), 25–26, 31, 33–36, 47, 51–52.
 - **Short rhythmic dyads stay double stops:**
-  - Vln II 22 and 46 (C♯5+E5);
+  - Vln II 6–7 (G4+C5 pulse), 22 (C♯5+E5), 45 beat 1 (F5+C6) and 46 (E5+C♯6);
   - Vla 46 (G4+B♭4);
-  - Vc D3+A3 (open), E3+B♭3, G3+D4, E3+C4, F♯3+C4, F3+C4, A2+E3.
+  - Vc D3+A3 (open), E3+B♭3, G3+D4, E3+C4, F♯3+C4, F3+C4, A2+E3, B♭2+F3 (41).
 - **Cb:** never.
 - **Playability:** every dyad in the skeleton passes build.py's STOP check.
 
 ### 4.7 Clefs and engraving
 - Vla: alto clef throughout (top note D5).
 - Vc: bass clef throughout. Single apex notes (F4, A4, E4, G4) stay in bass clef with ledger lines rather than flickering between clefs. Tenor clef is permitted only for b.20 or b.42, beats 3–4, if the engraver prefers.
-- Vln I 27–31 (beats 1–3), 37–40 and 49–52 may be printed under an *8va* line if engrave.py supports it. The MIDI stays at sounding pitch either way.
+- Vln I is printed under an *8va* line in 25–31 (to beat 3 of 31), 36 beat 4 – 46, and 49–52 (`OTTAVA` in build.py); 31 beat 4 and 47 are marked *loco*. The MIDI stays at sounding pitch either way.
 - Rehearsal letters are boxed. The G.P., pizz./arco and every tempo word from §2 appear in all parts.
 
 ---
@@ -369,14 +369,14 @@ These are the pitches each part has at the last beat of one section and the firs
 | | Vln II | A4 w | E5 8th (ostinato), *mp*, *a tempo* |
 | | Vla | F4 w | F3+A3 dq |
 | | Vc | C3 h | B♭2 short 8th |
-| | Cb | C2 h | B♭1 **pizz.** |
+| | Cb | C2 h | B♭1 short 8th, arco *secco* |
 | **40 → 41** | all | **beat 4 silent (G.P.)** | all attack together, **ff** |
-| | Vln I | D6 (beats 1–3) | A5 8th |
-| | Vln II | A5 (beats 1–3) | A4 8th |
+| | Vln I | D6 (beats 1–3) | A6 8th |
+| | Vln II | A5 (beats 1–3) | A5 8th |
 | | Vla | bariolage A4–D5 (last 16th D5 at pos 11) | bariolage D4–F4 (D4 first) |
-| | Vc | D3 q (beat 3, marcato) | B♭2 8th > |
+| | Vc | D3 q (beat 3, marcato) | B♭2+F3 8th > |
 | | Cb | D2 q (beat 3, marcato) | B♭1 dq, marcato |
-| **44 → 45** (inside E) | Vln I / Vln II / Vla | F5 h / F4 h / bariolage A3–D4 | C6 / C5 / C4, **fff** |
+| **44 → 45** (inside E) | Vln I / Vln II / Vla | F6 h / F5 h / bariolage A3–D4 | C7 / F5+C6 / C5, **fff** |
 | | Vc / Cb | walk … A2 / … A1 | G2 8th / G1 |
 | **48 → 49** | Vln I | D5 w, *pp*, *rit.* | D6 q, *pp dolce*: the octave lift |
 | | Vln II | A4 w | rest h, then F5+A5 |
@@ -394,11 +394,14 @@ These are the pitches each part has at the last beat of one section and the firs
 
    ```python
    MELODY = {b: [("vn1", 0)] for b in range(1, 53)}
-   for b in (13, 14, 15, 16, 25, 26, 27, 28, 29, 30, 37, 38, 39, 41, 42, 43, 44):
+   for b in (13, 14, 15, 16, 25, 26, 27, 28, 29, 30, 37, 38, 39):
        MELODY[b] = [("vn1", 0), ("vn2", -12)]
    for b in (33, 34, 35):
        MELODY[b] = [("vn2", 0)]
-   MELODY[45] = [("vn1", 0), ("vn2", -12), ("va", -24)]
+   for b in (41, 42, 43, 44):                     # round 1: E an octave up
+       MELODY[b] = [("vn1", 12), ("vn2", 0)]
+   MELODY[45] = [("vn1", 12), ("vn2", 0), ("va", -12)]
+   MELODY[46] = [("vn1", 12)]
    MELODY_FREE = {36: "A5 held over from b.35 in Vln I (sky pedal)"}
    ```
 
@@ -416,7 +419,7 @@ These are the pitches each part has at the last beat of one section and the firs
    - no A in the Vla at 12 pos 11;
    - Vln II and Vla silent on beat 4 of 36;
    - no B♭3 in the Vla in 41 (Vc A3);
-   - nothing sounding G against Vln II's F♯4 in 42 (pos 8–10).
+   - nothing sounding G against the violins' F♯6 / F♯5 in 42 (pos 6–7).
 4. **No parallel 5ths or 8ves**, except the planned doublings:
 
    ```python
@@ -449,6 +452,7 @@ These are the pitches each part has at the last beat of one section and the firs
    - b.40, beat 4: the passing C bass is dropped for the G.P.
    - b.44, beats 3–4: launch walk D–C–B♭–A added (not in the chart).
    - b.45: melody tripled in octaves.
+   - b.41–46: the reprise an octave above the chart (Vln I 8va, Vln II at pitch, Vla an octave below Vln II in 45); 47 returns to the chart's E5 (*loco*).
    - b.51–52: Vc and Cb B♭ pedal added under the chart's treble-only C/B♭.
    - Rolled chords (45, 51) are played as plain chords.
    - The chart's LH register in 1–4 is kept, but split between Vln II and Vla as single lines.
@@ -506,6 +510,10 @@ Your draft sorts after `00_` and overrides the skeleton's bars. Check one bar *b
 | Coda voicing exactly as the chart (Vln II F5+A5 / E5+G5, Vla B♭4+D5 / B♭4+C5), with Vc and Cb B♭ ppp under 51–52 | film (J2) | Rejected: variety's B♭maj9 ending, and chamber's cello quote and reharmonisation under the fermata |
 | Rejected: chamber's removal of E3 in 18 and 26, its invented G–F–E bass in 45, its ♩ = 92 coda; variety's misreadings of 29 (E6) and 31 (E5) and its ♩ = 96 G.P. beat; film's Vc tenor counter-melody in 29–30 and its Vc 16th fifths in 37–44 | J1, J2 | Harmony changes, misreadings, or mud |
 | Not taken: Vc motto answers in 5–7 | chamber (optional) | Keeps the intro's gaps empty ("the letter's breath"); the answer idea lives in Vln II at b.12 |
+| Round 1 (review): E an octave up (41–46); C added to the intro pad (Vln II C5 in 2–3, G4+C5 pulse in 6–7); Cb holds D under 24 beat 2 and the Vla drops its F♯4 there; Vla 14 G3–E4 (not C3 over the B♭ bass); Vla 27 E4 (the chart's B♭–E tritone); Vla 39 D4–C5 (the chart's Dm11 C); Vla rests for the Vc fill in 42 beats 3–4; Vc B♭2+F3 on the 41 landing; 40 *f* < into the G.P.; *sonoro* for *largamente* at 17 | review panel | Fidelity to the chart's chords; the biggest climax must also be the highest and the loudest; "Largamente" is kept for the tempo mark at 47 |
+| Round 1, rejected: Vla D4+F4 or Vln II A4 in 23 (the C♯→C octave is Vln II doubling the lament, as in 20–22); Vln II B♭5+D♭6 div. in 18 (halves the unison D♭6 colour note); Cb tenuto in 36 (the secco continues) | lead | Would break the lament or the signature D♭6 |
+| Round 2: §3, §4 and §5 brought in line with build.py after round 1 (the tables above now describe the written notes); Cb *dim.* in 47 with the Vc, into the *p* at 48 | lead | build.py is the source of truth; a later writer must not revert round 1 from stale rows |
+| Round 2.5 (ACE MIDI): an un-slurred tenuto touches its next note only by step (the leaps at 8→9, 12→13, 15→16, 35→36, 45, 45→46, 46→47, 47, 48 get the détaché gap, so ACE hears no slur the score lacks); an accent inside a crescendo stays at least 6 below the note the crescendo lands on (walks 16/24/44, hammers 40); Vc/Cb accent on the 17 landing, as in 25 | lead | The landings are the loudest attacks in the velocity-only render; the 3+3+2 accents of 39 keep their bite. Reviewer's flat cap at the crescendo's target was not taken: it erased them |
 
 **Fallbacks, to be decided after an ACE test render:**
 1. If D7 / C7 in the coda sound thin or whistly, move Vln I in 49–52 down an octave, to the chart's written pitch D5–C6. Vln II and Vla then drop their chords an octave too (Vln II F4+A4 → E4+G4; Vla B♭3+D4 → B♭3+C4).

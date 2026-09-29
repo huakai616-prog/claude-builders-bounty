@@ -66,6 +66,7 @@ def ly_notes(p, events, part_mode=False):
         by_bar.setdefault(e["bar"], []).append(e)
     ott = [((b1 - 1) * B.BAR16 + s1, (b2 - 1) * B.BAR16 + s2)
            for b1, s1, b2, s2 in B.OTTAVA.get(p["id"], [])]
+    low_line = B.midi_of(BOTTOM_LINE[p["clef"]])
     ott_on = False
     lines = []
     for b in range(1, B.NBARS + 1):
@@ -103,15 +104,15 @@ def ly_notes(p, events, part_mode=False):
                 if not last or e["tie"]:
                     t += "~"
                 if first and e["accent"]:
-                    t += "->"
+                    t += "_>" if accent_below(e, octv, low_line) else "->"
                 if first and e["marcato"]:
-                    t += "-^"
+                    t += "^^"          # below, an inverted ^ reads as up-bow
                 if first and e["stacc"]:
                     t += "-."
                 if first and e["tenuto"]:
                     t += "--"
                 if last and e["fermata"]:
-                    t += "\\fermata"
+                    t += "-\\tweak outside-staff-priority #500 \\fermata"
                 if first and e["slur_start"]:
                     t += "("
                 if last and e["slur_end"]:
@@ -178,15 +179,89 @@ def spacer_line(att, pre=None):
     return "\n    ".join(out)
 
 
+BOTTOM_LINE = {"treble": "E4", "alto": "F3", "bass": "G2"}
+MIDDLE_LINE = {"treble": "B4", "alto": "C4", "bass": "D3"}
+
+
+def accent_below(e, octv, low_line):
+    """An accent on a note on or below the bottom line goes under it (or
+    under its beam): above, it would be pushed out over the staff, far from
+    its notehead."""
+    return min(B.midi_of(x) for x in e["pitches"]) + octv <= low_line
+
+
+def _steps(p, octv=0):
+    """Diatonic staff steps of a pitch name (written, with octv)."""
+    s, o = p[0], int(re.search(r"-?\d+$", p).group())
+    return "CDEFGAB".index(s) + 7 * (o + octv // 12)
+
+
+def _stem_steps(e, events, octv, mid):
+    """Staff steps from the middle line of the notes that set e's stem
+    direction: its beam group (8ths / 16ths), else its own chord."""
+    group = [e]
+    if e["dur"] <= 2:
+        bar = [x for x in events if x["bar"] == e["bar"]]
+        i = bar.index(e)
+        lo = hi = i
+        short = lambda x: x["pitches"] and x["dur"] <= 2 and \
+            x["pos"] // 8 == e["pos"] // 8
+        while lo > 0 and short(bar[lo - 1]):
+            lo -= 1
+        while hi + 1 < len(bar) and short(bar[hi + 1]):
+            hi += 1
+        group = bar[lo:hi + 1]
+    return [_steps(y, octv) - mid for x in group for y in x["pitches"]]
+
+
+def dyn_padding(p, events):
+    """16th -> staff-padding for the dynamic line that starts there, where a
+    low accented note, or a tenuto / staccato under a low stem-up note,
+    would otherwise sit on the dynamic (the dynamics are a separate voice
+    and do not avoid another voice's articulations)."""
+    octv = p.get("written_octave", 0)
+    low_line = B.midi_of(BOTTOM_LINE[p["clef"]])
+    bottom = _steps(BOTTOM_LINE[p["clef"]])
+    mid = _steps(MIDDLE_LINE[p["clef"]])
+    out = {}
+    for e in events:
+        if not e["pitches"]:
+            continue
+        low = min(_steps(x, octv) for x in e["pitches"])
+        below = (bottom - low) / 2
+        if e["accent"] and accent_below(e, octv, low_line):
+            st = _stem_steps(e, events, octv, mid)
+            # beamed with the beam under it: the accent goes under the beam
+            out[e["abs"]] = below + (6.0 if e["dur"] <= 2
+                                     and max(st) > -min(st) else 3.6)
+        elif (e["tenuto"] or e["stacc"]) and low - bottom <= 2:
+            st = _stem_steps(e, events, octv, mid)
+            if max(st) < -min(st):          # stem up: the mark hangs below
+                out[e["abs"]] = below + 3.6
+    return out
+
+
 DYN_WORDS = {"sfz", "fp", "sf", "ppp", "pp", "p", "mp", "mf", "f", "ff",
              "fff"}
 
 
-def ly_dynamics(p):
+def ly_dynamics(p, events):
     att = [[] for _ in range(TOTAL + 1)]
     pre = [[] for _ in range(TOTAL + 1)]
     dyn_at = {pos(b, s) for b, s, _ in p["dyn"]}
     starts = {pos(b, s) for b, s, *_ in p["hair"]}
+    # a dynamic that ends a hairpin would belong to the line the hairpin
+    # began (often on the previous system): end that hairpin a 16th early
+    # so the padded dynamic starts a line of its own. The skyline stacking
+    # ignores staff-padding, so it is switched off for that one line.
+    padded = {}
+    for t, pad in dyn_padding(p, events).items():
+        if t in dyn_at or t in starts:
+            padded[t] = pad
+            pre[t].append("\\once \\override DynamicLineSpanner"
+                          ".outside-staff-priority = ##f "
+                          "\\once \\override DynamicLineSpanner.staff-padding"
+                          f" = #{pad:.1f}")
     for b, s, mark in p["dyn"]:
         att[pos(b, s)].append("\\" + mark)
     for b, s, b2, s2, kind in p["hair"]:
@@ -195,20 +270,26 @@ def ly_dynamics(p):
         end = z + 1
         if end >= TOTAL:
             att[z].append("\\!")
+        elif end in padded:
+            att[z].append("\\!")
         elif end not in dyn_at and end not in starts:
             att[end].append("\\!")
     for b, s, txt in p["text"]:
         att[pos(b, s)].append(
-            f"^\\markup \\whiteout \\italic {ly_str(txt)}")
+            ("-\\tweak self-alignment-X #CENTER " if txt == "G.P." else "")
+            + f"^\\markup \\whiteout \\italic {ly_str(txt)}")
     for b, s, c in B.CLEFS.get(p["id"], []):
         pre[pos(b, s)].append(f"\\clef {c}")
     return spacer_line(att, pre)
 
 
+TEMPO_FONT = "\\override #'(font-name . \"TeX Gyre Pagella Bold\") \\fontsize #1 "
+
+
 def tempo_markup(text, bpm=None):
     if bpm is None:
-        return f"\\tempo \\markup \\bold {ly_str(text)}"
-    return ("\\tempo \\markup { \\bold " + ly_str(text) + " \\hspace #1.2 "
+        return f"\\tempo \\markup {TEMPO_FONT}{ly_str(text)}"
+    return ("\\tempo \\markup { " + TEMPO_FONT + ly_str(text) + " \\hspace #1.2 "
             "\\concat { \\fontsize #-1.5 \\general-align #Y #DOWN "
             "\\note {4} #UP \\normal-text \" = " + str(bpm) + "\" } }")
 
@@ -337,7 +418,7 @@ def paper_score(total):
   markup-system-spacing = #'((basic-distance . 14) (minimum-distance . 10)
                              (padding . 4) (stretchability . 6))
   system-system-spacing = #'((basic-distance . 22) (minimum-distance . 14)
-                             (padding . 7) (stretchability . 60))
+                             (padding . 7) (stretchability . 14))
   top-system-spacing = #'((basic-distance . 14) (minimum-distance . 10)
                           (padding . 4) (stretchability . 4))
   last-bottom-spacing = #'((basic-distance . 8) (minimum-distance . 5)
@@ -382,6 +463,12 @@ def title_block():
 """
 
 
+# cautionary naturals after an accidental in the previous bar, in any
+# octave (as the MusicXML has them)
+AUTO_ACC = ("autoAccidentals = #`(Staff ,(make-accidental-rule 'same-octave 0) "
+            ",(make-accidental-rule 'any-octave 0) "
+            ",(make-accidental-rule 'any-octave 1))")
+
 LAYOUT = """
 \\layout {
   \\context {
@@ -394,6 +481,7 @@ LAYOUT = """
     \\override RehearsalMark.self-alignment-X = #LEFT
     \\override RehearsalMark.padding = #2.2
     \\override MetronomeMark.padding = #1.6
+    \\override MetronomeMark.skyline-horizontal-padding = #2
     \\override RehearsalMark.outside-staff-priority = #1500
     \\override MetronomeMark.outside-staff-priority = #1400
     \\override TextScript.outside-staff-priority = #450
@@ -401,9 +489,14 @@ LAYOUT = """
     \\override Hairpin.to-barline = ##t
     \\override DynamicTextSpanner.style = #'none
     \\override StaffGrouper.staffgroup-staff-spacing =
-      #'((basic-distance . 12) (minimum-distance . 9) (padding . 2))
+      #'((basic-distance . 12) (minimum-distance . 8) (padding . 1.5)
+         (stretchability . 12))
     \\override StaffGrouper.staff-staff-spacing =
-      #'((basic-distance . 12) (minimum-distance . 9) (padding . 2))
+      #'((basic-distance . 12) (minimum-distance . 8) (padding . 1.5)
+         (stretchability . 12))
+    \\override SpacingSpanner.common-shortest-duration = #(ly:make-moment 1/4)
+    \\override MetronomeMark.font-features = #'("lnum")
+    %(accidentals)s
   }
   \\context {
     \\Staff
@@ -414,7 +507,7 @@ LAYOUT = """
     \\override InstrumentName.font-size = #1
   }
 }
-"""
+""" % {"accidentals": AUTO_ACC}
 
 
 def staff(p, parsed, top):
@@ -438,7 +531,7 @@ def staff(p, parsed, top):
         {notes}
       }}
       \\new Voice {{
-        {ly_dynamics(p)}
+        {ly_dynamics(p, parsed[pid])}
       }}
       \\new Voice {{
         {glob}
@@ -450,6 +543,7 @@ BAR_COUNTER = """
     \\new Dynamics \\with {
       \\consists Measure_counter_engraver
       \\override MeasureCounter.font-encoding = #'latin1
+      \\override MeasureCounter.font-features = #'("lnum")
       \\override MeasureCounter.font-series = #'bold
       \\override MeasureCounter.font-size = #0.2
       \\override MeasureCounter.outside-staff-priority = ##f
@@ -523,8 +617,8 @@ def paper_part(p, total):
   bookTitleMarkup = ##f
   scoreTitleMarkup = ##f
   ragged-last = ##f
-  ragged-bottom = ##t
-  ragged-last-bottom = ##t
+  ragged-bottom = ##f
+  ragged-last-bottom = ##f
   markup-system-spacing = #'((basic-distance . 12) (padding . 4))
   system-system-spacing = #'((basic-distance . 15) (minimum-distance . 11)
                              (padding . 3.5) (stretchability . 12))
@@ -585,7 +679,7 @@ def part_source(p, total):
       }}
     }}
     \\new Voice {{
-      {ly_dynamics(p)}
+      {ly_dynamics(p, parsed[p["id"]])}
     }}
     \\new Voice {{
       {ly_global(score=p['id'])}
@@ -602,7 +696,16 @@ def part_source(p, total):
       \\override MultiMeasureRest.expand-limit = #1
       \\override MultiMeasureRestNumber.outside-staff-priority = #50
       \\override MetronomeMark.skyline-horizontal-padding = #2
+      \\override MetronomeMark.padding = #1.6
+      \\override MetronomeMark.font-features = #'("lnum")
+      \\override BarNumber.font-features = #'("lnum")
       \\override Hairpin.to-barline = ##t
+      {AUTO_ACC}
+    }}
+    \\context {{
+      \\Staff
+      ottavationMarkups = #ottavation-ordinals
+      \\override OttavaBracket.font-shape = #'italic
     }}
   }}
 }}

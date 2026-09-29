@@ -127,7 +127,7 @@ PART_BREAKS["cb"] = tuple(range(9, NBARS, 4))
 CLEFS = {}              # part id -> [(bar, 16th, "tenor" / "treble" / ...)]
 # printed 8va lines (notation only; data and MIDI stay at sounding pitch):
 # part id -> [(bar, 16th, last bar, last 16th)]
-OTTAVA = {"vn1": [(27, 0, 31, 11), (37, 0, 40, 11), (49, 0, 52, 15)]}
+OTTAVA = {"vn1": [(25, 0, 31, 11), (36, 12, 46, 15), (49, 0, 52, 15)]}
 # <<< FORM
 
 # ---------------------------------------------------------------------------
@@ -182,12 +182,12 @@ VN1 = {
     39: 'G6/2> F6/2 A5/2 G6/2> F6/2 A5/2 F6/2> E6/2',
     40: 'D6/12> r/4',
     # E Reprise 再现 (41-48)
-    41: 'A5/2> D6/1 D6/1 D6/2> A5/1 A5/1 A5/2> F5/1 F5/1 F5/2> A5/2',
-    42: 'A5/2> G5/1 G5/1 G5/2> (F#5/2 G5/8)',
-    43: 'G5/2> C6/1 C6/1 C6/2> G5/1 G5/1 G5/2> E5/1 E5/1 E5/2> G5/2',
-    44: 'G5/2> F5/1 F5/1 F5/2> (E5/2 F5/8)',
-    45: 'C6/2> Bb5/2_ F5/2_ C6/4> Bb5/6_',
-    46: 'Bb5/6^ A5/6^ E5/4_',
+    41: 'A6/2> D7/1 D7/1 D7/2> A6/1 A6/1 A6/2> F6/1 F6/1 F6/2> A6/2',
+    42: 'A6/2> G6/1 G6/1 G6/2> (F#6/2 G6/8)',
+    43: 'G6/2> C7/1 C7/1 C7/2> G6/1 G6/1 G6/2> E6/1 E6/1 E6/2> G6/2',
+    44: 'G6/2> F6/1 F6/1 F6/2> (E6/2 F6/8)',
+    45: 'C7/2> Bb6/2_ F6/2_ C7/4> Bb6/6_',
+    46: 'Bb6/6^ A6/6^ E6/4_',
     47: 'E5/12_ (E5/4',
     48: 'D5/16)',
     # F Coda 尾声 (49-52)
@@ -199,12 +199,12 @@ VN1 = {
 VN2 = {
     # Intro 前奏 (1-8)
     1: 'A4/16',
-    2: 'G4/16~',
-    3: 'G4/16',
+    2: 'G4/8 C5/8~',
+    3: 'C5/16',
     4: 'A4/16',
     5: 'r/2 A4/4 A4/2* r/2 A4/4 A4/2*',
-    6: 'r/2 G4/4 G4/2* r/2 G4/4 G4/2*',
-    7: 'r/2 G4/4 G4/2* r/2 G4/4 r/2',
+    6: 'r/2 G4+C5/4 G4+C5/2* r/2 G4+C5/4 G4+C5/2*',
+    7: 'r/2 G4+C5/4 G4+C5/2* r/2 G4+C5/4 r/2',
     8: '(A5/2 G5/2 F5/12_)',
     # A Theme 主题 (9-16)
     9: 'C5/16',
@@ -243,12 +243,12 @@ VN2 = {
     39: 'G5/2> F5/2 A4/2 G5/2> F5/2 A4/2 F5/2> E5/2',
     40: 'A5/12> r/4',
     # E Reprise 再现 (41-48)
-    41: 'A4/2> D5/1 D5/1 D5/2> A4/1 A4/1 A4/2> F4/1 F4/1 F4/2> A4/2',
-    42: 'A4/2> G4/1 G4/1 G4/2> (F#4/2 G4/8)',
-    43: 'G4/2> C5/1 C5/1 C5/2> G4/1 G4/1 G4/2> E4/1 E4/1 E4/2> G4/2',
-    44: 'G4/2> F4/1 F4/1 F4/2> (E4/2 F4/8)',
-    45: 'F4+C5/2> Bb4/2_ F4/2_ C5/4> Bb4/6_',
-    46: 'C#5+E5/6^ C#5+E5/6^ r/4',
+    41: 'A5/2> D6/1 D6/1 D6/2> A5/1 A5/1 A5/2> F5/1 F5/1 F5/2> A5/2',
+    42: 'A5/2> G5/1 G5/1 G5/2> (F#5/2 G5/8)',
+    43: 'G5/2> C6/1 C6/1 C6/2> G5/1 G5/1 G5/2> E5/1 E5/1 E5/2> G5/2',
+    44: 'G5/2> F5/1 F5/1 F5/2> (E5/2 F5/8)',
+    45: 'F5+C6/2> Bb5/2_ F5/2_ C6/4> Bb5/6_',
+    46: 'E5+C#6/6^ E5+C#6/6^ r/4',
     47: 'C5/12_ A4/4~',
     48: 'A4/16',
     # F Coda 尾声 (49-52)
@@ -273,7 +273,7 @@ VA = {
     11: '(A3/2 C4/2 G4/2 C4/2) (A3/2 E4/2 G4/2 C4/2)',
     12: '(D4/2 F4/2 A4/2 F4/2) (D4/4 F4/4)',
     13: '(F3/2 Bb3/2 D4/2 Bb3/2) (D3/2 F3/2 A3/2 D4/2)',
-    14: '(C3/2 E3/2 G3/2 C4/2) Bb3/2* G4/2* E4/2* C4/2*',
+    14: '(G3/2 C4/2 E4/2 C4/2) Bb3/2* G4/2* E4/2* C4/2*',
     15: '(A3/2 C4/2 G3/2 C4/2) (A3/2 E3/2 G3/2 C4/2)',
     16: '(D3/2 F3/2 A3/2 F3/2) (A3/1 Bb3/1 C4/1 D4/1) (E4/1 F4/1 G4/1 A4/1)',
     # B Chorus I 副歌·一 (17-24)
@@ -284,12 +284,12 @@ VA = {
     21: 'D4+G4/16',
     22: 'C#4+G4/16',
     23: 'C4+F4/16',
-    24: 'C4+F#4/8 C4+A4/8',
+    24: 'C4+A4/16',
     # C Chorus II 副歌·二 (25-32)
     25: 'Bb4+D5/16',
     26: 'Bb4+Db5/6_ Bb4+Db5/2_ (Bb4/1 Db5/1 Bb4/1 Db5/1) (Bb4/1 Db5/1 '
         'Bb4/1 Db5/1)',
-    27: '(C5/1 G4/1 C5/1 G4/1) (C5/1 G4/1 C5/1 A4/1) (C5/1 A4/1 C5/1 '
+    27: '(C5/1 E4/1 C5/1 E4/1) (C5/1 E4/1 C5/1 A4/1) (C5/1 A4/1 C5/1 '
         'A4/1) (C5/1 A4/1 C5/1 A4/1)',
     28: '(D5/1 A4/1 D5/1 A4/1) (D5/1 A4/1 D5/1 A4/1) (D5/1 A4/1 D5/1 '
         'A4/1) (D5/1 A4/1 D5/1 A4/1)',
@@ -308,19 +308,18 @@ VA = {
         'D4/1 Bb3/1> D4/1 Bb3/1 D4/1',
     38: 'A3/1> F4/1 A3/1 F4/1 A3/1 F4/1 A3/1> F4/1 A3/1 F4/1 A3/1 F4/1 '
         'A3/1> F4/1 A3/1 F4/1',
-    39: 'D4/1> A4/1 D4/1 A4/1 D4/1 A4/1 D4/1> A4/1 D4/1 A4/1 D4/1 A4/1 '
-        'D4/1> A4/1 D4/1 A4/1',
+    39: 'D4/1> C5/1 D4/1 C5/1 D4/1 C5/1 D4/1> C5/1 D4/1 C5/1 D4/1 C5/1 '
+        'D4/1> C5/1 D4/1 C5/1',
     40: 'A4/1> D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 A4/1 D5/1 r/4',
     # E Reprise 再现 (41-48)
     41: 'D4/1> F4/1 D4/1 F4/1 D4/1 F4/1 D4/1> F4/1 D4/1 F4/1 D4/1 F4/1 '
         'D4/1> F4/1 D4/1 F4/1',
-    42: 'E4/1> C4/1 E4/1 C4/1 E4/1 C4/1 E4/1> C4/1 E4/1 C4/1 E4/1 C4/1 '
-        'E4/1> C4/1 E4/1 C4/1',
+    42: 'E4/1> C4/1 E4/1 C4/1 E4/1 C4/1 E4/1> C4/1 r/8',
     43: 'E4/1> A3/1 E4/1 A3/1 E4/1 A3/1 E4/1> A3/1 E4/1 A3/1 E4/1 A3/1 '
         'E4/1> A3/1 E4/1 A3/1',
     44: 'A3/1> D4/1 A3/1 D4/1 A3/1> D4/1 A3/1 D4/1 A3/1> D4/1 A3/1 D4/1 '
         'A3/1> D4/1 A3/1 D4/1',
-    45: 'C4/2> Bb3/2_ F3/2_ C4/4> Bb3/6_',
+    45: 'C5/2> Bb4/2_ F4/2_ C5/4> Bb4/6_',
     46: 'G4+Bb4/6^ G4+Bb4/6^ r/4',
     47: 'F3+C4/12_ F4/4~',
     48: 'F4/16',
@@ -350,7 +349,7 @@ VC = {
     15: 'A2/6_ A2/6_ A2/4_',
     16: 'D3/4_ D3+A3/4_ D3/2> C3/2> Bb2/2> A2/2>',
     # B Chorus I 副歌·一 (17-24)
-    17: 'G2/4 (Bb3/2 D4/2 F4/2 Bb3/2 D4/2) G2/2',
+    17: 'G2/4> (Bb3/2 D4/2 F4/2 Bb3/2 D4/2) G2/2',
     18: 'C3/4 (E3/2 G3/2 Bb3/2 G3/2 E3/2 C3/2)',
     19: 'F2/2 (F3/2 A3/2 C4/2 E4/2 C4/2 A3/2) F2/2',
     20: 'Bb2/2 (Bb3/2 D4/2 F4/2 A4/2 F4/2 D4/2) Bb2/2',
@@ -377,7 +376,7 @@ VC = {
     39: 'D3/2> D3/2 D3/2 D3/2> D3/2 D3/2 D3/2> D3/2',
     40: 'D3/4^ D3+A3/4^ D3/4^ r/4',
     # E Reprise 再现 (41-48)
-    41: 'Bb2/2> r/4 D3+A3/4> r/2 D3+A3/4>',
+    41: 'Bb2+F3/2> r/4 D3+A3/4> r/2 D3+A3/4>',
     42: 'Bb2/2> E3+C4/4> E3+C4/2 Bb3/2>* G4/2>* E4/2>* C4/2>*',
     43: 'A2/2> E3+C4/4> E3+C4/2 A2/2 E3+C4/4> A2/2',
     44: 'D3/4> F3+C4/4 D3/2> C3/2> Bb2/2> A2/2>',
@@ -411,14 +410,14 @@ CB = {
     15: 'A1/6_ A1/6_ A1/4_',
     16: 'D2/4_ r/4 D2/2> C2/2> Bb1/2> A1/2>',
     # B Chorus I 副歌·一 (17-24)
-    17: 'G1/16',
+    17: 'G1/16>',
     18: 'C2/16',
     19: 'F1/16',
     20: 'Bb1/16',
     21: 'E2/12 r/2 E2/2',
     22: 'A1/16',
     23: 'D2/12 A1/4',
-    24: 'D2/4 r/4 D2/2> C2/2> Bb1/2> A1/2>',
+    24: 'D2/8 D2/2> C2/2> Bb1/2> A1/2>',
     # C Chorus II 副歌·二 (25-32)
     25: 'G1/16>',
     26: 'C2/16',
@@ -457,8 +456,8 @@ DYN = {
          (11, 12, 'mf'), (12, 8, 'p'), (13, 0, 'mf'), (17, 0, 'f'),
          (19, 0, 'f'), (21, 0, 'mf'), (22, 12, 'f'), (23, 0, 'mf'),
          (25, 0, 'ff'), (27, 0, 'ff'), (29, 0, 'f'), (31, 0, 'mf'),
-         (32, 0, 'p'), (35, 0, 'pp'), (37, 0, 'mf'), (38, 0, 'f'),
-         (40, 0, 'ff'), (41, 0, 'ff'), (43, 0, 'ff'), (45, 0, 'fff'),
+         (32, 0, 'p'), (35, 0, 'pp'), (37, 0, 'mf'),
+         (40, 0, 'f'), (41, 0, 'ff'), (43, 0, 'ff'), (45, 0, 'fff'),
          (47, 0, 'f'), (49, 0, 'pp'), (50, 4, 'p'), (51, 0, 'pp'),
          (52, 12, 'ppp')],
     'vn2': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
@@ -466,30 +465,30 @@ DYN = {
          (13, 0, 'mf'), (17, 0, 'f'), (19, 0, 'f'), (21, 0, 'mf'),
          (22, 12, 'f'), (23, 0, 'mf'), (25, 0, 'ff'), (27, 0, 'ff'),
          (29, 0, 'f'), (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'mp'),
-         (37, 0, 'mf'), (38, 0, 'f'), (40, 0, 'ff'), (41, 0, 'ff'),
+         (37, 0, 'mf'), (40, 0, 'f'), (41, 0, 'ff'),
          (43, 0, 'ff'), (45, 0, 'fff'), (47, 0, 'mf'), (49, 8, 'pp'),
-         (50, 4, 'pp'), (51, 0, 'ppp')],
+         (51, 0, 'ppp')],
     'va': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
          (3, 12, 'p'), (4, 0, 'pp'), (5, 2, 'p'), (8, 0, 'mp'), (9, 0, 'p'),
          (13, 0, 'mp'), (17, 0, 'f'), (18, 0, 'mf'), (22, 12, 'f'),
          (23, 0, 'mf'), (25, 0, 'ff'), (26, 0, 'f'), (27, 0, 'ff'),
          (29, 0, 'mf'), (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'p'),
-         (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'ff'), (41, 0, 'ff'),
-         (42, 0, 'f'), (45, 0, 'fff'), (47, 0, 'mf'), (49, 8, 'pp'),
+         (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'f'), (41, 0, 'ff'),
+         (45, 0, 'fff'), (47, 0, 'mf'), (49, 8, 'pp'),
          (51, 0, 'ppp')],
     'vc': [(1, 0, 'ppp'), (1, 8, 'pp'), (2, 12, 'p'), (3, 0, 'pp'),
          (3, 12, 'p'), (4, 0, 'pp'), (5, 0, 'p'), (8, 0, 'mp'), (9, 0, 'p'),
          (13, 0, 'mp'), (17, 0, 'f'), (18, 0, 'mf'), (21, 0, 'mp'),
          (22, 12, 'f'), (23, 0, 'mp'), (25, 0, 'ff'), (26, 0, 'f'),
          (27, 0, 'ff'), (29, 0, 'mf'), (31, 0, 'mp'), (32, 0, 'pp'),
-         (33, 0, 'p'), (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'ff'),
+         (33, 0, 'p'), (37, 0, 'mp'), (38, 0, 'mf'), (40, 0, 'f'),
          (41, 0, 'ff'), (45, 0, 'fff'), (46, 14, 'mf'), (48, 0, 'p'),
          (49, 0, 'pp'), (51, 0, 'ppp')],
     'cb': [(8, 0, 'pp'), (8, 8, 'mp'), (9, 0, 'p'), (13, 0, 'mp'), (17, 0, 'f'),
          (18, 0, 'mf'), (21, 0, 'mp'), (22, 12, 'f'), (23, 0, 'mp'),
          (25, 0, 'ff'), (26, 0, 'f'), (27, 0, 'ff'), (29, 0, 'mf'),
          (31, 0, 'mp'), (32, 0, 'pp'), (33, 0, 'p'), (37, 0, 'mp'),
-         (38, 0, 'mf'), (40, 0, 'ff'), (41, 0, 'ff'), (45, 0, 'fff'),
+         (38, 0, 'mf'), (40, 0, 'f'), (41, 0, 'ff'), (45, 0, 'fff'),
          (46, 14, 'mf'), (48, 0, 'p'), (49, 0, 'pp'), (51, 0, 'ppp')],
 }
 HAIR = {
@@ -498,27 +497,28 @@ HAIR = {
          (15, 0, 16, 15, 'cresc'), (18, 0, 18, 7, 'cresc'),
          (18, 8, 18, 15, 'dim'), (20, 8, 20, 15, 'dim'),
          (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
-         (26, 6, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
+         (28, 6, 28, 15, 'dim'),
          (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
          (35, 0, 36, 15, 'cresc'), (39, 0, 39, 15, 'cresc'),
-         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 15, 'cresc'),
-         (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
+         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 11, 'cresc'),
+         (42, 12, 42, 15, 'dim'), (44, 0, 44, 15, 'cresc'),
+         (46, 12, 46, 15, 'dim'), (47, 0, 48, 15, 'dim'),
          (49, 8, 50, 3, 'cresc'), (50, 4, 50, 15, 'dim'),
          (51, 12, 52, 11, 'dim')],
     'vn2': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
-         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 5, 1, 'cresc'),
+         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 4, 15, 'cresc'),
          (7, 0, 8, 3, 'cresc'), (8, 4, 8, 11, 'dim'),
          (15, 0, 16, 15, 'cresc'), (18, 0, 18, 7, 'cresc'),
          (18, 8, 18, 15, 'dim'), (20, 8, 20, 15, 'dim'),
          (22, 0, 22, 11, 'cresc'), (24, 0, 24, 15, 'cresc'),
-         (26, 6, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
+         (28, 6, 28, 15, 'dim'),
          (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
          (35, 0, 36, 11, 'cresc'), (39, 0, 39, 15, 'cresc'),
-         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 15, 'cresc'),
-         (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
-         (50, 4, 50, 15, 'dim')],
+         (40, 0, 40, 11, 'cresc'), (42, 6, 42, 11, 'cresc'),
+         (42, 12, 42, 15, 'dim'), (44, 0, 44, 15, 'cresc'),
+         (47, 0, 48, 15, 'dim'), (50, 4, 50, 15, 'dim')],
     'va': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
-         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 5, 1, 'cresc'),
+         (3, 6, 3, 11, 'cresc'), (3, 12, 3, 15, 'dim'), (4, 8, 4, 15, 'cresc'),
          (7, 0, 7, 15, 'cresc'), (8, 8, 8, 15, 'dim'),
          (12, 8, 12, 15, 'cresc'), (15, 0, 16, 15, 'cresc'),
          (17, 4, 17, 15, 'dim'), (22, 0, 22, 11, 'cresc'),
@@ -526,7 +526,7 @@ HAIR = {
          (26, 8, 26, 15, 'cresc'), (28, 6, 28, 15, 'dim'),
          (30, 6, 30, 15, 'dim'), (31, 0, 31, 15, 'dim'),
          (35, 0, 36, 11, 'cresc'), (39, 0, 39, 15, 'cresc'),
-         (40, 0, 40, 11, 'cresc'), (41, 2, 41, 15, 'dim'),
+         (40, 0, 40, 11, 'cresc'),
          (44, 0, 44, 15, 'cresc'), (47, 0, 48, 15, 'dim'),
          (50, 4, 50, 15, 'dim')],
     'vc': [(1, 0, 1, 7, 'cresc'), (2, 6, 2, 11, 'cresc'), (2, 12, 2, 15, 'dim'),
@@ -549,21 +549,25 @@ HAIR = {
          (28, 6, 28, 15, 'dim'), (30, 6, 30, 15, 'dim'),
          (31, 0, 31, 11, 'dim'), (35, 0, 36, 15, 'cresc'),
          (39, 0, 39, 15, 'cresc'), (40, 0, 40, 11, 'cresc'),
-         (44, 0, 44, 15, 'cresc'), (48, 0, 48, 15, 'dim')],
+         (44, 0, 44, 15, 'cresc'), (47, 0, 47, 11, 'dim'),
+         (48, 0, 48, 15, 'dim')],
 }
 TEXT = {
-    'vn1': [(1, 0, 'espr.'), (9, 0, 'espr.'), (17, 0, 'largamente'),
-         (21, 0, 'espr.'), (27, 0, 'con tutta forza'), (32, 0, 'dolce'),
-         (40, 12, 'G.P.'), (49, 0, 'lontano')],
-    'vn2': [(5, 2, 'leggiero'), (12, 8, 'dolce'), (17, 0, 'div.'),
+    'vn1': [(1, 0, 'espr.'), (9, 0, 'espr.'), (17, 0, 'sonoro'),
+         (21, 0, 'espr.'), (27, 0, 'con tutta forza'), (31, 12, 'loco'),
+         (32, 0, 'dolce'), (40, 12, 'G.P.'), (47, 0, 'loco'),
+         (49, 0, 'lontano')],
+    'vn2': [(5, 2, 'leggiero'), (12, 8, 'dolce'), (17, 0, 'div. sonoro'),
          (18, 0, 'unis. espr.'), (21, 0, 'div.'), (21, 12, 'unis.'),
-         (27, 0, 'con tutta forza'), (31, 0, 'div.'), (31, 12, 'unis.'),
-         (33, 0, 'leggiero'), (40, 12, 'G.P.'), (49, 8, 'div.')],
-    'va': [(5, 2, 'leggiero'), (17, 0, 'div.'),
+         (22, 0, 'non div.'), (27, 0, 'con tutta forza'), (31, 0, 'div.'),
+         (31, 12, 'unis.'), (33, 0, 'leggiero'), (40, 12, 'G.P.'),
+         (45, 0, 'non div.'), (46, 0, 'non div.'), (49, 8, 'div.')],
+    'va': [(5, 2, 'leggiero'), (17, 0, 'div. sonoro'),
          (26, 8, 'unis.'), (27, 0, 'con tutta forza'), (31, 0, 'div.'),
          (31, 12, 'unis.'), (33, 0, 'div.'), (37, 0, 'unis.'),
-         (40, 12, 'G.P.'), (47, 0, 'div.'),
-         (47, 12, 'unis.'), (51, 0, 'div.')],
+         (40, 12, 'G.P.'), (46, 0, 'non div.'), (47, 0, 'div.'),
+         (47, 12, 'unis.'), (49, 8, 'div.'), (50, 0, 'unis.'),
+         (51, 0, 'div.')],
     'vc': [(17, 4, 'cantabile'), (27, 0, 'con tutta forza'), (33, 0, 'leggiero'),
          (37, 0, 'marcato'), (40, 12, 'G.P.')],
     'cb': [(27, 0, 'con tutta forza'), (33, 0, 'secco'), (37, 0, 'marcato'),
@@ -596,11 +600,15 @@ DOUBLINGS = [("vn1", "vn2", 13, 16), ("vn1", "vn2", 21, 21), ("vn1", "vn2", 25, 
              ("vn1", "va", 45, 45), ("vc", "cb", 8, 52)]
 # bar -> [(part, octave shift in semitones)]: who carries the chart's melody
 MELODY = {b: [("vn1", 0)] for b in range(1, NBARS + 1)}
-for _b in (13, 14, 15, 16, 25, 26, 27, 28, 29, 30, 37, 38, 39, 41, 42, 43, 44):
+for _b in (13, 14, 15, 16, 25, 26, 27, 28, 29, 30, 37, 38, 39):
     MELODY[_b] = [("vn1", 0), ("vn2", -12)]
 for _b in (33, 34, 35):
     MELODY[_b] = [("vn2", 0)]
-MELODY[45] = [("vn1", 0), ("vn2", -12), ("va", -24)]
+# E: the reprise opens upward (Vln I at the chart's 8va, Vln II at pitch)
+for _b in (41, 42, 43, 44):
+    MELODY[_b] = [("vn1", 12), ("vn2", 0)]
+MELODY[45] = [("vn1", 12), ("vn2", 0), ("va", -12)]
+MELODY[46] = [("vn1", 12)]
 # bars where the melody part deliberately departs from the chart: reason
 MELODY_FREE = {36: "A5 held over from b.35 in Vln I (sky pedal)"}
 # (bar, half) -> reason: the bass deliberately departs from the chart
@@ -663,8 +671,10 @@ OPEN_STRINGS = {"vn1": ["G3", "D4", "A4", "E5"], "vn2": ["G3", "D4", "A4", "E5"]
                 "cb": ["E1", "A1", "D2", "G2"]}
 HAND_SPAN = {"vn1": 7, "vn2": 7, "va": 6, "vc": 4, "cb": 2}
 
+# fff sits above an accented ff (106 + ACCENT), so the 45-46 crest stays
+# the loudest thing in the velocity-only ACE render
 VEL = {"ppp": 26, "pp": 36, "p": 48, "mp": 62, "mf": 76, "f": 92, "ff": 106,
-       "fff": 118, "sfz": 110, "fp": 92, "sf": 104}
+       "fff": 122, "sfz": 110, "fp": 92, "sf": 104}
 ACCENT = 12
 
 # ---------------------------------------------------------------------------
@@ -736,8 +746,8 @@ def split_dur(pos, dur):
                 allowed = [12, 8, 6, 4, 3, 2, 1]
         elif pos % 4 == 2:
             allowed = [6, 4, 2, 1] if pos in (2, 10) else [2, 1]
-            if pos == 6:
-                allowed = [2, 1]
+            if pos == 6:     # 3+3+2: the middle dotted quarter stays whole
+                allowed = [6, 2, 1] if dur == 6 else [2, 1]
         elif pos % 4 == 1:
             allowed = [3, 2, 1]
         else:
@@ -961,8 +971,39 @@ def check(parsed, bars=None):
                             f"{ids[i]}/{ids[j]} "
                             f"{'P8' if iv1 == 0 else 'P5'}")
                 prev = (pa, pb)
+    problems += check_hairpins(bars)
     problems += check_fidelity(parsed, bars)
     return problems
+
+
+def check_hairpins(bars=None):
+    """A hairpin ramps the MIDI curve to the next printed dynamic, so a cresc
+    must lead to a louder mark and a dim to a softer one (ff < ff would peak
+    before the target and drop back on it). The halves of a < > or > <
+    swell (two opposite hairpins that touch) are exempt."""
+    out = []
+    for p in PARTS:
+        dyn = sorted(((b - 1) * BAR16 + s, VEL[m]) for b, s, m in p["dyn"])
+        spans = [((b - 1) * BAR16 + s, (b2 - 1) * BAR16 + s2, k)
+                 for b, s, b2, s2, k in sorted(p["hair"])]
+        for a, z, kind in spans:
+            if not in_bars(a // BAR16 + 1, bars):
+                continue
+            where = f"{p['id']} m{a // BAR16 + 1}.{a % BAR16:02d} {kind}"
+            after = [v for t, v in dyn if t > z]
+            if not after:
+                out.append(f"HAIRPIN: {where} has no dynamic after it")
+                continue
+            before = [v for t, v in dyn if t <= a]
+            if not before or any(k != kind and (z2 + 1 == a or a2 == z + 1)
+                                 for a2, z2, k in spans):
+                continue
+            if (kind == "cresc") == (after[0] <= before[-1]) or \
+                    after[0] == before[-1]:
+                out.append(f"HAIRPIN: {where} leads to "
+                           f"{'a softer' if after[0] < before[-1] else 'the same'}"
+                           " dynamic")
+    return out
 
 
 def check_fidelity(parsed, bars=None):
@@ -1311,16 +1352,18 @@ def polish(path):
                         el.find("direction-type/metronome") is not None:
                     el.set("placement", "above")
     add_wedges(r)
-    # one bold tempo mark: "Moderato con moto ♩ = 112"
-    first_measure = r.find("part/measure")
-    for dr in first_measure.findall("direction"):
-        met = dr.find("direction-type/metronome")
-        if met is not None:
-            dt = ET.Element("direction-type")
-            ET.SubElement(dt, "words", {"font-weight": "bold"}).text = \
-                TEMPO_MARK[0] + " "
-            dr.insert(0, dt)
-            break
+    add_ottavas(r)
+    add_system_text(r)
+    for sa in r.iter("strong-accent"):      # never an inverted, up-bow-like v
+        sa.set("placement", "above")
+    # music21's fixed offsets (default-x -36 / default-y -80 on every
+    # dynamic, 45 on tempo words): placement decides, Sibelius's house
+    # style does the rest
+    for dt in r.iter("direction-type"):
+        for x in list(dt):
+            if x.tag in ("dynamics", "words"):
+                x.attrib.pop("default-x", None)
+                x.attrib.pop("default-y", None)
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()
@@ -1333,16 +1376,72 @@ def polish(path):
         open(path, "w", encoding="utf-8").write(xml)
 
 
+def _per16(r):
+    return int(r.find("part/measure/attributes/divisions").text) // 4
+
+
+def _measures(r, p):
+    ids = {sp.findtext("part-name"): sp.get("id")
+           for sp in r.iter("score-part")}
+    part = r.find(f"part[@id='{ids[p['sib']]}']")
+    return {int(m.get("number")): m for m in part.findall("measure")}
+
+
+def _notes_at(meas, per16):
+    """[(note element, onset in 16ths)] for the non-grace notes of meas."""
+    out, t = [], 0
+    for x in meas:
+        if x.tag == "note":
+            if x.find("grace") is not None:
+                continue
+            if x.find("chord") is not None:
+                out.append((x, out[-1][1] if out else 0))
+                continue
+            out.append((x, t / per16))
+            t += int(x.findtext("duration"))
+        elif x.tag == "backup":
+            t -= int(x.findtext("duration"))
+        elif x.tag == "forward":
+            t += int(x.findtext("duration"))
+    return out
+
+
+def _place(meas, s16, el, per16):
+    """Put el into meas at 16th position s16 (0..16): in front of the note
+    that sounds at that moment, with an <offset> into it, so no <forward> /
+    <backup> (which some importers turn into hidden rests in a second
+    voice) is needed; s16 = 16 is the end of the bar."""
+    t, target = 0, s16 * per16
+    best = None
+    for i, x in enumerate(list(meas)):
+        if x.tag == "note":
+            if x.find("chord") is not None or x.find("grace") is not None:
+                continue
+            if t <= target and (best is None or t >= best[1]):
+                best = (i, t)
+            t += int(x.findtext("duration"))
+        elif x.tag == "backup":
+            t -= int(x.findtext("duration"))
+        elif x.tag == "forward":
+            t += int(x.findtext("duration"))
+    if target >= t or best is None:          # the end of the bar
+        kids = list(meas)
+        at = len(kids)
+        while at and kids[at - 1].tag == "barline":
+            at -= 1
+        meas.insert(at, el)
+        return
+    i, onset = best
+    if target > onset:
+        ET.SubElement(el, "offset").text = str(target - onset)
+    meas.insert(i, el)
+
+
 def add_wedges(r):
     """Write every HAIR entry as a pair of <direction><wedge> elements at its
     exact position: the start at (bar, 16th), the stop at the end of its
-    last 16th. Each direction goes in front of the note that sounds at that
-    moment, with an <offset> into it, so no <forward> / <backup> (which some
-    importers turn into hidden rests in a second voice) is needed."""
-    ids = {sp.findtext("part-name"): sp.get("id")
-           for sp in r.iter("score-part")}
-    div = int(r.find("part/measure/attributes/divisions").text)
-    per16 = div // 4
+    last 16th."""
+    per16 = _per16(r)
 
     def wedge(kind, number):
         d = ET.Element("direction", placement="below")
@@ -1350,41 +1449,103 @@ def add_wedges(r):
         ET.SubElement(dt, "wedge", type=kind, number=str(number))
         return d
 
-    def place(meas, s16, el):
-        """Put el into meas at 16th position s16 (0..16)."""
-        t, target = 0, s16 * per16
-        best = None
-        for i, x in enumerate(list(meas)):
-            if x.tag == "note":
-                if x.find("chord") is not None or x.find("grace") is not None:
-                    continue
-                if t <= target and (best is None or t >= best[1]):
-                    best = (i, t)
-                t += int(x.findtext("duration"))
-            elif x.tag == "backup":
-                t -= int(x.findtext("duration"))
-            elif x.tag == "forward":
-                t += int(x.findtext("duration"))
-        if target >= t or best is None:          # the end of the bar
-            kids = list(meas)
-            at = len(kids)
-            while at and kids[at - 1].tag == "barline":
-                at -= 1
-            meas.insert(at, el)
-            return
-        i, onset = best
-        if target > onset:
-            ET.SubElement(el, "offset").text = str(target - onset)
-        meas.insert(i, el)
-
     for p in PARTS:
-        part = r.find(f"part[@id='{ids[p['sib']]}']")
-        ms = {int(m.get("number")): m for m in part.findall("measure")}
+        ms = _measures(r, p)
         for n, (b1, s1, b2, s2, kind) in enumerate(sorted(p["hair"])):
             num = 1 + n % 2
-            place(ms[b1], s1, wedge(
-                "crescendo" if kind == "cresc" else "diminuendo", num))
-            place(ms[b2], s2 + 1, wedge("stop", num))
+            _place(ms[b1], s1, wedge(
+                "crescendo" if kind == "cresc" else "diminuendo", num), per16)
+            _place(ms[b2], s2 + 1, wedge("stop", num), per16)
+
+
+def add_ottavas(r):
+    """The OTTAVA lines as <octave-shift>: the pitch data stays at sounding
+    pitch and type="down" displays it an octave lower. Stems inside a span
+    are dropped so the importer stems the written notes."""
+    per16 = _per16(r)
+    for p in PARTS:
+        ms = _measures(r, p)
+        for b1, s1, b2, s2 in OTTAVA.get(p["id"], []):
+            d = ET.Element("direction", placement="above")
+            ET.SubElement(ET.SubElement(d, "direction-type"), "octave-shift",
+                          type="down", size="8", number="1")
+            e = ET.Element("direction")
+            ET.SubElement(ET.SubElement(e, "direction-type"), "octave-shift",
+                          type="stop", size="8", number="1")
+            a, z = (b1 - 1) * BAR16 + s1, (b2 - 1) * BAR16 + s2
+            for b in range(b1, b2 + 1):
+                for n, t in _notes_at(ms[b], per16):
+                    if a <= (b - 1) * BAR16 + t <= z:
+                        for s in n.findall("stem"):
+                            n.remove(s)
+            _place(ms[b1], s1, d, per16)
+            _place(ms[b2], s2 + 1, e, per16)
+
+
+def add_system_text(r):
+    """System-level text in the first part, as the PDF prints it: one bold
+    tempo mark per metronome ("Largamente ♩ = 92"), a <sound tempo> for
+    every step of the MIDI tempo map, section names beside the rehearsal
+    letters and the Intro heading; all flagged system="only-top" so that
+    parts extracted in Sibelius keep them."""
+    per16 = _per16(r)
+    ms = _measures(r, PARTS[0])
+    words_at = {(b, txt) for b, s, txt, bpm in TEMPO_TEXT}
+    for b, m in ms.items():
+        for dr in m.findall("direction"):
+            met = dr.find("direction-type/metronome")
+            if met is not None:
+                txt = TEMPO_MARK[0] if b == 1 else next(
+                    t for tb, s, t, bpm in TEMPO_TEXT if tb == b and bpm)
+                for w in m.findall("direction"):
+                    if w is not dr and \
+                            (w.findtext("direction-type/words") or "").strip() \
+                            == txt:
+                        m.remove(w)
+                if (dr.findtext("direction-type/words") or "").strip() != txt:
+                    dt = ET.Element("direction-type")
+                    ET.SubElement(dt, "words", {"font-weight": "bold"}).text \
+                        = txt + " "
+                    dr.insert(0, dt)
+            words = (dr.findtext("direction-type/words") or "").strip()
+            if met is not None or (b, words) in words_at or \
+                    dr.find("direction-type/rehearsal") is not None:
+                dr.set("system", "only-top")
+            reh = dr.find("direction-type/rehearsal")
+            if reh is not None and b in REHEARSAL:
+                _, en, zh = REHEARSAL[b]
+                dt = ET.Element("direction-type")
+                ET.SubElement(dt, "words", {"font-weight": "bold"}).text = \
+                    f" {en} {zh}"
+                dr.insert(list(dr).index(dr.find("direction-type")) + 1, dt)
+    intro = ET.Element("direction", placement="above", system="only-top")
+    ET.SubElement(ET.SubElement(intro, "direction-type"), "words",
+                  {"font-weight": "bold"}).text = \
+        f"{INTRO_TITLE[0]} {INTRO_TITLE[1]}"
+    _place(ms[1], 0, intro, per16)
+    # the tempo map: on the tempo word where there is one, else a bare
+    # <sound>; the last step (the fermata stretch for ACE) is left to the
+    # fermata itself
+    for b, s, bpm in TEMPI[:-1]:
+        m = ms[b]
+        tt = [t for tb, ts, t, x in TEMPO_TEXT if (tb, ts) == (b, s)]
+        host = None
+        for dr in m.findall("direction"):
+            w = (dr.findtext("direction-type/words") or "").strip()
+            if dr.find("direction-type/metronome") is not None and s == 0 \
+                    or (tt and w == tt[0]):
+                host = dr
+                break
+        if host is not None:
+            # an offset without sound="yes" moves only the print: the
+            # tempo would change where the host sits in the stream
+            off = host.find("offset")
+            if off is not None:
+                off.set("sound", "yes")
+            if host.find("sound") is None:
+                ET.SubElement(host, "sound", tempo=str(bpm))
+        else:
+            _place(m, s, ET.Element("sound", tempo=str(bpm)), per16)
 
 
 def verify_bars(path):
@@ -1494,10 +1655,45 @@ GRACE_T = T16 // 2          # a 32nd
 GAP = 40                    # ticks of air between detached notes
 
 
+def note_velocities(p, notes, vel):
+    """Velocity per merged note: the loudest level in the note's first half
+    bar, so a held note that opens a swell (the niente pads) is not stuck at
+    its starting level in ACE, which reads no CC on AI instruments; + ACCENT
+    for > and ^. Inside a crescendo an accent may not outrun the note the
+    crescendo lands on: it stays at least ACCENT // 2 below that arrival
+    (walks 16, 24, 44, hammers 40), so the landing is the loudest attack of
+    the build, while accents the arrival already tops (the 3+3+2 of 39)
+    keep theirs."""
+    base, out = [], []
+    for n in notes:
+        s0 = min(n["start"], len(vel) - 1)
+        b = max(vel[s0:min(len(vel), s0 + min(n["dur"], 8))])
+        base.append(b)
+        out.append(min(127, b + ACCENT if n["accent"] or n["marcato"] else b))
+    # latest crescendo first, so an arrival that is itself capped (the 40
+    # hammer, landing of 39 and launch into 41) is final before it is used
+    for z, a in sorted(((min(NBARS * BAR16, (b2 - 1) * BAR16 + s2),
+                         (b - 1) * BAR16 + s)
+                        for b, s, b2, s2, k in p["hair"] if k == "cresc"),
+                       reverse=True):
+        arr = next((i for i, n in enumerate(notes) if n["start"] > z), None)
+        if arr is None:
+            continue
+        for i, n in enumerate(notes):
+            if a <= n["start"] <= z and out[i] > base[i]:
+                out[i] = max(base[i], min(out[i], out[arr] - ACCENT // 2))
+    return [max(1, min(127, v)) for v in out]
+
+
 def part_track(p, events, ch, gm=False):
     import mido
     notes = merged_notes(events)
     vel = dyn_curve(p)
+    vels = note_velocities(p, notes, vel)
+
+    def top(x):
+        return max(midi_of(q) for q in x["pitches"])
+
     ab = []  # (tick, order, msg)
     ab.append((0, 0, mido.MetaMessage("track_name", name=p["name"])))
     ab.append((0, 0, mido.MetaMessage("instrument_name", name=p["ace"])))
@@ -1511,12 +1707,17 @@ def part_track(p, events, ch, gm=False):
                                       control=10, value=pan)))
         ab.append((0, 1, mido.Message("control_change", channel=ch,
                                       control=91, value=48)))
+    # CC1 + CC11 carry the curve for plugin instruments (ACE's AI String
+    # Section plays velocity only); scaled so that fff is exactly 127 and
+    # nothing clips. The GM preview gets no CC1: FluidSynth maps it to
+    # vibrato depth, which would blur the pitches the preview is for.
     last_cc = None
     for t in range(0, NBARS * BAR16, 1):
-        val = min(127, 16 + vel[t])
+        val = min(127, round(16 + vel[t] * 111 / VEL["fff"]))
         if val != last_cc:
-            ab.append((t * T16, 2, mido.Message(
-                "control_change", channel=ch, control=1, value=val)))
+            if not gm:
+                ab.append((t * T16, 2, mido.Message(
+                    "control_change", channel=ch, control=1, value=val)))
             ab.append((t * T16, 2, mido.Message(
                 "control_change", channel=ch, control=11, value=val)))
             last_cc = val
@@ -1531,12 +1732,10 @@ def part_track(p, events, ch, gm=False):
             off -= GAP                      # re-articulate the same pitch
         elif touching and n["slurred"]:
             pass                            # legato: note touches the next
-        elif touching and not n["tenuto"]:
-            off -= GAP // 2                 # détaché
-        v = vel[min(n["start"], len(vel) - 1)]
-        if n["accent"] or n["marcato"]:
-            v += ACCENT
-        v = max(1, min(127, v))
+        elif touching and not (n["tenuto"] and abs(top(nxt) - top(n)) <= 2):
+            off -= GAP // 2                 # détaché; a tenuto stays
+                                            # connected only to a step
+        v = vels[i]
         if n["grace"]:
             gp = midi_of(n["grace"])
             ab.append((on - GRACE_T, 5, mido.Message(
@@ -1627,7 +1826,42 @@ GP_NOTE = ("第 40 小节第 4 拍五条轨同时休止一拍（G.P. 全体休�
            "呼吸，下一小节全奏落地，不要补音。")
 
 
+def held_swells():
+    """part id -> [(bar, 16th, last bar, last 16th, kind)]: hairpins that
+    run at least half inside one held note (and a dotted quarter of it, or
+    all of a shorter hairpin), which ACE's AI String Section cannot hear:
+    it reads velocity, not CC."""
+    parsed = parse_all()
+    out = {}
+    for p in PARTS:
+        notes = merged_notes(parsed[p["id"]])
+        for h in sorted(p["hair"]):
+            b1, s1, b2, s2, _ = h
+            a, z = (b1 - 1) * BAR16 + s1, (b2 - 1) * BAR16 + s2
+            inside = max((min(z + 1, n["start"] + n["dur"]) - max(a, n["start"])
+                          for n in notes if n["start"] < z + 1
+                          and n["start"] + n["dur"] > a), default=0)
+            if 2 * inside >= z + 1 - a and inside >= min(6, z + 1 - a):
+                out.setdefault(p["id"], []).append(h)
+    return out
+
+
+def _bars_text(hs):
+    bars = sorted({b for h in hs for b in range(h[0], h[2] + 1)})
+    runs, start = [], None
+    for i, b in enumerate(bars):
+        if start is None:
+            start = b
+        if i + 1 == len(bars) or bars[i + 1] != b + 1:
+            runs.append(f"{start}" if start == b else f"{start}–{b}")
+            start = None
+    return "、".join(runs)
+
+
 def usage_md():
+    swells = held_swells()
+    swell_rows = "\n".join(f"| `{PART[pid]['name']}` | {_bars_text(hs)} |"
+                           for pid, hs in swells.items())
     marks = "\n".join(f"| {l} | {b} | {en} {zh} |"
                        for b, (l, en, zh) in sorted(REHEARSAL.items()))
     speakers = "\n".join(
@@ -1666,8 +1900,14 @@ def usage_md():
 
 3. 演奏法保持默认的**智能模式**。长音、连线、断奏、重音都已经体现在音符的长短、间隙和力度里。这版**没有用拨弦（pizz.）和弱音器**，这两种只能在 ACE 里手动设置，所以不需要改。
 4. {GP_NOTE}
-5. 确认没有轨被静音或独奏（被静音的轨不会渲染），然后从头播放一遍，让五条轨都渲染完。
-6. 如果只想单独换某一轨，`分轨/` 里有每个声部单独的 MIDI，同样导入到第 1 小节。
+5. **（可选精修）长音里的渐强、渐弱。** 不做这一步也能直接播放。按 ACE 官方说明，AI 乐器轨读的是音符、演奏法和乐器参数，不读 MIDI 控制器（文件里的 CC1 / CC11 只给插件音源和 GM 试听用），所以力度主要靠每个音的力度值。每个音的力度已经按总谱的力度记号算好；只有下面这些渐强、渐弱整段落在同一个长音里、中间没有新的起音，导入后会是平的。想要更细的起伏，就在对应轨的乐器参数曲线上照总谱补画：
+
+| 轨 | 小节 |
+|---|---|
+{swell_rows}
+
+6. 确认没有轨被静音或独奏（被静音的轨不会渲染），然后从头播放一遍，让五条轨都渲染完。
+7. 如果只想单独换某一轨，`分轨/` 里有每个声部单独的 MIDI，同样导入到第 1 小节。
 
 ## 粗略试听
 
