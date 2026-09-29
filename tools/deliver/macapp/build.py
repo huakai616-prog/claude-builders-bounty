@@ -24,6 +24,7 @@ import plistlib
 import struct
 import subprocess
 import sys
+import time
 import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -204,9 +205,10 @@ def entries():
 
 def build_zip():
     buf = io.BytesIO()
+    stamp = time.localtime()[:6]                        # newer builds unpack as newer folders
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:
         for path, data, mode in entries():
-            info = zipfile.ZipInfo(path, date_time=(2026, 9, 29, 12, 0, 0))
+            info = zipfile.ZipInfo(path, date_time=stamp)
             info.create_system = 3                      # Unix: keep the modes
             if data is None:
                 info.external_attr = ((0o040000 | mode) << 16) | 0x10

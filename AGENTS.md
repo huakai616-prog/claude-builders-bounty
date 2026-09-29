@@ -148,6 +148,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - 导入的署名位置会乱（作曲跑到顶上，作词掉进谱里）。
   - 这两个 `tools/hollywood/hollywood.py` 都已经处理了。
   - pypdf 报 `_cffi_backend` 时 `pip install cffi`。
+- **给用户 Mac 写的 shell 脚本**：macOS 的 `/bin/bash` 是 3.2，UTF-8 下它把 0x80–0xFF 的字节当字母，`"「$NAME」"` 会把「」」的第一个字节吞进变量名，打印出「??」。变量后面紧跟中文时一律写 `${NAME}`。在 Linux 上可以用 `localedef -i en_US -f ISO-8859-1` 造一个 Latin-1 locale（`LOCPATH=… LC_ALL=en_US.ISO-8859-1`）复现。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 
 ## 待办 / 待确认
