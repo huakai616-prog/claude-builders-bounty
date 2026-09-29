@@ -34,6 +34,7 @@
 | 情歌（最后一遍副歌，梁静茹） | 人声 + 弦乐四重奏 · F 大调 · ♩=70 | `claude/serene-darwin-2l4jy4` | `qingge/` | 已完成，带封面 PDF（LilyPond 排的 A4，不是 `tools/hollywood` 的 11×17）。有三处八度 / 节奏待用户确认 |
 | 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `main`（原 `claude/magical-meitner-wj6g5j`） | `chatang/` | 已完成，带前奏尾奏，好莱坞总谱 PDF（封面 + 3 页）。待用户确认调（保留原调 A）和转写八度（1 记作 A3），待在 ACE Studio 渲染 |
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
+| 冬风（肖邦练习曲 Op. 25 No. 11，全曲 96 小节） | 弦乐四重奏（纯器乐） · a 小调（原调） · Lento → 𝅗𝅥=69 | `main`（原 `claude/string-quartet-arrangement-mdjnjg`） | `dongfeng/` | 已完成，好莱坞总谱 PDF（封面 + 12 页）。用户给的是五线谱钢琴谱 PDF，已和另一版本逐音核对。待用户确认第 20 小节一处版本差异，待在 ACE Studio 渲染 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
@@ -53,6 +54,7 @@
    - **弦乐总 MIDI**：所有弦乐声部在一个文件里；
    - **人声带歌词 MIDI**，外加 GBK 编码备用版。
    - 其他照旧：全轨 MIDI、人声素 MIDI、试听 mp3、字幕。
+   - **纯器乐作品**（没有人声，例如冬风）：交西贝柳斯工程、好莱坞 PDF、四重奏总 MIDI 三样，外加每件乐器一份分轨 MIDI 和试听 mp3；不做人声 MIDI 和字幕。交付中心里标 `instrumental=True`。
 2. **署名**：改编、制谱都写**花开当富贵**。封面、首页标题栏、每页页脚、MusicXML 的 arranger / encoder 都要写。
 3. **好莱坞模板**：规范和做法都写在 `.claude/skills/hollywood-score/SKILL.md`，工具在 `tools/hollywood/`（`hollywood.py` + `hollywood.mss`）。GPT / Codex 也照这份 SKILL.md 做。要点：
    - 11×17 英寸总谱纸，Score in C；
@@ -75,6 +77,8 @@
 - **用户嫌每次从聊天里下载文件麻烦**。生成的文件一律提交进仓库的 `output/` 目录，不要只作为聊天附件发。
 
 ## 从简谱图到交付
+
+（用户给的是**钢琴曲的五线谱 PDF** 时，不用转写简谱：照 `dongfeng/` 的做法，把钢琴的音型原样存成数据，编配只换八度和声部，并用另一个版本逐小节对照，见 `dongfeng/README.md` 和 SKILL.md 的 "Instrumental arrangements"。）
 
 1. **转写**。放大截图逐小节读，规则如下：
    - 下划线数定时值：一条线是八分音符，两条线是十六分音符。

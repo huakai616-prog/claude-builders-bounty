@@ -71,6 +71,17 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
 - **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
+- **Dense music** (sextuplet runs in every bar): `META["style"] = {"measureSpacing": 1.0, "minNoteDistance": 0.3, ...}` overrides `hollywood.mss` keys for this song only. With vertical spread on, the minimum gap between systems is `minSystemSpread` (house value 10 sp), not `minSystemDistance`. See `dongfeng/build.py`.
+- **Instrumental works** (no voice): `META["original"]` (for example "钢琴练习曲 Op. 25 No. 11") fills the first-page left credit block and adds an 原作 row on the cover; leave `lyricist` and `artist` empty. There is no vocal MIDI, so the deliverables are MusicXML, PDF and the quartet MIDI (plus one MIDI per instrument); mark the catalog entry `instrumental=True` (see "Delivery center").
+
+### Instrumental arrangements of piano music (冬风 / Chopin)
+
+`dongfeng/` is the template for arranging a piano piece (not a song) for strings. It splits the song pipeline in two: `dongfeng/engine.py` (parser, music21 score, MusicXML polish, MIDI, checks) and `dongfeng/build.py` (Chopin's text + the quartet parts). Copy both for the next piece.
+
+- The grid is 48 ticks a bar, so sextuplets (2), 16ths (3), triplets (4) and dotted rhythms mix. Sextuplets are written 6:4 with the "6" only where a run starts; MS4 ignores MusicXML `show-number="none"`, so `build.py`'s `_mscx_hook` hides the other numbers in the imported file.
+- Store the pianist's figuration as data (`RH` / `LH`, sounding pitch) and build parts with `w(bar, octave_shift, beats, fix)`; the parts then stay exactly Chopin's notes, and only octaves and instruments change.
+- `--check` also tests every double stop (`engine.stop_ok`: adjacent strings, one hand frame). A scratch per-beat pitch-class comparison against a reference transcription catches wrong notes in the hand-written chords.
+- Four staves fit 2 bars × 4 systems per page at 7.2 mm; set `PAGE_BREAKS` so every page holds 4 systems.
 
 Then run:
 
@@ -139,6 +150,7 @@ To add or update a work, after its files are built and committed:
 
 1. Add or edit its entry in `tools/deliver/catalog.py`.
    - `ref=None` means "the current working tree", i.e. the song you just built.
+   - An instrumental work sets `instrumental=True`: its zip has `1_三样主文件/` (no vocal MIDI), its 说明.txt explains ACE / Sibelius parts, and `zip_note` describes `2_其他文件/`.
    - Fill in `main` (the four files), `pdf_kind` (`"hollywood"` for the tools/hollywood PDF), `audio`, and the open questions for the user.
 2. `python3 tools/deliver/package.py <slug> --files`. This prints the `files` map to publish. Output goes to `tools/deliver/dist/`, which is git-ignored.
 3. `Artifact` `action: "read"` on the URL. A publish from a new conversation is refused until you have read it.

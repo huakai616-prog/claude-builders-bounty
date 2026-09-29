@@ -51,7 +51,20 @@ MEDIA = {".pdf", ".mp3", ".mp4", ".webm", ".wav", ".ogg", ".png", ".jpg",
          ".jpeg", ".gif", ".webp", ".otf", ".ttf", ".woff", ".woff2"}
 LABELS = dict(musicxml="西贝柳斯工程", pdf="总谱 PDF", strings="弦乐总 MIDI",
               vocal="人声带歌词 MIDI")
-MAIN_DIR, OTHER_DIR = "1_四样主文件", "2_其他文件"
+SONG_KEYS = ("musicxml", "pdf", "strings", "vocal")
+CN_NUM = {1: "一", 2: "两", 3: "三", 4: "四"}
+OTHER_DIR = "2_其他文件"
+
+
+def main_keys(w):
+    """The main deliverables of a work: the usual four, or (instrumental
+    works, no voice) musicxml / pdf / strings."""
+    return ("musicxml", "pdf", "strings") if w.get("instrumental") \
+        else SONG_KEYS
+
+
+def main_dir(w):
+    return f"1_{CN_NUM[len(main_keys(w))]}样主文件"
 CREDIT = "花开当富贵"
 
 
@@ -106,15 +119,20 @@ def readme_txt(w, main_rel, layout_note):
         lines.append(f"改编、制谱：{CREDIT}")
     lines.append("")
     if main_rel:
-        lines.append("四样主文件：")
+        lines.append(f"{CN_NUM[len(main_rel)]}样主文件：")
         for k, rel in main_rel:
             label = (w.get("labels") or {}).get(k, LABELS[k])
             lines.append(f"  · {label}：{rel if rel else '（这首还没有）'}")
         lines.append("")
         lines += ["怎么用：",
-                  "  · 西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。",
-                  "  · ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。",
-                  ""]
+                  "  · 西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。"]
+        if w.get("instrumental"):
+            lines += ["  · 分谱：西贝柳斯打开总谱后会自动生成各声部分谱（窗口 → 分谱）。",
+                      "  · ACE Studio：导入「全轨」MIDI，四条轨都加载 AI 乐器 String Section，speaker 分别选 Violins I / Violins II / Violas / Celli。",
+                      ""]
+        else:
+            lines += ["  · ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。",
+                      ""]
     if layout_note:
         lines += [layout_note, ""]
     if w.get("note"):
@@ -153,6 +171,7 @@ def package(w):
             else w["title"]
         entries = []          # (arcname, abs path)
         main_rel = []
+        MAIN_DIR = main_dir(w)
         if w["layout"] == "standard":
             main = w["main"]
             main_names = {v for v in main.values() if v}
@@ -160,11 +179,12 @@ def package(w):
                 sub = MAIN_DIR if f in main_names else OTHER_DIR
                 entries.append((f"{top}/{sub}/{f}", os.path.join(src, f)))
             entries.sort()  # 1_四样主文件 before 2_其他文件
-            for k in ("musicxml", "pdf", "strings", "vocal"):
+            for k in main_keys(w):
                 v = main.get(k)
                 main_rel.append((k, f"{MAIN_DIR}/{v}" if v else None))
-            note = (f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
-                    "全轨 MIDI、试听 mp3 和字幕。")
+            note = w.get("zip_note") or (
+                f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
+                "全轨 MIDI、试听 mp3 和字幕。")
         else:
             inc = w.get("include")
             for f in files_under(src):
@@ -177,7 +197,7 @@ def package(w):
                 for p in ps:
                     entries.append((f"{top}/{folder}/{os.path.basename(p)}",
                                     os.path.join(tmp, p)))
-            for k in ("musicxml", "pdf", "strings", "vocal"):
+            for k in main_keys(w):
                 if k in w["main"]:
                     v = w["main"][k]
                     main_rel.append((k, v))
@@ -269,11 +289,15 @@ def package(w):
                                 size=os.path.getsize(clip))
         if w["section"] == "song":
             have = [m["key"] for m in row["main"] if m["ok"]]
-            full = len(have) == 4
+            n = len(main_keys(w))
+            full = len(have) == n
             if full and w.get("pdf_kind") == "hollywood":
-                row["status"], row["status_zh"] = "ready", "四样齐全"
+                row["status"], row["status_zh"] = "ready", (
+                    f"{CN_NUM[n]}样齐全" + (" · 器乐曲" if w.get("instrumental")
+                                          else ""))
             elif full:
-                row["status"], row["status_zh"] = "old", "四样齐全 · PDF 是旧版预览"
+                row["status"], row["status_zh"] = \
+                    "old", f"{CN_NUM[n]}样齐全 · PDF 是旧版预览"
             else:
                 row["status"], row["status_zh"] = "partial", \
                     f"只有 {len(have)} 样，其余还没做"

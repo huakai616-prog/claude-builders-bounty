@@ -20,6 +20,26 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="dongfeng", section="song", ref=None, instrumental=True,
+        title="冬风", subtitle="肖邦 练习曲 Op. 25 No. 11 · 弦乐四重奏",
+        artist="", key="a 小调（原调）", tempo="Lento · Allegro 𝅗𝅥=69",
+        instrumentation="弦乐四重奏（全曲 96 小节）",
+        src="dongfeng/output", layout="standard",
+        main=dict(musicxml="冬风_弦乐四重奏.musicxml",
+                  pdf="冬风_弦乐四重奏_总谱.pdf",
+                  strings="冬风_弦乐四重奏_全轨.mid"),
+        labels=dict(strings="弦乐四重奏 MIDI"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        zip_note="「1_三样主文件」是西贝柳斯工程、总谱 PDF 和四重奏 MIDI"
+                 "（纯器乐，没有人声 MIDI）；「2_其他文件」里是四件乐器各自的"
+                 "分轨 MIDI 和试听 mp3。",
+        note="纯器乐：肖邦钢琴练习曲《冬风》全曲改编成弦乐四重奏，没有人声 MIDI。",
+        questions=[
+            "第 20 小节第 3 拍：你给的谱是 C#6 A5 D6，另一个版本是 D#6 A5 C6。这里按你的谱写了。",
+            "第 44–45 小节：你给的谱把 8va 线印到了第 44 小节左手下面，按正确的读法处理成第 45 小节右手前两拍高八度。",
+            "速度用了肖邦原速 𝅗𝅥=69。ACE 演示没问题；真人四重奏演奏会很难，要现场版的话可以降到 𝅗𝅥=60 左右。",
+        ]),
+    dict(
         slug="wobunanguo", section="song", ref=None,
         title="我不难过", subtitle="副歌 · 人声与弦乐四重奏",
         artist="孙燕姿", key="♭E 大调", tempo="♩=68",

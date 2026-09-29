@@ -44,6 +44,9 @@ DEFAULT_META = {
     "composer": "",
     "lyricist": "",
     "artist": "",           # original performer
+    "original": "",         # original work, for instrumental arrangements
+                            # ("钢琴练习曲 Op. 25 No. 11"): cover row and
+                            # first-page left block
     "arranger": ARRANGER,
     "engraver": ENGRAVER,
     "instrumentation": [],  # [("Voice", "人声"), ("Violin I", "第一小提琴"), ...]
@@ -145,7 +148,8 @@ def polish_musicxml(path, meta):
     top = round(H - _tenths(MARGIN_TOP), 1)
     left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
     lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
-               f"原唱：{m['artist']}" if m["artist"] else ""]
+               f"原唱：{m['artist']}" if m["artist"] else "",
+               f"原作：{m['original']}" if m["original"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
@@ -523,6 +527,9 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
        color: #111; font-variant-numeric: lining-nums; }
 .cjk { font-family: 'Noto Serif CJK SC', 'Songti SC', serif; }
 .sym { font-family: 'DejaVu Sans', sans-serif; font-size: .95em; }
+/* note values (half note for cut-time metronomes): DejaVu has none */
+.note { font-family: 'FreeSerif', 'Noto Music', 'Apple Symbols', serif;
+        font-size: 1.2em; line-height: 0; }
 .page { width: 11in; height: 17in; position: relative; overflow: hidden;
         page-break-after: always; break-after: page; }
 .page:last-child { page-break-after: auto; break-after: auto; }
@@ -607,16 +614,24 @@ def _e(s):
 
 
 def _sym(s):
-    """Wrap music glyphs EB Garamond lacks (♩ ♪ ♭ ♯) in a fallback font."""
+    """Wrap music glyphs EB Garamond lacks (♩ ♪ ♭ ♯, and the note values
+    𝅝 𝅗𝅥 𝅘𝅥 for a "𝅗𝅥 = 69" in cut time) in a fallback font."""
     out = []
     for ch in _e(s):
-        out.append(f"<span class='sym'>{ch}</span>" if ch in "♩♪♭♯♮" else ch)
-    return "".join(out)
+        if ch in "♩♪♭♯♮":
+            out.append(f"<span class='sym'>{ch}</span>")
+        elif 0x1D100 <= ord(ch) <= 0x1D1FF:  # Musical Symbols block
+            out.append(f"<span class='note'>{ch}</span>")
+        else:
+            out.append(ch)
+    # a note value and its combining stem go in one span
+    return "".join(out).replace("</span><span class='note'>", "")
 
 
 def cover_html(m):
     rows = [("作曲", "Music", m["composer"]), ("作词", "Lyrics", m["lyricist"]),
             ("原唱", "Original Artist", m["artist"]),
+            ("原作", "Original Work", m["original"]),
             ("改编", "Arranged by", m["arranger"]),
             ("制谱", "Music Preparation", m["engraver"])]
     trs = "".join(
@@ -668,6 +683,24 @@ def overlay_html(m, page, total):
 # ---------------------------------------------------------------------------
 # PDF
 # ---------------------------------------------------------------------------
+def _style_file(tmp, overrides):
+    """hollywood.mss, or a copy with song-specific values
+    (META["style"] = {"measureSpacing": 1.1, ...}) for dense music."""
+    if not overrides:
+        return STYLE
+    x = open(STYLE, encoding="utf-8").read()
+    for k, v in overrides.items():
+        tag = f"<{k}>{v}</{k}>"
+        if re.search(rf"<{k}>[^<]*</{k}>", x):
+            x = re.sub(rf"<{k}>[^<]*</{k}>", tag, x)
+        else:
+            x = x.replace("</Style>", f"  {tag}\n  </Style>", 1)
+    path = os.path.join(tmp, "style.mss")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(x)
+    return path
+
+
 def render_pdf(musicxml, out_pdf, meta, png_dir=None):
     from pypdf import PdfReader, PdfWriter
     m = _meta(meta)
@@ -680,7 +713,8 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         _engrave_fixes(mscz)
         if m.get("mscx_hook"):  # song-specific touch-ups, see SKILL.md
             _edit_mscx(mscz, m["mscx_hook"])
-        _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
+        style = _style_file(tmp, m.get("style"))
+        _ms4(["-S", style, "-o", score_pdf, mscz])  # engrave with house style
         score = PdfReader(score_pdf)
         n = len(score.pages)
         doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
@@ -699,10 +733,13 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             pg = score.pages[i]
             pg.merge_page(ov.pages[i + 1])
             w.add_page(pg)
+        who = " / ".join(x for x in (
+            f"{m['composer']} 曲" if m["composer"] else "",
+            f"{m['lyricist']} 词" if m["lyricist"] else "") if x)
         w.add_metadata({
             "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
-            "/Author": f"{m['composer']} 曲 / {m['lyricist']} 词 · "
-                       f"改编 {m['arranger']} · 制谱 {m['engraver']}",
+            "/Author": (who + " · " if who else "")
+                       + f"改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
         _fix_text_layer(w)
