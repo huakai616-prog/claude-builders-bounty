@@ -228,8 +228,8 @@ def _fits(pos, d):
         return pos % 16 == 0 or pos in (8, 40)
     if d == 12:          # also the 3+3+2 dotted 8th on the "e" of 1 / 3
         return pos % 16 in (0, 4) or pos % 32 == 12
-    if d == 8:
-        return pos % 8 == 0
+    if d == 8:           # also the syncopated 16th-8th-16th eighth
+        return pos % 8 == 0 or (pos % 4 == 0 and pos // 32 == (pos + 7) // 32)
     if d == 6:
         return pos % 8 in (0, 2)
     if d == 4:
