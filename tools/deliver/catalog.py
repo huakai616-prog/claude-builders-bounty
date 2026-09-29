@@ -23,6 +23,25 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="unravel", section="song", ref=None,
+        title="Unravel", subtitle="全曲 · 弦乐四重奏 · 东京喰种 OP · 依 Animenz 钢琴版改编",
+        artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
+        instrumentation="弦乐四重奏 · 纯器乐",
+        src="unravel/output", layout="standard",
+        main=dict(musicxml="Unravel_全曲_弦乐四重奏.musicxml",
+                  pdf="Unravel_全曲_总谱.pdf",
+                  strings="Unravel_弦乐四重奏.mid",
+                  parts="Unravel_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF（封面 + 15 页）、弦乐总 MIDI 和分谱 PDF。全曲约 3 分 57 秒。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section（有独奏小提琴、中提琴、大提琴就用独奏的）。MIDI 开头空一小节，弱起在它的最后一个八分音符上，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "总谱第 78–81 小节（ACE 第 79–82 小节）的震音在 MIDI 里写成了快速重复音；ACE 有 tremolo 演奏法的话，可以改成长音再选 tremolo。"],
+        questions=[
+            "八音盒段（第 90–96、129–130 小节）钢琴原谱在 8va 下最高到 G7，小提琴拉不到，这里第一小提琴整体低八度拉，旋律形状不变。",
+            "终副歌第 112 小节用了 fff（钢琴原谱是 ff），让最后一次副歌成为全曲顶点；不要的话改回 ff。",
+        ]),
+    dict(
         slug="alla-turca", section="song", ref=None,
         title="土耳其进行曲", subtitle="全曲 · 弦乐四重奏",
         artist="", key="a 小调 / A 大调（原调）", tempo="♩=120",

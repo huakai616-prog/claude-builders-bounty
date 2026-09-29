@@ -75,6 +75,12 @@
          single box above its neighbours -->
     <measureNumberMinDistance>0.5</measureNumberMinDistance>
 
+    <!-- ties between the noteheads, so a phrase slur ending on a tied
+         note and the tie never meet in one point, and a chord's lower tie
+         clears a stem-down flag -->
+    <tiePlacementSingleNote>inside</tiePlacementSingleNote>
+    <tiePlacementChord>inside</tiePlacementChord>
+
     <!-- rehearsal marks: big, bold, boxed -->
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>16</rehearsalMarkFontSize>

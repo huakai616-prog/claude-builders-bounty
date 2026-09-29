@@ -44,6 +44,8 @@ DEFAULT_META = {
     "composer": "",
     "lyricist": "",
     "artist": "",           # original performer
+    "source": "",           # 改编自: the version this arrangement is based
+                            # on, e.g. "Animenz 钢琴版" (instrumental works)
     "original": "",         # instrumental works: the original piece
                             # ("钢琴奏鸣曲 K.331 第三乐章"), shown as 原曲
     "arranger": ARRANGER,
@@ -166,7 +168,8 @@ def polish_musicxml(path, meta, part=None):
     left, right, mid = tn(mx), W - tn(mx), W / 2
     lines_l = [f"原曲：{m['original']}" if m["original"] else "",
                f"作词：{m['lyricist']}" if m["lyricist"] else "",
-               f"原唱：{m['artist']}" if m["artist"] else ""]
+               f"原唱：{m['artist']}" if m["artist"] else "",
+               f"改编自：{m['source']}" if m["source"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
@@ -310,7 +313,7 @@ def _ms4(args):
 TITLE_FRAME_SP = 21  # height of the first-page title frame, in spaces
 
 
-def _fix_title_frame(mscz, height=None):
+def _fix_title_frame(mscz, height=None, gap=None):
     """MS4 imports MusicXML credits with odd offsets (composer drifts to the
     top, lyricist into the music).  Give the title frame a fixed height and
     let the style place each text: title / subtitle centred at the top,
@@ -327,6 +330,11 @@ def _fix_title_frame(mscz, height=None):
                 box = re.sub(r"<height>[^<]*</height>",
                              f"<height>{height or TITLE_FRAME_SP}</height>",
                              box, 1)
+                if gap is not None:     # frame -> first system, in spaces
+                    box = re.sub(r"\s*<bottomGap>[^<]*</bottomGap>", "", box)
+                    box = box.replace(
+                        "</height>", f"</height>\n        <bottomGap>{gap}"
+                        "</bottomGap>", 1)
                 box = re.sub(r"\s*<offset [^>]*/>", "", box)
                 box = re.sub(r"\s*<align>[^<]*</align>", "", box)
                 return box
@@ -341,13 +349,20 @@ def _fix_title_frame(mscz, height=None):
 SECTION_LIFT_SP = 5  # rehearsal letter + section title sit above bar numbers
 
 
-def _lift_sections(mscz, lift=SECTION_LIFT_SP):
+def _lift_sections(mscz, lift=SECTION_LIFT_SP, pin=False):
     """Bar numbers are boxed above every bar, so a rehearsal letter and its
     bold section title ("A  Chorus 副歌") would share their row and run into
-    the section's first bar number.  Raise both onto a row of their own."""
+    the section's first bar number.  Raise both onto a row of their own.
+    pin=True sets the title a little right of the letter: a wide letter
+    (M, N, H) touching the title makes autoplace stack the two; with a lift
+    that clears the first chord's articulations and an 8va line, they then
+    stay on one row (autoplace stays on, so the page keeps room for them)."""
     if not lift:
         return
     off = f'\n            <offset x="0" y="{-lift}"/>'
+    title_off = off
+    if pin:
+        title_off = f'\n            <offset x="1" y="{-lift}"/>'
     with zipfile.ZipFile(mscz) as z:
         items = [(i, z.read(i.filename)) for i in z.infolist()]
     out = []
@@ -365,7 +380,7 @@ def _lift_sections(mscz, lift=SECTION_LIFT_SP):
                 return re.sub(
                     r"(<StaffText>\s*<eid>[^<]*</eid>\s*"
                     r"<text><b>[^<]*</b></text>)",
-                    lambda k: k.group(1) + off, meas)
+                    lambda k: k.group(1) + title_off, meas)
             x = re.sub(r"<Measure>.*?</Measure>", fix, x, flags=re.S)
             data = x.encode("utf-8")
         out.append((info, data))
@@ -383,7 +398,8 @@ def _engrave_fixes(mscz):
     * Chinese in staff / system texts ("Chorus 副歌") in Noto Serif CJK,
       not whatever fallback the text font finds;
     * 8va lines labelled "8va", not a bare "8" (MS4 turns the import's
-      ottavaNumbersOnly on, and -S does not reset it)."""
+      ottavaNumbersOnly on, and -S does not reset it), "(8va)" where a line
+      carries over a system break."""
     with zipfile.ZipFile(mscz) as z:
         items = [(i, z.read(i.filename)) for i in z.infolist()]
     out = []
@@ -404,6 +420,9 @@ def _engrave_fixes(mscz):
             data = x.encode("utf-8")
         elif info.filename.endswith(".mss"):
             x = data.decode("utf-8")
+            x = re.sub(r"<ottava8VAContinueText>[^<]*</ottava8VAContinueText>",
+                       "<ottava8VAContinueText>(&lt;sym&gt;ottavaAlta&lt;/sym&gt;)"
+                       "</ottava8VAContinueText>", x)
             if "<ottavaNumbersOnly>" in x:
                 x = re.sub(r"<ottavaNumbersOnly>\d</ottavaNumbersOnly>",
                            "<ottavaNumbersOnly>0</ottavaNumbersOnly>", x)
@@ -597,9 +616,9 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
               border-bottom: .4pt solid #bbb; }
 .credits tr:last-child td { border-bottom: none; }
 .credits .zh { font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
-               width: .75in; letter-spacing: .15em; }
+               width: .95in; letter-spacing: .15em; }
 .credits .en { font-size: 10pt; letter-spacing: .2em; text-transform: uppercase;
-               color: #555; width: 2.3in; }
+               color: #555; width: 2.2in; }
 .credits .nm { font-family: 'Noto Serif CJK SC', serif; font-size: 15pt;
                text-align: right; font-weight: 600; }
 .info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em;
@@ -655,6 +674,7 @@ def cover_html(m):
             ("原曲", "Original", m["original"]),
             ("作词", "Lyrics", m["lyricist"]),
             ("原唱", "Original Artist", m["artist"]),
+            ("改编自", "Based on", m["source"]),
             ("改编", "Arranged by", m["arranger"]),
             ("制谱", "Music Preparation", m["engraver"])]
     trs = "".join(
@@ -665,12 +685,15 @@ def cover_html(m):
     inst = "　·　".join(
         f"{_e(en)} <span class='cjk'>{_e(zh)}</span>"
         for en, zh in m["instrumentation"])
+    # CJK titles get wide tracking; a Latin-script title reads spaced out
+    latin_title = (" style='letter-spacing:.02em;padding-left:.02em'"
+                   if m["title"].isascii() else "")
     return f"""
 <div class='page cover'>
   <div class='frame'></div>
   <div class='cv kicker'>Full Score</div>
   <div class='cv kicker2'>Score in C · Concert Pitch</div>
-  <div class='cv title'>{_e(m['title'])}</div>
+  <div class='cv title'{latin_title}>{_e(m['title'])}</div>
   <div class='cv latin'>{_e(m['title_latin'])}</div>
   <div class='cv orn'><span></span><b></b><span></span></div>
   <div class='cv sub'>{_e(m['subtitle'])}</div>
@@ -729,8 +752,10 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         mscz = os.path.join(tmp, "score.mscz")
         score_pdf = os.path.join(tmp, "score.pdf")
         _ms4(["-o", mscz, musicxml])            # import MusicXML
-        _fix_title_frame(mscz)
-        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+        _fix_title_frame(mscz, m.get("title_frame_sp", TITLE_FRAME_SP),
+                         m.get("title_gap_sp"))
+        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP),
+                       m.get("section_pin", False))
         _engrave_fixes(mscz)
         if m.get("mscx_hook"):  # song-specific touch-ups, see SKILL.md
             _edit_mscx(mscz, m["mscx_hook"])
@@ -756,8 +781,9 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             w.add_page(pg)
         w.add_metadata({
             "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
-            "/Author": f"{m['composer']} 曲"
-                       + (f" / {m['lyricist']} 词" if m["lyricist"] else "")
+            "/Author": " / ".join(x for x in (
+                f"{m['composer']} 曲" if m["composer"] else "",
+                f"{m['lyricist']} 词" if m["lyricist"] else "") if x)
                        + f" · 改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
@@ -813,7 +839,9 @@ def render_parts_pdf(parts, out_pdf, meta):
             pdf = os.path.join(tmp, f"part{k}.pdf")
             _ms4(["-o", mscz, xml])
             _fix_title_frame(mscz, PART_TITLE_SP)
-            _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+            _lift_sections(mscz, m.get("part_section_lift",
+                                       m.get("section_lift", SECTION_LIFT_SP)),
+                           m.get("section_pin", False))
             _engrave_fixes(mscz)
             if m.get("mscx_part_hook"):
                 _edit_mscx(mscz, m["mscx_part_hook"])
