@@ -775,15 +775,22 @@ def _grid(events_by_voice):
 
 
 def _attacks(evs):
-    out, held = [], False
+    """(abs, [midi], bar) for every note that is struck, not continued by
+    a tie (ties may pass from one voice to another)."""
+    tied = {}
     for e in evs:
+        if e["pitches"] is not None and e["tie"]:
+            end = e["abs"] + e["dur"]
+            tied.setdefault(end, set()).update(midi_of(x)
+                                               for x in e["pitches"])
+    out = []
+    for e in sorted(evs, key=lambda e: e["abs"]):
         if e["pitches"] is None:
-            held = False
             continue
-        if not held:
-            out.append((e["abs"], [midi_of(x) for x in e["pitches"]],
-                        e["bar"]))
-        held = e["tie"]
+        ps = [midi_of(x) for x in e["pitches"]]
+        fresh = [x for x in ps if x not in tied.get(e["abs"], ())]
+        if fresh:
+            out.append((e["abs"], fresh, e["bar"]))
     return out
 
 
@@ -815,20 +822,28 @@ def check(parsed):
     for pid, evs in parsed.items():
         for a, ps, b in _attacks(evs):
             q_att.setdefault(a, []).extend((pid, x) for x in ps)
-    mel = _attacks(pe.get("rh", []))
-    for a, ps, b in mel:
-        top = max(ps)
-        got = {x % 12 for _, x in q_att.get(a, [])}
+    rh = [e for v in ("rh", "rh2", "rh3") for e in pe.get(v, [])]
+    lh = [e for v in ("lh", "lh2", "lh3") for e in pe.get(v, [])]
+    mel = {}
+    for a, ps, b in _attacks(pe.get("rh", [])):
+        mel[a] = (max(ps), b)
+    for a, (top, b) in sorted(mel.items()):
+        att = q_att.get(a, [])
+        hi = max((x for _, x in att), default=None)
+        v1 = max((x for pid, x in att if pid == "vn1"), default=None)
+        got = {x % 12 for x in (hi, v1) if x is not None}
         if top % 12 not in got and ("mel", b) not in ALLOW:
             out.append(f"MELODY: m{b} {_name(top)} at +{a - OFFS[b]} "
                        "missing")
-    bass_v = [v for v in ("lh", "lh2", "lh3") if v in pe]
     bass = {}
-    for v in bass_v:
-        for a, ps, b in _attacks(pe[v]):
-            bass[a] = min(min(ps), bass.get(a, (999, 0))[0]), b
+    for a, ps, b in _attacks(lh):
+        if a not in bass or min(ps) < bass[a][0]:
+            bass[a] = (min(ps), b)
     for a, (m, b) in sorted(bass.items()):
-        got = {x % 12 for _, x in q_att.get(a, [])}
+        att = q_att.get(a, [])
+        lo = min((x for _, x in att), default=None)
+        c = min((x for pid, x in att if pid == "vc"), default=None)
+        got = {x % 12 for x in (lo, c) if x is not None}
         if m % 12 not in got and ("bass", b) not in ALLOW:
             out.append(f"BASS: m{b} {_name(m)} at +{a - OFFS[b]} missing")
     pg = _grid(pe.values())
@@ -861,8 +876,28 @@ def main():
     write_midi(os.path.join(OUT, f"{NAME}_弦乐四重奏.mid"),
                [p["id"] for p in PARTS], parsed)
     print(f"written to {OUT} ({seconds():.0f} s)")
+    if "--mp3" in sys.argv:
+        write_mp3()
     if "--pdf" in sys.argv:
         write_pdf()
+
+
+def write_mp3():
+    """Rough GM preview (FluidSynth + FluidR3 GM), for checking notes only."""
+    import subprocess
+    import tempfile
+    sf2 = "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+    mid = os.path.join(OUT, f"{NAME}_弦乐四重奏.mid")
+    mp3 = os.path.join(OUT, "粗略试听_GM音色_非ACE效果.mp3")
+    with tempfile.TemporaryDirectory() as t:
+        wav = os.path.join(t, "p.wav")
+        subprocess.run(["fluidsynth", "-ni", "-g", "0.7", "-r", "44100",
+                        "-F", wav, sf2, mid], check=True,
+                       capture_output=True)
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav,
+                        "-af", "loudnorm=I=-16:TP=-1.5", "-b:a", "160k",
+                        mp3], check=True)
+    print("mp3:", mp3)
 
 
 def write_pdf(png_dir=None):

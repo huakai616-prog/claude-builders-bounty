@@ -15,9 +15,15 @@ HAIR = {k: [] for k in ("vn1", "vn2", "va", "vc")}
 TEXT = {k: [] for k in ("vn1", "vn2", "va", "vc")}
 CLEFS = {k: [] for k in ("vn1", "vn2", "va", "vc")}
 OTTAVA = []
+ALLOW = set()
 _TARGET = dict(VN1=VN1, VN2=VN2, VA=VA, VC=VC)
 
-for _f in sorted(glob.glob(os.path.join(HERE, "sections", "sec*.py"))):
+# ARR_ONLY=sections/sec05.py loads just that file (a drafter checking one
+# section while others are still being written)
+_FILES = ([os.path.join(HERE, os.environ["ARR_ONLY"])]
+          if os.environ.get("ARR_ONLY")
+          else sorted(glob.glob(os.path.join(HERE, "sections", "sec*.py"))))
+for _f in _FILES:
     _spec = importlib.util.spec_from_file_location(
         os.path.basename(_f)[:-3], _f)
     _m = importlib.util.module_from_spec(_spec)
@@ -31,6 +37,7 @@ for _f in sorted(glob.glob(os.path.join(HERE, "sections", "sec*.py"))):
         for _k, _v in getattr(_m, _name, {}).items():
             _dst[_k].extend(_v)
     OTTAVA.extend(getattr(_m, "OTTAVA", []))
+    ALLOW |= set(getattr(_m, "ALLOW", set()))
 
 # Rehearsal letters and section titles (bar, letter or None, title)
 SECTIONS = [
@@ -43,17 +50,17 @@ SECTIONS = [
     (58, "F", "Bridge 桥段"),
     (66, "G", "Solo 华彩"),
     (78, "H", "Breakdown 崩落"),
-    (82, "I", "Pre-Chorus 导歌"),
-    (90, "J", "Music Box 八音盒"),
-    (97, "K", "Chorus 副歌"),
-    (104, "L", "Interlude 间奏"),
-    (108, "M", "Final Chorus 终副歌"),
-    (118, "N", "Coda 尾声"),
+    (82, "J", "Pre-Chorus 导歌"),
+    (90, "K", "Music Box 八音盒"),
+    (97, "L", "Chorus 副歌"),
+    (104, "M", "Interlude 间奏"),
+    (108, "N", "Final Chorus 终副歌"),
+    (118, "P", "Coda 尾声"),
 ]
 # Tempo map (bar, pos, bpm) and printed tempo words (bar, pos, text)
 TEMPI = [(0, 0, 134)]
 TEMPO_TEXT = []
 SYSTEM_BREAKS = ()
 PAGE_BREAKS = ()
-# Accepted check items: ("mel"|"bass"|"foreign", bar) or ("stop", part, bar)
-ALLOW = set()
+# Accepted check items live in the section files as ALLOW:
+# ("mel"|"bass"|"foreign", bar) or ("stop", part, bar), each with a reason

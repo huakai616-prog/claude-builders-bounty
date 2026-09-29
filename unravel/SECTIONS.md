@@ -4,6 +4,11 @@ Bars are the score's bar numbers. "RH"/"LH" = the piano's right / left hand
 in `piano_source.json`. Each brief fixes the texture; the drafter chooses
 octaves, bowings and details within ARRANGING.md.
 
+Note on `--check` BASS: every left-hand attack counts as "bass". Where the
+LH is a broken-chord / 16th figure, the player of that figure must be the
+lowest part ATTACKING at those moments (a cello note held by a tie doesn't
+count as an attack) — or the cello must attack the same pitch class.
+
 Common to all sections:
 - Set a dynamic for every part that plays, on its first note in the section.
 - Don't tie across the section's last barline; end cleanly.
@@ -102,19 +107,30 @@ Common to all sections:
   Va = sustained chord tones from the LH top notes (half notes).
 
 ## S10 · bars 78–81 · Breakdown 崩落
-- The RH tremolo dyad (B♭4+D5 half note) → Vn II and Va bowed tremolo
-  (`trem3`) on the dyad's notes.
-- The RH's high half note + 32nd/64th cascade down several octaves = a
-  RELAY: Vn I (top half note and the first part of the cascade) → Vn II
-  (joins after its tremolo) → Va → Vc ends the cascade low.
-- LH octave 8ths (E♭2 E♭3 …) and half notes → Vc (and Va doubling when
-  free).
+- Beats 1–2: the piano's two-note tremolo ([B♭5 D6] ↔ B♭6, half note) →
+  Vn I bowed tremolo `trem3` on the top note (B♭6; in 81 C7), Vn II bowed
+  tremolo on the lower dyad as a double stop (B♭5+D6; in 81 C6+F6), Va a
+  tremolo chord tone below (e.g. B♭4 or D5) for body.
+- Beats 3–4: the 32nd cascade is an exact four-player RELAY, one 8th each:
+  Vn I plays the first four 32nds (B♭6 E♭6 D6 B♭5), Vn II the next four
+  (B♭5 E♭5 D5 B♭4), Va the next four (B♭4 E♭4 D4 B♭3), Vc the last four
+  (B♭3 E♭3 D3 B♭2 — the piano's LH does these). Same shape in 79–81 with
+  their pitches.
+- Vc = the LH: bass on beat 1 (E♭2 / F2 / G2 / D2) with the octave 8ths
+  (octave double stops E♭2+E♭3 etc. are fine on the cello), and the LH
+  half note on beat 3, then its cascade group.
 
 ## S11 · bars 82–89 · Pre-Chorus 导歌 II (like 32–35)
-- Same texture as S04: Va = LH 16th ostinato, Vc = low bass, Vn I/Vn II =
-  RH two voices. 86–88: the piano adds chords and grows: add Vn II double
-  stops / chord tones; 88–89 transition (triplet, clef change in the piano)
-  into the music box, diminuendo to p.
+- 82–85: same texture as S04: Va = LH 16th ostinato, Vc = the LH's low
+  quarter-note bass (G2 E♭2 F2 G2), Vn I = RH upper voice (A4 B♭4 A4 …),
+  Vn II = RH lower voice (F4 D4 D4 …).
+- 86–88: four layers: RH 16th figure (D5 A4 B♭4 F4 …) → Vn I; the LH top
+  syncopated line (D4 D4 … C4 D4) → Vn II; LH ostinato (G3 B♭3 B♭3 …) → Va;
+  LH bass (G2 E♭2 F2) → Vc. Grow (cresc.) through 88.
+- 89: the transition: the piano's held chord and the rising triplet
+  (G4 A4 B♭4 D5 added one by one) → Vn II/Va/Vc add their notes one by one
+  and hold (a string "bloom"); Vn I = the RH's 8va notes (E♭6 D6 D7 C7 …,
+  octave down if needed). Arrive p at 90.
 
 ## S12 · bars 90–96 · Music Box 八音盒 (p, 8va)
 - Vn I = the RH top-note melody (dotted 8ths etc.), an octave below the
@@ -138,10 +154,20 @@ Common to all sections:
   weight but in time).
 
 ## S15 · bars 118–132 · Coda 尾声 (p → pp)
-- 118–128: Vn II = RH 8th broken figure; Vn I = the RH's top notes / the
-  melody fragments (122, 124, 126 …); Va = LH chord tones (the repeated
-  dyads), Vc = LH bass (whole / half notes).
-- 129–130: Vn I = the 8va melody fragment (octave below if > C7); Va =
-  the LH 16th run up; Vc = the low G held.
-- 131–132: final G held by all (open G strings in Vc/Va/Vn), fermata,
-  morendo to ppp.
+- 118–121: Vn II = the RH 8th broken figure (G4 B♭4 D5 …); Vn I rests or
+  holds the RH's long top note (B♭5 in 118) softly; Va = the LH syncopated
+  dyads (B♭3+D4 …) as a double stop or single notes; Vc = the LH bass
+  (E♭2 G2 F2 … whole notes).
+- 122–127: the LH becomes broken 8ths (E♭3 B♭3 G4 …) → Va (one player);
+  Vc = the lowest note of each LH group sustained (E♭3/E♭2, G2, F2 …);
+  Vn I = the RH melody (C6 B♭5 A5, D6 …); Vn II = the RH's lower line /
+  8ths (G4 B♭4 D5 …, F4 C5 D5 …).
+- 128: the RH alone (A5 A5 A5 B♭5 B♭5) → Vn I alone, the others rest
+  (a lone voice — keep it naked).
+- 129–130: Vn I = the 8va melody (D7 C7 B♭6; octave below if you prefer
+  D6 C6 B♭5) with Vn II on the 16ths of the RH's second voice; Va = the LH
+  16th run (D4 G4 A4 … C6, treble clef); Vc = G2 (piano G3 an octave down
+  or at pitch G3), held.
+- 131–132: the final sonority G3 + B♭5 held (tied, fermata on 132): Vc G2
+  (open) and/or G3, Va G3/D4, Vn II B♭4/G4, Vn I B♭5 — all pp → niente,
+  fermata on the last bar.
