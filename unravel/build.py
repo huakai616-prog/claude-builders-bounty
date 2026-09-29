@@ -114,6 +114,11 @@ def parse_voice(s, length):
                 raise ValueError(f"empty or stray tuplet in {s!r}")
             tup["evs"][0]["tup_start"] = True
             tup["evs"][-1]["tup_stop"] = True
+            # the unit the bracket counts in: written total / n (a group
+            # may start with a longer rest, e.g. {5:4 r/8 X/4 X/4 X/4 })
+            base = Fr(sum(e["wdur"] for e in tup["evs"]), tup["n"])
+            for e in tup["evs"]:
+                e["tup_base"] = base
             tup = None
             continue
         m = TOK.match(t)
@@ -204,7 +209,7 @@ META = dict(
     instrumentation=[("Violin I", "第一小提琴"), ("Violin II", "第二小提琴"),
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
     key="G Minor · g小调", tempo="♩ = 134",
-    duration="ca. 4′00″", year="2026", tempo_text="Con fuoco")
+    duration="ca. 4′00″", year="2026", tempo_text="Allegro misterioso")
 
 
 # ---------------------------------------------------------------------------
@@ -333,8 +338,10 @@ def make_m21(p, events):
                 for i, d in enumerate(pieces):
                     if d is None:
                         dd = duration.Duration(quarterLength=_ql(e["wdur"]))
+                        unit = duration.Duration(
+                            quarterLength=_ql(e["tup_base"]))
                         tp = duration.Tuplet(e["tup"][0], e["tup"][1])
-                        tp.setDurationType(dd.type, dd.dots)
+                        tp.setDurationType(unit.type, unit.dots)
                         if e["tup_start"]:
                             tp.type = "start"
                         elif e["tup_stop"]:
