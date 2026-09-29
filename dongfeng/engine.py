@@ -17,6 +17,7 @@ bar is alla breve = 96 ticks; "||" separates two voices on one staff):
     >  accent      ^  marcato      .  staccato     _  tenuto
     %  fermata     A  rolled chord D  down-bow     U  up-bow
     T  tremolo (unmeasured, three strokes)       ,  breath mark (comma)
+    !  staccatissimo (wedge)
   g:E1        grace note (acciaccatura) before the next note
 """
 import re
@@ -73,7 +74,7 @@ def fit(p, lo, hi):
 # ---------------------------------------------------------------------------
 TOK = re.compile(
     r"^(?P<sl>\(*)(?P<p>r|[A-G][#b]*-?\d(?:\+[A-G][#b]*-?\d)*)/(?P<d>\d+)"
-    r"(?P<m>[>^._%ADUT,]*)(?P<tie>~?)(?P<sr>\)*)$")
+    r"(?P<m>[>^._%ADUT,!]*)(?P<tie>~?)(?P<sr>\)*)$")
 
 
 def parse_voice(s, bar, voice):
@@ -304,9 +305,11 @@ def write_musicxml(path, parts, parsed, spec):
     _sub(sc, "millimeters", "7.2")
     _sub(sc, "tenths", "40")
     pl = _sub(root, "part-list")
-    _sub(pl, "part-group", type="start", number="1").extend([
-        _el("group-name", spec.group_name),
-        _el("group-symbol", "bracket"), _el("group-barline", "yes")])
+    group = len(parts) > 1
+    if group:
+        _sub(pl, "part-group", type="start", number="1").extend([
+            _el("group-name", spec.group_name),
+            _el("group-symbol", "bracket"), _el("group-barline", "yes")])
     for i, p in enumerate(parts, 1):
         sp = _sub(pl, "score-part", id=f"P{i}")
         _sub(sp, "part-name", p["name"])
@@ -319,7 +322,8 @@ def write_musicxml(path, parts, parsed, spec):
         _sub(mi, "midi-program", p["program"] + 1)
         _sub(mi, "volume", 80)
         _sub(mi, "pan", p.get("pan", 0))
-    _sub(pl, "part-group", type="stop", number="1")
+    if group:
+        _sub(pl, "part-group", type="stop", number="1")
 
     for i, p in enumerate(parts, 1):
         part_el = _sub(root, "part", id=f"P{i}")
@@ -697,7 +701,8 @@ def _emit_note(m, e, j, n, pc, v, show, beams, tup_first, tup_last, idx,
             arts = _el("articulations")
             if first:
                 for c, tag in ((">", "accent"), ("^", "strong-accent"),
-                               (".", "staccato"), ("_", "tenuto")):
+                               (".", "staccato"), ("_", "tenuto"),
+                               ("!", "staccatissimo")):
                     if c in mk:
                         el = _sub(arts, tag)
                         if tag == "strong-accent":
@@ -846,8 +851,8 @@ def part_track(p, voices, spec, ch, nticks, with_cc=True):
             off = (n["start"] + n["dur"]) * MT
             nxt = vnotes[i + 1] if i + 1 < len(vnotes) else None
             mk = n["marks"]
-            if "." in mk:
-                off = on + max(3 * MT, (n["dur"] * MT) // 2)
+            if "." in mk or "!" in mk:
+                off = on + max(3 * MT, (n["dur"] * MT) // (3 if "!" in mk else 2))
             elif nxt and nxt["start"] * MT == off:
                 if set(nxt["pitches"]) & set(n["pitches"]):
                     off -= min(24, (n["dur"] * MT) // 4)

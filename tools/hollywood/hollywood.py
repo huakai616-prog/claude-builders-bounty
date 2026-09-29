@@ -144,8 +144,9 @@ def polish_musicxml(path, meta):
         r.remove(c)
     top = round(H - _tenths(MARGIN_TOP), 1)
     left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
-    lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
-               f"原唱：{m['artist']}" if m["artist"] else ""]
+    lines_l = m.get("credit_left") or [
+        f"作词：{m['lyricist']}" if m["lyricist"] else "",
+        f"原唱：{m['artist']}" if m["artist"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
@@ -275,7 +276,7 @@ def _ms4(args):
 TITLE_FRAME_SP = 21  # height of the first-page title frame, in spaces
 
 
-def _fix_title_frame(mscz):
+def _fix_title_frame(mscz, height=None):
     """MS4 imports MusicXML credits with odd offsets (composer drifts to the
     top, lyricist into the music).  Give the title frame a fixed height and
     let the style place each text: title / subtitle centred at the top,
@@ -290,7 +291,8 @@ def _fix_title_frame(mscz):
             def fix(mo):
                 box = mo.group(0)
                 box = re.sub(r"<height>[^<]*</height>",
-                             f"<height>{TITLE_FRAME_SP}</height>", box, 1)
+                             f"<height>{height or TITLE_FRAME_SP}</height>",
+                             box, 1)
                 box = re.sub(r"\s*<offset [^>]*/>", "", box)
                 box = re.sub(r"\s*<align>[^<]*</align>", "", box)
                 return box
@@ -516,14 +518,14 @@ def _chrome_pdf(html_path, pdf_path):
 # Cover and running header / footer (HTML, printed by Chromium)
 # ---------------------------------------------------------------------------
 CSS = """
-@page { size: 11in 17in; margin: 0; }
+@page { size: PAGE_Win PAGE_Hin; margin: 0; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: transparent; }
 body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
        color: #111; font-variant-numeric: lining-nums; }
 .cjk { font-family: 'Noto Serif CJK SC', 'Songti SC', serif; }
 .sym { font-family: 'DejaVu Sans', sans-serif; font-size: .95em; }
-.page { width: 11in; height: 17in; position: relative; overflow: hidden;
+.page { width: PAGE_Win; height: PAGE_Hin; position: relative; overflow: hidden;
         page-break-after: always; break-after: page; }
 .page:last-child { page-break-after: auto; break-after: auto; }
 .sc { text-transform: uppercase; letter-spacing: .22em; font-size: .78em; }
@@ -602,6 +604,10 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
 """
 
 
+def _css(w, h):
+    return CSS.replace("PAGE_W", f"{w:g}").replace("PAGE_H", f"{h:g}")
+
+
 def _e(s):
     return html.escape(str(s))
 
@@ -646,19 +652,21 @@ def cover_html(m):
 </div>"""
 
 
-def overlay_html(m, page, total):
+def overlay_html(m, page, total, head=None):
     same = m["arranger"] == m["engraver"]
     who = (f"<span class='cjk'>改编 · 制谱　{_e(m['arranger'])}</span>"
            "<span class='en'>Arranged &amp; Music Preparation by "
            f"<span class='nm'>{_e(m['arranger'])}</span></span>") if same else (
            f"<span class='cjk'>改编　{_e(m['arranger'])}　·　制谱　"
            f"{_e(m['engraver'])}</span>")
-    head = _e(m["title"]) + (f" · {_e(m['subtitle'].split('·')[0].strip())}"
-                             if m["subtitle"] else "")
+    if head is None:
+        head = _e(m["title"]) + (
+            f" · {_e(m['subtitle'].split('·')[0].strip())}"
+            if m["subtitle"] else "")
     return f"""
 <div class='page'>
   <div class='hd'><div class='l'><span class='t'>{head}</span>
-    <span class='x'>Full Score in C</span></div>
+    <span class='x'>{_e(m.get('head_kind', 'Full Score in C'))}</span></div>
     <div class='r'>{page}</div></div>
   <div class='ft'><div class='l'>{who}</div>
     <div class='r'>Page {page} of {total}</div></div>
@@ -684,7 +692,7 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         score = PdfReader(score_pdf)
         n = len(score.pages)
         doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
-               + CSS + "</style></head><body>" + cover_html(m)
+               + _css(PAGE_W, PAGE_H) + "</style></head><body>" + cover_html(m)
                + "".join(overlay_html(m, i + 1, n) for i in range(n))
                + "</body></html>")
         hp = os.path.join(tmp, "pages.html")
@@ -701,8 +709,10 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             w.add_page(pg)
         w.add_metadata({
             "/Title": f"{m['title']} — {m['subtitle']} (Full Score)",
-            "/Author": f"{m['composer']} 曲 / {m['lyricist']} 词 · "
-                       f"改编 {m['arranger']} · 制谱 {m['engraver']}",
+            "/Author": " / ".join(x for x in (
+                f"{m['composer']} 曲" if m["composer"] else "",
+                f"{m['lyricist']} 词" if m["lyricist"] else "") if x)
+                       + f" · 改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
         _fix_text_layer(w)
@@ -715,6 +725,88 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
             subprocess.run(["pdftoppm", "-r", "60", "-png", out_pdf,
                             os.path.join(png_dir, "page")], check=True)
     return n + 1
+
+
+# ---------------------------------------------------------------------------
+# Parts (A4, one PDF with every part)
+# ---------------------------------------------------------------------------
+A4_W, A4_H = 8.27, 11.69
+
+
+def _parts_style(path):
+    """hollywood.mss adapted for players' parts: A4, 7 mm staves, multi-bar
+    rests, the same fonts, boxes and marks."""
+    x = open(STYLE, encoding="utf-8").read()
+    for tag, val in (("pageWidth", A4_W), ("pageHeight", A4_H),
+                     ("pagePrintableWidth", round(A4_W - 1.1, 2)),
+                     ("pageEvenLeftMargin", 0.55), ("pageOddLeftMargin", 0.55),
+                     ("pageEvenTopMargin", 0.85), ("pageOddTopMargin", 0.85),
+                     ("pageEvenBottomMargin", 0.8),
+                     ("pageOddBottomMargin", 0.8), ("Spatium", 1.75),
+                     ("minSystemDistance", 7.5), ("maxSystemDistance", 14),
+                     ("titleFontSize", 24), ("subTitleFontSize", 12)):
+        x = re.sub(rf"<{tag}>[^<]*</{tag}>", f"<{tag}>{val}</{tag}>", x)
+    x = x.replace("</Style>", """    <createMultiMeasureRests>1</createMultiMeasureRests>
+    <minEmptyMeasures>2</minEmptyMeasures>
+    <minMMRestWidth>8</minMMRestWidth>
+    <multiMeasureRestMargin>1</multiMeasureRestMargin>
+  </Style>""")
+    open(path, "w", encoding="utf-8").write(x)
+
+
+def render_parts_pdf(items, out_pdf, meta, title_frame=15):
+    """items: [(musicxml, "Violin I", "第一小提琴")], one single-part
+    MusicXML each (credits already written by polish_musicxml).  Engraves
+    every part on A4 with the house style and the running header / footer,
+    and merges them into one PDF with a bookmark per part."""
+    from pypdf import PdfReader, PdfWriter
+    m = _meta(meta)
+    w = PdfWriter()
+    total = 0
+    with tempfile.TemporaryDirectory() as tmp:
+        style = os.path.join(tmp, "parts.mss")
+        _parts_style(style)
+        for k, (xml, en, zh) in enumerate(items):
+            mscz = os.path.join(tmp, f"p{k}.mscz")
+            pdf = os.path.join(tmp, f"p{k}.pdf")
+            _ms4(["-o", mscz, xml])
+            _fix_title_frame(mscz, title_frame)
+            _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+            _engrave_fixes(mscz)
+            if m.get("mscx_hook"):
+                _edit_mscx(mscz, m["mscx_hook"])
+            _ms4(["-S", style, "-o", pdf, mscz])
+            part = PdfReader(pdf)
+            n = len(part.pages)
+            pm = dict(m, head_kind=f"{en} Part")
+            head = (f"{_e(m['title'])} · <span class='cjk'>{_e(zh)}</span> "
+                    f"{_e(en)}")
+            doc = ("<!doctype html><html><head><meta charset='utf-8'><style>"
+                   + _css(A4_W, A4_H) + "</style></head><body>"
+                   + "".join(overlay_html(pm, i + 1, n, head=head)
+                             for i in range(n)) + "</body></html>")
+            hp = os.path.join(tmp, f"o{k}.html")
+            open(hp, "w", encoding="utf-8").write(doc)
+            op = os.path.join(tmp, f"o{k}.pdf")
+            _chrome_pdf(hp, op)
+            ov = PdfReader(op)
+            assert len(ov.pages) == n, (len(ov.pages), n)
+            first = len(w.pages)
+            for i in range(n):
+                pg = part.pages[i]
+                pg.merge_page(ov.pages[i])
+                w.add_page(pg)
+            w.add_outline_item(f"{zh} {en}", first)
+            total += n
+        w.add_metadata({
+            "/Title": f"{m['title']} — {m['subtitle']} (Parts)",
+            "/Author": f"{m['composer']} 曲 · 改编 {m['arranger']} · "
+                       f"制谱 {m['engraver']}",
+            "/Creator": "MuseScore Studio 4 + tools/hollywood"})
+        _fix_text_layer(w)
+        with open(out_pdf, "wb") as fh:
+            w.write(fh)
+    return total
 
 
 def _load_build(path):

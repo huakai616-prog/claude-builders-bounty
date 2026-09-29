@@ -111,10 +111,10 @@ def readme_txt(w, main_rel, layout_note):
             label = (w.get("labels") or {}).get(k, LABELS[k])
             lines.append(f"  · {label}：{rel if rel else '（这首还没有）'}")
         lines.append("")
-        lines += ["怎么用：",
-                  "  · 西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。",
-                  "  · ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。",
-                  ""]
+        lines += ["怎么用："] + [f"  · {x}" for x in (w.get("howto") or [
+                  "西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。",
+                  "ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。"])] \
+            + [""]
     if layout_note:
         lines += [layout_note, ""]
     if w.get("note"):
@@ -163,8 +163,9 @@ def package(w):
             for k in ("musicxml", "pdf", "strings", "vocal"):
                 v = main.get(k)
                 main_rel.append((k, f"{MAIN_DIR}/{v}" if v else None))
-            note = (f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
-                    "全轨 MIDI、试听 mp3 和字幕。")
+            note = w.get("layout_note") or (
+                f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
+                "全轨 MIDI、试听 mp3 和字幕。")
         else:
             inc = w.get("include")
             for f in files_under(src):

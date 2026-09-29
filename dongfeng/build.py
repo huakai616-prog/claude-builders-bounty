@@ -22,6 +22,7 @@ Token syntax (see engine.py): 24 ticks = a quarter, a bar = 96 ticks.
   python3 dongfeng/build.py           # MusicXML + MIDI
   python3 dongfeng/build.py --pdf     # + Hollywood PDF
   python3 dongfeng/build.py --mp3     # + GM preview
+  python3 dongfeng/build.py --parts   # + players' parts (A4)
 """
 import os
 import re
@@ -141,33 +142,33 @@ VLC[7] = "A2/24. A2+E3/18 A2+E3/6 A2+E3/24 A2+F3/24"
 
 VN1[8] = REST
 VN2[8] = "E4/24 r/24 r/48"
-VLA[8] = "E3+A3/24 r/24 E3/48"
+VLA[8] = "E3+A3/48 E3/48"
 VLC[8] = W(8, sh=-1)
 
 VN1[9] = W(9, rng=VN, first=">")
 VN2[9] = "r/24 D4/18> D4/6 C4/24 r/24"
 VLA[9] = "r/24 F3/18> F3/6 F3/24 r/24"
-VLC[9] = "G#2/72> A2/24>"
+VLC[9] = "G#2/48> r/24 A2/24>"
 
 VN1[10] = W(10, rng=VN, first=">")
 VN2[10] = "r/24 D4/8 D4/8 D4/8 C4/24 r/24"
 VLA[10] = "r/24 G3/8 F3/8 E3/8 E3/24 r/24"
-VLC[10] = "G#2/72> A2/24>"
+VLC[10] = "G#2/48> r/24 A2/24>"
 
 VN1[11] = W(11, rng=VN)
 VN2[11] = "r/24 (E4/8 G#4/8 C#5/8) D#4+A4/24 B3/24"
 VLA[11] = "r/24 G#3/24 B3/48"
 VLC[11] = "B2/72 B2/24>"
 
-VN1[12] = W(11, 0, 2) + " E7/48>,"
+VN1[12] = W(11, 0, 2) + " E7/24>! r/24"
 VN2[12] = "r/24 (B3+G#4/8 A#3+F##4/8 B3+G#4/8) G#4+E5/24. r/24"
 VLA[12] = "r/48 B3+E4/24. r/24"
 VLC[12] = "E2+B2/24 r/24 E3/24. r/24"
 
-# 13-16 (f): the same fall, now in octaves; the pair of instruments slides
-#    down the quartet: (Vln I, Vln II) -> (Vln I, Vla) -> (Vla, Vc) -> Vc,
-#    each line keeping Chopin's step from bar to bar, and whoever is free
-#    plays the march.
+# 13-16 (f): the same fall, now in octaves: (Vln I, Vln II) -> (Vln I, Vla)
+#    -> Vla -> Vc, each line keeping Chopin's step from bar to bar; in 15
+#    the cello keeps Chopin's C bass and the march, whoever else is free
+#    plays the march too.
 VN1[13] = W(13, sh=-1, first=">")
 VN2[13] = W(13, sh=-2, first=">")
 VLA[13] = "r/24 C4+E4/18> C4+E4/6. C4+E4/24_ C4+F4/24_"
@@ -181,7 +182,7 @@ VLC[14] = "A2/24_ E2/24_ A2/48_"
 VN1[15] = "r/24 E5/18 E5/6 E5/24 F5/24"
 VN2[15] = "r/24 G3+E4/18 G3+E4/6 G3+E4/24 G3+F4/24"
 VLA[15] = W(15, sh=-1, rng=VA)
-VLC[15] = W(15, sh=-2, rng=VC)
+VLC[15] = "C2/24. G2+E3/18> G2+E3/6 G2+E3/24_ G2+F3/24_"
 
 VN1[16] = REST
 VN2[16] = "C4+E4/24 r/24 E4+C5/48"
@@ -253,19 +254,19 @@ VLC[26] = W(26, sh=-1, rng=VC)
 VN1[27] = "r/24 " + W(27, 1, 3) + " r/24"
 VN2[27] = "r/24 D#4+C5/18> D#4+C5/6 E4+C5/24 r/24"
 VLA[27] = W(27, 0, 1) + " r/48 " + W(27, 3, 4)
-VLC[27] = "D#2/72> E2/24>"
+VLC[27] = "D#2/48> E3/24 E2/24>"
 
 VN1[28] = "r/24 " + W(28, 1, 3) + " r/24"
 VN2[28] = "r/24 D#4+D5/8 D#4+C5/12 D#4+B4/4 E4+B4/24 r/24"
 VLA[28] = W(28, 0, 1) + " r/48 " + W(28, 3, 4)
-VLC[28] = "D#2/72> E2/24>"
+VLC[28] = "D#2/48> E3/24 E2/24>"
 
 VN1[29] = W(29, 0, 3) + " r/24"
 VN2[29] = "r/24 (B3/8 D#4/8 G#4/8) A#3+E4/24 r/24"
 VLA[29] = "r/24 F#3/24 F#3/24 " + W(29, 3, 4)
 VLC[29] = "F#2/72 F#2/24"
 
-VN1[30] = W(29, 0, 2) + " B6/48>,"
+VN1[30] = W(29, 0, 2) + " B6/24>! r/24"
 VN2[30] = "r/24 (F#4+D#5/8 E#4+C##5/8 F#4+D#5/8) D#4+B4/24. r/24"
 VLA[30] = "r/24 (F#3+D#4/8 E#3+C##4/8 F#3+D#4/8) D#3+B3/24. r/24"
 VLC[30] = "B2/24 r/24 B2/24. r/24"
@@ -287,7 +288,7 @@ VN2[33] = "G3/96~"
 VLA[33] = W(33)
 VLC[33] = W(33, sh=-1)
 
-VN1[34] = "D4+B4/24 r/72"
+VN1[34] = "D4+B4/24 r/24 D4/48"
 VN2[34] = "G3/96"
 VLA[34] = W(34, rng=VA)
 VLC[34] = W(34, sh=-1, rng=VC)
@@ -403,7 +404,7 @@ VLA[53] = "C4/24> G3+E4/24>A F3+C4+A4/24>A A3+F#4/24>A"
 VLC[53] = "C3/24> C2+G2+E3/24>A F2+C3+A3/24>A B2+D#3/24>A"
 
 VN1[54] = W(54)
-VN2[54] = "B4+G5/24>A C#5+A5/24>A D5+F#5/24>A C5+A5/24>A"
+VN2[54] = "B4+G5/24>A C#5+A5/24>A D5+A5/24>A C5+A5/24>A"
 VLA[54] = "G3+E4/24>A C#4+A4/24>A D4+A4/24>A C4+A4/24>A"
 VLC[54] = "E2+B2+G3/24>A A2+E3+C#4/24>A D2+A2+D3/24>A A2+E3+C4/24>A"
 
@@ -509,7 +510,7 @@ VLC[70] = "A2/24_ E2/24_ A2/48_"
 VN1[71] = "r/24 E5/18 E5/6 E5/24 F5/24"
 VN2[71] = "r/24 A3+E4/18 A3+E4/6 A3+E4/24 A3+F4/24"
 VLA[71] = W(71, sh=-1, rng=VA)
-VLC[71] = W(71, sh=-2, rng=VC)
+VLC[71] = "A2/24. A2+E3/18 A2+E3/6 A2+E3/24 A2+F3/24"
 
 VN1[72] = "E5/24 r/72"
 VN2[72] = "A3+E4/24 r/72"
@@ -519,7 +520,7 @@ VLC[72] = W(72, sh=-1)
 for b in range(73, 77):  # 73-76 as 9-12
     for P in (VN1, VN2, VLA, VLC):
         P[b] = P[b - 64]
-VN1[76] = W(75, 0, 2) + " E7/48>,"
+VN1[76] = W(75, 0, 2) + " E7/24>! r/24"
 
 VN1[77] = W(77, sh=-1, first=">")
 VN2[77] = W(77, sh=-2, first=">")
@@ -537,9 +538,9 @@ VLA[79] = W(79, sh=-1, rng=VA)
 VLC[79] = "G2/24. G2+E3/18> G2+E3/6 G2+E3/24_ G2+F3/24_"
 
 VN1[80] = "E5/48 r/48"
-VN2[80] = "C4+E4/24 C4+E4/24 C4+A4/24 B3+G#4/24"
+VN2[80] = "C4+E4/24 C4+E4/24 C4+A4/24 A3+E4/24"
 VLA[80] = W(80)
-VLC[80] = "G2+E3/24 C3/24 F2/24 E2/24"
+VLC[80] = "G2+E3/24 G2/24 F2/24 E2/24"
 
 # ===========================================================================
 # H. Coda, bars 81-96
@@ -866,7 +867,8 @@ META = dict(
     composer="肖邦 Frédéric Chopin", lyricist="", artist="",
     instrumentation=[("Violin I", "第一小提琴"), ("Violin II", "第二小提琴"),
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
-    key="A Minor · a 小调", tempo="𝅗𝅥 = 69", duration="ca. 3′30″",
+    key="A Minor · a 小调", tempo="Allegro con brio 𝅗𝅥 = 69",
+    duration="ca. 3′05″",
     year="2026", tempo_text="")
 
 def _mscx_hook(x):
@@ -962,6 +964,64 @@ def base():
     return os.path.join(OUT, f"{NAME}_弦乐四重奏")
 
 
+def chopin_events(b):
+    """Chopin's notes in bar b: [(tick, dur, midi)] (scale in bar 95 left out)."""
+    out = []
+    for hand in (chopin.RH, chopin.LH):
+        s = hand[b]
+        if not s:
+            continue
+        if "@" not in s:
+            for i, p in enumerate(s.replace("|", " ").split()):
+                out.append((i * 4, 4, engine.midi_of(p)))
+            continue
+        for mo in re.finditer(r"@([\d.]+) (\S+)/([\d.]+)", s):
+            t, ps, d = float(mo.group(1)), mo.group(2), float(mo.group(3))
+            for p in ps.split("+"):
+                out.append((t, d, engine.midi_of(p)))
+    return out
+
+
+PC = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
+
+
+def harm(parsed):
+    """Beat by beat: the lowest sounding pitch class and the pitch classes
+    that sound on the beat, quartet against Chopin.  Lists the beats that
+    differ, for review (deliberate choices are fine)."""
+    lines = []
+    q_all = [e for p in PARTS for v in parsed[p["id"]].values() for e in v
+             if e["pitches"]]
+    for b in range(1, NBARS + 1):
+        ch = chopin_events(b)
+        if not ch:
+            continue
+        for k in range(4):
+            t0 = k * 24
+            c_on = [m for t, d, m in ch if t <= t0 < t + d]
+            c_in = {m % 12 for t, d, m in ch if t0 <= t < t0 + 24 or t <= t0 < t + d}
+            a0 = (b - 1) * BAR + t0
+            q_on = [engine.midi_of(x) for e in q_all
+                    if e["abs"] <= a0 < e["abs"] + e["dur"] for x in e["pitches"]]
+            q_in = {engine.midi_of(x) % 12 for e in q_all
+                    if a0 <= e["abs"] < a0 + 24 or e["abs"] <= a0 < e["abs"] + e["dur"]
+                    for x in e["pitches"]}
+            msg = []
+            if c_on and q_on and min(c_on) % 12 != min(q_on) % 12:
+                msg.append(f"bass {PC[min(q_on) % 12]} (Chopin {PC[min(c_on) % 12]})")
+            if c_on and not q_on:
+                msg.append("quartet silent")
+            miss = {m % 12 for m in c_on} - q_in
+            if miss:
+                msg.append("missing " + " ".join(PC[x] for x in sorted(miss)))
+            extra = q_in - c_in
+            if extra:
+                msg.append("added " + " ".join(PC[x] for x in sorted(extra)))
+            if msg:
+                lines.append(f"m{b}.{k + 1}: " + "; ".join(msg))
+    return lines
+
+
 def dump(path):
     """Plain-text view of every bar: Chopin's text and the four parts."""
     with open(path, "w", encoding="utf-8") as fh:
@@ -978,6 +1038,9 @@ def main():
         dump(sys.argv[sys.argv.index("--dump") + 1])
         return
     parsed = parse_all()
+    if "--harm" in sys.argv:
+        print("\n".join(harm(parsed)))
+        return
     problems = check(parsed)
     for x in problems:
         print(x)
@@ -990,9 +1053,61 @@ def main():
     hollywood.polish_musicxml(xml, META)
     engine.write_midi(base() + "_全轨.mid", PARTS, parsed, spec,
                       "Winter Wind - String Quartet")
+    for i, p in enumerate(PARTS, 1):
+        engine.write_midi(os.path.join(OUT, f"{NAME}_分轨{i}_{ZH[p['id']]}.mid"),
+                          PARTS, parsed, spec, "Winter Wind - " + p["name"],
+                          ids=[p["id"]])
     print("written to", OUT)
+    if "--mp3" in sys.argv:
+        write_mp3()
     if "--pdf" in sys.argv:
         write_pdf()
+    if "--parts" in sys.argv:
+        write_parts()
+
+
+ZH = {"vn1": "第一小提琴", "vn2": "第二小提琴", "va": "中提琴",
+      "vc": "大提琴"}
+SF2 = "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+
+
+def write_mp3():
+    """GM preview (FluidSynth), only for checking notes: not the ACE sound."""
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        wav = os.path.join(tmp, "p.wav")
+        subprocess.run(["fluidsynth", "-ni", "-g", "0.7", "-r", "44100",
+                        "-F", wav, SF2, base() + "_全轨.mid"], check=True,
+                       capture_output=True)
+        mp3 = os.path.join(OUT, "粗略试听_GM音色_非ACE效果.mp3")
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", wav,
+                        "-af", "loudnorm=I=-16:TP=-1.5", "-b:a", "192k", mp3],
+                       check=True)
+    print("MP3:", mp3)
+
+
+def write_parts():
+    """Players' parts: one A4 PDF with Violin I, Violin II, Viola, Cello."""
+    import copy
+    import tempfile
+    parsed = parse_all()
+    spec = make_spec(parsed)
+    pspec = copy.copy(spec)
+    # parts: MS4 fills the lines itself, but every section starts a new line
+    pspec.system_breaks = tuple(s for s, _, _ in SECTIONS if s > 1)
+    pspec.page_breaks = ()
+    items = []
+    with tempfile.TemporaryDirectory() as tmp:
+        for i, p in enumerate(PARTS, 1):
+            xml = os.path.join(tmp, f"part{i}.musicxml")
+            engine.write_musicxml(xml, [p], {p["id"]: parsed[p["id"]]}, pspec)
+            pm = dict(META, credit_left=[f"{p['name']}", ZH[p["id"]]],
+                      subtitle="弦乐四重奏 · 分谱")
+            hollywood.polish_musicxml(xml, pm)
+            items.append((xml, p["name"], ZH[p["id"]]))
+        dst = os.path.join(OUT, f"{NAME}_分谱_四个声部.pdf")
+        n = hollywood.render_parts_pdf(items, dst, META, title_frame=17)
+    print(f"Parts: {dst} ({n} pages)")
 
 
 def write_pdf(png_dir=None):

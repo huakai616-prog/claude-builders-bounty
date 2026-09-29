@@ -16,6 +16,8 @@ plus 说明.txt; `extra` adds files from elsewhere into a subfolder.
     strings   弦乐总 MIDI       vocal  人声带歌词 MIDI
 To add a new song: append an entry here (newest work at the top is fine,
 the page sorts by `updated`), then run tools/deliver/package.py <slug>.
+Instrumental works relabel the slots with `labels` and replace the zip's
+explanation with `layout_note` and `howto` (lists of lines).
 """
 
 WORKS = [

@@ -15,6 +15,7 @@ The user set these rules once and does not want to be asked again.
    - **Full strings MIDI**: all string parts in one file, `<歌名>_弦乐<编制>_伴奏.mid`.
    - **Vocal MIDI with per-syllable lyrics**: `<歌名>_人声_带歌词.mid`, plus the GBK fallback.
    - Also keep the usual extras: full-track MIDI for ACE, plain vocal MIDI, GM preview mp3, SRT.
+   - **Instrumental works** (no voice, e.g. `dongfeng/`, 冬风): the fourth file is the players' **parts PDF** (A4, every part in one file, `hollywood.render_parts_pdf`), and the extras are the full-track MIDI plus one MIDI per instrument and the mp3. In the delivery catalog, relabel the slot with `labels=dict(vocal="四个声部分谱 PDF")` and give `layout_note` / `howto`.
 2. **Credits**: 改编 (arranger) and 制谱 (engraver / music preparation) are both **花开当富贵**. They appear on the cover, in the first-page title block, in every page footer, in the MusicXML `<creator type="arranger">` and `<encoder>`, and in the PDF metadata. `tools/hollywood` defaults to this; never leave either credit out.
 3. **Layout must be refined** (精益求精). Render, look at every page, and fix problems before you deliver (see the QA list below).
 4. **The user must be able to find the files without GitHub** (they said 「我不太会用 GitHub」). Every finished work goes into the pinned **编曲交付中心** page, and the first line of your reply is its link: https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN . There, one click saves a zip to the computer's Downloads folder. Never tell the user to look for files on a branch.
@@ -71,6 +72,9 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
 - **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
+
+- **Parts** (instrumental works): `hollywood.render_parts_pdf([(musicxml, "Violin I", "第一小提琴"), ...], out_pdf, meta)` engraves each single-part MusicXML on A4 (house style adapted: 7 mm staves, multi-bar rests), adds the running header ("冬风 · 第一小提琴 Violin I", "VIOLIN I PART") and footer, and merges the parts into one PDF with a bookmark per part. `meta["credit_left"]` puts the part name in the title block's left corner. See `write_parts()` in `dongfeng/build.py`.
+- **Tuplets**: MS4 ignores MusicXML `show-number="none"`; `dongfeng/build.py`'s `_mscx_hook` hides the bracket of every tuplet and the number of every tuplet that arrived without one (the engine prints "6" / "3" only on the first group of each run).
 
 Then run:
 

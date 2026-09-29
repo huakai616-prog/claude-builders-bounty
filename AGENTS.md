@@ -35,6 +35,7 @@
 | 茶汤（副歌，郁可唯） | 人声 + 弦乐四重奏 · A 大调（原调） · ♩=112 | `main`（原 `claude/magical-meitner-wj6g5j`） | `chatang/` | 已完成，带前奏尾奏，好莱坞总谱 PDF（封面 + 3 页）。待用户确认调（保留原调 A）和转写八度（1 记作 A3），待在 ACE Studio 渲染 |
 | 大东北我的家乡（全曲，何玉） | 交响乐队（Instrument X）+ SATB 合唱 · F→G · ♩=72/128 | `claude/determined-archimedes-93zrgx` | `dadongbei/`，给用户的成品在 `干活/大东北我的家乡/` | 已完成，待在 Mac 上用 Instrument X 和 ACE 渲染；PDF 没有封面和署名 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
+| 冬风（肖邦练习曲 Op. 25 No. 11，全曲 96 小节） | 弦乐四重奏（纯器乐） · a 小调（原调） · 𝅗𝅥=69 | `main`（原 `claude/zealous-planck-f3owl6`） | `dongfeng/` | 已完成：好莱坞总谱 PDF、A4 分谱 PDF、MusicXML、全轨 / 分轨 MIDI、试听 mp3。用户给的是 17 页钢琴谱 PDF，不是简谱。肖邦原文在 `dongfeng/chopin.py`，已逐音和用户的谱核对。待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
 - 泪海、我不难过、茶汤、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
@@ -73,6 +74,15 @@
   - 结尾渐宽、渐慢。
 - 用户说「图二」但只传了一张图时，就用那张图，并在回复里说明。
 - **用户嫌每次从聊天里下载文件麻烦**。生成的文件一律提交进仓库的 `output/` 目录，不要只作为聊天附件发。
+
+## 纯器乐改编（钢琴谱 → 弦乐）
+
+冬风是第一首：用户给的是整首钢琴曲的五线谱 PDF，要弦乐四重奏，没有人声。做法（见 `dongfeng/README.md` 和 `dongfeng/build.py`）：
+
+- 先找公开的机读乐谱当底稿（冬风用的是 ASAP 数据集，`raw.githubusercontent.com` 能下载），再逐页逐音和用户的 PDF 核对（多个代理分页核对 + 独立复核），差异写进 `chopin.py` 的说明里。
+- `dongfeng/engine.py` 是通用的：六连音 / 三连音、双声部、谱号变化、8va、弓法记号、震音、琶音和弦、双音可演奏性检查（按空弦和把位算）、快速大跳检查。以后改编别的钢琴曲可以直接复用。
+- `build.py --harm` 逐拍对照原作的低音和和声，改完要看一遍。
+- 交付物没有人声 MIDI，第四样换成 A4 分谱 PDF（`tools/hollywood` 的 `render_parts_pdf`）。
 
 ## 从简谱图到交付
 
