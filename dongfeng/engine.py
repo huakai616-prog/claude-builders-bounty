@@ -297,7 +297,7 @@ def make_part(song, p, events):
         d = dynamics.Dynamic(mark)
         d.placement = "below"
         measures[bb].insert(Fraction(s, BEAT), d)
-    for bb, s, bb2, s2, kind in p["hair"]:
+    for bb, s, bb2, s2, kind in p.get("hair_print", p["hair"]):
         cls = dynamics.Crescendo if kind == "cresc" else dynamics.Diminuendo
         n1 = notes_at.get((bb - 1) * BAR + s)
         n2 = obj_at(bb2, s2, forward=False)
@@ -310,6 +310,11 @@ def make_part(song, p, events):
         te = expressions.TextExpression(txt)
         te.style.fontStyle = "italic"
         te.placement = "above"
+        measures[bb].insert(Fraction(s, BEAT), te)
+    for bb, s, txt in p.get("words_below", []):  # "cresc." over bars
+        te = expressions.TextExpression(txt)
+        te.style.fontStyle = "italic"
+        te.placement = "below"
         measures[bb].insert(Fraction(s, BEAT), te)
     return part
 
@@ -366,6 +371,7 @@ def polish(song, path):
     names = {s.get("id"): s.findtext("part-name")
              for s in r.iter("score-part")}
     first_pid = r.find("part").get("id")
+    divs = int(r.find("part/measure/attributes/divisions").text)
     for part in r.findall("part"):
         pname = names[part.get("id")]
         prev_sext = False
@@ -410,7 +416,7 @@ def polish(song, path):
                             beamed = n.find("beam") is not None
                             t.set("bracket", "no" if beamed else "yes")
                     prev_sext = False
-                elif n.find("rest") is None:
+                else:  # a plain note or rest ends the run of sextuplets
                     prev_sext = False
                 i += 1
             # tempo words joined to the metronome (bar 1 is done by
@@ -426,20 +432,41 @@ def polish(song, path):
                                 words + " "
                             dr.insert(0, dt)
                             break
-        for pn, b1, b2 in song.OTTAVA:
-            if pname != pn:
+        ms = {int(m.get("number")): m for m in part.findall("measure")}
+        for spec in song.OTTAVA:
+            if spec[0] != pname:
                 continue
-            ms = {int(m.get("number")): m for m in part.findall("measure")}
-            first, last = ms[b1], ms[b2]
+            if len(spec) == 3:
+                b1, t1, b2, t2 = spec[1], 0, spec[2], BAR - 1
+            else:
+                b1, t1, b2, t2 = spec[1:]
+            first = _note_at(ms[b1], t1, divs, forward=True)
+            last = _note_at(ms[b2], t2, divs, forward=False)
             start = ET.fromstring(
                 '<direction placement="above"><direction-type>'
                 '<octave-shift type="down" size="8"/></direction-type>'
                 '</direction>')
-            first.insert(list(first).index(first.find("note")), start)
+            ms[b1].insert(list(ms[b1]).index(first), start)
             stop = ET.fromstring(
                 '<direction><direction-type><octave-shift type="stop" '
                 'size="8"/></direction-type></direction>')
-            last.insert(list(last).index(last.findall("note")[-1]) + 1, stop)
+            ms[b2].insert(list(ms[b2]).index(last) + 1, stop)
+        for (pn, b), way in song.STEMS.items():
+            if pn != pname:
+                continue
+            for n in ms[b].findall("note"):
+                tm = n.find("time-modification")
+                if tm is None:
+                    continue
+                st = n.find("stem")
+                if st is None:  # schema order: right after time-modification
+                    st = ET.Element("stem")
+                    n.insert(list(n).index(tm) + 1, st)
+                st.text = way
+                for t in n.findall("notations/tuplet"):
+                    if t.get("type") == "start":
+                        t.set("placement", "above" if way == "up"
+                              else "below")
     ET.indent(tree, space="  ")
     tree.write(path, encoding="UTF-8", xml_declaration=True)
     xml = open(path, encoding="utf-8").read()
@@ -450,6 +477,22 @@ def polish(song, path):
             "MusicXML 4.0 Partwise//EN\" "
             "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
         open(path, "w", encoding="utf-8").write(xml)
+
+
+def _note_at(measure, tick, divs, forward=True):
+    """The first pitched note starting at or after `tick` (forward), or the
+    last one starting at or before it, in a single-voice measure."""
+    pos, hits = 0, []
+    for n in measure.findall("note"):
+        if n.find("chord") is not None:
+            continue
+        on = pos * BEAT / divs
+        if n.find("rest") is None:
+            hits.append((on, n))
+        pos += int(n.findtext("duration"))
+    if forward:
+        return next(n for on, n in hits if on >= tick - 1e-6)
+    return [n for on, n in hits if on <= tick + 1e-6][-1]
 
 
 def verify_bars(song, path):

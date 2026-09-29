@@ -301,32 +301,34 @@ def put(b, vn1=R, vn2=R, va=R, vc=R):
 def arrange():
     # ---- Introduction (Lento): the theme alone in the cello, then the
     # quartet as a pp chorale (Chopin's own four-part chords)
-    put(1, vc="(E4/12 E4/9 E4/3 E4/12 F4/12")
-    put(2, vn1="r/48@", vn2="r/48@", va="r/48@", vc="E4/12 C4/12 E4/24@)")
-    put(3, vn1="(E4/12 E4/9 E4/3 E4/12 F4/12",
-        vn2="(C4/12 C4/9 C4/3 C4/12 C4/12",
-        va="(G3/12 G3/9 G3/3 G3/12 A3/12",
-        vc="(C3/12 C3/9 C3/3 C3/12 F2/12")
-    put(4, vn1="E4/12 C4/12 E4/24@)",
-        vn2="C4/12 A3/12 C4/12 D4/12@)",
-        va="G3/12 F3/12 G3/12 G#3/12@)",
-        vc="C2/12 F2/12 C3/12 B2/12@)")
+    # (repeated notes on separate bows, slurs where Chopin's end)
+    put(1, vc="E4/12 E4/9 E4/3 (E4/12 F4/12")
+    put(2, vn1="r/48@", vn2="r/48@", va="r/48@", vc="E4/12 C4/12) E4/24@")
+    put(3, vn1="E4/12 E4/9 E4/3 (E4/12 F4/12)",
+        vn2="C4/12 C4/9 C4/3 C4/12 C4/12",
+        va="G3/12 G3/9 G3/3 (G3/12 A3/12)",
+        vc="C3/12 C3/9 C3/3 (C3/12 F2/12)")
+    put(4, vn1="(E4/12 C4/12) E4/24@",
+        vn2="(C4/12 A3/12) (C4/12 D4/12@)",
+        va="(G3/12 F3/12) (G3/12 G#3/12@)",
+        vc="(C2/12 F2/12) (C3/12 B2/12@)")
 
     # ---- A: Theme.  The first gust falls Vn1 -> Vn2 -> Va -> Vc (8vb);
     # the theme sits in the viola (E4 on the A string), doubled an octave
     # down in the cello's fifths.
     put(5, vn1=w(5, -1),
         vn2="r/12 C4/9 C4/3 C4/12 C4/12",
-        va="r/12 (E4/9 E4/3 E4/12 F4/12",
+        va="r/12 E4/9 E4/3 E4/12 F4/12",
         vc="A2/12^ A2+E3/9 A2+E3/3 A2+E3/12 A2+F3/12")
     put(6, vn1="C4/12 A3/12 C4/24",
         vn2=w(6, -1),
-        va="E4/12 C4/12 E4/24)",
+        va="E4/12 C4/12 E4/24",
         vc="A2+E3/12 A2+E3/12 A2+E3/24")
     put(7, va=w(7, -1, fix={23: "A3"}),
-        vc="A2/12^ (A2+E3/9 A2+E3/3 A2+E3/12 A2+F3/12)")
-    put(8, va="E3+A3/12 r/12 E3/24",
-        vc=w(8, -1))
+        vc="A2/12^ A2+E3/9 A2+E3/3 A2+E3/12 A2+F3/12")
+    # Chopin's A bass (held) and E, an octave up, over the cello's wind
+    put(8, va="E3+A3/12 A3/12 E3+A3/24",
+        vc=w(8, -1, slur=6))
     # arpeggios: Violin I alone; the theme in 6ths/3rds (Vn2 over Va),
     # cello bass on beats 1 and 4
     put(9, vn1=w(9, fix={23: "F4"}),
@@ -339,8 +341,8 @@ def arrange():
         vc="G#2/24^ r/12 A2/12^")
     put(11, vn1=w(11),
         vn2="r/12 E4/4 G#4/4 C#5/4 B4/12 r/12",
-        va="r/12 B3/12 A3+D#4/12 B3/12",
-        vc="B2/24^ r/12 B2/12^")
+        va="r/12 B3/12 D#4+A4/12 B3/12",
+        vc="B2/24^ B3/12 B2/12^")
     put(12, vn1=sx("A4 E4 G#4 B4 A5 E5 G#5 B5 A6 E6 G#6 B5") + " E7/12' r/12",
         vn2="r/12 G#4/4 F##4/4 G#4/4 E4/12' r/12",
         va="r/12 B3/4 A#3/4 B3/4 G#3/12' r/12",
@@ -348,7 +350,7 @@ def arrange():
 
     # ---- B: the theme again, stronger: octaves (Vn2 E5 over Va E4)
     put(13, vn1=w(13, -1),
-        vn2="r/12 (E5/9 E5/3 E5/12 F5/12)",
+        vn2="r/12 E5/9 E5/3 E5/12 F5/12",
         va="r/12 C4+E4/9 C4+E4/3 C4+E4/12 C4+F4/12",
         vc="A2/12^ A2+E3/9 A2+E3/3 A2+E3/12 A2+F3/12")
     put(14, vn1="E5/12 C5/12 E5/24",
@@ -357,9 +359,9 @@ def arrange():
         vc="A2+E3/12 A2+E3/12 A2+E3/24")
     # C major: the wind stays in the viola (at pitch), the cello sings
     put(15, va=w(15),
-        vc="C2/12^ (G2+E3/9 G2+E3/3 G2+E3/12 G2+F3/12")
+        vc="C2/12^ G2+E3/9 G2+E3/3 G2+E3/12 G2+F3/12")
     put(16, va=w(16),
-        vc="G2+E3/12 C2+C3/12 G2+E3/24)")
+        vc="G2+E3/12 C2+C3/12 G2+E3/24")
     put(17, vn1=w(17),
         vn2="r/12 Bb3/12 Bb3/12 r/12",
         va="r/12 G3+E4/12 G3+Eb4/12 r/12",
@@ -382,35 +384,36 @@ def arrange():
         vn2="r/12 B3/4 F4/4 A4/4 G4/12 r/12",
         va="r/12 G3/12 r/12 B3+F4/12",
         vc="G2/12^ r/24 G3/12")
-    put(22, vn1=w(22),
+    # an octave down, so the rising D#6 lands on bar 23's E6 in one hand
+    put(22, vn1=w(22, -1),
         va="r/12 G3+E4/12 r/24",
         vc="C2/12^ C3/12 r/24")
 
     # ---- C: E minor, the gust again (8vb relay), theme on B3
     put(23, vn1=w(23, -1),
         vn2="r/12 G3/9 G3/3 G3/12 G3/12",
-        va="r/12 (B3/9 B3/3 B3/12 C4/12",
+        va="r/12 B3/9 B3/3 B3/12 C4/12",
         vc="E2/12^ E2+B2/9 E2+B2/3 E2+B2/12 E2+C3/12")
-    put(24, vn1="G4/12 E4/12 G4/24",
+    put(24, vn1="B4/12 G4/12 B4/24",
         vn2=w(24, -1),
-        va="B3/12 G3/12 B3/24)",
+        va="B3/12 G3/12 B3/24",
         vc="E2+B2/12 E2+B2/12 E2+B2/24")
     put(25, va=w(25, -1, fix={23: "G3"}),
-        vc="E2/12^ (E2+B2/9 E2+B2/3 E2+B2/12 E2+C3/12)")
-    put(26, va="E3+B3/12 r/12 B3/24",
-        vc=w(26, -1, fix={15: "B2", 19: "B2"}))
+        vc="E2/12^ E2+B2/9 E2+B2/3 E2+B2/12 E2+C3/12")
+    put(26, va="E3+B3/12 E3/12 E3+B3/24",
+        vc=w(26, -1, fix={15: "B2", 19: "B2"}, slur=6))
     put(27, vn1=w(27, 1),
-        vn2="r/12 C4/9 C4/3 C4/12 r/12",
-        va="r/12 D#3/9 D#3/3 E3/12 r/12",
+        vn2="r/12 C4/9> C4/3 C4/12 r/12",
+        va="r/12 D#3/9> D#3/3 E3/12 r/12",
         vc="D#2/24^ r/12 E2/12^")
     put(28, vn1=w(28, 1),
-        vn2="r/12 D4/4 C4/4 B3/4 B3/12 r/12",
+        vn2="r/12 (D4/4 C4/6 B3/2) B3/12 r/12",
         va="r/12 D#3/12 E3/12 r/12",
         vc="D#2/24^ r/12 E2/12^")
     put(29, vn1=w(29, fix={23: "F#4"}),
         vn2="r/12 B3/4 D#4/4 G#4/4 F#4/12 r/12",
         va="r/12 F#3/12 A#3+E4/12 F#3/12",
-        vc="F#2/24^ r/12 F#2/12^")
+        vc="F#2/24^ F#3/12 F#2/12^")
     put(30, vn1=sx("E4 B3 D#4 F#4 E5 B4 D#5 F#5 E6 B5 D#6 F#5")
         + " B6/12' r/12",
         vn2="r/12 D#4/4 C##4/4 D#4/4 B3/12' r/12",
@@ -419,7 +422,7 @@ def arrange():
 
     # ---- D: the gust at Chopin's own pitch (top C7), theme doubled
     put(31, vn1=w(31),
-        vn2="r/12 (B4/9 B4/3 B4/12 C5/12)",
+        vn2="r/12 B4/9 B4/3 B4/12 C5/12",
         va="r/12 G3+E4/9 G3+E4/3 G3+E4/12 G3+E4/12",
         vc="E2/12^ E2+B2/9 E2+B2/3 E2+B2/12 E2+C3/12")
     put(32, vn1="B4/12 G4/12 B4/24",
@@ -427,21 +430,21 @@ def arrange():
         va="G3+E4/12 E3+G3/12 G3+E4/24",
         vc="E2+B2/12 E2+B2/12 E2+B2/24")
     put(33, va=w(33),
-        vc="G2/12^ (D2+B2/9 D2+B2/3 D2+B2/12 D2+C3/12)")
-    put(34, va="B3/12 G3/12 D3/24",
+        vc="G2/12^ D2+B2/9 D2+B2/3 D2+B2/12 D2+C3/12")
+    put(34, va="D3+B3/12 G3/12 D3+G3/24",
         vc=w(34))
     put(35, vn1=w(35, fix={23: "F4"}),
-        va="r/12 D3+B3/12 D3+Bb3/12 r/12",
+        va="r/12 D3+B3/12> D3+Bb3/12 r/12",
         vc="G2/12^ r/4 F#2/4 G2/4 Ab2/12 G#2/12^")
-    put(36, vn1="r/12 D4/12 G#3+D4/12 r/12",
+    put(36, vn1="r/12 D4/12> G#3+D4/12 r/12",
         vn2=w(36, fix={23: "F4"}),
-        va="r/12 F3/12 F3/12 r/12",
+        va="r/12 F3/12> F3/12 r/12",
         vc="A2/12^ r/4 G#2/4 A2/4 Bb2/12 A#2/12^")
     # rising: viola hands the wind up to Violin I
     put(37, vn1=w(37, beats=(3, 4)),
         vn2="r/12 G4/9> G4/3 G4/12> r/12",
         va=w(37, beats=(1, 2)),
-        vc="B2/12^ (G3/9> G3/3 G3/12>) G2/12^")
+        vc="B2/12^ G3/9> G3/3 G3/12> G2/12^")
     put(38, vn1=w(38),
         va="r/12 E3/4 C4/4 G#4/4 r/12 F3+Ab3/4 Db4/4 Ab4/4",
         vc="C2/12^ r/12 F2/12^ r/12")
@@ -456,25 +459,25 @@ def arrange():
     # the wind down to the viola and cello (Chopin's left hand)
     put(41, vn1="G5/12 G5/9 G5/3 G5/12 A5/12",
         vn2="E5/12 G4+E5/9 G4+E5/3 G4+E5/12 A4+E5/12",
-        va=lw(41, fix={23: "C#3"}))
+        va=lw(41, fix={23: "Bb3"}))
     put(42, vn1="G5/12 E5/12 G5/24",
         vn2="G4+E5/12 G4+C#5/12 G4+E5/24",
-        vc=lw(42, 1))
+        vc=lw(42, 1, slur=6))
     put(43, vn1="Bb5/12 Bb5/9 Bb5/3 Bb5/12 C6/12",
         vn2="G5/12 Bb4+G5/9 Bb4+G5/3 Bb4+G5/12 C5+G5/12",
         va=lw(43))
     put(44, vn1="Bb5/12 G5/12 Bb5/24",
         vn2="Bb4+G5/12 Bb4+E5/12 Bb4+G5/24",
-        vc=lw(44, 1))
+        vc=lw(44, 1, slur=6))
     # A-flat: the theme in the viola's tenor voice, Violin I the wind
     put(45, vn1=w(45),
-        va="r/12 (Eb4/9 Eb4/3 Eb4/12 Ab4/9 C4/3",
+        va="r/12 Eb4/9 Eb4/3 (Eb4/12 Ab4/9 C4/3",
         vc="Eb2/12^ r/12 Eb3+C4/12 r/12")
     put(46, vn1=w(46),
         va="Eb4/12 Bb3/9 Eb4/3 C4/12) r/12",
         vc="Eb3/24 Ab2+Eb3/12 r/12")
     put(47, vn2=w(47),
-        va="r/12 (B3/9 B3/3 B3/12 E4/6 G#3/3 r/3",
+        va="r/12 B3/9 B3/3 (B3/12 E4/6) r/3 (G#3/3",
         vc="B2/12^ r/12 B2+G#3/12 r/12")
     put(48, vn2=w(48),
         va="B3/12 F#3/4 G#3/4 A3/4 G#3/12) r/12",
@@ -483,8 +486,8 @@ def arrange():
     # ---- F: build-up.  The bass theme in octaves (viola over cello),
     # the wind swapping between the violins
     put(49, vn1=w(49),
-        va="E3/12^ B3/4 G#3/4 B3/4 E3/6 r/3 E4/3 F#4/9 E4/3",
-        vc="E2/12^ B2/4 G#2/4 B2/4 E2/6 r/3 E3/3 F#3/9 E3/3")
+        va="E3/12^ B3/4 G#3/4 B3/4 E3/6 r/3 E3/3 F#3/9 E3/3",
+        vc="E2/12^ B2/4 G#2/4 B2/4 E2/6 r/3 E2/3 F#2/9 E2/3")
     put(50, vn2=w(50),
         va="Eb3/12 C3/12 Eb3/12 F3/4 F#3/4 G3/4",
         vc="Eb2/12 C2/12 Eb2/12 F2/4 F#2/4 G2/4")
@@ -503,11 +506,11 @@ def arrange():
         va="G3/12> C#4/12> D4/12> C4/12>",
         vc="E2+B2/12^ A2+E3/12^ D3+A3/12^ A2+E3/12^")
     put(55, vn1=w(55),
-        va="D3/12^ F4/12^ A#3/6 C4/3 r/3 B3/12^",
-        vc="D2/12^ F3/12^ A#2/6 C3/3 r/3 B2/12^")
+        va="D3/12^ (F4/12^ A#3/6) r/3 (C4/3 B3/12^)",
+        vc="D2/12^ (F3/12^ A#2/6) r/3 (C3/3 B2/12^)")
     put(56, vn2=w(56),
-        va="D#3/12^ F#4/12^ A3/6 D4/3 r/3 C4/12^",
-        vc="D#2/12^ F#3/12^ A2/6 D3/3 r/3 C3/12^")
+        va="D#3/12^ (F#4/12^ A3/6) r/3 (D4/3 C4/12^)",
+        vc="D#2/12^ (F#3/12^ A2/6) r/3 (D3/3 C3/12^)")
     # dominant pedal on E: the tenor melody passes Vn2 -> Vn1
     put(57, vn1=w(57),
         vn2="r/12 (B3/9 E4/3 D4/24)",
@@ -517,7 +520,7 @@ def arrange():
         vn2=w(58, fix={23: "F#4"}),
         va="E3/48",
         vc="E2/48~")
-    put(59, vn2=w(59, 1),
+    put(59, vn2=w(59, fix={3: "F4"}),
         va="r/12 F3/9> F3/3 F3/12> G3/12>",
         vc="E2/48~")
     put(60, vn1=w(60),
@@ -526,29 +529,30 @@ def arrange():
 
     # ---- G: Climax.  Contrary motion: the violins fall in octaves, the
     # viola and cello climb in octaves
-    put(61, vn1=w(61, -1), vn2=w(61, -2),
-        va=lw(61, 1), vc=lw(61))
-    put(62, vn1=sx("F6 B5 E6 G#5 D#6 B5 D6 G#5 C#6 G5 C6 F5")
+    put(61, vn1=w(61, -1, slur=6), vn2=w(61, -2, slur=6),
+        va=lw(61, 1, slur=6), vc=lw(61, slur=6))
+    put(62, vn1=sx("F6 B5 E6 G#5 D#6 B5 D6 G#5 C#6 G5 C6 F5", slur=6)
         + " F5+B5/6' r/6 r/12",
-        vn2=sx("F5 B4 E5 G#4 D#5 B4 D5 G#4 C#5 G4 C5 F4")
+        vn2=sx("F5 B4 E5 G#4 D#5 B4 D5 G#4 C#5 G4 C5 F4", slur=6)
         + " F4+B4/6' r/6 r/12",
-        va=sx("B3 F4 D4 G#4 D4 G#4 F4 B4 F4 B4 G4 D5")
+        va=sx("B3 F4 D4 G#4 D4 G#4 F4 B4 F4 B4 G4 D5", slur=6)
         + " G#4+D5/6' r/6 r/12",
-        vc=sx("B2 F3 D3 G#3 D3 G#3 F3 B3 F3 B3 G3 D4")
+        vc=sx("B2 F3 D3 G#3 D3 G#3 F3 B3 F3 B3 G3 D4", slur=6)
         + " B2+F3/6' r/6 r/12")
-    put(63, vn1=w(63), vn2=w(63, -1),
-        va=lw(63, 1, fix={0: "B3"}), vc=lw(63, fix={0: "B2"}))
-    put(64, vn1=sx("B5 F5 A#5 D5 A5 F5 G#5 D5 G5 D5 F#5 B4")
+    put(63, vn1=w(63, slur=6), vn2=w(63, -1, slur=6),
+        va=lw(63, 1, fix={0: "B3"}, slur=6),
+        vc=lw(63, fix={0: "B2"}, slur=6))
+    put(64, vn1=sx("B5 F5 A#5 D5 A5 F5 G#5 D5 G5 D5 F#5 B4", slur=6)
         + " D5+F5/6' r/6 r/12",
-        vn2=sx("B4 F4 A#4 D4 A4 F4 G#4 D4 G4 D4 F#4 B3")
+        vn2=sx("B4 F4 A#4 D4 A4 F4 G#4 D4 G4 D4 F#4 B3", slur=6)
         + " G#4+D5/6' r/6 r/12",
-        va=sx("F3 B3 G#3 D4 G#3 D4 B3 F4 B3 F4 D4 G#4")
+        va=sx("F3 B3 G#3 D4 G#3 D4 B3 F4 B3 F4 D4 G#4", slur=6)
         + " F4+B4/6' r/6 r/12",
-        vc=sx("F2 B2 G#2 D3 G#2 D3 B2 F3 B2 F3 D3 G#3")
+        vc=sx("F2 B2 G#2 D3 G#2 D3 B2 F3 B2 F3 D3 G#3", slur=6)
         + " B2+F3/6' r/6 r/12")
     # the whisper before the return: F D E G# in both violins, p
-    put(65, vn1="F5/2 D5/2 E5/2 G#4/6 r/12 F5/2 D5/2 E5/2 G#4/6 r/12",
-        vn2="F4/2 D4/2 E4/2 B3/6 r/12 F4/2 D4/2 E4/2 B3/6 r/12")
+    put(65, vn1="(F5/2 D5/2 E5/2 G#4/6) r/12 (F5/2 D5/2 E5/2 G#4/6) r/12",
+        vn2="(F4/2 D4/2 E4/2 B3/6) r/12 (F4/2 D4/2 E4/2 B3/6) r/12")
     put(66, vn1=w(66, slur=24), vn2=lw(66, slur=24))
     put(67, vn1=w(67, slur=24), vn2=w(67, -1, slur=24),
         va=lw(67, 1, slur=24), vc=lw(67, slur=24))
@@ -564,54 +568,63 @@ def arrange():
         src = b - 64
         put(b, VN1[src], VN2[src], VA[src], VC[src])
     put(79, va=w(79),
-        vc="G2/12^ (G2+E3/9 G2+E3/3 G2+E3/12 G2+F3/12")
+        vc="G2/12^ G2+E3/9 G2+E3/3 G2+E3/12 G2+F3/12")
     put(80, va=w(80),
-        vc="E3/12 C3/12 F2/12 E2/12)")
+        vc="G2+E3/12 C3/12 F2/12 E2/12")
 
     # ---- I: Coda
-    put(81, vn1=w(81, beats=(3, 4)),
-        vn2="r/12 A3+F4/12 A3+F#4/12 r/12",
-        va=w(81, beats=(1, 2)),
+    # the viola climbs two of Chopin's four-note cells, Violin I the rest
+    put(81, vn1="r/12 r/2 r/2 (C6/2 F5/2 B5/2) (B5/2 C7/2 F#6/2 B6/2 B5/2 "
+        "C6/2 F#5/2 B5/2 B4/2 C5/2 F#4/2 B4/2 B3/2)",
+        vn2="r/12 A3+F4/12> A3+F#4/12 r/12",
+        va="(C4/2 F3/2 B3/2) (B3/2 C5/2 F4/2 B4/2) B4/2 r/2 r/2 r/2 r/2 r/24",
         vc="D2/12^ r/4 C#3/4 D3/4 D#3/12 D#2/12^")
     put(82, vn1=w(82),
         vn2="r/24 Bb4/12 r/12",
-        va="r/12 Bb3+G4/12 Bb3+D4/12 r/12",
+        va="r/12 Bb3+G4/12> Bb3+D4/12 r/12",
         vc="E2/12^ r/4 D#3/4 E3/4 F3/12 F2/12^")
     put(83, vn1=w(83),
         vn2="r/12 F5/9^ F5/3 F5/12^ G5/12^",
         va="r/12 F4/9^ F4/3 F4/12^ G4/12^",
         vc="F2/12^ F3/9^ F3/3 F3/12^ F3+C4/12^")
-    put(84, vn1=w(84, beats=(1, 2)),
-        vn2="F5/12 C5/12 " + " ".join(
-            f"{p}/2" for p in "E6 A5 D#6 D#5 E6 A5 D#6 D#5 E6 A5 D#6 D#5"
-            .split()),
-        va="F4/12 C4/12 F4/24",
-        vc="F3/12 C3/12 F3/24")
+    # Violin I carries the wind on (an octave down from beat 3, into bar
+    # 85); Violin II ends the theme with the viola and cello
+    put(84, vn1=sx("E7 A6 D#7 D#6 E6 A5 D#6 D#5 E6 A5 D#6 D#6") + " "
+        + sx("E6 A5 D#6 D#5 E6 A5 D#6 D#5 E6 A5 D#6 D#5"),
+        vn2="F5/12> C5/12> F5/24>",
+        va="F4/12> C4/12> F4/24>",
+        vc="F3/12> C3/12> F3/24>")
     # over the dominant: the wind hovers, the bass climbs
     put(85, vn1=w(85, -1, slur=24),
         vc=lw(85, slur=24))
+    # the climb's top half goes to Violin II (1st position), the viola
+    # takes over the hover
     put(86, vn1=w(86, -1, slur=24),
-        vn2=w(86, -2, slur=24),
-        va=lw(86, slur=24),
+        vn2="(E5/2 B4/2 D#5/2 A4/2 E5/2 B4/2 D#5/2 A4/2 E5/2 B4/2 D#5/2 A4/2) "
+        "(A4/2 D#5/2 B4/2 F5/2 B4/2 F5/2 D#5/2 A5/2 D#5/2 A5/2 F5/2 B5/2)",
+        va="(B3/2 F4/2 D#4/2 A4/2 D#4/2 A4/2 F4/2 B4/2 F4/2 B4/2 A4/2 D#5/2) "
+        "(E5/2 B4/2 D#5/2 A4/2 E5/2 B4/2 D#5/2 A4/2 E5/2 B4/2 D#5/2 A4/2)",
         vc="F2/48")
     # the last descent in octaves (Chopin doubles it himself)
     put(87, vn1=w(87, -1),
         vn2="C5+E5/6^ r/6 r/12 r/24",
         va=w(87, -2),
-        vc="A2+E3/6^ r/6 r/12 r/24")
-    put(88, vn1=sx("F5 C5 E5 A4 D5 A4 C5 E4 B4 E4 A4 C4")
-        + " B4/12^ E5/12^",
+        vc="E2+A2/6^ r/6 r/12 r/24")  # the 6/4: F2 falls to E2
+    # the plunge goes on down: viola over cello, one octave a half bar
+    put(88, vn1="r/24 B4/12^ E5/12^",
         vn2="r/24 A4/12^ G#4/12^",
         va=sx("F4 C4 E4 A3 D4 A3 C4 E3 B3 E3 A3 C3")
         + " B3+E4/12^ B3+D4/12^",
-        vc="r/24 E2+B2/12^ E2+B2/12^")
+        vc=sx("F3 C3 E3 A2 D3 A2 C3 E2 B2 E2 A2 C2")
+        + " E2+B2/12^ E2+B2/12^")
 
     # ---- J: Finale.  The wind falls through the quartet one last time
-    bass = " ".join(["A2/3> E2/3 C3/3 E2/3"] * 4)
+    # A lowest (Chopin's A1 E2 C3 E2; A1 is out of range, so the E goes up)
+    bass = " ".join(["A2/3> E3/3 C3/3 E3/3"] * 4)
     bass8 = " ".join(["A3/3> E3/3 C4/3 E3/3"] * 4)
     # bar 90: beat 2 on the low E, beat 4 C-E-C-E (Chopin)
-    bass90 = "A2/3> E2/3 C3/3 E2/3 E2/3> E2/3 C3/3 E2/3 " \
-             "A2/3> E2/3 C3/3 E2/3 C3/3 E2/3 C3/3 E2/3"
+    bass90 = "A2/3> E3/3 C3/3 E3/3 E2/3> E2/3 C3/3 E2/3 " \
+             "A2/3> E3/3 C3/3 E3/3 C3/3 E2/3 C3/3 E2/3"
     bass90_8 = "A3/3> E3/3 C4/3 E3/3 E3/3> E3/3 C4/3 E3/3 " \
                "A3/3> E3/3 C4/3 E3/3 C4/3 E3/3 C4/3 E3/3"
     put(89, vn1=w(89), va=bass8, vc=bass)
@@ -630,26 +643,26 @@ def arrange():
         va=w(92, 1),
         vc=w(92))
     # fff: the theme in full chords, open strings ringing
-    put(93, vn1="A4/12^ A4+E5/9^ A4+E5/3^ A4+E5/12^ A4+F5/12^",
-        vn2="A3/12^ C4+E4/9^ C4+E4/3^ C4+E4/12^ D4+A4/12^",
-        va="A3/12^ A3+E4/9^ A3+E4/3^ A3+E4/12^ A3+F4/12^",
-        vc="A2/12^ A2+E3/9^ A2+E3/3^ A2+E3/12^ A2+F3/12^")
-    put(94, vn1="A4+E5/24^ D5+A5/24^",
+    put(93, vn1="A4/12' A4+E5/9^ A4+E5/3^ A4+E5/12^ A4+F5/12^",
+        vn2="A3/12' C4+E4/9^ C4+E4/3^ C4+E4/12^ D4+A4/12^",
+        va="A3/12' A3+E4/9^ A3+E4/3^ A3+E4/12^ A3+F4/12^",
+        vc="A2/12' A2+E3/9^ A2+E3/3^ A2+E3/12^ A2+F3/12^")
+    put(94, vn1="A4+E5/24^ A4+D5/24^",
         vn2="C4+E4/24^ B3+F4/24^",
         va="A3+E4/24^ A3+D4/24^",
         vc="A2+E3/24^ A2+F3/24^")
     # the last gust: a scale up four octaves, cello and viola first,
     # the violins in 32nds to the top
-    put(95, vn1="A4+E5/36^ " + " ".join(
-        f"{n}/1" for n in "C5 D5 E5 F#5 G#5 A5 B5 C6 D6 E6 F#6 G#6".split()),
-        vn2="C4+E4/36^ " + " ".join(
-        f"{n}/1" for n in "C4 D4 E4 F#4 G#4 A4 B4 C5 D5 E5 F#5 G#5".split()),
-        va="A3+E4/12^ " + sx("A3 B3 C4 D4 E4 F#4 G#4 A4 B4 C5 D5 E5")
-        + " E5/12",
-        vc="A2+E3/12^ " + sx("A2 B2 C3 D3 E3 F#3 G#3 A3 B3 C4 D4 E4")
-        + " E4/12")
-    put(96, vn1="A6/12' r/12 r/24", vn2="A5/12' r/12 r/24",
-        va="A4/12' r/12 r/24", vc="A2/12' r/12 r/24")
+    # one unbroken scale in octaves, as Chopin's: cello (lower line) and
+    # viola (upper) to B, the violins from C to G#, faster and faster
+    put(95, vn1="A4+E5/36^ " + sx("C5 D5 E5 F#5 G#5 A5 B5 C6 D6 E6 F#6 G#6",
+                                  dur=1),
+        vn2="C4+E4/36^ " + sx("C4 D4 E4 F#4 G#4 A4 B4 C5 D5 E5 F#5 G#5",
+                              dur=1),
+        va="A3+E4/12^ (A3/4 B3/4 C4/4 D4/2 E4/2 F#4/2 G#4/2 A4/2 B4/2) r/12",
+        vc="A2+E3/12^ (A2/4 B2/4 C3/4 D3/2 E3/2 F#3/2 G#3/2 A3/2 B3/2) r/12")
+    # Chopin ends on the two A's alone
+    put(96, vn1="A6/12' r/12 r/24", vn2="A5/12' r/12 r/24")
 
 arrange()
 
@@ -669,28 +682,33 @@ HAIR = [(8, 24, 8, 47, "cresc"), (10, 12, 10, 23, "dim"),
         (12, 12, 12, 24, "cresc"), (16, 24, 16, 47, "cresc"),
         (30, 12, 30, 35, "cresc"), (45, 24, 45, 35, "cresc"),
         (45, 36, 45, 47, "dim"), (49, 6, 49, 30, "cresc"),
-        (66, 0, 68, 47, "cresc"), (72, 24, 72, 47, "cresc"),
+        (66, 0, 68, 47, "cresc."), (72, 24, 72, 47, "cresc"),
         (74, 12, 74, 23, "dim"), (76, 12, 76, 24, "cresc"),
         (82, 0, 82, 47, "cresc"), (84, 24, 84, 47, "dim"),
         (86, 0, 86, 47, "cresc")]
 # per-part extras: (part, bar, tick, mark)
 DYN_EXTRA = [("vc", 5, 0, "fz"), ("vc", 69, 0, "fz"), ("vn1", 62, 24, "fz"),
              ("vn2", 62, 24, "fz"), ("va", 62, 24, "fz"),
-             ("vc", 62, 24, "fz"), ("vn2", 87, 0, "fz"), ("vc", 87, 0, "fz")]
-TEXT = [("vc", 1, 0, "espressivo"), ("vn1", 3, 0, "sotto voce"),
-        ("va", 5, 12, "marcato"),
-        ("vn1", 65, 0, "sotto voce")]
+             ("vc", 62, 24, "fz"), ("vn2", 87, 0, "fz"), ("vc", 87, 0, "fz"),
+             # the level after a fz, and entries that must not inherit fp
+             ("vc", 5, 12, "f"), ("vc", 69, 12, "f"), ("vn2", 88, 24, "f"),
+             ("vc", 88, 0, "f"), ("va", 45, 12, "p"), ("vn2", 47, 0, "p"),
+             ("va", 67, 0, "mp"), ("vc", 67, 0, "mp")]
+TEXT = [("vc", 1, 0, "espressivo")]
+TEXT += [(pid, 3, 0, "sotto voce") for pid in ("vn1", "vn2", "va", "vc")]
+TEXT += [("va", 5, 12, "marcato"), ("va", 69, 12, "marcato"),
+         ("vn1", 65, 0, "sotto voce"), ("vn2", 65, 0, "sotto voce"),
+         ("vn1", 69, 0, "a tempo")]
 
 # Tempo: quarter-note bpm for the MIDI.  METRONOMES / TEMPO_WORDS /
 # TEMPO_TEXT are what the score shows.
 TEMPI = [(1, 0, 60), (2, 24, 34), (3, 0, 58), (4, 0, 54), (4, 12, 50),
          (4, 24, 44), (4, 36, 30), (5, 0, 138),
          (68, 0, 132), (68, 12, 124), (68, 24, 114), (68, 36, 100),
-         (69, 0, 138), (93, 0, 132), (94, 0, 122), (95, 0, 104),
-         (95, 12, 126)]
+         (69, 0, 138)]
 METRONOMES = [(1, 0, 60, "quarter"), (5, 0, 69, "half")]
 TEMPO_WORDS = {5: ["Allegro con brio"]}
-TEMPO_TEXT = [(4, 0, "rit."), (68, 12, "rit."), (69, 0, "a tempo")]
+TEMPO_TEXT = [(4, 0, "rit."), (68, 12, "rit.")]
 SECTIONS = [(1, None, "Introduction 引子"), (5, "A", "Theme 主题"),
             (13, "B", "Theme 主题 · C 大调"), (23, "C", "Episode 插部 · e 小调"),
             (31, "D", "Episode 插部"), (41, "E", "Development 展开部"),
@@ -702,16 +720,27 @@ DOUBLE_BARS = {4}
 # page 9 holds three, bars 67-68 are too tall for a fourth)
 SYSTEM_BREAKS = tuple(range(5, 96, 2))
 PAGE_BREAKS = (11, 19, 27, 35, 43, 51, 59, 67, 73, 81, 89)
-# 8va for Violin I where a whole bar sits above the staff (display only)
-OTTAVA = [("Violin I", b, b) for b in (19, 22, 31, 38, 45, 63, 84, 89)]
-
+# 8va lines (display only; MusicXML and MIDI keep the sounding pitch):
+# (part, bar, bar) for whole bars, (part, bar, tick, bar2, tick2) for spans
+OTTAVA = [("Violin I", 19, 21)] + [("Violin I", b, b)
+                                   for b in (31, 38, 45, 63, 89)]
+OTTAVA += [("Violin I", b, 12, b, 35) for b in (11, 17, 27, 28, 49, 55, 57,
+                                               75, 82)]
+OTTAVA += [("Violin I", 12, 12, 12, 35), ("Violin I", 76, 12, 76, 35),
+           ("Violin I", 30, 24, 30, 35), ("Violin I", 60, 24, 60, 47),
+           ("Violin I", 81, 16, 81, 35), ("Violin I", 83, 12, 84, 23),
+           ("Violin II", 18, 12, 18, 35), ("Violin II", 47, 0, 47, 23),
+           ("Violin II", 56, 12, 56, 35)]
+# bar 95: the violin I run's tuplet number above, the cello's below
+STEMS = {("Violin I", 95): "up", ("Violoncello", 95): "down"}
 # intentional: octave doublings of one line (the theme in octaves, the bass
 # theme of bars 49-57 in octaves, the fff chords at the end)
 _DOUBLED = {("va", "vc"): (5, 6, 13, 14, 23, 24, 31, 32, 49, 50, 51, 52,
                            53, 54, 55, 56, 57, 69, 70, 77, 78, 84),
             ("vn2", "va"): (13, 31, 77, 83, 84),
             ("vn2", "vc"): (13, 31, 77, 83, 84),
-            ("vn1", "va"): (14, 32, 78), ("vn1", "vc"): (14, 32, 78)}
+            ("vn1", "va"): (14, 24, 32, 78), ("vn1", "vc"): (14, 32, 78)}
+_DOUBLED[("va", "vc")] += (88,)
 PARALLEL_OK = {(a, b, bar) for (a, b), bars in _DOUBLED.items()
                for bar in bars}
 PARALLEL_OK |= {(a, b, bar) for a in ("vn1", "vn2", "va", "vc")
@@ -820,16 +849,27 @@ def distribute(parsed):
             if pid == p["id"]:
                 dyn = [d for d in dyn if (d[0], d[1]) != (b, t)]
                 dyn.append((b, t, mk))
-        hair = []
+        hair, words, wordy = [], [], []
         for b, t, b2, t2, kind in HAIR:
             a, z = (b - 1) * BAR + t, (b2 - 1) * BAR + t2
             inside = [o for o in onsets if a <= o <= z]
+            held = any(e["pitches"] and e["dur"] >= 24 and e["abs"] <= z
+                       and e["abs"] + e["dur"] > a for e in evs)
+            if kind.endswith("."):  # over several bars: a word, not a wedge
+                if inside:
+                    words.append((inside[0] // BAR + 1, inside[0] % BAR, kind))
+                    wordy.append((b, t, b2, t2, kind.rstrip(".")))
+                continue
             if len(inside) >= 2:
                 s, e = inside[0], inside[-1]
                 hair.append((s // BAR + 1, s % BAR, e // BAR + 1, e % BAR,
                              kind))
+            elif held:  # a long note swells or fades too
+                hair.append((b, t, b2, t2, kind))
         p["dyn"] = sorted(dyn)
-        p["hair"] = hair
+        p["hair"] = hair + wordy   # all of them shape the MIDI
+        p["hair_print"] = hair     # the long ones print as "cresc."
+        p["words_below"] = words
         p["text"] = [(b, t, x) for pid, b, t, x in TEXT if pid == p["id"]]
 
 
