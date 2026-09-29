@@ -71,7 +71,9 @@
     <measureNumberFramePadding>0.35</measureNumberFramePadding>
     <measureNumberFrameWidth>0.1</measureNumberFrameWidth>
     <measureNumberPosAbove x="0" y="-3"/>
-    <measureNumberMinDistance>1</measureNumberMinDistance>
+    <!-- 0.5 sp: a fermata or dynamic just under the row must not push a
+         single box above its neighbours -->
+    <measureNumberMinDistance>0.5</measureNumberMinDistance>
 
     <!-- rehearsal marks: big, bold, boxed -->
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>

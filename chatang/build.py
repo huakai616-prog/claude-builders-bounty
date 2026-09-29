@@ -137,16 +137,16 @@ VN1 = {
     10: REST,
     11: REST,
     12: REST,
-    13: "r/8 (A4/2 C#5/2 B4/2 E5/2~)",
-    14: "E5/16",
-    15: "F#5/8 (G#5/2 B5/2 C#6/2 E6/2",
+    13: "r/8 (A4/2 C#5/2 B4/2 E5/2)",
+    14: "(E5/16",
+    15: "F#5/8) (G#5/2 B5/2 C#6/2 E6/2",
     16: "C#6/8 B5/8)",
     17: "A5/4 (E5/1 F#5/1 A5/1 B5/1 C#6/1 E6/1 F#6/1 A6/1) r/4",
     18: "(F#6/8 E6/6 B5/2",
     19: "C#6/6 B5/2 A5/2 B5/2 C#6/2 E6/2)",
     20: "(D6/8 B5/4 A5/4",
-    21: "F#5/8) (G#5/2 B5/2 C#6/2 E6/2",
-    22: "E6/8 C#6/4 E6/4)",
+    21: "F#5/8) (G#5/2 B5/2 C#6/2 E6/2)",
+    22: "(E6/8 C#6/4 E6/4)",
     23: "(D6/8 B5/2 C#6/2 E6/2 F#6/2",
     24: "G#6/8 A6/8~",
     25: "A6/8 G#6/8)",
@@ -264,7 +264,7 @@ VC = {
 PARTS = [
     dict(id="vox", name="Voice", abbr="V.", data=VOCAL,
          inst=instrument.Soprano, clef=clef.TrebleClef, program=52,
-         dyn=[(10, 2, "mp"), (18, 0, "f"), (24, 0, "ff")],
+         dyn=[(10, 2, "mp"), (18, 2, "f"), (24, 2, "ff")],
          # voice hairpins shape the MIDI only: printed above the staff they
          # push single bar-number boxes out of line
          print_hair=False,
@@ -344,13 +344,39 @@ META = dict(
     year="2026", tempo_text="Moderato")
 
 
+# Below-staff positions (staff spaces) for dynamics in the last system, so
+# each staff's mp / p / pp share one line: the viola's p is pushed down by
+# the bar 29-30 slur and its pp by the low E3, Violin II's mp by a stem.
+# An MS4 offset replaces the style default (dynamicsPosBelow y = 2), it does
+# not add to it.  (staff number in score order, bar, dynamic) -> y
+DYN_Y = {(4, 28, "mp"): 3.79, (4, 29, "p"): 3.79,
+         (3, 29, "p"): 2.57, (3, 30, "pp"): 2.57}
+
+
 def _mscx_hook(x):
-    """MS4 touch-up: "a cappella" marks bar 17 beat 4, the last beat of a
-    system, so right-align it to end at the barline instead of running
-    into the margin (MS4 ignores MusicXML justify on import)."""
-    return re.sub(r"(<StaffText>\s*<eid>[^<]*</eid>)(\s*<text><i>a cappella"
-                  r"</i></text>)", r"\1\n            <align>right,baseline"
-                  r"</align>\2", x)
+    """MS4 touch-ups (MS4 ignores MusicXML justify / default-y on import):
+    * "a cappella" marks bar 17 beat 4, the last beat of a system:
+      right-align it to end at the barline, not in the margin;
+    * DYN_Y: line up the dynamics of the last system."""
+    x = re.sub(r"(<StaffText>\s*<eid>[^<]*</eid>)(\s*<text><i>a cappella"
+               r"</i></text>)", r"\1\n            <align>right,baseline"
+               r"</align>\2", x)
+    for (staff, bar, mark), dy in DYN_Y.items():
+        blocks = [mo for mo in re.finditer(
+            rf'<Staff id="{staff}">.*?</Staff>', x, re.S)
+            if "<Measure>" in mo.group(0)]
+        assert len(blocks) == 1, (staff, len(blocks))
+        st = blocks[0]
+        meas = list(re.finditer(r"<Measure>.*?</Measure>", st.group(0), re.S))
+        m = meas[bar - 1]
+        body, n = re.subn(
+            rf"(<Dynamic>\s*<subtype>{mark}</subtype>.*?)(</Dynamic>)",
+            rf'\1  <offset x="0" y="{dy}"/>\n            \2', m.group(0),
+            count=1, flags=re.S)
+        assert n == 1, (staff, bar, mark)
+        a = st.start() + m.start()
+        x = x[:a] + body + x[a + len(m.group(0)):]
+    return x
 
 
 META["mscx_hook"] = _mscx_hook
@@ -412,7 +438,7 @@ def split_dur(pos, dur):
                        4: [12, 4, 3, 2, 1],
                        8: [8, 6, 4, 3, 2, 1]}.get(pos, [4, 3, 2, 1])
         elif pos % 4 == 2:
-            allowed = [4, 2, 1] if pos in (2, 10) else [2, 1]
+            allowed = [6, 4, 2, 1] if pos in (2, 10) else [2, 1]
         elif pos % 4 == 1:
             allowed = [3, 2, 1]
         else:

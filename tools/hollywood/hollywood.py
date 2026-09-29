@@ -173,6 +173,26 @@ def polish_musicxml(path, meta):
                 dr.insert(0, dt)
                 break
 
+    # 16th runs: music21 breaks the second beam after every eighth, so a beat
+    # of four 16ths reads 2+2; engrave each pure 16th group as one unit
+    for meas in r.iter("measure"):
+        group = []
+        for n in meas.findall("note"):
+            b1 = n.find("beam[@number='1']")
+            if b1 is None:
+                continue
+            group.append(n)
+            if b1.text != "end":
+                continue
+            b2 = [g.find("beam[@number='2']") for g in group]
+            if len(group) > 2 and all(
+                    b is not None and b.text in ("begin", "continue", "end")
+                    for b in b2):
+                for i, b in enumerate(b2):
+                    b.text = ("begin" if i == 0 else
+                              "end" if i == len(b2) - 1 else "continue")
+            group = []
+
     # rehearsal letters bold (house style; Sibelius and MS4 both read it)
     for rh in r.iter("rehearsal"):
         rh.set("font-weight", "bold")
@@ -373,6 +393,118 @@ def _edit_mscx(mscz, fn):
             z.writestr(info, data)
 
 
+# CJK Radicals Supplement code points that share a glyph with an ordinary
+# character in Noto Serif CJK SC (derived from the font's cmap).  The
+# Kangxi Radicals block (U+2F00-2FDF) is handled by NFKC.
+_RADICALS = {
+    0x2E82: 0x4E5B, 0x2E83: 0x4E5A, 0x2E85: 0x4EBB, 0x2E89: 0x5202,
+    0x2E8E: 0x5140, 0x2E8F: 0x5C23, 0x2E90: 0x5C22, 0x2E92: 0x5DF3,
+    0x2E93: 0x5E7A, 0x2E94: 0x5F51, 0x2E95: 0x5F50, 0x2E96: 0x5FC4,
+    0x2E98: 0x624C, 0x2E99: 0x6535, 0x2E9B: 0x65E1, 0x2E9E: 0x6B7A,
+    0x2EA0: 0x6C11, 0x2EA1: 0x6C35, 0x2EA3: 0x706C, 0x2EA6: 0x4E2C,
+    0x2EA8: 0x72AD, 0x2EAB: 0x7F52, 0x2EAD: 0x793B, 0x2EAF: 0x7CF9,
+    0x2EB0: 0x7E9F, 0x2EB1: 0x7F53, 0x2EB2: 0x7F52, 0x2EB9: 0x8002,
+    0x2EBA: 0x8080, 0x2EBE: 0x8279, 0x2EBF: 0x8279, 0x2EC0: 0x8279,
+    0x2EC1: 0x864E, 0x2EC2: 0x8864, 0x2EC3: 0x8980, 0x2EC5: 0x89C1,
+    0x2EC6: 0x89D2, 0x2EC8: 0x8BA0, 0x2EC9: 0x8D1D, 0x2ECB: 0x8F66,
+    0x2ECC: 0x8FB6, 0x2ED0: 0x9485, 0x2ED1: 0x9577, 0x2ED2: 0x9578,
+    0x2ED3: 0x957F, 0x2ED4: 0x95E8, 0x2ED6: 0x961D, 0x2ED8: 0x9752,
+    0x2ED9: 0x97E6, 0x2EDA: 0x9875, 0x2EDB: 0x98CE, 0x2EDC: 0x98DE,
+    0x2EDD: 0x98DF, 0x2EDF: 0x98E0, 0x2EE0: 0x9963, 0x2EE2: 0x9A6C,
+    0x2EE3: 0x9AA8, 0x2EE4: 0x9B3C, 0x2EE5: 0x9C7C, 0x2EE6: 0x9E1F,
+    0x2EE7: 0x5364, 0x2EE8: 0x9EA6, 0x2EE9: 0x9EC4, 0x2EEA: 0x9EFE,
+    0x2EEB: 0x6589, 0x2EEC: 0x9F50, 0x2EEE: 0x9F7F, 0x2EEF: 0x7ADC,
+    0x2EF0: 0x9F99, 0x2EF1: 0x9F9C, 0x2EF2: 0x4E80,
+}
+
+
+def _plain_cjk(cp):
+    if cp in _RADICALS:
+        return _RADICALS[cp]
+    if 0x2F00 <= cp <= 0x2FDF:
+        import unicodedata
+        n = unicodedata.normalize("NFKC", chr(cp))
+        if len(n) == 1:
+            return ord(n)
+    return cp
+
+
+def _fix_tounicode(cmap):
+    """Rewrite one ToUnicode CMap so glyphs that the font shares between a
+    radical and an ordinary character (方 / ⽅) map to the ordinary one.
+    MS4's PDF export picks the radical, so copy / search in the PDF fails.
+    Returns the new CMap bytes, or None if nothing needed changing."""
+    txt = cmap.decode("latin-1")
+    table = {}
+    for blk in re.findall(r"beginbfchar(.*?)endbfchar", txt, re.S):
+        for src, dst in re.findall(r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>",
+                                   blk):
+            table[src] = dst
+    for blk in re.findall(r"beginbfrange(.*?)endbfrange", txt, re.S):
+        for lo, hi, rest in re.findall(
+                r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(\[[^\]]*\]|<[0-9A-Fa-f]+>)",
+                blk):
+            w = len(lo)
+            a, b = int(lo, 16), int(hi, 16)
+            if rest.startswith("["):
+                for i, d in enumerate(re.findall(r"<([0-9A-Fa-f]+)>", rest)):
+                    table[f"{a + i:0{w}X}"] = d
+            else:
+                d0 = int(rest[1:-1], 16)
+                dw = len(rest) - 2
+                for i in range(b - a + 1):
+                    table[f"{a + i:0{w}X}"] = f"{d0 + i:0{dw}X}"
+    changed = False
+    for k, d in table.items():
+        if len(d) == 4 and 0x2E80 <= int(d, 16) <= 0x2FDF:
+            nd = f"{_plain_cjk(int(d, 16)):04X}"
+            if nd != d.upper():
+                table[k] = nd
+                changed = True
+    if not changed:
+        return None
+    head = txt[:txt.index("endcodespacerange") + len("endcodespacerange")]
+    items = sorted(table.items(), key=lambda kv: int(kv[0], 16))
+    body = []
+    for i in range(0, len(items), 100):
+        chunk = items[i:i + 100]
+        body.append(f"{len(chunk)} beginbfchar")
+        body += [f"<{k}> <{v}>" for k, v in chunk]
+        body.append("endbfchar")
+    tail = "endcmap\nCMapName currentdict /CMap defineresource pop\nend\nend\n"
+    return (head + "\n" + "\n".join(body) + "\n" + tail).encode("latin-1")
+
+
+def _fix_text_layer(writer):
+    """Apply _fix_tounicode to every font (Type 0 / 3 / TrueType, also inside
+    Type 3 and form-XObject resources) in the finished PDF."""
+    from pypdf.generic import NameObject
+    seen = set()
+
+    def walk_res(res):
+        res = res.get_object() if res is not None else None
+        if not res:
+            return
+        for f in (res.get("/Font") or {}).values():
+            f = f.get_object()
+            if id(f) in seen:
+                continue
+            seen.add(id(f))
+            tu = f.get("/ToUnicode")
+            if tu is not None:
+                stream = tu.get_object()
+                new = _fix_tounicode(stream.get_data())
+                if new is not None:
+                    stream.set_data(new)
+            walk_res(f.get("/Resources"))
+        for x in (res.get("/XObject") or {}).values():
+            x = x.get_object()
+            if x.get("/Subtype") == NameObject("/Form"):
+                walk_res(x.get("/Resources"))
+    for page in writer.pages:
+        walk_res(page.get("/Resources"))
+
+
 def _chrome_pdf(html_path, pdf_path):
     subprocess.run([find_chrome(), "--headless", "--no-sandbox", "--disable-gpu",
                     "--no-pdf-header-footer", "--virtual-time-budget=4000",
@@ -462,6 +594,7 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
       align-items: baseline; }
 .ft .l .cjk { letter-spacing: .08em; }
 .ft .l .en { color: #555; margin-left: 8pt; font-style: italic; }
+.ft .l .en .nm { font-style: normal; }  /* no fake-italic Chinese */
 .ft .r { letter-spacing: .2em; text-transform: uppercase; font-size: 8pt;
          color: #333; }
 """
@@ -515,7 +648,7 @@ def overlay_html(m, page, total):
     same = m["arranger"] == m["engraver"]
     who = (f"<span class='cjk'>改编 · 制谱　{_e(m['arranger'])}</span>"
            "<span class='en'>Arranged &amp; Music Preparation by "
-           f"{_e(m['arranger'])}</span>") if same else (
+           f"<span class='nm'>{_e(m['arranger'])}</span></span>") if same else (
            f"<span class='cjk'>改编　{_e(m['arranger'])}　·　制谱　"
            f"{_e(m['engraver'])}</span>")
     head = _e(m["title"]) + (f" · {_e(m['subtitle'].split('·')[0].strip())}"
@@ -570,6 +703,7 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
                        f"改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
+        _fix_text_layer(w)
         with open(out_pdf, "wb") as fh:
             w.write(fh)
         if png_dir:
