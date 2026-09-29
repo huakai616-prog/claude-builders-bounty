@@ -179,7 +179,8 @@ def pieces_of(e, kinds):
                 cands = [x for x in (96, 72, 48, 36, 24, 18, 12, 6, 3)
                          if (x <= 24 or pos % 48 == 0) and
                          (x not in (96, 72) or pos == 0) and
-                         (x != 36 or pos % 48 == 0)]
+                         (x != 36 or pos % 48 == 0) and
+                         (x != 72 or e["pitches"] is not None)]
             elif off == 12:
                 cands = [12, 6, 3]
             elif off in (6, 18):
@@ -562,8 +563,11 @@ def _write_part(part_el, p, voices, spec, top):
             shown = {}
             for g in range(BAR // Q):
                 if g in tup_first:
-                    shown[g] = tuplet_run.get(v) != kinds[g]
-                    tuplet_run[v] = kinds[g]
+                    unit = 4 if kinds[g] == "s" else 8
+                    uniform = all(pc[1] == unit and ee["pitches"]
+                                  for ee, _, _, pc in plist if pc[0] // Q == g)
+                    shown[g] = tuplet_run.get(v) != kinds[g] or not uniform
+                    tuplet_run[v] = kinds[g] if uniform else None
                 else:
                     tuplet_run[v] = None
             # emit
@@ -803,7 +807,8 @@ def merged(voices):
                 depth = max(0, depth + e["sl"] - e["sr"])
                 continue
             depth = max(0, depth + e["sl"] - e["sr"])
-            if cur is not None and cur["tie"]:
+            if cur is not None and cur["tie"] and \
+                    cur["pitches"] == e["pitches"]:
                 cur["dur"] += e["dur"]
                 cur["tie"] = e["tie"]
                 cur["marks"] += e["marks"].replace(">", "").replace("^", "")
@@ -985,6 +990,10 @@ def check_part(pid, fam, rng, voices, fast_rng=None):
     out = []
     lo, hi = (midi_of(x) for x in rng)
     for v, evs in voices.items():
+        for a_, b_ in zip(evs, evs[1:]):
+            if a_["tie"] and a_["pitches"] and b_["pitches"] != a_["pitches"]:
+                out.append(f"TIE {pid} m{a_['bar']} {'+'.join(a_['pitches'])} "
+                           f"-> {'+'.join(b_['pitches'] or ['rest'])}")
         prev = None
         for e in evs:
             if not e["pitches"]:

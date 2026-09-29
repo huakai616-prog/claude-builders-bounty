@@ -153,7 +153,7 @@ VLC[9] = "G#2/48> r/24 A2/24>"
 VN1[10] = W(10, rng=VN, first=">")
 VN2[10] = "r/24 D4/8 D4/8 D4/8 C4/24 r/24"
 VLA[10] = "r/24 G3/8 F3/8 E3/8 E3/24 r/24"
-VLC[10] = "G#2/48> r/24 A2/24>"
+VLC[10] = "G#2/24> r/48 A2/24>"
 
 VN1[11] = W(11, rng=VN)
 VN2[11] = "r/24 (E4/8 G#4/8 C#5/8) D#4+A4/24 B3/24"
@@ -179,14 +179,14 @@ VN2[14] = "C4+E4/24_ C4/24_ C4+E4/48_"
 VLA[14] = W(14, sh=-2, rng=VA)
 VLC[14] = "A2/24_ E2/24_ A2/48_"
 
-VN1[15] = "r/24 E5/18 E5/6 E5/24 F5/24"
+VN1[15] = REST
 VN2[15] = "r/24 G3+E4/18 G3+E4/6 G3+E4/24 G3+F4/24"
 VLA[15] = W(15, sh=-1, rng=VA)
 VLC[15] = "C2/24. G2+E3/18> G2+E3/6 G2+E3/24_ G2+F3/24_"
 
 VN1[16] = REST
-VN2[16] = "C4+E4/24 r/24 E4+C5/48"
-VLA[16] = "G3+E4/24 C4/24 G3+E4/48"
+VN2[16] = "C4+E4/24 r/24 E4/48"
+VLA[16] = "G3+E4/24 C3+C4/24 C3+G3/48"
 VLC[16] = W(16, sh=-1)
 
 # 17-22: the sequence climbs; the two violins answer each other (17 / 18),
@@ -202,7 +202,7 @@ VN2[18] = W(18)
 VLA[18] = "r/24 Bb3/8. r/16 Eb3+Bb3/24A. r/24"
 VLC[18] = "D2/24. r/8 C#3/8 D3/8 Eb3/24 Eb2/24"
 
-VN1[19] = W(19)
+VN1[19] = W(19, slur=4)   # a bow per 4-note cell: the ninths fall on bow changes
 VN2[19] = "r/24 C5/18> C5/6 C5/24> r/24"
 VLA[19] = "r/24 C4/18> C4/6 C4/24> r/24"
 VLC[19] = "E2/72 C2/24"
@@ -214,8 +214,7 @@ VLC[20] = "F2/24. r/24 F3/48"
 
 # 21: the peak (E7 in Chopin) comes down an octave from beat 2 on, so the
 #     line meets bar 22-23 (written an octave down) without a jump
-VN1[21] = W(21, 0, 1) + " " + W(21, 1, 3, sh=-1) + " " + \
-    W(21, 3, 4, sh=-1, sub={19: "B4"})
+VN1[21] = W(21, sh=-1, sub={19: "B4"})
 VN2[21] = "r/24 (B3/8 F4/8 A4/8) G4/48"
 VLA[21] = "r/24 G3/24 r/24 B3+F4/24"
 VLC[21] = "G2/72 G2/24"
@@ -236,7 +235,7 @@ VLC[23] = "E2+B2+G3/24^D E2/72"
 
 VN1[24] = "E4+B4/24_ B3+G4/24_ E4+B4/48_"
 VN2[24] = W(24, sh=-1)
-VLA[24] = "E3+B3/24_ E3+G3/24_ E3+B3/48_"
+VLA[24] = "E3+G3/24_ E3+G3/24_ E3+G3/48_"
 VLC[24] = "E2/24_ B2/24_ E2/48_"
 
 VN1[25] = REST
@@ -246,7 +245,7 @@ VLC[25] = "E2/24. E2+B2/18 E2+B2/6 E2+B2/24 E2+C3/24"
 
 VN1[26] = REST
 VN2[26] = "B3/24 r/72"
-VLA[26] = "E3+B3/24 r/24 B3/48"
+VLA[26] = "E3+B3/48 B3/48"
 VLC[26] = W(26, sh=-1, rng=VC)
 
 # 27-28: the rising arpeggio starts low, so the viola begins and ends each
@@ -275,23 +274,23 @@ VLC[30] = "B2/24 r/24 B2/24. r/24"
 #    cello (33-34) while Violin II holds its open G as the bass of G major
 VN1[31] = W(31, sh=-1, first=">")
 VN2[31] = W(31, sh=-2, rng=VN, first=">")
-VLA[31] = "r/24 E3+B3/18> E3+B3/6. E3+B3/24_ E3+C4/24_"
+VLA[31] = "r/24 G3+B3/18> G3+B3/6. G3+B3/24_ G3+C4/24_"
 VLC[31] = "E2+B2+G3/24^D E2+B2/18> E2+B2/6. E2+B2/24_ E2+C3/24_"
 
 VN1[32] = W(32, sh=-1, rng=VN)
 VN2[32] = "E4+B4/24_ B3+G4/24_ E4+B4/48_"
-VLA[32] = "E3+B3/24_ E3+G3/24_ E3+B3/48_"
+VLA[32] = "E3+G3/24_ E3+G3/24_ E3+G3/48_"
 VLC[32] = "E2/24_ B2/24_ E2/48_"
 
 VN1[33] = "r/24 D4+B4/18> D4+B4/6. D4+B4/24_ E4+C5/24_"
-VN2[33] = "G3/96~"
+VN2[33] = REST
 VLA[33] = W(33)
-VLC[33] = W(33, sh=-1)
+VLC[33] = "G2/24. " + W(33, 1, 4, sh=-1)
 
 VN1[34] = "D4+B4/24 r/24 D4/48"
-VN2[34] = "G3/96"
+VN2[34] = REST
 VLA[34] = W(34, rng=VA)
-VLC[34] = W(34, sh=-1, rng=VC)
+VLC[34] = "D2+B2/24> G2/24 G2+D3/48"
 
 # 35-36: the arpeggio figure over a chromatic bass (G F# G Ab-G#, A G# A Bb-A#)
 VN1[35] = W(35, 0, 3) + " r/24"
@@ -306,9 +305,9 @@ VLC[36] = "A2/24. r/8 G#2/8 A2/8 Bb2/24 A#2/24>"
 
 # 37: the wind now climbs through the quartet: viola -> Violin II -> Violin I,
 #     over the cello's march on G
-VN1[37] = "r/48 " + W(37, 2, 4)
-VN2[37] = "r/24 " + W(37, 1, 2) + " G4/24> r/24"
-VLA[37] = W(37, 0, 1) + " r/72"
+VN1[37] = "r/48 " + W(37, 2, 4, slur=4)
+VN2[37] = "r/24 (F4/4 D4/4) (E5/4 G4/4 D5/4 F4/4) G4/24> r/24"
+VLA[37] = "(E4/4 G3/4 D4/4 F3/4) (G4/4 E4/4) r/24 r/48"
 VLC[37] = "B2/24. G3/18> G3/6 G3/24> G2/24"
 
 VN1[38] = W(38, rng=VN)
@@ -317,11 +316,11 @@ VLA[38] = "r/24 (E3/8 C4/8 G#4/8) r/24 (F3+Ab3/8 Db4/8 Ab4/8)"
 VLC[38] = "C2/48 F2/48"
 
 VN1[39] = W(39)
-VN2[39] = "r/72 B3+F4/24"
+VN2[39] = "r/24 G3/24 r/24 B3+F4/24"
 VLA[39] = "r/24 (C4/8 E4/8 G4/8) r/24 G3+D4/24"
 VLC[39] = "G2/24. r/24 G2/24. r/24"
 
-VN1[40] = W(40)
+VN1[40] = W(40, 0, 3) + " (E5/4 G4/4) (A5/4 E5/4 G5/4 C5/4)"
 VN2[40] = "C5+E5/24A r/72"
 VLA[40] = "G3+E4/24A r/72"
 VLC[40] = "C2+G2+E3/24A r/72"
@@ -338,7 +337,7 @@ VLC[41] = "A2/72 " + L(41, 3, 4)
 VN1[42] = "G5/24_ E5/24_ G5/48_"
 VN2[42] = "G4+E5/24_ G4+C#5/24_ G4+E5/48_"
 VLA[42] = "A3/96"
-VLC[42] = L(42, rng=VC)
+VLC[42] = L(42, 0, 2) + " " + L(42, 2, 4, sh=1)
 
 VN1[43] = "Bb5/24 Bb5/18> Bb5/6 Bb5/24_ C6/24_"
 VN2[43] = "G5/24 Bb4+G5/18> Bb4+G5/6 Bb4+G5/24_ C5+G5/24_"
@@ -348,25 +347,25 @@ VLC[43] = "C2/96"
 VN1[44] = "Bb5/24_ G5/24_ Bb5/48_"
 VN2[44] = "Bb4+G5/24_ Bb4+E5/24_ Bb4+G5/48_"
 VLA[44] = "C4/96"
-VLC[44] = L(44, rng=VC)
+VLC[44] = L(44, 0, 3) + " " + L(44, 3, 4, sh=1)
 
 # 45-48: A-flat, then E major: a quiet interlude, the melody in the viola
 VN1[45] = W(45)
-VN2[45] = "r/48 Eb4+C5/48"
+VN2[45] = "r/48 C4/48"
 VLA[45] = "r/24 (Eb4/18 Eb4/6 Eb4/24 Ab4/18 C4/6"
 VLC[45] = "Eb2/48 Eb3/48"
 
 VN1[46] = W(46)
-VN2[46] = "G4+Db5/48 Ab4+C5/24 r/24"
+VN2[46] = "r/48 C4/24 r/24"
 VLA[46] = "Eb4/24 Bb3/18 Eb4/6 C4/24) r/24"
 VLC[46] = "Eb3/48 Ab2+Eb3/24A r/24"
 
-VN1[47] = "r/24 D#4+A4/24 B3+G#4/48"
+VN1[47] = REST
 VN2[47] = W(47)
 VLA[47] = "r/24 (B3/18 B3/6 B3/24 E4/12) r/6 G#3/6"
 VLC[47] = "B2/48 B2+G#3/24 r/24"
 
-VN1[48] = "D#4+A4/48 B3+G#4/24 r/24"
+VN1[48] = REST
 VN2[48] = W(48)
 VLA[48] = "(B3/24 F#3/8 G#3/8 A3/8 G#3/24) r/24"
 VLC[48] = "B2/48 E2+B2/24A r/24"
@@ -377,61 +376,61 @@ VLC[48] = "B2/48 E2+B2/24A r/24"
 # 49-52: Chopin's left hand is a bass line in octaves; here it is tripled
 #    (cello, viola, Violin II), marcato, under the wind
 VN1[49] = W(49)
-VN2[49] = "E5/24> (B4/8 G#4/8 B4/8) E4/12. r/6 E5/6 F#5/18> E5/6"
-VLA[49] = "E4/24> (B3/8 G#3/8 B3/8) E3/12. r/6 E4/6 F#4/18> E4/6"
-VLC[49] = "E3/24> (B2/8 G#2/8 B2/8) E2/12. r/6 E3/6 F#3/18> E3/6"
+VN2[49] = REST
+VLA[49] = "E4/24> (B3/8 G#3/8 B3/8) E3/12. r/6 E3/6 F#3/18> E3/6"
+VLC[49] = "E3/24> (B2/8 G#2/8 B2/8) E2/12. r/6 E2/6 F#2/18> E2/6"
 
-VN1[50] = W(50, sub={3: "C5"})   # C4 -> C5: no G-to-E string leap
-VN2[50] = "Eb4/24> C4/24 Eb4/24 (F4/8 F#4/8 G4/8)"
+VN1[50] = REST
+VN2[50] = "(D5/4 G4/4 C5/4) (C5/4 F5/4 C5/4) " + W(50, 1, 4)  # C4 -> C5: no G-to-E string leap
 VLA[50] = "Eb3/24> C3/24 Eb3/24 (F3/8 F#3/8 G3/8)"
 VLC[50] = "Eb2/24> C2/24 Eb2/24 (F2/8 F#2/8 G2/8)"
 
-VN1[51] = W(51, rng=VN)
-VN2[51] = "Ab5/24> (Eb5/8 C5/8 Eb5/8) Ab4/12. r/6 Ab5/6 Bb5/18> Ab5/6"
-VLA[51] = "Ab4/24> (Eb4/8 C4/8 Eb4/8) Ab3/12. r/6 Ab4/6 Bb4/18> Ab4/6"
-VLC[51] = "Ab3/24> (Eb3/8 C3/8 Eb3/8) Ab2/12. r/6 Ab3/6 Bb3/18> Ab3/6"
+VN1[51] = W(51, rng=("G3", "B6"))
+VN2[51] = REST
+VLA[51] = "Ab3/24> (Eb3/8 C3/8 Eb3/8) Ab3/12. r/6 Ab3/6 Bb3/18> Ab3/6"
+VLC[51] = "Ab2/24> (Eb2/8 C2/8 Eb2/8) Ab2/12. r/6 Ab2/6 Bb2/18> Ab2/6"
 
-VN1[52] = W(52, sub={3: "E5"})
-VN2[52] = "G4/24> E4/24 G4/24 (A4/8 A#4/8 B4/8)"
+VN1[52] = REST
+VN2[52] = W(52, sub={3: "E5"})
 VLA[52] = "G3/24> E3/24 G3/24 (A3/8 A#3/8 B3/8)"
 VLC[52] = "G2/24> E2/24 G2/24 (A2/8 A#2/8 B2/8)"
 
 # 53-54: Chopin's rolled chords round the circle of fifths become
 #    strummed triple stops in the lower three
 VN1[53] = W(53)
-VN2[53] = "C5/24> C5+E5/24>A A4+F5/24>A D#5+A5/24>A"
+VN2[53] = W(53, first=">")
 VLA[53] = "C4/24> G3+E4/24>A F3+C4+A4/24>A A3+F#4/24>A"
 VLC[53] = "C3/24> C2+G2+E3/24>A F2+C3+A3/24>A B2+D#3/24>A"
 
 VN1[54] = W(54)
-VN2[54] = "B4+G5/24>A C#5+A5/24>A D5+A5/24>A C5+A5/24>A"
+VN2[54] = W(54)
 VLA[54] = "G3+E4/24>A C#4+A4/24>A D4+A4/24>A C4+A4/24>A"
 VLC[54] = "E2+B2+G3/24>A A2+E3+C#4/24>A D2+A2+D3/24>A A2+E3+C4/24>A"
 
 VN1[55] = W(55)
-VN2[55] = "D4/24> (F5/24 A#4/12) r/6 (C5/6 B4/24)"
+VN2[55] = "D4/24> (F4/24 A#3/12) r/6 (C4/6 B3/24)"
 VLA[55] = "D3/24> (F4/24 A#3/12) r/6 (C4/6 B3/24)"
 VLC[55] = "D2/24> (F3/24 A#2/12) r/6 (C3/6 B2/24)"
 
 VN1[56] = W(56)
-VN2[56] = "D#4/24> (F#5/24 A4/12) r/6 (D5/6 C5/24)"
+VN2[56] = "D#4/24> (F#4/24 A3/12) r/6 (D4/6 C4/24)"
 VLA[56] = "D#3/24> (F#4/24 A3/12) r/6 (D4/6 C4/24)"
 VLC[56] = "D#2/24> (F#3/24 A2/12) r/6 (D3/6 C3/24)"
 
 # 57-60: over a long E pedal the viola sings Chopin's tenor lament, and at
 #    59 the theme returns on F, a half step too high, cresc. to the storm
 VN1[57] = W(57)
-VN2[57] = "r/48 D4+G#4/48"
+VN2[57] = REST
 VLA[57] = "r/24 (B3/18 E4/6 D4/48)"
 VLC[57] = "E2/24^ E3/72"
 
-VN1[58] = W(58, rng=VN)
-VN2[58] = "r/48 D4+G#4/48"
+VN1[58] = REST
+VN2[58] = W(58, rng=VN)
 VLA[58] = "r/24 (G#3/18 C#4/6 B3/48)"
 VLC[58] = "E2/96"
 
-VN1[59] = W(59, rng=VN)
-VN2[59] = "r/24 F4/18> F4/6 F4/24> G4/24>"
+VN1[59] = W(59, sh=1, first=">")
+VN2[59] = W(59, rng=VN, first=">")
 VLA[59] = "r/24 F3/18> F3/6 F3/24> G3/24>"
 VLC[59] = "E2/96T~"
 
@@ -481,11 +480,11 @@ VLC[65] = REST
 
 VN1[66] = W(66, slur=12)
 VN2[66] = L(66, slur=12)
-VLA[66] = "r/48 B3/48T~"
+VLA[66] = "r/48 B3/48T"
 VLC[66] = "E2/96T~"
 
 VN1[67] = W(67, slur=12)
-VN2[67] = W(67, sh=-1, slur=12)
+VN2[67] = "B3/96T"
 VLA[67] = L(67, 0, 2) + " r/48"
 VLC[67] = "E2/48T " + L(67, 2, 4)
 
@@ -507,14 +506,14 @@ VN2[70] = "C4+E4/24_ C4/24_ C4+E4/48_"
 VLA[70] = W(70, sh=-2, rng=VA)
 VLC[70] = "A2/24_ E2/24_ A2/48_"
 
-VN1[71] = "r/24 E5/18 E5/6 E5/24 F5/24"
+VN1[71] = REST
 VN2[71] = "r/24 A3+E4/18 A3+E4/6 A3+E4/24 A3+F4/24"
 VLA[71] = W(71, sh=-1, rng=VA)
 VLC[71] = "A2/24. A2+E3/18 A2+E3/6 A2+E3/24 A2+F3/24"
 
-VN1[72] = "E5/24 r/72"
+VN1[72] = REST
 VN2[72] = "A3+E4/24 r/72"
-VLA[72] = W(72)
+VLA[72] = "E3+A3/48 E3/48"
 VLC[72] = W(72, sh=-1)
 
 for b in range(73, 77):  # 73-76 as 9-12
@@ -532,39 +531,39 @@ VN2[78] = "C4+E4/24_ C4/24_ C4+E4/48_"
 VLA[78] = W(78, sh=-2, rng=VA)
 VLC[78] = "A2/24_ E2/24_ A2/48_"
 
-VN1[79] = "r/24 E5/18 E5/6 E5/24 F5/24"
+VN1[79] = REST
 VN2[79] = "r/24 G3+E4/18 G3+E4/6 G3+E4/24 G3+F4/24"
 VLA[79] = W(79, sh=-1, rng=VA)
 VLC[79] = "G2/24. G2+E3/18> G2+E3/6 G2+E3/24_ G2+F3/24_"
 
-VN1[80] = "E5/48 r/48"
-VN2[80] = "C4+E4/24 C4+E4/24 C4+A4/24 A3+E4/24"
+VN1[80] = REST
+VN2[80] = "C4+E4/24 C4/24 C4+A4/24 A3+E4/24"
 VLA[80] = W(80)
 VLC[80] = "G2+E3/24 G2/24 F2/24 E2/24"
 
 # ===========================================================================
 # H. Coda, bars 81-96
 # ===========================================================================
-VN1[81] = "r/24 " + W(81, 1, 4)
+VN1[81] = "r/24 " + W(81, 1, 4, slur=0)
 VN2[81] = "r/24 A3+F4/8> r/16 A3+F#4/24A r/24"
-VLA[81] = W(81, 0, 1) + " r/24 D#3+A3/24A r/24"
+VLA[81] = "(C4/4 F3/4 B3/4 B3/4) (C5/4 F4/4) r/24 D#3+A3/24A r/24"
 VLC[81] = "D2/24. r/8 C#3/8 D3/8 D#3/24 D#2/24>"
 
-VN1[82] = W(82, rng=VN)
+VN1[82] = W(82, 0, 2, slur=0) + " " + W(82, 2, 4, sh=-1, rng=VN, slur=0)
 VN2[82] = "r/24 Bb3+G4/8> r/16 D4+Bb4/24A r/24"
 VLA[82] = "r/24 Bb3/8 r/16 F3+Bb3/24A r/24"
 VLC[82] = "E2/24. r/8 D#3/8 E3/8 F3/24 F2/24>"
 
 # 83-84 (ff): the march on F in three octaves against the wind
-VN1[83] = W(83, 0, 2) + " " + W(83, 2, 4, sh=-1)
-VN2[83] = "r/24 F5/18> F5/6. F5/24> G5/24>"
+VN1[83] = W(83, 0, 2, slur=0) + " " + W(83, 2, 4, sh=-1, slur=0)
+VN2[83] = "r/24 F4/18> F4/6. F4/24> G4/24>"
 VLA[83] = "r/24 F4/18> F4/6. F4/24> C4+G4/24>"
 VLC[83] = "F2/24> F3/18> F3/6. F3/24> F3+C4/24>"
 
-VN1[84] = W(84, sh=-1)
-VN2[84] = "F5/24> C5/24> F5/48>"
+VN1[84] = W(84, sh=-1, slur=0)
+VN2[84] = "F4/24> C4/24> F4/48>"
 VLA[84] = "F4/24> C4/24> F4/48>"
-VLC[84] = "F2+C3/24> C3/24> F2+C3/48>"
+VLC[84] = "F2/24> C3/24> F2/48>"
 
 # 85-86 (p, cresc.): Violin I whistles; Chopin's rising left hand climbs
 #    from the cello through the viola to Violin II; the cello keeps F
@@ -599,13 +598,13 @@ VLA[89] = HAM_VA
 VLC[89] = HAM
 
 VN1[90] = W(90)
-VN2[90] = "A4+E5/96T"
+VN2[90] = REST
 VLA[90] = W(90, sh=-1)
-VLC[90] = "A2/6> E3/6 C4/6 E3/6 E2/6> E3/6 C4/6 E3/6 A2/6> E3/6 C4/6 E3/6 C3/6> E3/6 C4/6 E3/6"
+VLC[90] = "A2/6> E3/6 C4/6 E3/6 E2/6> C3/6 E3/6 C3/6 A2/6> E3/6 C4/6 E3/6 C4/6> E3/6 C4/6 E3/6"
 
 VN1[91] = W(91, 0, 3) + " r/24"
-VN2[91] = "A4+E5/96T"
-VLA[91] = "r/72 " + W(91, 3, 4)
+VN2[91] = W(91, 0, 3) + " r/24"
+VLA[91] = "r/48 r/24 " + W(91, 3, 4, sub={23: "C4"})
 VLC[91] = HAM
 
 CHROM = ["A", "G#", "G", "F#", "F", "E", "D#", "D", "C#", "C", "B", "Bb"]
@@ -622,15 +621,15 @@ def chrom(o_hi):
 
 VN1[92] = chrom(5)
 VN2[92] = chrom(4)
-VLA[92] = chrom(4)
-VLC[92] = W(92)
+VLA[92] = W(92, sh=1, first=">")
+VLC[92] = chrom(3)
 
 # 93-96 (fff): the march one last time in full chords, then the scale
 #    from C, in four octaves at once, to the final A
 VN1[93] = "A5/24^.D C5+A5/18^ C5+A5/6. C5+A5/24^ D5+A5/24^"
 VN2[93] = "A4/24^.D E4+C5/18^ E4+C5/6. E4+C5/24^ F4+D5/24^"
-VLA[93] = "A3/24^.D A3+E4+A4/18^ A3+E4+A4/6. A3+E4+A4/24^ A3+F4+A4/24^"
-VLC[93] = "A2/24^.D A2+E3+A3/18^ A2+E3+A3/6. A2+E3+A3/24^ A2+D3+A3/24^"
+VLA[93] = "A3/24^.D A3+E4+A4/18^ E4+A4/6. A3+E4+A4/24^ A3+F4+A4/24^"
+VLC[93] = "A2/24^.D A2+E3+A3/18^ E3+A3/6. A2+E3+A3/24^ A2+D3+A3/24^"
 
 VN1[94] = "C5+A5/48^ B4+A5/48^"
 VN2[94] = "E4+C5/48^ F4+D5/48^"
@@ -642,8 +641,8 @@ SCALE = ["C", "D", "E", "F#", "G#", "A", "B", "C", "D", "E", "F#", "G#"]
 
 def run_up(o):
     ps = [f"{n}{o + (1 if i >= 7 else 0)}" for i, n in enumerate(SCALE)]
-    return "(" + " ".join(f"{p}/4" for p in ps[:6]) + ") (" + \
-        " ".join(f"{p}/4" for p in ps[6:]) + ")"
+    return "(" + " ".join(f"{p}/4" + ("U" if i == 0 else "")
+                          for i, p in enumerate(ps)) + ")"
 
 
 VN1[95] = "C5+A5/48^ " + run_up(5)
@@ -685,14 +684,13 @@ def words(bar, tick, text, *ids):
 # I. Introduction
 dyn(1, 0, "p", "va")
 words(1, 0, "sul G, poco vibrato", "va")
-dyn(3, 0, "pp", "vn1", "vn2", "vc")
-dyn(3, 0, "=pp", "va")
-words(3, 0, "sul tasto, senza vibrato", "vn1", "vn2", "vc")
-words(3, 0, "sul tasto", "va")
+dyn(3, 0, "p", "vn1")
+dyn(3, 0, "pp", "vn2", "va", "vc")
+words(3, 0, "sul tasto, senza vibrato")
 # A. Theme
 dyn(5, 0, "f risoluto", "vn1")
-dyn(5, 0, "fz", "vc")
-dyn(5, 0, "=f", "vc")
+dyn(5, 0, "f", "vc")
+dyn(5, 0, "=fz", "vc")
 dyn(5, 24, "f", "vn2", "va")
 words(5, 0, "ord.")
 words(7, 0, "dim.", "va", "vc", "vn2")
@@ -704,14 +702,13 @@ dyn(9, 24, "f", "vn2", "va")
 words(9, 24, "marcato", "vn2", "va")
 hair(10, 0, 10, 72, "dim")
 dyn(11, 0, "mf")
-hair(12, 0, 12, 48, "cresc")
+hair(12, 0, 12, 48, "cresc", "vn1", "vn2", "vc")
 dyn(13, 0, "f")
 words(15, 0, "dim.")
 hair(15, 0, 15, 90, "dim-")
 dyn(16, 0, "mf")
-hair(16, 48, 16, 90, "cresc")
+hair(16, 48, 16, 90, "cresc", "vn2", "va", "vc")
 dyn(17, 0, "f")
-hair(19, 0, 20, 90, "cresc-")
 dyn(21, 0, "f")
 hair(22, 0, 22, 90, "cresc", "vn1")
 # B. E minor
@@ -720,15 +717,13 @@ dyn(23, 24, "f", "vn2", "va")
 words(25, 0, "dim.", "va", "vc", "vn2")
 hair(25, 0, 25, 72, "dim-", "va", "vc", "vn2")
 dyn(26, 0, "mf", "vc", "va", "vn2")
-hair(26, 0, 26, 72, "cresc", "vc", "va")
-dyn(27, 0, "f")
-words(27, 24, "marcato", "vn2")
-hair(28, 0, 28, 72, "dim")
+dyn(27, 0, "mf")
 dyn(29, 0, "mf")
 hair(30, 0, 30, 48, "cresc")
 dyn(31, 0, "f")
 dyn(35, 0, "mf")
-hair(37, 0, 37, 90, "cresc")
+hair(37, 0, 37, 90, "cresc", "vn2", "vc")
+hair(37, 48, 37, 90, "cresc", "vn1")
 dyn(38, 0, "f")
 hair(40, 0, 40, 90, "dim", "vn1")
 # C. Theme on top
@@ -743,20 +738,19 @@ words(45, 24, "dolce, espressivo", "va")
 hair(45, 48, 45, 66, "cresc", "va")
 hair(45, 72, 45, 90, "dim", "va")
 dyn(47, 0, "p")
-hair(48, 0, 48, 90, "cresc")
+hair(48, 0, 48, 90, "cresc", "vn2", "va", "vc")
 # D. Development
 dyn(49, 0, "f")
 words(49, 0, "marcato", "vn2", "va", "vc")
-hair(49, 0, 49, 48, "cresc-")
-dyn(53, 0, "ff", "vn2", "va", "vc")
-dyn(53, 0, "f", "vn1")
+hair(49, 0, 49, 48, "cresc", "vn1", "va", "vc")
+dyn(53, 0, "ff")
 dyn(55, 0, "f")
 dyn(57, 0, "mf")
 words(57, 24, "espressivo", "va")
 words(57, 0, "poco a poco cresc.", "vn1")
 hair(57, 0, 58, 90, "cresc-")
+words(58, 0, "cresc.", "va", "vc", "vn2")
 dyn(59, 0, "f")
-words(59, 0, "trem.", "vc")
 hair(59, 0, 60, 90, "cresc")
 # E. Storm
 dyn(61, 0, "ff")
@@ -776,15 +770,15 @@ words(66, 48, "sul pont.", "va")
 words(66, 0, "cresc. poco a poco", "vn1", "vn2")
 hair(66, 0, 67, 90, "cresc-", "vn1", "vn2")
 hair(66, 0, 67, 90, "cresc-", "vc", "va")
-dyn(67, 0, "p", "vc")
-dyn(67, 0, "p", "va")
+dyn(67, 0, "p cresc.", "vc")
+dyn(67, 0, "p cresc.", "va")
 words(68, 0, "ord.")
 dyn(68, 0, "mf")
 hair(68, 0, 68, 90, "cresc")
 # G. Reprise
 dyn(69, 0, "f", "vn1", "vn2")
-dyn(69, 0, "fz", "vc")
-dyn(69, 0, "=f", "vc")
+dyn(69, 0, "f", "vc")
+dyn(69, 0, "=fz", "vc")
 dyn(69, 24, "f", "va")
 words(71, 0, "dim.")
 hair(71, 0, 71, 72, "dim-")
@@ -795,32 +789,37 @@ dyn(73, 24, "f", "vn2", "va")
 words(73, 24, "marcato", "vn2", "va")
 hair(74, 0, 74, 72, "dim")
 dyn(75, 0, "mf")
-hair(76, 0, 76, 48, "cresc")
+hair(76, 0, 76, 48, "cresc", "vn1", "vn2", "vc")
 dyn(77, 0, "f")
 words(79, 0, "dim.")
 hair(79, 0, 79, 90, "dim-")
 dyn(80, 0, "mf")
-hair(80, 0, 80, 90, "cresc")
+hair(80, 0, 80, 90, "cresc", "vn2", "va", "vc")
 # H. Coda
 dyn(81, 0, "f")
+words(81, 24, "sautillé", "vn1")
+words(81, 0, "sautillé", "va")
 words(82, 0, "cresc.")
 hair(82, 0, 82, 90, "cresc-")
 dyn(83, 0, "ff")
 words(83, 24, "marcatissimo", "vn2", "va", "vc")
 hair(84, 48, 84, 90, "dim")
 dyn(85, 0, "p")
-words(85, 0, "leggiero", "vn1")
-words(85, 0, "cresc. poco a poco", "vc", "va", "vn2")
+words(85, 0, "legato, leggiero", "vn1")
+words(85, 0, "cresc. poco a poco", "vn1", "vc")
+words(85, 48, "cresc. poco a poco", "va")
+words(86, 48, "cresc. poco a poco", "vn2")
 hair(85, 0, 86, 90, "cresc-")
 dyn(87, 0, "f")
-dyn(87, 0, "fz", "vn2", "va", "vc")
+dyn(87, 0, "=fz", "vn2", "va", "vc")
 dyn(89, 0, "ff")
-words(90, 0, "dim.")
+words(90, 0, "dim.", "vn1", "va", "vc")
 hair(90, 0, 90, 90, "dim-")
 dyn(91, 0, "f")
-hair(91, 0, 91, 90, "cresc")
+hair(91, 0, 91, 90, "cresc", "vn1", "vn2", "vc")
+hair(91, 72, 91, 90, "cresc", "va")
 dyn(92, 0, "ff")
-words(92, 0, "marcatissimo", "vn1", "vn2", "va")
+words(92, 0, "marcatissimo", "vn1", "vn2", "vc")
 dyn(93, 0, "fff")
 words(93, 0, "pesante")
 
@@ -841,9 +840,11 @@ TEMPI = [(1, 0, 52), (2, 48, 34), (3, 0, 50), (4, 0, 46), (4, 48, 40),
          (4, 72, 24), (5, 0, 138),
          (68, 48, 128), (68, 60, 120), (68, 72, 110), (68, 84, 98),
          (69, 0, 138), (93, 0, 132), (95, 0, 122), (95, 48, 118), (96, 0, 104)]
-SYSTEM_BREAKS = tuple(range(5, NBARS + 1, 2))
+# two bars a system (24 sextuplet 16ths in a bar), the Lento and the last
+# four bars (chords and one run) four to a system
+SYSTEM_BREAKS = tuple(b for b in range(5, NBARS + 1, 2) if b != 95)
 PAGE_BREAKS = ()
-DOUBLE_BARS = (4, 22, 40, 48, 60, 64, 68, 80)
+DOUBLE_BARS = (4, 22, 40, 48, 60, 64, 68, 80, 88)
 PROGRAMS = {}       # part id -> [(bar, tick, GM program)] (pizz. etc.)
 PARTS = [
     dict(id="vn1", name="Violin I", abbr="Vln. I", iname="Violin",
@@ -873,13 +874,15 @@ META = dict(
 
 def _mscx_hook(x):
     """MS4 touch-ups on the imported score (MS4 ignores these from MusicXML):
-    tuplets are drawn without brackets, and only the tuplets that arrived
-    with a number (the first of each run of sextuplets / triplets) show it."""
+    only the tuplets that arrived with a number (the first of each run of
+    sextuplets / triplets, and any irregular group) show it; the others get
+    neither number nor bracket."""
     def fix(mo):
         t = mo.group(0)
-        extra = "<bracketType>2</bracketType>\n"
-        if "<Number>" not in t:
-            extra += "            <numberType>2</numberType>\n"
+        if "<Number>" in t:  # MS4 brackets it only when it is not beamed
+            return t
+        extra = ("<bracketType>2</bracketType>\n"
+                 "            <numberType>2</numberType>\n")
         return t.replace("<normalNotes>", extra + "            <normalNotes>", 1)
     return re.sub(r"<Tuplet>.*?</Tuplet>", fix, x, flags=re.S)
 
@@ -897,18 +900,25 @@ def auto_marks(parsed):
     for p in PARTS:
         evs = [e for v in parsed[p["id"]].values() for e in v if e["pitches"]]
         if p["fam"] == "vn":
+            # count ledger lines, not semitones: a beat reaching B6 (four
+            # ledger lines above the staff) or three notes from G6 up
+            def dia(x):
+                st, _, o = engine.split_pitch(x)
+                return 7 * o + "CDEFGAB".index(st)
+            g6, b6 = dia("G6"), dia("B6")
             beats = set()
             for k in range(NBARS * BAR // 24):
                 a, z = k * 24, k * 24 + 24
                 ns = [e for e in evs if a <= e["abs"] < z]
-                hi = [e for e in ns if max(mid(x) for x in e["pitches"]) >= 93]
+                top = [max(dia(x) for x in e["pitches"]) for e in ns]
                 held = [e for e in ns if e["dur"] >= 12 and
                         max(mid(x) for x in e["pitches"]) >= 96]
-                if len(hi) >= 3 or held:
+                if any(t >= b6 for t in top) or \
+                        sum(t >= g6 for t in top) >= 3 or held:
                     beats.add(k)
             spans, cur = [], None
             for k in sorted(beats):
-                if cur and k == cur[1]:
+                if cur and k - cur[1] <= 1:
                     cur[1] = k + 1
                 else:
                     cur = [k, k + 1]
