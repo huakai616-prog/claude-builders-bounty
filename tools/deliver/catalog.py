@@ -30,9 +30,7 @@ WORKS = [
                   strings="我不难过_弦乐四重奏_伴奏.mid",
                   vocal="我不难过_人声_带歌词.mid"),
         pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
-        questions=[
-            "谱上几处低八度请核对：「陪」「寞」「看」（以及后半段同位置的「你」「我」「不」）照谱写成了低八度，旋律会在高音之间突然掉下去。原唱不是这样的话告诉我，我改成高八度。",
-        ]),
+        questions=[]),  # 用户说这首不用再重做，别再问
     dict(
         slug="qingge", section="song", ref="origin/claude/serene-darwin-2l4jy4",
         title="情歌", subtitle="最后一遍副歌 · 人声与弦乐四重奏",
