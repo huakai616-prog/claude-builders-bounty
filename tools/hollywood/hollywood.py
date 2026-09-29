@@ -173,6 +173,30 @@ def polish_musicxml(path, meta):
                 dr.insert(0, dt)
                 break
 
+    # 16th runs: music21 breaks the second beam after every eighth, so a beat
+    # of four 16ths reads 2+2; engrave each pure 16th group as one unit
+    for meas in r.iter("measure"):
+        group = []
+        for n in meas.findall("note"):
+            b1 = n.find("beam[@number='1']")
+            if b1 is None:
+                continue
+            group.append(n)
+            if b1.text != "end":
+                continue
+            b2 = [g.find("beam[@number='2']") for g in group]
+            if len(group) > 2 and all(
+                    b is not None and b.text in ("begin", "continue", "end")
+                    for b in b2):
+                for i, b in enumerate(b2):
+                    b.text = ("begin" if i == 0 else
+                              "end" if i == len(b2) - 1 else "continue")
+            group = []
+
+    # rehearsal letters bold (house style; Sibelius and MS4 both read it)
+    for rh in r.iter("rehearsal"):
+        rh.set("font-weight", "bold")
+
     # every bar numbered (Sibelius honours <measure-numbering>)
     first = r.find("part/measure")
     if first is not None:
@@ -278,6 +302,209 @@ def _fix_title_frame(mscz):
             z.writestr(info, data)
 
 
+SECTION_LIFT_SP = 5  # rehearsal letter + section title sit above bar numbers
+
+
+def _lift_sections(mscz, lift=SECTION_LIFT_SP):
+    """Bar numbers are boxed above every bar, so a rehearsal letter and its
+    bold section title ("A  Chorus 副歌") would share their row and run into
+    the section's first bar number.  Raise both onto a row of their own."""
+    if not lift:
+        return
+    off = f'\n            <offset x="0" y="{-lift}"/>'
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    out = []
+    for info, data in items:
+        if info.filename.endswith(".mscx"):
+            x = data.decode("utf-8")
+
+            def fix(mo):
+                meas = mo.group(0)
+                if "<RehearsalMark>" not in meas:
+                    return meas
+                meas = re.sub(r"(<RehearsalMark>\s*<eid>[^<]*</eid>)",
+                              lambda k: k.group(1) + off, meas)
+                # the section title: a staff text that is bold throughout
+                return re.sub(
+                    r"(<StaffText>\s*<eid>[^<]*</eid>\s*"
+                    r"<text><b>[^<]*</b></text>)",
+                    lambda k: k.group(1) + off, meas)
+            x = re.sub(r"<Measure>.*?</Measure>", fix, x, flags=re.S)
+            data = x.encode("utf-8")
+        out.append((info, data))
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in out:
+            z.writestr(info, data)
+
+
+CJK_FONT = "Noto Serif CJK SC"
+_CJK = re.compile(r"[\u3000-\u303f\u3400-\u9fff\uff00-\uffef]+")
+
+
+def _engrave_fixes(mscz):
+    """Fixes on the imported .mscz that the MusicXML cannot carry:
+    * Chinese in staff / system texts ("Chorus 副歌") in Noto Serif CJK,
+      not whatever fallback the text font finds;
+    * 8va lines labelled "8va", not a bare "8" (MS4 turns the import's
+      ottavaNumbersOnly on, and -S does not reset it)."""
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    out = []
+    for info, data in items:
+        if info.filename.endswith(".mscx"):
+            x = data.decode("utf-8")
+
+            def text(mo):
+                return _CJK.sub(lambda k: f'<font face="{CJK_FONT}"/>'
+                                f'{k.group(0)}<font face="Edwin"/>',
+                                mo.group(0))
+
+            def block(mo):
+                return re.sub(r"<text>.*?</text>", text, mo.group(0),
+                              flags=re.S)
+            x = re.sub(r"<(StaffText|SystemText)>.*?</\1>", block, x,
+                       flags=re.S)
+            data = x.encode("utf-8")
+        elif info.filename.endswith(".mss"):
+            x = data.decode("utf-8")
+            if "<ottavaNumbersOnly>" in x:
+                x = re.sub(r"<ottavaNumbersOnly>\d</ottavaNumbersOnly>",
+                           "<ottavaNumbersOnly>0</ottavaNumbersOnly>", x)
+            else:
+                x = x.replace("</Style>",
+                              "  <ottavaNumbersOnly>0</ottavaNumbersOnly>\n"
+                              "    </Style>", 1)
+            data = x.encode("utf-8")
+        out.append((info, data))
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in out:
+            z.writestr(info, data)
+
+
+def _edit_mscx(mscz, fn):
+    """Apply fn(mscx_text) -> mscx_text to the score inside an .mscz."""
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in items:
+            if info.filename.endswith(".mscx"):
+                data = fn(data.decode("utf-8")).encode("utf-8")
+            z.writestr(info, data)
+
+
+# CJK Radicals Supplement code points that share a glyph with an ordinary
+# character in Noto Serif CJK SC (derived from the font's cmap).  The
+# Kangxi Radicals block (U+2F00-2FDF) is handled by NFKC.
+_RADICALS = {
+    0x2E82: 0x4E5B, 0x2E83: 0x4E5A, 0x2E85: 0x4EBB, 0x2E89: 0x5202,
+    0x2E8E: 0x5140, 0x2E8F: 0x5C23, 0x2E90: 0x5C22, 0x2E92: 0x5DF3,
+    0x2E93: 0x5E7A, 0x2E94: 0x5F51, 0x2E95: 0x5F50, 0x2E96: 0x5FC4,
+    0x2E98: 0x624C, 0x2E99: 0x6535, 0x2E9B: 0x65E1, 0x2E9E: 0x6B7A,
+    0x2EA0: 0x6C11, 0x2EA1: 0x6C35, 0x2EA3: 0x706C, 0x2EA6: 0x4E2C,
+    0x2EA8: 0x72AD, 0x2EAB: 0x7F52, 0x2EAD: 0x793B, 0x2EAF: 0x7CF9,
+    0x2EB0: 0x7E9F, 0x2EB1: 0x7F53, 0x2EB2: 0x7F52, 0x2EB9: 0x8002,
+    0x2EBA: 0x8080, 0x2EBE: 0x8279, 0x2EBF: 0x8279, 0x2EC0: 0x8279,
+    0x2EC1: 0x864E, 0x2EC2: 0x8864, 0x2EC3: 0x8980, 0x2EC5: 0x89C1,
+    0x2EC6: 0x89D2, 0x2EC8: 0x8BA0, 0x2EC9: 0x8D1D, 0x2ECB: 0x8F66,
+    0x2ECC: 0x8FB6, 0x2ED0: 0x9485, 0x2ED1: 0x9577, 0x2ED2: 0x9578,
+    0x2ED3: 0x957F, 0x2ED4: 0x95E8, 0x2ED6: 0x961D, 0x2ED8: 0x9752,
+    0x2ED9: 0x97E6, 0x2EDA: 0x9875, 0x2EDB: 0x98CE, 0x2EDC: 0x98DE,
+    0x2EDD: 0x98DF, 0x2EDF: 0x98E0, 0x2EE0: 0x9963, 0x2EE2: 0x9A6C,
+    0x2EE3: 0x9AA8, 0x2EE4: 0x9B3C, 0x2EE5: 0x9C7C, 0x2EE6: 0x9E1F,
+    0x2EE7: 0x5364, 0x2EE8: 0x9EA6, 0x2EE9: 0x9EC4, 0x2EEA: 0x9EFE,
+    0x2EEB: 0x6589, 0x2EEC: 0x9F50, 0x2EEE: 0x9F7F, 0x2EEF: 0x7ADC,
+    0x2EF0: 0x9F99, 0x2EF1: 0x9F9C, 0x2EF2: 0x4E80,
+}
+
+
+def _plain_cjk(cp):
+    if cp in _RADICALS:
+        return _RADICALS[cp]
+    if 0x2F00 <= cp <= 0x2FDF:
+        import unicodedata
+        n = unicodedata.normalize("NFKC", chr(cp))
+        if len(n) == 1:
+            return ord(n)
+    return cp
+
+
+def _fix_tounicode(cmap):
+    """Rewrite one ToUnicode CMap so glyphs that the font shares between a
+    radical and an ordinary character (方 / ⽅) map to the ordinary one.
+    MS4's PDF export picks the radical, so copy / search in the PDF fails.
+    Returns the new CMap bytes, or None if nothing needed changing."""
+    txt = cmap.decode("latin-1")
+    table = {}
+    for blk in re.findall(r"beginbfchar(.*?)endbfchar", txt, re.S):
+        for src, dst in re.findall(r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>",
+                                   blk):
+            table[src] = dst
+    for blk in re.findall(r"beginbfrange(.*?)endbfrange", txt, re.S):
+        for lo, hi, rest in re.findall(
+                r"<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*(\[[^\]]*\]|<[0-9A-Fa-f]+>)",
+                blk):
+            w = len(lo)
+            a, b = int(lo, 16), int(hi, 16)
+            if rest.startswith("["):
+                for i, d in enumerate(re.findall(r"<([0-9A-Fa-f]+)>", rest)):
+                    table[f"{a + i:0{w}X}"] = d
+            else:
+                d0 = int(rest[1:-1], 16)
+                dw = len(rest) - 2
+                for i in range(b - a + 1):
+                    table[f"{a + i:0{w}X}"] = f"{d0 + i:0{dw}X}"
+    changed = False
+    for k, d in table.items():
+        if len(d) == 4 and 0x2E80 <= int(d, 16) <= 0x2FDF:
+            nd = f"{_plain_cjk(int(d, 16)):04X}"
+            if nd != d.upper():
+                table[k] = nd
+                changed = True
+    if not changed:
+        return None
+    head = txt[:txt.index("endcodespacerange") + len("endcodespacerange")]
+    items = sorted(table.items(), key=lambda kv: int(kv[0], 16))
+    body = []
+    for i in range(0, len(items), 100):
+        chunk = items[i:i + 100]
+        body.append(f"{len(chunk)} beginbfchar")
+        body += [f"<{k}> <{v}>" for k, v in chunk]
+        body.append("endbfchar")
+    tail = "endcmap\nCMapName currentdict /CMap defineresource pop\nend\nend\n"
+    return (head + "\n" + "\n".join(body) + "\n" + tail).encode("latin-1")
+
+
+def _fix_text_layer(writer):
+    """Apply _fix_tounicode to every font (Type 0 / 3 / TrueType, also inside
+    Type 3 and form-XObject resources) in the finished PDF."""
+    from pypdf.generic import NameObject
+    seen = set()
+
+    def walk_res(res):
+        res = res.get_object() if res is not None else None
+        if not res:
+            return
+        for f in (res.get("/Font") or {}).values():
+            f = f.get_object()
+            if id(f) in seen:
+                continue
+            seen.add(id(f))
+            tu = f.get("/ToUnicode")
+            if tu is not None:
+                stream = tu.get_object()
+                new = _fix_tounicode(stream.get_data())
+                if new is not None:
+                    stream.set_data(new)
+            walk_res(f.get("/Resources"))
+        for x in (res.get("/XObject") or {}).values():
+            x = x.get_object()
+            if x.get("/Subtype") == NameObject("/Form"):
+                walk_res(x.get("/Resources"))
+    for page in writer.pages:
+        walk_res(page.get("/Resources"))
+
+
 def _chrome_pdf(html_path, pdf_path):
     subprocess.run([find_chrome(), "--headless", "--no-sandbox", "--disable-gpu",
                     "--no-pdf-header-footer", "--virtual-time-budget=4000",
@@ -307,14 +534,16 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
 .frame::after { content: ''; position: absolute; inset: 5pt;
                 border: .5pt solid #111; }
 .cv { position: absolute; left: 0; right: 0; text-align: center; }
-.kicker { top: 2.05in; font-size: 15pt; letter-spacing: .5em;
+/* letter-spacing trails the last glyph too: pad-left by the same amount
+   so every spaced line sits on the page axis */
+.kicker { top: 2.05in; font-size: 15pt; letter-spacing: .5em; padding-left: .5em;
           text-transform: uppercase; }
-.kicker2 { top: 2.5in; font-size: 11pt; letter-spacing: .3em;
+.kicker2 { top: 2.5in; font-size: 11pt; letter-spacing: .3em; padding-left: .3em;
            text-transform: uppercase; color: #444; }
 .title { top: 4.1in; font-family: 'Noto Serif CJK SC', serif;
          font-weight: 700; font-size: 92pt; letter-spacing: .12em;
          padding-left: .12em; line-height: 1.1; }
-.latin { top: 6.05in; font-size: 17pt; letter-spacing: .45em;
+.latin { top: 6.05in; font-size: 17pt; letter-spacing: .45em; padding-left: .45em;
          text-transform: uppercase; color: #333; }
 .orn { top: 6.85in; }
 .orn span { display: inline-block; width: 1.6in; height: 0;
@@ -323,6 +552,7 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
          transform: rotate(45deg); border: .8pt solid #111;
          vertical-align: middle; }
 .sub { top: 7.4in; font-family: 'Noto Serif CJK SC', serif; font-size: 22pt;
+       padding-left: .12em;
        letter-spacing: .12em; }
 .suben { top: 8.05in; font-size: 17pt; font-style: italic; color: #222; }
 .credits { position: absolute; top: 9.55in; left: 2.35in; right: 2.35in;
@@ -336,12 +566,14 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
                color: #555; width: 2.3in; }
 .credits .nm { font-family: 'Noto Serif CJK SC', serif; font-size: 15pt;
                text-align: right; font-weight: 600; }
-.info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em; color: #222; }
-.inst { top: 13.75in; font-size: 11pt; letter-spacing: .12em; color: #444; }
+.info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em;
+        padding-left: .06em; color: #222; }
+.inst { top: 13.75in; font-size: 11pt; letter-spacing: .12em;
+        padding-left: .12em; color: #444; }
 .inst .cjk { font-size: 10pt; letter-spacing: .05em; color: #666; }
 .sig { top: 15.1in; font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
        letter-spacing: .5em; padding-left: .5em; }
-.sig2 { top: 15.5in; font-size: 9.5pt; letter-spacing: .35em;
+.sig2 { top: 15.5in; font-size: 9.5pt; letter-spacing: .35em; padding-left: .35em;
         text-transform: uppercase; color: #555; }
 
 /* running header / footer on the music pages (transparent overlay) */
@@ -352,14 +584,20 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
             letter-spacing: .08em; }
 .hd .l .x { color: #555; margin-left: 10pt; font-size: 8.5pt;
             letter-spacing: .25em; text-transform: uppercase; }
+/* page number: a real bold face with lining figures (EB Garamond has no
+   bold here, so Chromium would fake one) */
 .hd .r { position: absolute; right: 0; bottom: 3pt; font-size: 21pt;
-         font-weight: 700; }
+         font-family: 'Noto Serif CJK SC', serif; font-weight: 700; }
+/* one flex row, baseline-aligned: the credit line and "PAGE n OF N" have
+   different sizes but must share a baseline */
 .ft { position: absolute; bottom: .38in; left: .6in; right: .6in;
-      height: .36in; border-top: .45pt solid #888; font-size: 9pt; }
-.ft .l { position: absolute; left: 0; top: 7pt; }
+      height: .36in; border-top: .45pt solid #888; font-size: 9pt;
+      padding-top: 7pt; display: flex; justify-content: space-between;
+      align-items: baseline; }
 .ft .l .cjk { letter-spacing: .08em; }
 .ft .l .en { color: #555; margin-left: 8pt; font-style: italic; }
-.ft .r { position: absolute; right: 0; top: 7pt; letter-spacing: .2em;
+.ft .l .en .nm { font-style: normal; }  /* no fake-italic Chinese */
+.ft .r { letter-spacing: .2em; margin-right: -.2em; /* flush with the rule */
          text-transform: uppercase; font-size: 8pt; color: #333; }
 """
 
@@ -412,7 +650,7 @@ def overlay_html(m, page, total):
     same = m["arranger"] == m["engraver"]
     who = (f"<span class='cjk'>改编 · 制谱　{_e(m['arranger'])}</span>"
            "<span class='en'>Arranged &amp; Music Preparation by "
-           f"{_e(m['arranger'])}</span>") if same else (
+           f"<span class='nm'>{_e(m['arranger'])}</span></span>") if same else (
            f"<span class='cjk'>改编　{_e(m['arranger'])}　·　制谱　"
            f"{_e(m['engraver'])}</span>")
     head = _e(m["title"]) + (f" · {_e(m['subtitle'].split('·')[0].strip())}"
@@ -438,6 +676,10 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         score_pdf = os.path.join(tmp, "score.pdf")
         _ms4(["-o", mscz, musicxml])            # import MusicXML
         _fix_title_frame(mscz)
+        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+        _engrave_fixes(mscz)
+        if m.get("mscx_hook"):  # song-specific touch-ups, see SKILL.md
+            _edit_mscx(mscz, m["mscx_hook"])
         _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
         score = PdfReader(score_pdf)
         n = len(score.pages)
@@ -463,6 +705,7 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
                        f"改编 {m['arranger']} · 制谱 {m['engraver']}",
             "/Subject": m["subtitle_en"],
             "/Creator": "MuseScore Studio 4 + tools/hollywood"})
+        _fix_text_layer(w)
         with open(out_pdf, "wb") as fh:
             w.write(fh)
         if png_dir:

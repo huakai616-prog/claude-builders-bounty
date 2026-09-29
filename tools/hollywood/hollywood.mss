@@ -71,7 +71,9 @@
     <measureNumberFramePadding>0.35</measureNumberFramePadding>
     <measureNumberFrameWidth>0.1</measureNumberFrameWidth>
     <measureNumberPosAbove x="0" y="-3"/>
-    <measureNumberMinDistance>1</measureNumberMinDistance>
+    <!-- 0.5 sp: a fermata or dynamic just under the row must not push a
+         single box above its neighbours -->
+    <measureNumberMinDistance>0.5</measureNumberMinDistance>
 
     <!-- rehearsal marks: big, bold, boxed -->
     <rehearsalMarkFontFace>Edwin</rehearsalMarkFontFace>
@@ -117,6 +119,8 @@
     <titleFontStyle>1</titleFontStyle>
     <subTitleFontFace>Noto Serif CJK SC</subTitleFontFace>
     <subTitleFontSize>14</subTitleFontSize>
+    <!-- MS4's default (10 mm) leaves the 30 pt title touching the subtitle -->
+    <subTitleOffset x="0" y="13"/>
     <composerFontFace>Noto Serif CJK SC</composerFontFace>
     <composerFontSize>10.5</composerFontSize>
     <lyricistFontFace>Noto Serif CJK SC</lyricistFontFace>

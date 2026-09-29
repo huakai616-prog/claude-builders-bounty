@@ -66,6 +66,10 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 ```
 
 - Create the `MetronomeMark` **without** text; `META["tempo_text"]` is joined to it.
+- **Hairpins on held notes**: the older `make_m21()` (泪海, 我不难过) pins a hairpin to note objects and silently drops it when both ends land on the same held note (a cresc under a whole note, a dim under a tie). `chatang/build.py` falls back to `spanner.SpannerAnchor` offsets in that case; copy its hairpin loop into new songs.
+- **Voice hairpins**: printed above the voice staff they push single bar-number boxes up. `print_hair=False` on the voice part keeps them in the MIDI only (`chatang/build.py`).
+- **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
+- **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
 
 Then run:
@@ -114,6 +118,9 @@ xmllint --noout --schema musicxml.xsd <song>/output/*.musicxml   # schema from w
 
 - MS4 **ignores `-S style` when it imports MusicXML directly**. `render_pdf` imports to `.mscz` first, then exports with the style.
 - MS4 gives imported MusicXML credits odd offsets: the composer drifts to the top and the lyricist falls into the music. `render_pdf` resets the title frame (`_fix_title_frame`).
+- The boxed bar numbers sit above every bar, so a rehearsal letter and its bold section title would share their row and run into the section's first bar number ("A Chorus 副歌 [10]"). `render_pdf` lifts both by 5 spaces onto their own row (`_lift_sections`). MS4 ignores `default-y` from MusicXML, so the offset is written into the imported `.mscz`. Set `META["section_lift"] = 0` to turn it off.
+- `render_pdf` also sets the Chinese in staff texts ("Chorus 副歌") in Noto Serif CJK SC (otherwise MS4 falls back to WenQuanYi Zen Hei, a sans) and labels 8va lines "8va" (MS4 imports them as a bare "8" and `-S` does not reset that). `polish_musicxml` makes rehearsal letters bold.
+- Letter-spaced cover lines need `padding-left` equal to their `letter-spacing`, or they sit left of the page axis (CSS adds the spacing after the last glyph too).
 - music21 writes the tempo words and the metronome as two directions. Use `tempo_text` so they print as one mark.
 - The cover and header are an HTML page printed by headless Chromium on a transparent background and merged onto the MS4 pages. Page size must stay 11 × 17 in on both sides.
 - EB Garamond has no ♩ ♭ ♯; `hollywood._sym` wraps them in a fallback font.
