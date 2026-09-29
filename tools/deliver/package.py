@@ -5,6 +5,10 @@
     python3 tools/deliver/package.py wobunanguo # just one
     python3 tools/deliver/package.py wobunanguo --files
         # also print the Artifact `files` map to publish for that work
+    python3 tools/deliver/package.py --snapshot <dir>
+        # <dir> = an ArtifactData `list` of collection `works` saved with
+        # out_dir (<dir>/works/<slug>.json); writes dist/files/works.json,
+        # the list the page shows when its database does not answer
 
 For each work it pulls the files from the work's git ref (or the working
 tree), and writes to tools/deliver/dist/ (not committed):
@@ -287,7 +291,26 @@ def package(w):
         return row
 
 
+def snapshot(src):
+    d = os.path.join(src, "works") if os.path.isdir(os.path.join(src, "works")) \
+        else src
+    rows = {}
+    for f in sorted(os.listdir(d)):
+        if f.endswith(".json"):
+            with open(os.path.join(d, f), encoding="utf-8") as fh:
+                rows[f[:-5]] = json.load(fh)
+    out = os.path.join(DIST, "files", "works.json")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as fh:
+        json.dump(rows, fh, ensure_ascii=False)
+    print(f"{len(rows)} works -> {out}")
+    print(json.dumps({"files/works.json": out}, ensure_ascii=False))
+
+
 def main():
+    if "--snapshot" in sys.argv:
+        snapshot(sys.argv[sys.argv.index("--snapshot") + 1])
+        return
     want = {a for a in sys.argv[1:] if not a.startswith("--")}
     works = [w for w in WORKS if not want or w["slug"] in want]
     os.makedirs(DIST, exist_ok=True)

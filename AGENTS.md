@@ -16,7 +16,7 @@
 
 **用户在「编曲交付中心」找文件**：https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN
 - 已经钉在用户 claude.ai 的左侧边栏。
-- 用户要过把它放进 Mac 程序坞：页面顶部的「放进 Mac 程序坞」卡片给一个安装包和一行终端命令，装好后点程序坞图标就用浏览器打开交付中心。源文件在 `tools/deliver/macapp/`（做法见 SKILL.md 的「Mac Dock app」）。用户问怎么装，就指这张卡片。
+- 用户要过把它放进 Mac 程序坞：页面底部（歌曲列表下面）的「放进 Mac 程序坞」卡片给一个安装包和一行终端命令，装好后点程序坞图标就用浏览器打开交付中心。源文件在 `tools/deliver/macapp/`（做法见 SKILL.md 的「Mac Dock app」）。用户问怎么装，就指这张卡片。
 - 每首歌点「下载到电脑」，就得到一个整理好的 zip。
 - 用户说过「我不太会用 GitHub」，所以别让用户去 GitHub 或分支里找文件。
 - 每次交付都要把作品加进交付中心，回复第一句给这个链接。步骤见 `.claude/skills/hollywood-score/SKILL.md` 的「Delivery center」。
@@ -152,6 +152,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **MS4 一行放不下时**：它会把最后一两小节挤到下一行单独成行，调小 `measureSpacing` 没用（已经是最小宽度）。先看实际分行：`pdftotext -bbox` 读出每页的方框小节号、按纵坐标分组，就知道每行是哪几小节。解决办法是每行少放小节，或者去掉占宽的东西（土耳其进行曲把大提琴的三个倚音琶音改成了琶音和弦）。
 - **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。
 - **纯器乐曲 / 钢琴谱转弦乐**：照 `alla-turca/build.py` 做。钢琴原谱逐小节转写成 `source_piano.py`，`--check` 会拿编配和原谱对照（旋律、低音、和声外音、原谱没有的小二度冲突）；反复用 `FORM` 写开、`ALIAS` 复用；分谱用 `hollywood.render_parts_pdf`。
+- **给用户 Mac 写的 shell 脚本**：macOS 的 `/bin/bash` 是 3.2，UTF-8 下它把 0x80–0xFF 的字节当字母，`"「$NAME」"` 会把「」」的第一个字节吞进变量名，打印出「??」。变量后面紧跟中文时一律写 `${NAME}`。在 Linux 上可以用 `localedef -i en_US -f ISO-8859-1` 造一个 Latin-1 locale（`LOCPATH=… LC_ALL=en_US.ISO-8859-1`）复现。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 
 ## 待办 / 待确认
