@@ -132,13 +132,13 @@ VN1 = {
     5: "E5/12) (E5/4",
     6: "A5/2 C#6/2 B5/2 E6/2) r/6 (F#6/1 A6/1",
     7: "F#6/12 C#6/4)",
-    8: "(B5/16~",
-    9: "B5/8) r/8",
+    8: "B5/16~",
+    9: "B5/8 r/8",
     10: REST,
     11: REST,
     12: REST,
-    13: "r/8 (A4/2 C#5/2 B4/2 E5/2~",
-    14: "E5/16)",
+    13: "r/8 (A4/2 C#5/2 B4/2 E5/2~)",
+    14: "E5/16",
     15: "F#5/8 (G#5/2 B5/2 C#6/2 E6/2",
     16: "C#6/8 B5/8)",
     17: "A5/4 (E5/1 F#5/1 A5/1 B5/1 C#6/1 E6/1 F#6/1 A6/1) r/4",
@@ -151,8 +151,8 @@ VN1 = {
     24: "G#6/8 A6/8~",
     25: "A6/8 G#6/8)",
     26: "(A5/2 C#6/2 B5/2 E6/2) r/6 (F#6/1 A6/1",
-    27: "F#6/12 C#6/4",
-    28: "E6/16)",
+    27: "F#6/12 C#6/4)",
+    28: "E6/16",
     29: "(B5/16",
     30: "A5/16)",
 }
@@ -265,12 +265,15 @@ PARTS = [
     dict(id="vox", name="Voice", abbr="V.", data=VOCAL,
          inst=instrument.Soprano, clef=clef.TrebleClef, program=52,
          dyn=[(10, 2, "mp"), (18, 0, "f"), (24, 0, "ff")],
+         # voice hairpins shape the MIDI only: printed above the staff they
+         # push single bar-number boxes out of line
+         print_hair=False,
          hair=[(16, 0, 17, 15, "cresc"), (22, 0, 23, 15, "cresc"),
                (25, 4, 25, 15, "dim")],
          text=[(17, 12, "a cappella")]),
     dict(id="vn1", name="Violin I", abbr="Vln. I", data=VN1,
          inst=instrument.Violin, clef=clef.TrebleClef, program=40,
-         dyn=[(1, 12, "mp"), (6, 0, "mf"), (8, 0, "f"), (9, 8, "p"),
+         dyn=[(1, 12, "mp"), (6, 0, "mf"), (8, 0, "f"),
               (13, 8, "mp"), (17, 0, "mf"), (18, 0, "f"), (22, 0, "ff"),
               (26, 0, "f"), (28, 0, "mp"), (29, 0, "p"), (30, 0, "pp")],
          hair=[(5, 12, 5, 15, "cresc"), (7, 0, 7, 15, "cresc"),
@@ -339,6 +342,18 @@ META = dict(
                      ("Violoncello", "大提琴")],
     key="A Major · A大调", tempo="♩ = 112", duration="ca. 1′06″",
     year="2026", tempo_text="Moderato")
+
+
+def _mscx_hook(x):
+    """MS4 touch-up: "a cappella" marks bar 17 beat 4, the last beat of a
+    system, so right-align it to end at the barline instead of running
+    into the margin (MS4 ignores MusicXML justify on import)."""
+    return re.sub(r"(<StaffText>\s*<eid>[^<]*</eid>)(\s*<text><i>a cappella"
+                  r"</i></text>)", r"\1\n            <align>right,baseline"
+                  r"</align>\2", x)
+
+
+META["mscx_hook"] = _mscx_hook
 
 # ---------------------------------------------------------------------------
 # Parsing
@@ -493,11 +508,10 @@ def make_m21(p, events):
                     te.placement = "above"
                     m.insert(0, te)
         if b == NBARS:
-            for n in m.notesAndRests:
-                if not n.isRest:
-                    f = expressions.Fermata()
-                    f.type = "upright"
-                    n.expressions.append(f)
+            for n in m.notesAndRests:  # rests too: the whole bar holds
+                f = expressions.Fermata()
+                f.type = "upright"
+                n.expressions.append(f)
             m.rightBarline = bar.Barline("final")
         measures[b] = m
         part.append(m)
@@ -519,12 +533,19 @@ def make_m21(p, events):
         d = dynamics.Dynamic(mark)
         d.placement = "above" if p["id"] == "vox" else "below"
         measures[bb].insert(s / 4, d)
-    for bb, s, bb2, s2, kind in p["hair"]:
-        n1, n2 = obj_at(bb, s), obj_at(bb2, s2, forward=False)
-        if n1 is not None and n2 is not None and n1 is not n2:
-            sp = (dynamics.Crescendo if kind == "cresc"
-                  else dynamics.Diminuendo)(n1, n2)
-            part.insert(0, sp)
+    for bb, s, bb2, s2, kind in (p["hair"] if p.get("print_hair", True)
+                                 else []):
+        cls = dynamics.Crescendo if kind == "cresc" else dynamics.Diminuendo
+        n1 = notes_at.get((bb - 1) * BAR16 + s)
+        n2 = obj_at(bb2, s2, forward=False)
+        if n1 is None or n2 is None or n1 is n2:
+            # no note starts there, or it all sits under one held note:
+            # pin the hairpin to offsets instead (after the notes, or
+            # append() would shift them)
+            n1, n2 = spanner.SpannerAnchor(), spanner.SpannerAnchor()
+            measures[bb].insert(s / 4, n1)
+            measures[bb2].insert((s2 + 1) / 4, n2)
+        part.insert(0, cls(n1, n2))
     for bb, s, txt in p["text"]:
         te = expressions.TextExpression(txt)
         te.style.fontStyle = "italic"

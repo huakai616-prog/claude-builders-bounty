@@ -173,6 +173,10 @@ def polish_musicxml(path, meta):
                 dr.insert(0, dt)
                 break
 
+    # rehearsal letters bold (house style; Sibelius and MS4 both read it)
+    for rh in r.iter("rehearsal"):
+        rh.set("font-weight", "bold")
+
     # every bar numbered (Sibelius honours <measure-numbering>)
     first = r.find("part/measure")
     if first is not None:
@@ -314,6 +318,61 @@ def _lift_sections(mscz, lift=SECTION_LIFT_SP):
             z.writestr(info, data)
 
 
+CJK_FONT = "Noto Serif CJK SC"
+_CJK = re.compile(r"[\u3000-\u303f\u3400-\u9fff\uff00-\uffef]+")
+
+
+def _engrave_fixes(mscz):
+    """Fixes on the imported .mscz that the MusicXML cannot carry:
+    * Chinese in staff / system texts ("Chorus 副歌") in Noto Serif CJK,
+      not whatever fallback the text font finds;
+    * 8va lines labelled "8va", not a bare "8" (MS4 turns the import's
+      ottavaNumbersOnly on, and -S does not reset it)."""
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    out = []
+    for info, data in items:
+        if info.filename.endswith(".mscx"):
+            x = data.decode("utf-8")
+
+            def text(mo):
+                return _CJK.sub(lambda k: f'<font face="{CJK_FONT}"/>'
+                                f'{k.group(0)}<font face="Edwin"/>',
+                                mo.group(0))
+
+            def block(mo):
+                return re.sub(r"<text>.*?</text>", text, mo.group(0),
+                              flags=re.S)
+            x = re.sub(r"<(StaffText|SystemText)>.*?</\1>", block, x,
+                       flags=re.S)
+            data = x.encode("utf-8")
+        elif info.filename.endswith(".mss"):
+            x = data.decode("utf-8")
+            if "<ottavaNumbersOnly>" in x:
+                x = re.sub(r"<ottavaNumbersOnly>\d</ottavaNumbersOnly>",
+                           "<ottavaNumbersOnly>0</ottavaNumbersOnly>", x)
+            else:
+                x = x.replace("</Style>",
+                              "  <ottavaNumbersOnly>0</ottavaNumbersOnly>\n"
+                              "    </Style>", 1)
+            data = x.encode("utf-8")
+        out.append((info, data))
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in out:
+            z.writestr(info, data)
+
+
+def _edit_mscx(mscz, fn):
+    """Apply fn(mscx_text) -> mscx_text to the score inside an .mscz."""
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in items:
+            if info.filename.endswith(".mscx"):
+                data = fn(data.decode("utf-8")).encode("utf-8")
+            z.writestr(info, data)
+
+
 def _chrome_pdf(html_path, pdf_path):
     subprocess.run([find_chrome(), "--headless", "--no-sandbox", "--disable-gpu",
                     "--no-pdf-header-footer", "--virtual-time-budget=4000",
@@ -343,14 +402,16 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
 .frame::after { content: ''; position: absolute; inset: 5pt;
                 border: .5pt solid #111; }
 .cv { position: absolute; left: 0; right: 0; text-align: center; }
-.kicker { top: 2.05in; font-size: 15pt; letter-spacing: .5em;
+/* letter-spacing trails the last glyph too: pad-left by the same amount
+   so every spaced line sits on the page axis */
+.kicker { top: 2.05in; font-size: 15pt; letter-spacing: .5em; padding-left: .5em;
           text-transform: uppercase; }
-.kicker2 { top: 2.5in; font-size: 11pt; letter-spacing: .3em;
+.kicker2 { top: 2.5in; font-size: 11pt; letter-spacing: .3em; padding-left: .3em;
            text-transform: uppercase; color: #444; }
 .title { top: 4.1in; font-family: 'Noto Serif CJK SC', serif;
          font-weight: 700; font-size: 92pt; letter-spacing: .12em;
          padding-left: .12em; line-height: 1.1; }
-.latin { top: 6.05in; font-size: 17pt; letter-spacing: .45em;
+.latin { top: 6.05in; font-size: 17pt; letter-spacing: .45em; padding-left: .45em;
          text-transform: uppercase; color: #333; }
 .orn { top: 6.85in; }
 .orn span { display: inline-block; width: 1.6in; height: 0;
@@ -359,6 +420,7 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
          transform: rotate(45deg); border: .8pt solid #111;
          vertical-align: middle; }
 .sub { top: 7.4in; font-family: 'Noto Serif CJK SC', serif; font-size: 22pt;
+       padding-left: .12em;
        letter-spacing: .12em; }
 .suben { top: 8.05in; font-size: 17pt; font-style: italic; color: #222; }
 .credits { position: absolute; top: 9.55in; left: 2.35in; right: 2.35in;
@@ -372,12 +434,14 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
                color: #555; width: 2.3in; }
 .credits .nm { font-family: 'Noto Serif CJK SC', serif; font-size: 15pt;
                text-align: right; font-weight: 600; }
-.info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em; color: #222; }
-.inst { top: 13.75in; font-size: 11pt; letter-spacing: .12em; color: #444; }
+.info { top: 13.25in; font-size: 12.5pt; letter-spacing: .06em;
+        padding-left: .06em; color: #222; }
+.inst { top: 13.75in; font-size: 11pt; letter-spacing: .12em;
+        padding-left: .12em; color: #444; }
 .inst .cjk { font-size: 10pt; letter-spacing: .05em; color: #666; }
 .sig { top: 15.1in; font-family: 'Noto Serif CJK SC', serif; font-size: 13pt;
        letter-spacing: .5em; padding-left: .5em; }
-.sig2 { top: 15.5in; font-size: 9.5pt; letter-spacing: .35em;
+.sig2 { top: 15.5in; font-size: 9.5pt; letter-spacing: .35em; padding-left: .35em;
         text-transform: uppercase; color: #555; }
 
 /* running header / footer on the music pages (transparent overlay) */
@@ -390,13 +454,16 @@ body { font-family: 'EB Garamond', 'Noto Serif CJK SC', 'Songti SC', serif;
             letter-spacing: .25em; text-transform: uppercase; }
 .hd .r { position: absolute; right: 0; bottom: 3pt; font-size: 21pt;
          font-weight: 700; }
+/* one flex row, baseline-aligned: the credit line and "PAGE n OF N" have
+   different sizes but must share a baseline */
 .ft { position: absolute; bottom: .38in; left: .6in; right: .6in;
-      height: .36in; border-top: .45pt solid #888; font-size: 9pt; }
-.ft .l { position: absolute; left: 0; top: 7pt; }
+      height: .36in; border-top: .45pt solid #888; font-size: 9pt;
+      padding-top: 7pt; display: flex; justify-content: space-between;
+      align-items: baseline; }
 .ft .l .cjk { letter-spacing: .08em; }
 .ft .l .en { color: #555; margin-left: 8pt; font-style: italic; }
-.ft .r { position: absolute; right: 0; top: 7pt; letter-spacing: .2em;
-         text-transform: uppercase; font-size: 8pt; color: #333; }
+.ft .r { letter-spacing: .2em; text-transform: uppercase; font-size: 8pt;
+         color: #333; }
 """
 
 
@@ -475,6 +542,9 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         _ms4(["-o", mscz, musicxml])            # import MusicXML
         _fix_title_frame(mscz)
         _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
+        _engrave_fixes(mscz)
+        if m.get("mscx_hook"):  # song-specific touch-ups, see SKILL.md
+            _edit_mscx(mscz, m["mscx_hook"])
         _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
         score = PdfReader(score_pdf)
         n = len(score.pages)
