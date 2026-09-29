@@ -260,6 +260,13 @@ def parse_part(bars):
             got = parse_voice(bars[b], bar_len(b), where=f"bar {b}")
         except ValueError as e:
             raise ValueError(f"{e}  (source {ARR[b]})") from None
+        # a bar of rests (two joined half bars) -> one whole-bar rest
+        if b and len(got) > 1 and all(e["pitches"] is None for e in got):
+            got = [dict(got[0], dur=BAR,
+                        text=sum((e["text"] for e in got), []),
+                        dyn=sum((e["dyn"] for e in got), []),
+                        hair_start=sum((e["hair_start"] for e in got), []),
+                        hair_end=sum((e["hair_end"] for e in got), []))]
         for e in got:
             e["bar"] = b
             e["abs"] = bar_start(b) + e["pos"]
@@ -477,7 +484,7 @@ SOUNDS = {"Violin I": ("Violin", "strings.violin"),
           "Violoncello": ("Violoncello", "strings.cello")}
 
 
-def polish(path, breaks=True):
+def polish(path, breaks=True, part_breaks=(), part_pages=()):
     """Instrument sounds, the pickup bar, system breaks (score only),
     dynamics below and words above the staff.  Page layout, credits and
     creators come from tools/hollywood (Hollywood house style)."""
@@ -503,13 +510,13 @@ def polish(path, breaks=True):
             num = int(m.get("number"))
             if num == 0:
                 m.set("implicit", "yes")     # the pickup: not counted
-            if breaks and num in SYSTEM_BREAKS:
+            if (breaks and num in SYSTEM_BREAKS) or num in part_breaks:
                 pr = m.find("print")
                 if pr is None:
                     pr = ET.Element("print")
                     m.insert(0, pr)
                 pr.set("new-system", "yes")
-            if breaks and num in PAGE_BREAKS:
+            if (breaks and num in PAGE_BREAKS) or num in part_pages:
                 pr = m.find("print")
                 if pr is None:
                     pr = ET.Element("print")
@@ -592,12 +599,20 @@ def merged_notes(events):
     return out
 
 
+RAMP = 12   # how far a hairpin moves when no dynamic mark gives it a target
+
+
 def dyn_curve(events):
-    """Velocity at every absolute 32nd from the inline dynamics / hairpins
-    (hairpins and cresc./dim. words ramp to the next dynamic)."""
+    """Velocity at every absolute 32nd.  Marked dynamics set the level;
+    hairpins and cresc./dim. words ramp from the running level, in the
+    order they start.  A ramp (with the same-way ramps that follow it
+    within a beat) aims at the next marked dynamic when that follows
+    within a beat and lies in its direction; otherwise a crescendo rises
+    RAMP and a diminuendo returns to the marked level (RAMP below it if
+    already there).  A ramp's last level holds until the next mark or
+    ramp; a cresc./dim. word runs to the next mark or opposite ramp."""
     total = bar_start(NBARS) + BAR
-    pts, ramps = [], []
-    open_ramp = {}
+    pts, ramps, open_ramp = [], [], {}
     for e in events:
         for d in e["dyn"]:
             if d in VEL:
@@ -614,24 +629,47 @@ def dyn_curve(events):
             if k in open_ramp:
                 ramps.append((open_ramp.pop(k), e["abs"] + e["dur"] - 1, k))
     pts.sort()
-    v = [pts[0][1] if pts else VEL["mf"]] * total
+    ramps.sort(key=lambda r: r[0])
+    marked = [pts[0][1] if pts else VEL["mf"]] * total
     for i, (a, val) in enumerate(pts):
         end = pts[i + 1][0] if i + 1 < len(pts) else total
         for t in range(a, end):
-            v[t] = val
-    for a, z, kind in ramps:
-        nxt = [(t, val) for t, val in pts if t > a]
-        if z is None:           # words: ramp until the next dynamic mark
-            z = (nxt[0][0] - 1) if nxt else min(total - 1, a + 4 * BAR)
-        v0 = v[a]
-        after = [val for t, val in pts if t > z]
-        v1 = after[0] if after else v0 + (14 if kind == "<" else -14)
-        if kind == "<" and v1 <= v0:
-            v1 = v0 + 12
-        if kind == ">" and v1 >= v0:
-            v1 = v0 - 12
+            marked[t] = val
+    v = marked[:]
+    at_mark = {t for t, _ in pts}
+    ends = []
+    for i, (a, z, kind) in enumerate(ramps):
+        tm = next((t for t, _ in pts if t > a), total)
+        opp = next((r[0] for r in ramps[i + 1:] if r[2] != kind and r[0] > a),
+                   total)
+        ends.append(z if z is not None else min(tm, opp) - 1)
+    for i, (a, _, kind) in enumerate(ramps):
+        z = ends[i]
+        tm, tv = next(((t, val) for t, val in pts if t > a), (total, None))
+        chain, j = z, i + 1          # same-way ramps starting within a beat
+        while j < len(ramps):
+            if ramps[j][0] > chain + 9 or ramps[j][0] >= tm:
+                break
+            if ramps[j][2] != kind:
+                chain = None
+                break
+            chain = max(chain, ends[j])
+            j += 1
+        v0 = v[a] if (a == 0 or a in at_mark) else v[a - 1]
+        up = kind == "<"
+        if (chain is not None and tv is not None and tm - chain - 1 <= 8
+                and (tv > v0 if up else tv < v0)):
+            v1 = v0 + (tv - v0) * (z + 1 - a) / (chain + 1 - a)
+        elif up:
+            v1 = v0 + RAMP
+        else:
+            v1 = marked[a] if v0 > marked[a] else v0 - RAMP
         for t in range(a, z + 1):
             v[t] = round(v0 + (v1 - v0) * (t - a) / max(1, z - a))
+        stop = min([t for t, _ in pts if t > z]
+                   + [r[0] for r in ramps if r[0] > z] + [total])
+        for t in range(z + 1, stop):
+            v[t] = round(v1)
     return v
 
 
@@ -722,9 +760,17 @@ def part_track(p, events, ch, gm_preview=True):
         else:
             length = int(length * 0.9)
         off = on + length
-        if nxt and nxt["start"] * T32 < off and \
-                set(nxt["pitches"]) & set(n["pitches"]):
-            off = nxt["start"] * T32 - 10
+        if nxt and nxt["start"] * T32 < off:
+            # what the next note sounds first: its pitches, its grace notes
+            # and (for a trill) the upper neighbour it starts on
+            nm = {midi_of(x) for x in nxt["pitches"]}
+            nm |= {midi_of(gp) for gp, _ in nxt["graces"]}
+            if "tr" in nxt["marks"]:
+                nb = next(bb for bb in range(NBARS, -1, -1)
+                          if bar_start(bb) <= nxt["start"])
+                nm.add(upper_neighbour(nxt["pitches"][-1], nb))
+            if nm & {midi_of(x) for x in n["pitches"]}:
+                off = nxt["start"] * T32 - 10
         v = vel[min(n["start"], len(vel) - 1)]
         if ">" in mk or "^" in mk:
             v += ACCENT + (6 if "^" in mk else 0)
@@ -1089,7 +1135,9 @@ def write_parts(parsed):
             sc.insert(0, make_m21(p, parsed[p["id"]], lead=True))
             path = os.path.join(t, f"{p['id']}.musicxml")
             sc.write("musicxml", fp=path)
-            polish(path, breaks=False)
+            polish(path, breaks=False,
+                   part_breaks=PART_BREAKS.get(p["id"], ()),
+                   part_pages=PART_PAGE_BREAKS.get(p["id"], ()))
             hollywood.polish_musicxml(path, META, part=(p["name"], p["zh"]))
             xmls.append((path, p["name"], p["zh"]))
         dst = os.path.join(OUT, f"{NAME}_分谱.pdf")
@@ -1166,7 +1214,7 @@ VN1 = {
 }
 VN2 = {
     "m0": "r/4",
-    "m1": "r/2 [p] E4/2. E4/2. E4/2.",
+    "m1": "[p] r/2 E4/2. E4/2. E4/2.",
     "m2": "r/2 E4/2. E4/2. E4/2.",
     "m3": "r/2 E4/2. r/2 E4/2.",
     "m4": "r/2 E4/2. E4/2. E4/2.",
@@ -1185,9 +1233,9 @@ VN2 = {
     "m14": "(G#4/2 E4/2) A4/2. B4/2.",
     "m15": "C5/2. C5/2. (D5/1 C5/1 B4/1 A4/1)",
     "m16": "G#4/4>_ r/4",
-    "m17": "r/2 [p] E4/2. E4/2. E4/2.",
+    "m17": "[p] r/2 E4/2. E4/2. E4/2.",
     "m18": "r/2 E4/2. E4/2. E4/2.",
-    "m19": "r/2 [cresc.] E4/2. r/2 [<] E4/2. [<|]",
+    "m19": "[cresc.] r/2 E4/2. [<] r/2 E4/2. [<|]",
     "m20": "r/2 D#4/2. D#4/2. D#4/2.",
     "m21": "r/2 [>] E4/2. r/2 B3/2. [>|]",
     "m22": "r/2 [>] A3/2. r/2 B3/2. [>|]",
@@ -1210,7 +1258,7 @@ VA = {
     "m16": "r/4 {arco} r/4",
     "m17": "r/2 [p] C4/2. C4/2. C4/2.",
     "m18": "r/2 C4/2. C4/2. C4/2.",
-    "m19": "r/2 [cresc.] C4/2. r/2 [<] C4/2. [<|]",
+    "m19": "[cresc.] r/2 C4/2. [<] r/2 C4/2. [<|]",
     "m20": "r/2 A3/2. A3/2. A3/2.",
     "m21": "r/2 [>] A3/2. r/2 F3/2. [>|]",
     "m22": "r/2 [>] E3/2. r/2 F3/2. [>|]",
@@ -1258,7 +1306,7 @@ VA2 = {
     "m13": "r/2 A3/2. r/2 C4/2.", "m15": "r/2 A3/2. r/2 C4/2.",
     "m16": "r/4 {pizz.} r/4",
     "m17": "r/2 [p] C4/2 C4/2 C4/2", "m18": "r/2 C4/2 C4/2 C4/2",
-    "m19": "r/2 [cresc.] C4/2 r/2 [<] C4/2 [<|]", "m20": "r/2 A3/2 A3/2 A3/2",
+    "m19": "[cresc.] r/2 C4/2 [<] r/2 C4/2 [<|]", "m20": "r/2 A3/2 A3/2 A3/2",
     "m21": "r/2 [>] A3/2 r/2 F3/2 [>|]", "m22": "r/2 [>] E3/2 r/2 F3/2 [>|]",
     "m23": "[p] A3/2 A3/2 G#3/2 G#3/2", "m24a": "A3/4",
 }
@@ -1289,8 +1337,8 @@ DRUM_E_ = "E2+B2+E3/2>arp E3/2."
 
 
 def pizz(s):
-    """The same notes pizzicato: no staccato dots, no slurs to graces."""
-    return re.sub(r"[()]", "", s.replace("/2.>", "/2>").replace("/2.", "/2")
+    """The same notes pizzicato: no staccato dots, tenutos or slurs."""
+    return re.sub(r"[()_]", "", s.replace("/2.>", "/2>").replace("/2.", "/2")
                   .replace("/4.", "/4"))
 
 
@@ -1376,7 +1424,7 @@ VN1.update({
 })
 VN2.update({
     "m32b": "r/4",
-    "m33": "r/2 [p] C#4/2. C#4/2. C#4/2.",
+    "m33": "[p] r/2 C#4/2. C#4/2. C#4/2.",
     "m34": "r/2 C#4/2. C#4/2. C#4/2.",
     "m35": "r/2 [<] C#4/2. C#4/2. C#4/2. [<|]",
     "m36": "r/2 [>] C#4/2. C#4/2. C#4/2. [>|]",
@@ -1393,14 +1441,15 @@ VN2.update({
     "m46": "r/2 E4/2. r/2 E4/2.",
     "m47": "E4/2. F#4/2. F#4/2. E4/2.",
     "m48": "E4/4_ r/4",
-    "m49": "r/2 [p] C#4/2. C#4/2. C#4/2.",
+    "m49": "[p] r/2 C#4/2. C#4/2. C#4/2.",
     "m50": "r/2 C#4/2. C#4/2. C#4/2.",
     "m51": "r/2 [<] C#4/2. C#4/2. C#4/2. [<|]",
     "m52": "r/2 [cresc.] C#4/2. C#4/2. C#4/2.",
     "m53": "r/2 [>] B3/2. B3/2. B3/2.",
     "m54": "r/2 B3/2. B3/2. B3/2. [>|]",
-    "m55": "r/2 [p] A3/2. r/2 B3/2.",
-    "m56a": "C#4/4_",
+    "m55": "[p] r/2 A3/2. r/2 B3/2.",
+    # #9: B3 (the C#7's seventh) resolves down to A3; the viola's G#3 to F#3
+    "m56a": "A3/4_",
 })
 VA.update({
     "m32b": "r/4",
@@ -1428,7 +1477,7 @@ VA.update({
     "m53": "r/2 [>] F#3/2. F#3/2. F#3/2.",
     "m54": "r/2 G#3/2. G#3/2. G#3/2. [>|]",
     "m55": "r/2 [p] F#3/2. r/2 G#3/2.",
-    "m56a": "A3/4_",
+    "m56a": "F#3/4_",
 })
 VC.update({
     "m32b": "r/4",
@@ -1477,19 +1526,22 @@ VN12.update({
     "m32b": "{pizz.} r/4",
     "m33": "r/2 [p] A3/2 A3/2 A3/2", "m34": "r/2 B3/2 B3/2 B3/2",
     "m35": "r/2 [<] A3/2 A3/2 A3/2 [<|]", "m36": "r/2 [>] G#3/2 G#3/2 G#3/2 [>|]",
-    "m37": "r/2 A3/2 A3/2 A3/2", "m38": "r/2 C#4/2 C#4/2 C#4/2",
-    "m39": "r/2 D#4/2 D#4/2 D#4/2", "m40a": "C#4/4",
+    # m38-39: below the viola's tune, which dips to B#3 here
+    "m37": "r/2 A3/2 A3/2 A3/2", "m38": "r/2 G#3/2 G#3/2 G#3/2",
+    "m39": "r/2 G#3/2 G#3/2 G#3/2", "m40a": "C#4/4",
 })
 VN22.update({lab: pizz(VN2[lab]) for lab in
              ("m33", "m34", "m35", "m36", "m37", "m38", "m39", "m40a")})
 VN22["m32b"] = "{pizz.} r/4"
+VN22.update({"m38": "r/2 C#4/2 C#4/2 C#4/2", "m39": "r/2 B#3/2 r/2 B#3/2"})
 VC2.update({lab: pizz(VC[lab].replace("{arco} ", "")) for lab in
             ("m33", "m34", "m35", "m36", "m37", "m38", "m39", "m40a")})
 VC2["m32b"] = "{pizz.} r/4"
-# second time, A major forte: violins in octaves, viola double stops
-VN22.update({lab: down8(VN1[lab]) for lab in
-             ("m40b", "m41", "m42", "m43", "m44", "m45", "m46", "m47")})
-VN22["m40b"] = "[f] (E4/1 D4/1 C#4/1 B3/1)"
+# second time, A major forte: the violins in unison over the viola's double
+# stops (Violin II an octave lower would run through them)
+VN22.update({lab: VN1[lab] for lab in
+             ("m41", "m42", "m43", "m44", "m45", "m46", "m47")})
+VN22["m40b"] = "[f] (E5/1 D5/1 C#5/1 B4/1)"
 VN12["m40b"] = "[f] (E5/1 D5/1 C#5/1 B4/1)"
 VA2.update({
     "m40b": "r/4",
@@ -1503,9 +1555,9 @@ VA2.update({
     # beat 1 closes the forte, beat 2 takes up the 16ths again
     "m48": "C#4+E4/4_ [p] (C#5/1 D5/1 C#5/1 B4/1",
 })
-VN22["m48"] = "A3/4_ r/4"
 for lab in ("m49", "m50", "m51", "m52", "m53", "m54", "m55", "m56a"):
     VA2[lab] = down8(VN1[lab])
+VA2["m56a"] = "A3+F#4/4_)"      # the F# minor third, as the first time
 # ... and the others pizzicato; from m52 the cello takes the lower chord
 # notes too (the violins cannot reach F#3)
 VN12.update({
@@ -1515,12 +1567,12 @@ VN12.update({
     "m52": "r/8", "m53": "r/8", "m54": "r/8", "m55": "r/8", "m56a": "r/4",
 })
 VN22.update({
-    "m48": "A3/4_ {pizz.} r/4",
+    "m48": "A4/4_ {pizz.} r/4",
     "m49": "r/2 [p] C#4/2 C#4/2 C#4/2", "m50": "r/2 C#4/2 C#4/2 C#4/2",
     "m51": "r/2 [<] C#4/2 C#4/2 C#4/2 [<|]",
     "m52": "r/2 [cresc.] C#4/2 C#4/2 C#4/2",
     "m53": "r/2 [>] B3/2 B3/2 B3/2", "m54": "r/2 B3/2 B3/2 B3/2 [>|]",
-    "m55": "r/2 [p] A3/2 r/2 B3/2", "m56a": "A3/4",
+    "m55": "r/2 [p] A3/2 r/2 B3/2", "m56a": "r/4",
 })
 VC2.update({
     "m40b": "r/4",
@@ -1565,6 +1617,10 @@ VN2.update({
     "m85": "r/2 E4/2. r/2 [>] B3/2.",
     "m86": "r/2 A3/2. [>|] r/2 B3/2.",
 })
+VN2.update({"m87": "[p] E4/8", "m88a": "E4/4"})
+VA["m88a"] = "A3/4"
+VC.update({"m80": "E3/4 r/4", "m88a": "A2/4"})
+VC2["m80"] = "E3/4 {pizz.} r/4"
 VA.update({"m85": "r/2 A3/2. r/2 [>] F3/2.",
            "m86": "r/2 E3/2. [>|] r/2 F3/2."})
 VC.update({"m72a": "E3/4",
@@ -1605,8 +1661,9 @@ PLAIN = {
 }
 VN1.update(BROKEN)
 VN2.update(PLAIN)
-VN22.update({lab: re.sub(r"([A-G]#?)4", r"\g<1>5", v) if lab != "m96b"
-             else v for lab, v in PLAIN.items()})
+VN22.update({lab: re.sub(r"([A-G]#?)(\d)",
+                          lambda k: k.group(1) + str(int(k.group(2)) + 1), v)
+             if lab != "m96b" else v for lab, v in PLAIN.items()})
 DRUM_VA_A = "A3+E4/2.> A3+E4/2. A3+E4/2. A3+E4/2."
 DRUM_VA_E = "B3+E4/2.> B3+E4/2. B3+E4/2. B3+E4/2."
 VA.update({
@@ -1674,19 +1731,19 @@ VN1.update({
 VN2.update({
     "m97": "[f] " + CHORD_A, "m98": CHORD_A,
     "m99": rep("E5+A5/2.", 4),
-    "m100": "D4+A4+F#5/4arp A4+F#5/4",
+    "m100": "D4+A4+F#5/4arp D5+F#5/4",
     "m101": rep("E5+A5/2.", 4),
     "m102": "E5+G#5/8",
     "m103": "[f] " + CHORD_A, "m104": CHORD_A,
     "m105": rep("E5+A5/2.", 4),
-    "m106": "D4+A4+F#5/4arp A4+F#5/4",
+    "m106": "D4+A4+F#5/4arp D5+F#5/4",
     "m107": "E5+A5/8",
     "m108": rep("E5+G#5/2.", 4),
     "m109": "E5/8", "m110": "E5/8", "m111": "E5/8", "m112": "E5/8",
     "m113": "F#5/8", "m114": "E5/8", "m115": "E5/4 D5/4",
     "m116": "[f] " + CHORD_A, "m117": CHORD_A,
     "m118": rep("E5+A5/2.", 4),
-    "m119": "D4+A4+F#5/4arp A4+F#5/4",
+    "m119": "D4+A4+F#5/4arp D5+F#5/4",
     "m120": "E5+A5/8",
     "m121": rep("E5+G#5/2.", 4),
     "m122": "[cresc.] C#5+E5/6_ C#5/2.",
@@ -1715,7 +1772,9 @@ VA.update({
     "m115": "(E3/1 E4/1 G#3/1 E4/1 E3/1 E4/1 G#3/1 E4/1)",
     "m116": "[f] " + DRUM_VA_A, "m117": DRUM_VA_A, "m118": DRUM_VA_A,
     "m119": "A3+F#4/2.> A3+F#4/2. A3+F#4/2. A3+F#4/2.",
-    "m120": DRUM_VA_A, "m121": DRUM_VA_E,
+    "m120": DRUM_VA_A,
+    # G#3+E4, not B3+E4: B3-A3 would double the tune's B5-A5 in octaves
+    "m121": "G#3+E4/2.> G#3+E4/2. G#3+E4/2. G#3+E4/2.",
     "m122": "[cresc.] " + DRUM_VA_A, "m123": DRUM_VA_A, "m124": DRUM_VA_A,
     "m125": "A3+E4/2.> A3+E4/2. A3+E4/2.> A3+E4/2.",
     "m126": "A3/4. [ff] A3+E4+C#5/4arp>~",
@@ -1793,6 +1852,15 @@ def _systems():
 SYSTEM_STARTS = _systems()
 SYSTEM_BREAKS = tuple(SYSTEM_STARTS[1:])
 PAGE_BREAKS = tuple(SYSTEM_STARTS[3::3])
+# Parts (MS4 lays them out itself): turn the page in a rest, and start a
+# system at a rehearsal bar whose title would otherwise run off the page
+# (bar that opens a new page; the turn from page 2 to 3 lands in a rest,
+# and Violin II's pages 3 / 4 face each other, split at H)
+PART_PAGE_BREAKS = {"vn1": (bar_of("m56b"),),   # turn in the m52-55 rest
+                    "vn2": (137, bar_of("m89")),  # turn in the empty bar 136
+                    "va": (153,),                 # turn in the 144-152 rest
+                    "vc": (141,)}                 # after bar 140's pizz.
+PART_BREAKS = {"vn2": (bar_of("m25"),), "va": (bar_of("m57"),)}
 BELOW_WORDS = {"cresc.", "dim.", "decresc.", "cresc", "cresco", "dolce"}
 # Deliberate departures from the piano, by Urtext bar (aliases included):
 ALLOW = {
@@ -1800,7 +1868,7 @@ ALLOW = {
     *{("foreign", f"m{i}", "vn2") for i in (9, 11, 13, 15)},
     # open fifths added at the half cadences
     ("foreign", "m24a", "vn2"), ("foreign", "m32a", "va"),
-    ("foreign", "m56a", "vn2"), ("foreign", "m96a", "va"),
+    ("foreign", "m96a", "va"),
     ("foreign", "m48", "vn2"), ("foreign", "m48", "va"),
     # the coda: a seventh (D5) that leads Violin II to the next C#5
     ("foreign", "m115", "vn2"),
@@ -1826,6 +1894,36 @@ META = dict(
     duration="ca. 3′44″", year="2026", tempo_text="Allegretto",
     )
 
+
+def _mscx_hook(x):
+    """MS4 touch-ups on the imported score (MS4 ignores MusicXML offsets):
+    * the bar-1 title "Tema 主题" goes right of the tempo mark, which MS4
+      would otherwise stack above it, into the title block's 原曲 line;
+    * rehearsal letters and their titles 7 sp up (not 5), so "Episodio"
+      clears bar 65's number box;
+    * A, F and G start an A-minor system (no key signature): start their
+      titles right of the letter box, not under it;
+    * H falls mid-system after the key change: pull its title back to the
+      gap the other letters have."""
+    x, n = re.subn(r'(<text><b>Tema <font face="Noto Serif CJK SC"/>主题'
+                   r'<font face="Edwin"/></b></text>)',
+                   r'\1\n            <offset x="5" y="0"/>', x, count=1)
+    assert n == 1, n
+    x, n = re.subn(r'<offset x="0" y="-5"/>', '<offset x="0" y="-7"/>', x)
+    assert n == 18, n          # 9 rehearsal letters + 9 section titles
+    x, n = re.subn(r'(<text><b>Tema (?:II )?<font face="Noto Serif CJK SC"/>'
+                   r'(?:主题第二段|主题再现)<font face="Edwin"/></b></text>\s*)'
+                   r'<offset x="0" y="-7"/>', r'\1<offset x="2.6" y="-7"/>', x)
+    assert n == 3, n           # A, F, G
+    ms = list(re.finditer(r'(<text><b>Alla turca [^\n]*</b></text>\s*)'
+                          r'<offset x="0" (y="[-\d.]+")/>', x))
+    assert len(ms) == 3, len(ms)          # B, E, H
+    h = ms[2]
+    return (x[:h.start()] + h.group(1)
+            + f'<offset x="-3.4" {h.group(2)}/>' + x[h.end():])
+
+
+META["mscx_hook"] = _mscx_hook
 
 if __name__ == "__main__":
     main()
