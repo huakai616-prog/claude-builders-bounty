@@ -21,7 +21,7 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 WORKS = [
     dict(
         slug="unravel", section="song", ref=None, instrumental=True,
-        title="Unravel", subtitle="全曲 · 弦乐四重奏（东京喰种 OP，Animenz 钢琴版改编）",
+        title="Unravel", subtitle="全曲 · 弦乐四重奏 · 东京喰种 OP · 依 Animenz 钢琴版改编",
         artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
         instrumentation="弦乐四重奏 · 纯器乐",
         src="unravel/output", layout="standard",
@@ -29,7 +29,11 @@ WORKS = [
                   pdf="Unravel_全曲_总谱.pdf",
                   strings="Unravel_弦乐四重奏.mid"),
         pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
-        questions=[]),
+        note="纯器乐，没有人声 MIDI。ACE Studio 里四轨都加载 String Section（有独奏小提琴、中提琴、大提琴就用独奏的）；第 78–81 小节的震音在 MIDI 里是快速重复音。",
+        questions=[
+            "八音盒段（第 90–96、129–130 小节）钢琴原谱在 8va 下最高到 G7，小提琴拉不到，这里第一小提琴整体低八度拉，旋律形状不变。",
+            "终副歌第 112 小节用了 fff（钢琴原谱是 ff），让最后一次副歌成为全曲顶点；不要的话改回 ff。",
+        ]),
     dict(
         slug="wobunanguo", section="song", ref=None,
         title="我不难过", subtitle="副歌 · 人声与弦乐四重奏",
