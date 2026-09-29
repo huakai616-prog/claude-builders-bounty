@@ -162,7 +162,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **交付**：
   - 纯器乐只有三样主文件：MusicXML、总谱 PDF、弦乐 MIDI，没有人声 MIDI；
   - 在 `tools/deliver/catalog.py` 里写 `instrumental=True`，交付中心会显示「主文件齐全 · 纯器乐」；
-  - 好莱坞模板 META 里用 `source`（原曲）代替作词和原唱。
+  - 好莱坞模板 META 里用 `source`（改编自，例如「Animenz 钢琴版」）写明依据的版本，封面和首页标题栏会显示。
 
 ## 踩过的坑
 

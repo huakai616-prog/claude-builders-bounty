@@ -44,8 +44,8 @@ DEFAULT_META = {
     "composer": "",
     "lyricist": "",
     "artist": "",           # original performer
-    "source": "",           # 原曲, for an arrangement of an instrumental work
-                            # ("A大调钢琴奏鸣曲 K. 331 · 第三乐章")
+    "source": "",           # 改编自: the version this arrangement is based
+                            # on, e.g. "Animenz 钢琴版" (instrumental works)
     "arranger": ARRANGER,
     "engraver": ENGRAVER,
     "instrumentation": [],  # [("Voice", "人声"), ("Violin I", "第一小提琴"), ...]
@@ -148,7 +148,7 @@ def polish_musicxml(path, meta):
     left, right, mid = _tenths(MARGIN_X), W - _tenths(MARGIN_X), W / 2
     lines_l = [f"作词：{m['lyricist']}" if m["lyricist"] else "",
                f"原唱：{m['artist']}" if m["artist"] else "",
-               f"原曲：{m['source']}" if m["source"] else ""]
+               f"改编自：{m['source']}" if m["source"] else ""]
     lines_r = [f"作曲：{m['composer']}" if m["composer"] else "",
                f"改编：{m['arranger']}", f"制谱：{m['engraver']}"]
     base = round(top - 150, 1)  # left and right blocks share a baseline
@@ -620,7 +620,7 @@ def _sym(s):
 def cover_html(m):
     rows = [("作曲", "Music", m["composer"]), ("作词", "Lyrics", m["lyricist"]),
             ("原唱", "Original Artist", m["artist"]),
-            ("原曲", "Original Work", m["source"]),
+            ("改编自", "Based on", m["source"]),
             ("改编", "Arranged by", m["arranger"]),
             ("制谱", "Music Preparation", m["engraver"])]
     trs = "".join(
@@ -631,12 +631,15 @@ def cover_html(m):
     inst = "　·　".join(
         f"{_e(en)} <span class='cjk'>{_e(zh)}</span>"
         for en, zh in m["instrumentation"])
+    # CJK titles get wide tracking; a Latin-script title reads spaced out
+    latin_title = (" style='letter-spacing:.02em;padding-left:.02em'"
+                   if m["title"].isascii() else "")
     return f"""
 <div class='page cover'>
   <div class='frame'></div>
   <div class='cv kicker'>Full Score</div>
   <div class='cv kicker2'>Score in C · Concert Pitch</div>
-  <div class='cv title'>{_e(m['title'])}</div>
+  <div class='cv title'{latin_title}>{_e(m['title'])}</div>
   <div class='cv latin'>{_e(m['title_latin'])}</div>
   <div class='cv orn'><span></span><b></b><span></span></div>
   <div class='cv sub'>{_e(m['subtitle'])}</div>

@@ -218,12 +218,12 @@ CLEF = {"treble": clef.TrebleClef, "alto": clef.AltoClef,
         "tenor": clef.TenorClef, "bass": clef.BassClef}
 
 META = dict(
-    title="Unravel", title_latin="东京喰种 OP",
+    title="Unravel", title_latin="Tokyo Ghoul · Opening Theme",
     subtitle="全曲 · 弦乐四重奏",
-    subtitle_en="Complete — for String Quartet",
+    subtitle_en="Full Version — for String Quartet",
     composer="TK from 凛として時雨",
     artist="TK from 凛として時雨",
-    source="Animenz 钢琴改编版",
+    source="Animenz 钢琴版",
     instrumentation=[("Violin I", "第一小提琴"), ("Violin II", "第二小提琴"),
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
     key="G Minor · g小调", tempo="♩ = 134",
