@@ -403,8 +403,10 @@ kbd { font-family: var(--mono); font-size: 12px; border: 1px solid var(--rule);
 
   // ---- Mac Dock app: download the installer, then one Terminal command ----
   // The command finds the newest download in ~/Downloads (Chrome keeps the
-  // zip, Safari unpacks it into a folder) and runs its 安装.sh.
-  const MAC_CMD = `bash -c 'cd ~/Downloads || exit 1; p=$(ls -td 编曲交付中心_安装包* 2>/dev/null | head -1); if [ -z "$p" ]; then echo "没找到安装包：请先在交付中心点「下载 Mac 应用」，再粘贴这条命令。"; exit 1; fi; case "$p" in *.zip) rm -rf /tmp/bqjf && ditto -xk "$p" /tmp/bqjf && p=/tmp/bqjf/编曲交付中心_安装包;; esac; bash "$p/安装.sh"'`;
+  // zip, Safari unpacks it into a folder) and runs its 安装.sh. It sorts by
+  // change time (unzipping back-dates mtimes), accepts only finished packages,
+  // and says so when Terminal is not allowed to read Downloads.
+  const MAC_CMD = `bash -c 'cd ~/Downloads || exit 1; ls . >/dev/null 2>&1 || { echo "终端还不能读「下载」文件夹：打开「系统设置」→「隐私与安全性」→「文件与文件夹」→「终端」，打开「下载文件夹」，再粘贴一次这条命令。"; exit 1; }; p=$(ls -tdc 编曲交付中心_安装包*.zip 编曲交付中心_安装包*/安装.sh 2>/dev/null | head -1); p=${p%/安装.sh}; if [ -z "$p" ]; then echo "没找到安装包：请先在交付中心点「下载 Mac 应用」，再粘贴这条命令。"; exit 1; fi; case "$p" in *.zip) t=$(mktemp -d) && ditto -xk "$p" "$t" && p="$t/编曲交付中心_安装包";; esac; bash "$p/安装.sh"'`;
   $("mac-cmd").textContent = MAC_CMD;
 
   async function copyCmd() {

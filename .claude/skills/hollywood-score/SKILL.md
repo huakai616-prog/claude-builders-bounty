@@ -170,6 +170,12 @@ The source is `tools/deliver/macapp/`: `build.py`, `install.sh`, `安装说明.t
 python3 tools/deliver/macapp/build.py          # add --icon to redraw the icon (Playwright + Chromium)
 ```
 
+Pitfalls, learned on the user's Mac:
+
+- macOS `/bin/bash` is 3.2. In UTF-8 locales it treats bytes 0x80–0xFF as letters, so in `"「$NAME」"` the first byte of 」 becomes part of the variable name, and the output shows 「??. Write `${NAME}` whenever Chinese text follows a variable. To reproduce on Linux, build a Latin-1 locale with `localedef -i en_US -f ISO-8859-1 <dir>/en_US.ISO-8859-1` and run with `LOCPATH=<dir> LC_ALL=en_US.ISO-8859-1`.
+- The 'already in the Dock' check reads only `persistent-apps` (via `plutil -extract`). The app also shows up in `recent-apps`, which must not count.
+- `MAC_CMD` sorts downloads with `ls -tdc`, because unzipping back-dates mtimes. It accepts only `*.zip` and `*/安装.sh`, skipping partial downloads. It also runs `ls .` first, so a Terminal that is denied the Downloads folder gets a real message and not 「没找到安装包」.
+
 Then publish `center.html` with the printed `files` map (`files/macapp/app.json`, `files/macapp/icon.png`). The install command itself lives in `center.html` as `MAC_CMD`.
 
 Works that live on other branches keep their branch name as `ref`. `package.py` reads them with `git archive`, so fetch first: `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.
