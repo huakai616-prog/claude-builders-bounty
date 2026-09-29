@@ -97,7 +97,7 @@ HAIR = {
 }
 
 TEXT = {
-    "vn1": [(52, 56, "cantabile")],
+    "vn1": [(53, 0, "cantabile")],
     "vn2": [(50, 4, "spiccato, leggiero")],
     "va": [],
     "vc": [(50, 0, "sostenuto")],

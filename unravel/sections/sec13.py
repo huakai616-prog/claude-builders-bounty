@@ -120,9 +120,9 @@ HAIR = {
     # interlude; then all four cresc. together in 107 (Vn I from its D6)
     # into the ff of the final chorus
     "vn1": [(101, 0, 101, 63, "cresc"), (102, 0, 104, 63, "dim"),
-            (107, 8, 107, 56, "cresc")],
+            (107, 0, 107, 63, "cresc")],
     "vn2": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 56, "dim"),
-            (107, 0, 107, 56, "cresc")],
+            (107, 0, 107, 63, "cresc")],
     "va": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 63, "dim"),
            (107, 0, 107, 63, "cresc")],
     "vc": [(101, 0, 101, 63, "cresc"), (102, 0, 103, 63, "dim"),
@@ -130,7 +130,7 @@ HAIR = {
 }
 
 TEXT = {
-    "vn1": [(97, 0, "cantabile"), (105, 56, "espressivo")],
+    "vn1": [(97, 0, "cantabile"), (106, 0, "espressivo")],
     "vn2": [(104, 4, "leggiero, spicc.")],
     "va": [(98, 0, "détaché")],
     "vc": [],

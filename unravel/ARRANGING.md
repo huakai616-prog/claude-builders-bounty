@@ -65,6 +65,13 @@ OTTAVA = [("vn1", 1, 4),                             # (part, first bar, last ba
           ("vn1", 62, 24, 62, 48)]                   # or (part, bar1, pos1, bar2, pos2)
 ```
 
+Expressive words in `TEXT` (dolce, cantabile, espressivo, subito, morendo,
+…, see `EXPRESSIVE` in `build.py`) print below the staff, merged with a
+dynamic on the same beat ("f subito"); techniques print above.  Don't put
+an expressive word on a pickup (it runs through the barline): put it on the
+next downbeat.  Engraving-only fixes (stem direction, slurs below) go in
+`STEMS` / `SLURS_BELOW` in `arrangement.py`.
+
 Token syntax is in the docstring of `build.py` (64th-note units: 16th = 4,
 8th = 8, quarter = 16, half = 32, whole = 64; tuplets `{5:4 … }`; two voices
 in one part separated by ` | ` — use sparingly, e.g. a held note under a

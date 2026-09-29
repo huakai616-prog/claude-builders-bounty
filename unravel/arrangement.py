@@ -48,7 +48,7 @@ SECTIONS = [
     (36, "D", "Chorus 副歌"),
     (50, "E", "Interlude 间奏"),
     (58, "F", "Bridge 桥段"),
-    (66, "G", "Solo 华彩"),
+    (66, "G", "Cadenza 华彩"),
     (78, "H", "Breakdown 崩落"),
     (82, "J", "Pre-Chorus 导歌"),
     (90, "K", "Music Box 八音盒"),
@@ -67,5 +67,26 @@ SYSTEM_BREAKS = (6, 11, 19, 21, 28, 32, 40, 44, 50, 52, 58, 60, 66, 68, 72,
                  74, 78, 80, 84, 87, 92, 94, 99, 101, 106, 108, 114, 118,
                  126, 129)
 PAGE_BREAKS = (16, 24, 36, 47, 55, 63, 70, 76, 82, 90, 97, 104, 111, 123)
+# Engraving overrides (MusicXML only, the sound is unchanged):
+# stem direction for voice 1 of a bar, and slurs drawn below the notes
+STEMS = {
+    # Vn II's run (D4-D5) stems up: its beam and "6" go above the staff,
+    # so the f < under it stays with Vn II, not the viola
+    ("vn2", 66): "up", ("vn2", 68): "up", ("vn2", 70): "up",
+    ("vn2", 72): "up",
+    # the D5 A4 Bb4 F4 motif reads as one shape every time
+    ("vn1", 86): "up", ("vn1", 87): "up", ("vn1", 88): "up",
+    ("vn2", 88): "up",
+    # like the neighbouring bars (tenutos above, flags clear of the ties)
+    ("va", 97): "down", ("va", 120): "down",
+}
+SLURS_BELOW = {
+    ("vn2", 12),
+    ("vc", 88),
+    # the coda's 3-note cells all on the notehead side, so each slur
+    # clearly starts on its first note
+    *((("vn2", b)) for b in range(118, 128)),
+    *((("va", b)) for b in range(122, 128)),
+}
 # Accepted check items live in the section files as ALLOW:
 # ("mel"|"bass"|"foreign", bar) or ("stop", part, bar), each with a reason

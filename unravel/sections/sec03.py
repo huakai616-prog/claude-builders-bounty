@@ -100,7 +100,7 @@ HAIR = {
             (28, 32, 29, 0, "cresc"), (30, 24, 31, 32, "dim")],
     # Vn II's F4 pickup and the cello's A2 lean into the p of the
     # pre-chorus (bar 32)
-    "vn2": _ACC_HAIR + [(31, 56, 31, 63, "cresc")],
+    "vn2": _ACC_HAIR + [(31, 32, 31, 63, "cresc")],
     "va": list(_ACC_HAIR),
     "vc": _ACC_HAIR + [(31, 48, 31, 63, "cresc")],
 }

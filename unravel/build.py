@@ -18,7 +18,8 @@ half = 32, whole = 64; one string per bar; " | " separates two voices):
   C5/8          note C5, an eighth
   D4+Bb4/16     double stop (low -> high)
   r/16          rest
-  A4/8~         tie into the next note
+  A4/8~         tie into the next note (per pitch: a chord ties only the
+                notes the next one shares, A4/8~ A4+C5/8 strikes the C5)
   suffixes      . staccato  > accent  ! marcato  - tenuto  ^ fermata
                 arp arpeggiated chord  trem1..trem3 tremolo slashes
                 db down-bow  ub up-bow
@@ -171,6 +172,7 @@ def parse_part(data):
 # The arrangement
 # ---------------------------------------------------------------------------
 from arrangement import (VN1, VN2, VA, VC, DYN, HAIR, TEXT,  # noqa: E402
+                         STEMS, SLURS_BELOW,
                          CLEFS, OTTAVA, SECTIONS, TEMPI, TEMPO_TEXT,
                          SYSTEM_BREAKS, PAGE_BREAKS, ALLOW)
 
@@ -194,13 +196,18 @@ SFZ = 22
 def _dedup_dyn(marks, hairs):
     """Drop a dynamic that repeats the level already in force (sections
     each mark their first notes, so a level can be restated at a section
-    seam) unless a hairpin lies in between."""
+    seam) unless a hairpin lies in between.  The first mark after a
+    rehearsal letter stays as a courtesy: players (and the extracted parts)
+    starting at the letter need the level."""
     out, cur, cur_t = [], None, None
+    letters = [OFFS[sb] for sb, letter, _ in SECTIONS if letter]
     for b, s, m in sorted(marks, key=lambda x: OFFS[x[0]] + x[1]):
         t = OFFS[b] + s
         hair_between = cur_t is not None and any(
             cur_t <= OFFS[hb] + hs <= t for hb, hs, _, _, _ in hairs)
-        if m == cur and not hair_between and m not in ("sfz", "sf", "fp"):
+        courtesy = cur_t is not None and any(cur_t < x <= t for x in letters)
+        if m == cur and not hair_between and not courtesy and \
+                m not in ("sfz", "sf", "fp"):
             continue
         out.append((b, s, m))
         if m in VEL:
@@ -214,6 +221,12 @@ for _p in PARTS:
     _p["text"] = TEXT[_p["id"]]
     _p["clefs"] = CLEFS.get(_p["id"], [])
 
+# expressive words go below the staff with the dynamics ("f subito",
+# "p dolce"); playing techniques (sul tasto, spicc., marcato, ...) above
+EXPRESSIVE = {"appassionato", "brillante", "cantabile", "con forza", "dolce",
+              "dolcissimo", "espressivo", "morendo", "senza accento",
+              "subito"}
+
 CLEF = {"treble": clef.TrebleClef, "alto": clef.AltoClef,
         "tenor": clef.TenorClef, "bass": clef.BassClef}
 
@@ -222,12 +235,15 @@ META = dict(
     subtitle="全曲 · 弦乐四重奏",
     subtitle_en="Full Version — for String Quartet",
     composer="TK from 凛として時雨",
-    artist="TK from 凛として時雨",
-    source="Animenz 钢琴版",
+    source="Animenz 钢琴版",   # instrumental: 改编自 instead of 原唱
     instrumentation=[("Violin I", "第一小提琴"), ("Violin II", "第二小提琴"),
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
-    key="G Minor · g小调", tempo="♩ = 134",
-    duration="ca. 4′00″", year="2026", tempo_text="Allegro misterioso")
+    key="G minor · g 小调", tempo="♩ = 134",
+    duration="ca. 4′00″", year="2026", tempo_text="Allegro misterioso",
+    # house layout tweaks: more air between the credits and the tempo mark;
+    # letters and titles pinned on one row (some sections open under an
+    # 8va or with tall chord stacks)
+    title_frame_sp=22, title_gap_sp=10, section_lift=9, section_pin=True)
 
 
 # ---------------------------------------------------------------------------
@@ -259,12 +275,28 @@ def _fits(pos, d):
     return True
 
 
-def split_dur(pos, dur):
+def _fits_rest(pos, d):
+    """Rests show every beat: only whole / half-bar / beat rests may start
+    on a beat and span it; shorter rests stay inside their beat."""
+    if d == 64:
+        return pos == 0
+    if d == 32:
+        return pos % 32 == 0
+    if d in (48, 24):
+        return False
+    if d == 16:
+        return pos % 16 == 0
+    return pos % 16 + d <= 16 and _fits(pos, d) and d not in (12, 6, 3) \
+        or (d in (12, 6, 3) and pos % 16 == 0)
+
+
+def split_dur(pos, dur, rest=False):
     pieces = []
     pos, dur = int(pos), int(dur)
+    ok = _fits_rest if rest else _fits
     while dur > 0:
         d = next(x for x in (64, 48, 32, 24, 16, 12, 8, 6, 4, 3, 2, 1)
-                 if x <= dur and _fits(pos, x))
+                 if x <= dur and ok(pos, x))
         pieces.append(d)
         pos += d
         dur -= d
@@ -323,7 +355,13 @@ def make_m21(p, events):
     by_bar = {}
     for e in events:
         by_bar.setdefault(e["bar"], {}).setdefault(e["voice"], []).append(e)
-    tied_prev = {}
+    tied_prev = {}          # voice -> pitches tied over from the last event
+    nxt = {}                # id(event) -> pitches of the voice's next event
+    for v in {e["voice"] for e in events}:
+        seq = sorted((e for e in events if e["voice"] == v and
+                      not e.get("grace_only")), key=lambda e: e["abs"])
+        for a, z in zip(seq, seq[1:]):
+            nxt[id(a)] = set(z["pitches"] or ())
     slur_open = {}
     for b in MEASURES:
         m = stream.Measure(number=b)
@@ -351,7 +389,8 @@ def make_m21(p, events):
                 if e["tup"]:
                     pieces = [None]
                 else:
-                    pieces = split_dur(e["pos"], e["dur"])
+                    pieces = split_dur(e["pos"], e["dur"],
+                                       rest=e["pitches"] is None)
                 objs = []
                 for i, d in enumerate(pieces):
                     if d is None:
@@ -376,21 +415,28 @@ def make_m21(p, events):
                              chord.Chord(names, duration=dd))
                         first = i == 0
                         last = i == len(pieces) - 1
-                        starts = (not first) or tied_prev.get(v)
-                        cont_ = (not last) or e["tie"]
-                        if starts and cont_:
-                            n.tie = tie.Tie("continue")
-                        elif starts:
-                            n.tie = tie.Tie("stop")
-                        elif cont_:
-                            n.tie = tie.Tie("start")
+                        # per pitch: a tie joins only the notes both chords
+                        # share (Bb4 -> Bb4+D5 ties the Bb4, strikes the D5)
+                        prev = tied_prev.get(v) or set()
+                        after = nxt.get(id(e), set()) if e["tie"] else set()
+                        ns = [n] if len(names) == 1 else list(n.notes)
+                        for nn, raw in zip(ns, e["pitches"]):
+                            starts = (not first) or raw in prev
+                            cont_ = (not last) or raw in after
+                            if starts and cont_:
+                                nn.tie = tie.Tie("continue")
+                            elif starts:
+                                nn.tie = tie.Tie("stop")
+                            elif cont_:
+                                nn.tie = tie.Tie("start")
                         _decorate(n, e, first, last)
                     cont.append(n)
                     objs.append(n)
                 if v == 0:
                     notes_at.setdefault(e["abs"], objs[0])
                 e["m21"] = objs
-                tied_prev[v] = e["tie"] and e["pitches"] is not None
+                tied_prev[v] = (set(e["pitches"]) if e["tie"] and
+                                e["pitches"] is not None else set())
                 if e["slur_start"]:
                     slur_open[v] = objs[0]
                 if e["slur_end"] and slur_open.get(v) is not None:
@@ -404,7 +450,9 @@ def make_m21(p, events):
                 m.insert(_ql(cpos), CLEF[cname]())
         if p["id"] == "vn1":
             for sb, letter, title in SECTIONS:
-                if sb == b:
+                # the unlettered intro keeps its name for the MIDI marker
+                # only: on the first page it would stack onto the tempo
+                if sb == b and letter:
                     if letter:
                         rm = expressions.RehearsalMark(letter)
                         rm.placement = "above"
@@ -446,10 +494,15 @@ def make_m21(p, events):
         measures[bb2].insert(_ql(min(s2 + 1, blen(bb2) - 1)), n2)
         part.insert(0, cls(n1, n2))
     for bb, s, txt in p["text"]:
-        te = expressions.TextExpression(txt)
-        te.style.fontStyle = "italic"
-        te.placement = "above"
-        measures[bb].insert(_ql(s), te)
+        words = [w.strip() for w in txt.split(",")]
+        expr = [w for w in words if w in EXPRESSIVE]
+        tech = [w for w in words if w not in EXPRESSIVE]
+        for group, where in ((tech, "above"), (expr, "below")):
+            if group:
+                te = expressions.TextExpression(", ".join(group))
+                te.style.fontStyle = "italic"
+                te.placement = where
+                measures[bb].insert(_ql(s), te)
     return part
 
 
@@ -514,12 +567,23 @@ def polish(path):
                 pr.set("new-page" if num in PAGE_BREAKS else "new-system",
                        "yes")
             for el in m.findall("direction"):
+                w = el.findtext("direction-type/words")
                 if el.find("direction-type/dynamics") is not None or \
                         el.find("direction-type/wedge") is not None:
                     el.set("placement", "below")
-                elif el.find("direction-type/words") is not None or \
+                elif w is not None and all(
+                        x.strip() in EXPRESSIVE for x in w.split(",")):
+                    el.set("placement", "below")
+                elif w is not None or \
                         el.find("direction-type/rehearsal") is not None:
                     el.set("placement", "above")
+            _merge_expr(m)
+            if (pid, num) in STEMS:
+                _set_stems(m, STEMS[(pid, num)])
+            if (pid, num) in SLURS_BELOW:
+                for sl in m.iter("slur"):
+                    if sl.get("type") == "start":
+                        sl.set("placement", "below")
         for ot in OTTAVA:
             # (part, first bar, last bar) or
             # (part, bar1, pos1, bar2, pos2): notes starting at/after pos1
@@ -560,6 +624,61 @@ def polish(path):
         open(path, "w", encoding="utf-8").write(xml)
 
 
+def _dir_times(measure):
+    """[(time in divisions, <direction>)] for a MusicXML measure."""
+    out, t = [], 0
+    for el in measure:
+        if el.tag == "backup":
+            t -= int(el.findtext("duration"))
+        elif el.tag == "forward":
+            t += int(el.findtext("duration"))
+        elif el.tag == "note":
+            if el.find("chord") is None and el.find("grace") is None:
+                t += int(el.findtext("duration"))
+        elif el.tag == "direction":
+            out.append((t + int(el.findtext("offset") or 0), el))
+    return out
+
+
+def _merge_expr(measure):
+    """An expressive word on the same beat as a dynamic joins the dynamic's
+    <direction>: MuseScore then sets them on one line ("f subito"), and
+    Sibelius keeps them together."""
+    dirs = _dir_times(measure)
+    for t, el in dirs:
+        w = el.findtext("direction-type/words")
+        if w is None or el.get("placement") != "below":
+            continue
+        dyn = next((d for tt, d in dirs if tt == t and d is not el and
+                    d.find("direction-type/dynamics") is not None), None)
+        if dyn is None:
+            continue
+        dts = dyn.findall("direction-type")
+        at = list(dyn).index(dts[-1]) + 1
+        for k, dt in enumerate(el.findall("direction-type")):
+            dyn.insert(at + k, dt)
+        measure.remove(el)
+
+
+_STEM_BEFORE = ("notehead", "notehead-text", "staff", "beam", "notations",
+                "lyric", "play", "listen")
+
+
+def _set_stems(measure, direction):
+    """Force the stem direction of every note in voice 1 of a measure."""
+    for n in measure.findall("note"):
+        if n.find("rest") is not None or (n.findtext("voice") or "1") != "1":
+            continue
+        st = n.find("stem")
+        if st is None:
+            kids = list(n)
+            at = next((k for k, c in enumerate(kids)
+                       if c.tag in _STEM_BEFORE), len(kids))
+            st = ET.Element("stem")
+            n.insert(at, st)
+        st.text = direction
+
+
 def _voice1_notes(measure, divs):
     """[(pos in 64ths, <note>)] for the non-chord, non-grace notes and
     rests of voice 1 in a MusicXML measure."""
@@ -579,6 +698,111 @@ def _voice1_notes(measure, divs):
                 out.append((Fr(t * 16, divs), el))
             t += d
     return out
+
+
+_BEAMABLE = {"eighth": 1, "16th": 2, "32nd": 3, "64th": 4}
+_NOTE_TAIL = ("notations", "lyric", "play", "listen")
+
+
+def rebeam(path):
+    """Recompute every beam: groups per beat, merged across a beat only
+    where a note crosses it (3+3+2 figures), never across the middle of the
+    bar; secondary beams per beat, lone 16ths hooked toward the note they
+    complete.  music21 leaves groups across beat 3 and orphan 'end's."""
+    tree = ET.parse(path)
+    r = tree.getroot()
+    divs = int(r.find("part/measure/attributes/divisions").text)
+    for part in r.findall("part"):
+        for m in part.findall("measure"):
+            voices = {}
+            t = 0
+            last = None
+            for el in m:
+                if el.tag == "backup":
+                    t -= int(el.findtext("duration"))
+                elif el.tag == "forward":
+                    t += int(el.findtext("duration"))
+                elif el.tag == "note":
+                    if el.find("grace") is not None:
+                        continue
+                    if el.find("chord") is not None:
+                        for b in el.findall("beam"):
+                            el.remove(b)
+                        continue
+                    d = int(el.findtext("duration"))
+                    rec = dict(el=el, start=Fr(t * 16, divs),
+                               end=Fr((t + d) * 16, divs),
+                               level=_BEAMABLE.get(el.findtext("type"), 0)
+                               if el.find("rest") is None else 0)
+                    voices.setdefault(el.findtext("voice") or "1",
+                                      []).append(rec)
+                    t += d
+            for notes in voices.values():
+                for n in notes:
+                    for b in n["el"].findall("beam"):
+                        n["el"].remove(b)
+                groups, cur = [], []
+                for n in notes:
+                    if not n["level"]:
+                        if cur:
+                            groups.append(cur)
+                        cur = []
+                        continue
+                    if cur:
+                        p = cur[-1]
+                        beat = (n["start"] // 16) * 16
+                        same_beat = p["start"] // 16 == n["start"] // 16
+                        crosses = p["start"] < beat < p["end"]
+                        half = p["start"] < 32 <= n["start"]
+                        if half or not (same_beat or crosses) or \
+                                p["end"] != n["start"]:
+                            groups.append(cur)
+                            cur = []
+                    cur.append(n)
+                if cur:
+                    groups.append(cur)
+                for g in groups:
+                    if len(g) < 2:
+                        continue
+                    for i, n in enumerate(g):
+                        beams = [("1", "begin" if i == 0 else "end"
+                                  if i == len(g) - 1 else "continue")]
+                        for lv in range(2, n["level"] + 1):
+                            def linked(o):
+                                return (o is not None and o["level"] >= lv
+                                        and o["start"] // 16
+                                        == n["start"] // 16)
+                            left = linked(g[i - 1] if i else None)
+                            right = linked(g[i + 1] if i + 1 < len(g)
+                                           else None)
+                            if left and right:
+                                v = "continue"
+                            elif right:
+                                v = "begin"
+                            elif left:
+                                v = "end"
+                            else:
+                                v = ("backward hook" if i else
+                                     "forward hook")
+                            beams.append((str(lv), v))
+                        el = n["el"]
+                        kids = list(el)
+                        at = next((k for k, c in enumerate(kids)
+                                   if c.tag in _NOTE_TAIL), len(kids))
+                        for num, v in reversed(beams):
+                            b = ET.Element("beam", number=num)
+                            b.text = v
+                            el.insert(at, b)
+    ET.indent(tree, space="  ")
+    tree.write(path, encoding="UTF-8", xml_declaration=True)
+    xml = open(path, encoding="utf-8").read()
+    if "<!DOCTYPE" not in xml:
+        xml = xml.replace(
+            "?>\n",
+            "?>\n<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD "
+            "MusicXML 4.0 Partwise//EN\" "
+            "\"http://www.musicxml.org/dtds/partwise.dtd\">\n", 1)
+        open(path, "w", encoding="utf-8").write(xml)
 
 
 def verify_bars(path):
@@ -698,10 +922,17 @@ def part_track(p, events, ch):
             v += MARCATO
         v = max(1, min(127, v))
         vk = e["voice"]
+        pits = sorted(midi_of(x) for x in e["pitches"])
         if vk in held:                       # continuation of a tie
-            held[vk]["off"] = t_end
+            h = held[vk]
+            for pm in [x for x in h if x not in pits]:   # left behind
+                o, vv = h.pop(pm)
+                notes.append((o, max(o + 30, t_on), pm, vv))
+            for pm in pits:                              # added to the chord
+                h.setdefault(pm, (t_on, v))
             if not e["tie"]:
-                notes.extend(held.pop(vk)["emit"]())
+                for pm, (o, vv) in held.pop(vk).items():
+                    notes.append((o, max(o + 30, t_end), pm, vv))
             continue
         on = t_on
         if e["grace"]:
@@ -709,7 +940,6 @@ def part_track(p, events, ch):
             for i, gp in enumerate(e["grace"]["pitches"]):
                 notes.append((on + i * gl, on + (i + 1) * gl, midi_of(gp), v))
             on += gl * len(e["grace"]["pitches"])
-        pits = sorted(midi_of(x) for x in e["pitches"])
         if e["trem"]:
             step = {1: T64 * 8, 2: T64 * 4, 3: T64 * 2}[e["trem"]]
             t = on
@@ -729,7 +959,9 @@ def part_track(p, events, ch):
             return out
         rec["emit"] = emit
         if e["tie"]:
-            held[vk] = rec
+            roll = rec["arp"] or len(pits) > 2
+            held[vk] = {pm: (on + (k * ARP_T if roll else 0), v)
+                        for k, pm in enumerate(pits)}
             continue
         if e["staccato"] or pizz[ai]:
             rec["off"] = on + max(40, int((t_end - on) * STACC))
@@ -975,6 +1207,7 @@ def main():
     sc.write("musicxml", fp=base + ".musicxml")
     polish(base + ".musicxml")
     hollywood.polish_musicxml(base + ".musicxml", META)
+    rebeam(base + ".musicxml")
     verify_bars(base + ".musicxml")
     write_midi(os.path.join(OUT, f"{NAME}_弦乐四重奏.mid"),
                [p["id"] for p in PARTS], parsed)

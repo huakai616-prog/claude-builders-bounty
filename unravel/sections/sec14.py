@@ -73,7 +73,7 @@ VN1 = {
     115: "A4+A5/12!db Bb4+Bb5/12!db F5+F6/16! A4+A5/16!db Bb4+Bb5/8!ub",
     116: "G5+G6/12!db F5+F6/12!db D5+D6/8!ub Bb4+Bb5/24!db Bb4+Bb5/8!ub",
     117: "Bb4+Bb5/16!db A4+A5/8>ub G4+G5/16>-db A4+A5/16-ub "
-         "Bb5/8>-db~",
+         "Bb5/8>-db",
 }
 
 VN2 = {

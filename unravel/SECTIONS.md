@@ -90,7 +90,7 @@ Common to all sections:
   (upper notes), Va = LH 16th pattern, Vc = LH low notes; 65: the big
   accented chords (tutti, rolled triple stops, marcato), ff.
 
-## S08 · bars 66–73 · Solo 华彩 (the runs)
+## S08 · bars 66–73 · Cadenza 华彩 (the runs)
 - The quintuplet/sextuplet runs are played as a RELAY: the run starts in Va
   (low part), continues in Vn II (middle), and Vn I takes the top and the
   descending quintuplets of the next bar. Overlap by one note at each hand-

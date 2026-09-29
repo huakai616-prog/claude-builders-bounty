@@ -17,7 +17,7 @@
        octave would reach D7 and then drop a 7th into S12's D6), tied in
        from the chord's D5; Vn II doubles Eb5 D5 in unison; then the
        "bloom" of the LH triplet:
-       Va adds G4 then A4, Vn II adds Bb4 then D5 (held second voices),
+       Va adds G4 then A4, Vn II adds Bb4 then D5 (chords, tied per note),
        over the cello's held open-G octave.  Dim. to arrive p at 90.
 """
 
@@ -45,7 +45,7 @@ VN2 = {
     # from 2.5: the RH lower voice's echo of the hook, F4 held to the chord
     88: "F4/8 D4/4 D4/4 r/8 (D5/4 A4/4 Bb4/4 F4/4~ F4/16) Bb4/8~",
     # held Bb4 (tie) -> Eb5 D5 doubling Vn I, then the bloom: Bb4, + D5
-    89: "Bb4/8 (Eb5/8 D5/8) {3:2 r/8 Bb4/4~ } Bb4/32 | r/32 D5/32",
+    89: "Bb4/8 (Eb5/8 D5/8) {3:2 r/8 Bb4/4~ } Bb4+D5/32",
 }
 
 _OST = ("r/4 G3/4 F3/4 G3/4 D3/4 F3/4 G3/4 A3/4 "
@@ -61,8 +61,8 @@ VA = {
         "A3/4 G3/4 Bb3/4 Bb3/4 G3/4 A3/4 D4/4 G3/4",
     88: "r/4 F3/4 Bb3/4 Bb3/4 G3/4 A3/4 Bb3/4 G3/4 "
         "A3/8 (G3/4 Bb3/8) r/4 D4+F4/8~",
-    # tied D4+F4, then the bloom: G4 at the triplet, + A4 (second voice)
-    89: "D4+F4/8 r/16 G4/40 | r/16 r/8 {3:2 r/4 A4/8~ } A4/32",
+    # tied D4+F4, then the bloom: G4 at the triplet, + A4 (tied into a chord)
+    89: "D4+F4/8 r/8 r/8 {3:2 G4/4~ G4+A4/8~ } G4+A4/32",
 }
 
 VC = {

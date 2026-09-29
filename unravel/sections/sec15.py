@@ -6,8 +6,8 @@ Texture
   note (Bb5) in 118 and fades out, rests, and returns on the pickup Bb5 of
   121.  S14 closes 117 with every part cut together on beat 4.5 (ff), so
   the Coda's downbeat is a subito pp: Vn I's Bb5 and the cello's new Eb2
-  enter together, the pp alone marking it (no Vn I text at 118 pos 0: it
-  would push rehearsal box P out of the system).  Va = the LH's syncopated
+  enter together on a fresh attack, "pp subito" under the staff (the
+  expressive words sit with the dynamics, clear of rehearsal box P).  Va = the LH's syncopated
   dyads (Bb3+D4, A3+C4) as soft double stops in thirds, sul tasto.  Vc =
   the LH whole-note bass (Eb2 G2 F2 G2, the lower note of the piano's
   octaves), sul tasto.
@@ -24,21 +24,19 @@ Texture
 - 128: Vn I alone (A5 A5 A5 Bb5 Bb5), louré, dolce; the others rest.  The
   last Bb5 is an 8th with an 8th rest (every piano attack kept): a breath
   before the shift to the exposed pp D7 of 129.
-- 129-130: Vn I = the 8va melody at the piano's sounding pitch (D7 C7 Bb6,
-  written with an 8va line, dolcissimo; bow near the normal contact point,
-  not flautando, which cracks this high on the E string) so the layers keep
-  the piano's spacing: Vn II = the RH's 16th second voice an octave lower
-  (D6 G5 D5 C6 G5 D5 Bb5), slurred in the piano's 3+3+2; Va = the LH 16th
-  run at pitch (D4 ... C6, treble clef) under Vn I's held Bb6, no hairpins
-  (the run's contour shapes itself at pp); Vc = open G2 (the piano's G3 an
-  octave down), held to the end.  All four re-enter pp after the tacet 128.
+- 129-130: Vn I = the music-box melody an octave below the piano's 8va
+  (D6 C6 Bb5, as in 90-96; no 8va line), dolcissimo; Vn II = the RH's 16th
+  second voice an octave lower (D6 G5 D5 C6 G5 D5 Bb5), slurred in the
+  piano's 3+3+2; Va = the LH 16th run folded down to D4 ... C5 (alto clef)
+  under Vn I's held Bb5, no hairpins (the run's contour shapes itself at
+  pp); Vc = open G2 (the piano's G3 an octave down), held to the end.  All
+  four re-enter pp after the tacet 128.
 - 131-132: the final G/Bb sonority (the piano holds only G3 + Bb5, so no
   D is added): Vc G2 (open), Va G3 (open, back in alto clef), Vn II G4,
-  Vn I Bb5 -- the viola's last Bb5 of 130 is taken over by Vn I on the
-  downbeat.  The piano strikes nothing on 131 (its G3 and Bb5 are tied
+  Vn I Bb5 (tied over from 130).  The piano strikes nothing on 131 (its G3 and Bb5 are tied
   over), so the chord should arrive as a release: Vc's G2 is tied over,
   Vn II slips in on G4 at 130 beat 3 (under the piano's held G3) and ties
-  over, and Vn I and Va enter 'senza accento'.  pp, morendo, fermata on
+  over, and the viola's G3 enters under them.  pp, morendo, fermata on
   132.
 Dynamics: the piano prints none here; the brief's p -> pp: Vn II p on the
 figure 118-121, accompaniment pp, Vn I pp on its held note and p for the
@@ -120,14 +118,14 @@ DYN = {
     "vn1": [(118, 0, "pp"), (121, 56, "p"), (129, 0, "pp")],
     "vn2": [(118, 8, "p"), (122, 0, "pp"), (129, 0, "pp")],
     "va": [(118, 24, "pp"), (129, 4, "pp")],
-    "vc": [(118, 32, "pp"), (129, 0, "pp")],
+    "vc": [(118, 0, "pp"), (129, 0, "pp")],
 }
 
 HAIR = {
     # 118: the held Bb5 fades under Vn II's figure; one shared swell to the
     # D6 of 126 and back (same spans in Vn I, Va, Vc); 128 the lone line
     # dies away into the 8va pp; morendo.
-    "vn1": [(117, 56, 118, 32, "dim"), (125, 56, 126, 40, "cresc"),
+    "vn1": [(118, 0, 118, 32, "dim"), (125, 56, 126, 40, "cresc"),
             (126, 48, 127, 32, "dim"), (128, 24, 128, 63, "dim"),
             (131, 0, 132, 63, "dim")],
     "vn2": [(121, 0, 121, 55, "dim"), (131, 0, 132, 63, "dim")],
@@ -138,12 +136,12 @@ HAIR = {
 }
 
 TEXT = {
-    "vn1": [(121, 56, "cantabile"), (128, 0, "dolce"),
-            (129, 0, "dolcissimo"), (131, 0, "senza accento, morendo")],
+    "vn1": [(118, 0, "subito"), (122, 0, "cantabile"), (128, 0, "dolce"),
+            (129, 0, "dolcissimo"), (131, 0, "morendo")],
     "vn2": [(118, 8, "subito, dolce, legato"), (129, 0, "leggiero"),
             (131, 0, "morendo")],
-    "va": [(118, 24, "subito, sul tasto"), (122, 0, "ord., legato"),
-           (131, 0, "senza accento, morendo")],
+    "va": [(118, 0, "sul tasto"), (118, 24, "subito"),
+           (122, 0, "ord., legato"), (131, 0, "morendo")],
     "vc": [(118, 0, "subito, sul tasto"), (131, 0, "morendo")],
 }
 

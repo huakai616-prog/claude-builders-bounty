@@ -106,6 +106,9 @@ TEXT = {
 
 CLEFS = {}
 
-OTTAVA = []
+# Vn I's climb and first falling quintuplet (up to D7) read under a short
+# 8va: from the beat-4 sextuplet to the end of the next bar's beat 1
+OTTAVA = [("vn1", 66, 48, 67, 16), ("vn1", 68, 48, 69, 16),
+          ("vn1", 70, 48, 71, 16), ("vn1", 72, 48, 73, 16)]
 
 ALLOW = set()

@@ -90,5 +90,6 @@ TEXT = {
 }
 
 CLEFS = {}
-OTTAVA = [("vn1", 76, 76)]  # as the piano: Bb6/A6/F6 would need five ledger lines
+OTTAVA = [("vn1", 76, 81)]  # as the piano: Bb6/A6/F6 would need five ledger lines;
+# one line on through 77 into the Breakdown (78-81, S10), not three
 ALLOW = set()

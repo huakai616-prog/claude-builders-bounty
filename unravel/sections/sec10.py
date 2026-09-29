@@ -37,20 +37,20 @@ the p/mp of S11.
 """
 
 VN1 = {
-    78: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~) Bb5/24",
-    79: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~) Bb5/24",
-    80: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~) Bb5/24",
-    81: "C7/32trem3 (C7/2> Bb6/2 F6/2 C6/2~) C6/24",
+    78: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~ Bb5/24)",
+    79: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~ Bb5/24)",
+    80: "Bb6/32trem3 (Bb6/2> Eb6/2 D6/2 Bb5/2~ Bb5/24)",
+    81: "C7/32trem3 (C7/2> Bb6/2 F6/2 C6/2~ C6/24)",
 }
 
 # The relay's joints carry no accents (the piano's cascade is one beamed
 # fall; only Vn I's top note is marked): each new player re-strikes the
 # unison the previous one is holding, so an accent there would terrace it.
 VN2 = {
-    78: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~) Bb4/16",
-    79: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~) Bb4/16",
-    80: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~) Bb4/16",
-    81: "C6+F6/32trem3 r/8 (C6/2 Bb5/2 F5/2 C5/2~) C5/8 F4/8",
+    78: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~ Bb4/16)",
+    79: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~ Bb4/16)",
+    80: "Bb5+D6/32trem3 r/8 (Bb5/2 Eb5/2 D5/2 Bb4/2~ Bb4/16)",
+    81: "C6+F6/32trem3 r/8 (C6/2 Bb5/2 F5/2 C5/2~ C5/8) F4/8",
 }
 
 # The viola lets go when the cello takes over (as the piano's RH rests on
@@ -114,7 +114,7 @@ CLEFS = {}
 
 # Vn I's B-flat6 / C7 tremolo and the top of the cascade read an octave
 # lower, as in the piano's own 8va (written B-flat5 / C6)
-OTTAVA = [("vn1", 78, 81)]
+OTTAVA = []  # the 8va from 76 (S09) runs through 81
 
 # The piano's fingered tremolo is encoded in the source as two quarters
 # in sequence ([B-flat5 D6] on beat 1, B-flat6 on beat 2; 81: [C6 F6],

@@ -72,6 +72,14 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
 - **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
+- **Engraving rules learned on Unravel** (`unravel/build.py` has them; copy into new engines):
+  - `rebeam()` after `polish_musicxml`: music21 beams across the middle of a 4/4 bar and leaves orphan `end` beams. Rebeam per beat, merge beats only where a note crosses the beat (3+3+2 figures), never across beat 3; secondary beams per beat, a lone 16th hooked toward the note it completes.
+  - Rests never hide a beat: dotted rests only on the beat, shorter rests inside their beat (`_fits_rest`).
+  - Expressive words (`dolce`, `cantabile`, `espressivo`, `subito`, `morendo`, …) go **below** the staff; when a dynamic sits on the same beat they are merged into its `<direction>` so MS4 and Sibelius print one line ("*f* subito", "*p* dolce"). Techniques (sul tasto, spicc., marcato, legato) stay above. Don't hang an expressive word on a pickup: it runs through the barline (the quartet's barlines are connected); put it on the next downbeat.
+  - Ties are per pitch: `Bb4/8~ Bb4+D5/32` ties the Bb4 and strikes the D5 (MusicXML and MIDI), so a chord can grow without a second voice.
+  - Per-bar engraving overrides (`STEMS`, `SLURS_BELOW` in `unravel/arrangement.py`) fix a run whose tuplet number pushes a dynamic toward the next staff, or slurs flipping side in repeated cells.
+  - Keep a courtesy dynamic right after a rehearsal letter.
+- **Layout options in `META`** (all optional): `title_frame_sp` (title frame height, default 21), `title_gap_sp` (frame to first system; 10 gives the tempo mark room under the credits), `section_lift` (default 5) and `section_pin=True` (title set 1 sp right of the letter so a wide M/N/H doesn't stack them; use with `section_lift=9` when sections open with tall chord stacks or under an 8va).
 
 Then run:
 
@@ -122,7 +130,8 @@ xmllint --noout --schema musicxml.xsd <song>/output/*.musicxml   # schema from w
 - MS4 **ignores `-S style` when it imports MusicXML directly**. `render_pdf` imports to `.mscz` first, then exports with the style.
 - MS4 gives imported MusicXML credits odd offsets: the composer drifts to the top and the lyricist falls into the music. `render_pdf` resets the title frame (`_fix_title_frame`).
 - The boxed bar numbers sit above every bar, so a rehearsal letter and its bold section title would share their row and run into the section's first bar number ("A Chorus 副歌 [10]"). `render_pdf` lifts both by 5 spaces onto their own row (`_lift_sections`). MS4 ignores `default-y` from MusicXML, so the offset is written into the imported `.mscz`. Set `META["section_lift"] = 0` to turn it off.
-- `render_pdf` also sets the Chinese in staff texts ("Chorus 副歌") in Noto Serif CJK SC (otherwise MS4 falls back to WenQuanYi Zen Hei, a sans) and labels 8va lines "8va" (MS4 imports them as a bare "8" and `-S` does not reset that). `polish_musicxml` makes rehearsal letters bold.
+- `render_pdf` also sets the Chinese in staff texts ("Chorus 副歌") in Noto Serif CJK SC (otherwise MS4 falls back to WenQuanYi Zen Hei, a sans) and labels 8va lines "8va", "(8va)" after a system break (MS4 imports them as a bare "8" and `-S` does not reset that: `_engrave_fixes` edits the score's own style). `polish_musicxml` makes rehearsal letters bold.
+- `hollywood.mss` places ties **between the noteheads** (`tiePlacement… inside`): with the default "outside" a phrase slur ending on a tied note meets the tie in one point.
 - Letter-spaced cover lines need `padding-left` equal to their `letter-spacing`, or they sit left of the page axis (CSS adds the spacing after the last glyph too).
 - music21 writes the tempo words and the metronome as two directions. Use `tempo_text` so they print as one mark.
 - The cover and header are an HTML page printed by headless Chromium on a transparent background and merged onto the MS4 pages. Page size must stay 11 × 17 in on both sides.
