@@ -35,11 +35,12 @@ WORKS = [
         pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
         note="纯器乐曲，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF、弦乐总 MIDI 和分谱 PDF。反复全部写开，第二遍换配器，全曲约 3 分 44 秒。",
         other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
-        howto=["ACE Studio：导入弦乐总 MIDI（四条乐器轨），加载 String Section；拨弦（pizz.）小节要在 ACE 里改成 Pizzicato，小节号见 README。"],
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section。MIDI 开头空一拍，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "拨弦（pizz.）要在 ACE 里把演奏法改成 Pizzicato（ACE 小节号）：Violin I 74–81、106–108；Violin II 74–81、106–112；Viola 10–16、42–49、58–65、122–129、138–144、170–177；Violoncello 10–17、42–49、58–65、74–81、106–113、122–129、138–145、170–177。"],
         questions=[
             "谱上 m52（总谱第 92、108 小节）第 6 个十六分音符是 B♯5，原典版是 D6；m55（第 95、111 小节）第 4 个音是 F♯5，原典版是 A5。现在照你给的谱，要改成原典版告诉我。",
             "速度按 Allegretto ♩=120，反复全部保留（约 3 分 44 秒）。想要更快或少几遍反复告诉我。",
-            "拨弦段落在 ACE 里要手动改演奏法（小节号在说明和 README 里）。",
+            "拨弦段落在 ACE 里要手动改成 Pizzicato，小节号写在压缩包的说明.txt 里。",
         ]),
     dict(
         slug="wobunanguo", section="song", ref=None,
