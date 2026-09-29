@@ -66,6 +66,7 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 ```
 
 - Create the `MetronomeMark` **without** text; `META["tempo_text"]` is joined to it.
+- **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
 
 Then run:
@@ -114,6 +115,7 @@ xmllint --noout --schema musicxml.xsd <song>/output/*.musicxml   # schema from w
 
 - MS4 **ignores `-S style` when it imports MusicXML directly**. `render_pdf` imports to `.mscz` first, then exports with the style.
 - MS4 gives imported MusicXML credits odd offsets: the composer drifts to the top and the lyricist falls into the music. `render_pdf` resets the title frame (`_fix_title_frame`).
+- The boxed bar numbers sit above every bar, so a rehearsal letter and its bold section title would share their row and run into the section's first bar number ("A Chorus 副歌 [10]"). `render_pdf` lifts both by 5 spaces onto their own row (`_lift_sections`). MS4 ignores `default-y` from MusicXML, so the offset is written into the imported `.mscz`. Set `META["section_lift"] = 0` to turn it off.
 - music21 writes the tempo words and the metronome as two directions. Use `tempo_text` so they print as one mark.
 - The cover and header are an HTML page printed by headless Chromium on a transparent background and merged onto the MS4 pages. Page size must stay 11 × 17 in on both sides.
 - EB Garamond has no ♩ ♭ ♯; `hollywood._sym` wraps them in a fallback font.

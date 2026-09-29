@@ -278,6 +278,42 @@ def _fix_title_frame(mscz):
             z.writestr(info, data)
 
 
+SECTION_LIFT_SP = 5  # rehearsal letter + section title sit above bar numbers
+
+
+def _lift_sections(mscz, lift=SECTION_LIFT_SP):
+    """Bar numbers are boxed above every bar, so a rehearsal letter and its
+    bold section title ("A  Chorus 副歌") would share their row and run into
+    the section's first bar number.  Raise both onto a row of their own."""
+    if not lift:
+        return
+    off = f'\n            <offset x="0" y="{-lift}"/>'
+    with zipfile.ZipFile(mscz) as z:
+        items = [(i, z.read(i.filename)) for i in z.infolist()]
+    out = []
+    for info, data in items:
+        if info.filename.endswith(".mscx"):
+            x = data.decode("utf-8")
+
+            def fix(mo):
+                meas = mo.group(0)
+                if "<RehearsalMark>" not in meas:
+                    return meas
+                meas = re.sub(r"(<RehearsalMark>\s*<eid>[^<]*</eid>)",
+                              lambda k: k.group(1) + off, meas)
+                # the section title: a staff text that is bold throughout
+                return re.sub(
+                    r"(<StaffText>\s*<eid>[^<]*</eid>\s*"
+                    r"<text><b>[^<]*</b></text>)",
+                    lambda k: k.group(1) + off, meas)
+            x = re.sub(r"<Measure>.*?</Measure>", fix, x, flags=re.S)
+            data = x.encode("utf-8")
+        out.append((info, data))
+    with zipfile.ZipFile(mscz, "w", zipfile.ZIP_DEFLATED) as z:
+        for info, data in out:
+            z.writestr(info, data)
+
+
 def _chrome_pdf(html_path, pdf_path):
     subprocess.run([find_chrome(), "--headless", "--no-sandbox", "--disable-gpu",
                     "--no-pdf-header-footer", "--virtual-time-budget=4000",
@@ -438,6 +474,7 @@ def render_pdf(musicxml, out_pdf, meta, png_dir=None):
         score_pdf = os.path.join(tmp, "score.pdf")
         _ms4(["-o", mscz, musicxml])            # import MusicXML
         _fix_title_frame(mscz)
+        _lift_sections(mscz, m.get("section_lift", SECTION_LIFT_SP))
         _ms4(["-S", STYLE, "-o", score_pdf, mscz])  # engrave with house style
         score = PdfReader(score_pdf)
         n = len(score.pages)
