@@ -148,7 +148,7 @@ the same standard with these differences:
   - A tuplet number's side: `<direction>up|down</direction>` after the `<Tuplet>`'s `<eid>` (MS4 ignores MusicXML `placement` on `<tuplet>`).
   - An 8va hook short of the next note: `<Segment><subtype>0</subtype><offset x="0" y="0"/><off2 x="-1.5" y="0"/></Segment>` after `<subtype>8va</subtype>`.
   - MS4 decides accidentals by written position, so after an 8va ends mid-bar it drops an accidental written for the other octave. `<accidental cautionary="yes" parentheses="no">` keeps it and prints it plain; `cautionary="yes"` alone prints it in parentheses.
-- **Parts layout**: read each line's bars back from the PDF (`pdftotext -bbox`, boxed bar numbers are 8.6 pt high) and add explicit line starts wherever a bar stands alone; give each part page starts so page turns fall on rests, and so no last page holds only the final bars.
+- **Parts layout**: read each line's bars back from the PDF (`pdftotext -bbox`, boxed bar numbers are 8.6 pt high) and add explicit line starts wherever a bar stands alone; give each part page starts so page turns fall on rests (plan for page 1 alone, then two-page spreads), and so no last page holds only the final bars. Parts carry the rehearsal letters and tempo marks but not the section titles: a title next to a letter gets pushed around by the first bar-number box and never lines up.
 - **Repeats**: written out (`FORM`), so the second time can be scored
   differently and the MIDI needs no unrolling; `ALIAS` reuses a strain's
   data for its reprise.

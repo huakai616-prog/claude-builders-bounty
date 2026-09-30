@@ -732,7 +732,7 @@ dyn(41, 0, "f cantabile, con forza", "vn1")
 dyn(41, 0, "f", "vn2", "va", "vc")
 dyn(45, 0, "fp", "vn1")
 dyn(45, 0, "p", "vc")
-dyn(45, 24, "p dolce, espressivo", "va")
+dyn(45, 24, "p dolce", "va")
 dyn(45, 48, "pp", "vn2")
 words(45, 0, "leggiero", "vn1")
 hair(45, 48, 45, 66, "cresc", "va")
@@ -918,19 +918,19 @@ def _staff_measures(x, fn):
 
 
 def _bar_tuplets(x):
-    """Tuplet numbers MS4 would set on a slur or beside a dynamic: bar 92's
-    triplet "3" above the accents (not "ff 3"), bar 95's "6" under the
-    one-bow scale's slur."""
+    """Tuplet numbers MS4 would set on a slur, a dynamic or a word: the
+    triplet "3" of bars 82 and 92 above (not "ff 3", clear of the cello's
+    cresc.), bar 95's "6" under the one-bow scale's slur."""
     def fn(bar, m):
-        if bar not in (92, 95):
+        if bar not in (82, 92, 95):
             return m
 
         def tup(mo):
             t = mo.group(0)
-            if "<Number>" not in t or (bar == 92 and
+            if "<Number>" not in t or (bar != 95 and
                                        "<actualNotes>3<" not in t):
                 return t
-            d = "up" if bar == 92 else "down"
+            d = "down" if bar == 95 else "up"
             return re.sub(r"(<eid>[^<]*</eid>)",
                           rf"\1\n            <direction>{d}</direction>", t, 1)
         return re.sub(r"<Tuplet>.*?</Tuplet>", tup, m, flags=re.S)
@@ -938,20 +938,9 @@ def _bar_tuplets(x):
 
 
 def _part_hook(x):
-    """Parts only.  The rehearsal letter beside its section title (and the
-    tempo), on one row right above the section's first line: stacked, the
-    letter rose to the line before.  A rolled chord right after a triplet's
-    rest gets room, or its arpeggio line runs into the rest."""
+    """Parts only: a rolled chord right after a triplet's rest gets room,
+    or its arpeggio line runs into the rest."""
     x = _mscx_hook(x)
-
-    def sec(mo):
-        m = mo.group(0)
-        if "<RehearsalMark>" not in m:
-            return m
-        m = re.sub(TITLE, r'\1\n<offset x="3" y="0"/>', m, flags=re.S)
-        return re.sub(r"(<Tempo>(?:(?!</Tempo>).)*?</text>)",
-                      r'\1\n<offset x="3" y="0"/>', m, flags=re.S)
-    x = re.sub(r"<Measure[^>]*>.*?</Measure>", sec, x, flags=re.S)
     return re.sub(r"(</Rest>\s*<endTuplet/>\s*<Chord>(?:(?!</Chord>).)*?"
                   r"<Arpeggio>(?:(?!</Chord>).)*?</Chord>)",
                   r"\1\n<Segment><leadingSpace>1.2</leadingSpace></Segment>",
@@ -965,7 +954,39 @@ def _score_hook(x):
     engine writes 12 pt (MS4 imports them with <font> tags)."""
     x = _mscx_hook(x)
     x = _spacer(x, staff=2, bar=86, sp=9)  # Violin II's p cresc. poco a poco
-    return re.sub(TITLE, r'\1\n<offset x="1" y="-5"/>', x, flags=re.S)
+    x = _spacer(x, staff=2, bar=66, sp=9)  # Violin II's cresc. poco a poco
+    x = _spacer(x, staff=1, bar=66, sp=8)  # Violin I's, between two "6"s
+    # tuplet numbers of two staves stacked between them: Violin II's "6" in
+    # bar 28 and the viola's "3" in bar 38 go to the notehead side
+    x = _tuplet_side(x, {(2, 28): "down", (3, 38): "down"})
+
+    def title(mo):  # bar 23's title clears Violin I's accent on the E6
+        lift = -6.5 if "E minor" in mo.group(0) else -5
+        return mo.group(1) + f'\n<offset x="1" y="{lift}"/>'
+    return re.sub(TITLE, title, x, flags=re.S)
+
+
+def _tuplet_side(x, where):
+    """{(staff, bar): "up" | "down"}: the first numbered tuplet there."""
+    head = x.rindex("</Part>")
+
+    def st(mo):
+        staff = int(mo.group(1))
+        k = [0]
+
+        def meas(mm):
+            k[0] += 1
+            d = where.get((staff, k[0]))
+            if not d:
+                return mm.group(0)
+            return re.sub(
+                r"(<Tuplet>\s*<eid>[^<]*</eid>)((?:(?!</Tuplet>).)*<Number>)",
+                rf"\1\n<direction>{d}</direction>\2", mm.group(0), 1,
+                flags=re.S)
+        return re.sub(r"<Measure[^>]*>.*?</Measure>", meas, mo.group(0),
+                      flags=re.S)
+    return x[:head] + re.sub(r'<Staff id="(\d+)">.*?</Staff>', st, x[head:],
+                             flags=re.S)
 
 
 def _spacer(x, staff, bar, sp):
@@ -994,7 +1015,7 @@ def _spacer(x, staff, bar, sp):
 
 META["mscx_hook"] = _score_hook
 META["mscx_part_hook"] = _part_hook
-META["part_section_lift"] = 0  # the part hook sets letter and title
+META["part_section_lift"] = 0  # parts: letters only, set by autoplace
 # Parts on a 6.6 mm staff (house parts: 7 mm): Violin I's sextuplet bars
 # (24 sixteenths each) then fit two to a line throughout; at 7 mm every
 # odd one out ended up alone on a line.
@@ -1002,11 +1023,13 @@ META["part_style"] = {"Spatium": 1.65}
 # extra line starts in the parts (besides the sections), read back from
 # the engraved PDF, so that no bar stands alone on a line
 PART_BREAKS = {"vn1": (37, 51, 53, 55, 57, 59, 67),
-               "va": (53, 57, 63, 85, 95), "vc": (63,)}
-# and page starts, for page turns at rests (Violin I: bars 64 and 79-80;
-# viola: bar 86; cello: the open-C whole note in bar 43 turns to a
-# two-page spread) and no last page holding only the final bars
-PART_PAGE_BREAKS = {"vn1": (65, 81), "va": (87,), "vc": (81,)}
+               "va": (27, 29, 53, 57, 63, 85, 95), "vc": (63,)}
+# and page starts, laid out page 1 alone, then two-page spreads: the turns
+# fall on rests (Violin I: bars 15-16 and 58; Violin II: 33-34; viola:
+# 30-31 and 86; cello: the open-C whole note in bar 43), and no last page
+# holds only the final bars
+PART_PAGE_BREAKS = {"vn1": (17, 59, 81), "vn2": (35,), "va": (31, 87),
+                    "vc": (81,)}
 
 
 def auto_marks(parsed):
@@ -1042,15 +1065,17 @@ def auto_marks(parsed):
                 else:
                     cur = [k, k + 1]
                     spans.append(cur)
-            # a line that stops (or starts) mid-bar while the rest of the
-            # bar stays high (from C5 up) runs to the barline instead: no
-            # choppy one-beat 8va, and no accidental that MS4 drops because
-            # the same written line carried it inside the 8va
-            def high(a, z):
-                ns = [mid(x) for e in evs if a <= e["abs"] < z
+            # within the bar, the line takes in the beats on either side
+            # while they stay from E5 up (written from the bottom line up):
+            # no choppy one-beat 8va, and toward the barline no loco note
+            # an octave below a written line the 8va already used.  It
+            # stops before a beat that dips lower, so nothing under the
+            # line is written on ledger lines below the staff
+            def high(k):
+                ns = [mid(x) for e in evs if k * 24 <= e["abs"] < k * 24 + 24
                       for x in e["pitches"]]
-                return all(x >= 72 for x in ns)
-            # a neighbouring beat that also reaches A6 (and stays from C5
+                return all(x >= 76 for x in ns)
+            # a neighbouring beat that also reaches A6 (and stays from E5
             # up) joins the line: no loco A6 on four ledger lines right
             # before or after it, no hook ending on a high note
             a6 = dia("A6")
@@ -1058,7 +1083,7 @@ def auto_marks(parsed):
             def beat_ok(k):
                 ns = [e for e in evs if k * 24 <= e["abs"] < k * 24 + 24]
                 return ns and max(dia(x) for e in ns for x in e["pitches"]) \
-                    >= a6 and all(mid(x) >= 72 for e in ns
+                    >= a6 and all(mid(x) >= 76 for e in ns
                                   for x in e["pitches"])
             for sp in spans:
                 while sp[0] > 0 and beat_ok(sp[0] - 1):
@@ -1073,12 +1098,10 @@ def auto_marks(parsed):
                     merged.append(sp)
             spans = merged
             for sp in spans:
-                a, z = sp[0] * 24, sp[1] * 24
-                ba, bz = a - a % BAR, z + (-z) % BAR
-                if a > ba and high(ba, a):
-                    sp[0] = ba // 24
-                if z < bz and high(z, bz):
-                    sp[1] = bz // 24
+                while sp[0] % 4 and high(sp[0] - 1):
+                    sp[0] -= 1
+                while sp[1] % 4 and high(sp[1]):
+                    sp[1] += 1
             ottava[p["id"]] = [(a * 24 // BAR + 1, a * 24 % BAR,
                                 z * 24 // BAR + 1 if z * 24 % BAR else z * 24 // BAR,
                                 z * 24 % BAR or BAR) for a, z in spans]
@@ -1269,6 +1292,9 @@ def write_parts():
                 {s for s, _, _ in SECTIONS if s > 1}
                 | set(PART_BREAKS.get(p["id"], ()))))
             pspec.page_breaks = tuple(PART_PAGE_BREAKS.get(p["id"], ()))
+            # players' parts carry the rehearsal letters and tempo marks;
+            # the section titles stay in the score
+            pspec.titles = False
             xml = os.path.join(tmp, f"part{i}.musicxml")
             engine.write_musicxml(xml, [p], {p["id"]: parsed[p["id"]]}, pspec)
             hollywood.polish_musicxml(xml, META, part=(p["name"], ZH[p["id"]]))

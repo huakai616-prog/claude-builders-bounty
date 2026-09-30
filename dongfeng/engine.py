@@ -460,6 +460,11 @@ def _write_part(part_el, p, voices, spec, top):
                          r"meno|subito|smorz|morendo|calando)", txt)
         if txt.startswith("_"):  # "_text": below the staff
             txt, below = txt[1:], True
+        if below:  # cresc. / dim. go to the part's entrance in that bar,
+            a = (b - 1) * BAR + t  # not under its rest (as dynamics do)
+            s = next_start(a, b * BAR)
+            if s is not None:
+                b, t = s // BAR + 1, s % BAR
         add(b, t, "words", txt, "below" if below else "above")
     # bars where an 8va line starts or stops mid-bar: MS4 decides the
     # accidentals by written position, so it drops one this engine writes
@@ -476,7 +481,8 @@ def _write_part(part_el, p, voices, spec, top):
         for (b, letter, title) in spec.sections:
             if letter:
                 add(b, 0, "rehearsal", letter, "above")
-            add(b, 0, "title", title, "above")
+            if getattr(spec, "titles", True):  # parts: letters only
+                add(b, 0, "title", title, "above")
         for (b, t, words, unit, num, qbpm) in spec.tempo_marks:
             add(b, t, "tempo", (words, unit, num, qbpm), "above")
         for (b, t, words) in spec.tempo_words:
