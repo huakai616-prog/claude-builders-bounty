@@ -414,8 +414,10 @@ def _with_offset(de, off):
     return de
 
 
-ORDER = {"rehearsal": 0, "title": 1, "tempo": 2, "tempotext": 3, "ottava": 4,
-         "dyn": 5, "words": 6, "wedge": 7}
+# same tick: a part's own words first, so MS4 sets them nearest the staff,
+# under the rehearsal letter, section title and tempo of the top part
+ORDER = {"words": -1, "rehearsal": 0, "title": 1, "tempo": 2, "tempotext": 3,
+         "ottava": 4, "dyn": 5, "wedge": 7}
 
 
 def _write_part(part_el, p, voices, spec, top):
@@ -456,10 +458,20 @@ def _write_part(part_el, p, voices, spec, top):
     for (b, t, txt) in spec.words.get(pid, []):
         below = re.match(r"(cresc|dim|decresc|poco|sempre|molto|pi\u00f9|"
                          r"meno|subito|smorz|morendo|calando)", txt)
+        if txt.startswith("_"):  # "_text": below the staff
+            txt, below = txt[1:], True
         add(b, t, "words", txt, "below" if below else "above")
+    # bars where an 8va line starts or stops mid-bar: MS4 decides the
+    # accidentals by written position, so it drops one this engine writes
+    # for another octave (Ab6 inside the line, Ab5 after it)
+    ott_bars = set()
     for (b, t, b2, t2) in spec.ottava.get(pid, []):
         add(b, t, "ottava", "start", "above")
         add(b2, t2, "ottava", "stop", "above")
+        if t:
+            ott_bars.add(b)
+        if t2 < BAR:
+            ott_bars.add(b2)
     if top:
         for (b, letter, title) in spec.sections:
             if letter:
@@ -510,6 +522,11 @@ def _write_part(part_el, p, voices, spec, top):
             if vi > 0:
                 bk = _sub(m, "backup")
                 _sub(bk, "duration", BAR)
+            multi = sum(1 for vv in vids if not all(
+                ee.get("hidden") for ee in voices[vv] if ee["bar"] == b)) > 1
+            for ee in vevs:
+                ee["multi"] = multi
+                ee["ott_bar"] = b in ott_bars
             if all(e.get("hidden") for e in vevs):
                 fw = _sub(m, "forward")
                 _sub(fw, "duration", BAR)
@@ -673,7 +690,9 @@ def _emit_note(m, e, j, n, pc, v, show, beams, tup_first, tup_last, idx,
         if first:
             acc = show.get((id(e), p))
             if acc is not None:
-                _sub(ne, "accidental", ACC_NAME[acc])
+                ael = _sub(ne, "accidental", ACC_NAME[acc])
+                if e.get("ott_bar"):  # kept as written (see ott_bars)
+                    ael.set("cautionary", "yes")
         _tm(ne, tup, d)
         if pi == 0:
             for lvl in sorted(beams):
@@ -690,8 +709,12 @@ def _emit_note(m, e, j, n, pc, v, show, beams, tup_first, tup_last, idx,
                     while slur_num.get((v, k)):
                         k += 1
                     slur_num[(v, k)] = True
-                    _sub(nots, "slur", type="start", number=k,
-                         placement="above" if v == 1 else "below")
+                    # two voices: slurs above / below; one voice: let the
+                    # notation program put them on the notehead side, clear
+                    # of the tuplet numbers on the beam side
+                    el = _sub(nots, "slur", type="start", number=k)
+                    if e.get("multi"):
+                        el.set("placement", "above" if v == 1 else "below")
             if last:
                 for _ in range(e["sr"]):
                     open_ = [k for (vv, k), on in slur_num.items()
@@ -704,9 +727,11 @@ def _emit_note(m, e, j, n, pc, v, show, beams, tup_first, tup_last, idx,
             mk = e["marks"]
             arts = _el("articulations")
             if first:
-                for c, tag in ((">", "accent"), ("^", "strong-accent"),
-                               (".", "staccato"), ("_", "tenuto"),
-                               ("!", "staccatissimo")):
+                # MS4 stacks them in this order from the notehead out:
+                # staccato / tenuto / wedge inside, accents outside
+                for c, tag in ((".", "staccato"), ("_", "tenuto"),
+                               ("!", "staccatissimo"), (">", "accent"),
+                               ("^", "strong-accent")):
                     if c in mk:
                         el = _sub(arts, tag)
                         if tag == "strong-accent":

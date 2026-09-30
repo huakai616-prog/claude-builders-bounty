@@ -727,8 +727,8 @@ hair(37, 48, 37, 90, "cresc", "vn1")
 dyn(38, 0, "f")
 hair(40, 0, 40, 90, "dim", "vn1")
 # C. Theme on top
-dyn(41, 0, "f")
-words(41, 0, "cantabile, con forza", "vn1")
+dyn(41, 0, "f cantabile, con forza", "vn1")
+dyn(41, 0, "f", "vn2", "va", "vc")
 dyn(45, 0, "fp", "vn1")
 dyn(45, 0, "p", "vc")
 dyn(45, 24, "p", "va")
@@ -741,7 +741,7 @@ dyn(47, 0, "p")
 hair(48, 0, 48, 90, "cresc", "vn2", "va", "vc")
 # D. Development
 dyn(49, 0, "f")
-words(49, 0, "marcato", "vn2", "va", "vc")
+words(49, 0, "marcato", "va", "vc")
 hair(49, 0, 49, 48, "cresc", "vn1", "va", "vc")
 dyn(53, 0, "ff")
 dyn(55, 0, "f")
@@ -871,7 +871,8 @@ META = dict(
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
     key="A Minor · a 小调", tempo="Allegro con brio 𝅗𝅥 = 69",
     duration="ca. 3′05″",
-    year="2026", tempo_text="")
+    year="2026", tempo_text="",
+    title_gap_sp=10)  # room for the Lento mark under the credit lines
 
 def _mscx_hook(x):
     """MS4 touch-ups on the imported score (MS4 ignores these from MusicXML):
@@ -895,7 +896,7 @@ META["mscx_hook"] = META["mscx_part_hook"] = _mscx_hook
 META["part_style"] = {"Spatium": 1.65}
 # extra line starts in the parts (besides the sections), read back from
 # the engraved PDF, so that no bar stands alone on a line
-PART_BREAKS = {"vn1": (59, 67), "va": (53, 57, 63, 95), "vc": (63,)}
+PART_BREAKS = {"vn1": (37, 53, 55, 57, 59, 67), "va": (53, 57, 63, 95), "vc": (63,)}
 # and page starts: the last section on a page of its own (three lines),
 # not the last two bars alone on the last page
 PART_PAGE_BREAKS = {"vn1": (89,), "va": (89,)}
@@ -934,6 +935,21 @@ def auto_marks(parsed):
                 else:
                     cur = [k, k + 1]
                     spans.append(cur)
+            # a line that stops (or starts) mid-bar while the rest of the
+            # bar stays high (from C5 up) runs to the barline instead: no
+            # choppy one-beat 8va, and no accidental that MS4 drops because
+            # the same written line carried it inside the 8va
+            def high(a, z):
+                ns = [mid(x) for e in evs if a <= e["abs"] < z
+                      for x in e["pitches"]]
+                return all(x >= 72 for x in ns)
+            for sp in spans:
+                a, z = sp[0] * 24, sp[1] * 24
+                ba, bz = a - a % BAR, z + (-z) % BAR
+                if a > ba and high(ba, a):
+                    sp[0] = ba // 24
+                if z < bz and high(z, bz):
+                    sp[1] = bz // 24
             ottava[p["id"]] = [(a * 24 // BAR + 1, a * 24 % BAR,
                                 z * 24 // BAR + 1 if z * 24 % BAR else z * 24 // BAR,
                                 z * 24 % BAR or BAR) for a, z in spans]
