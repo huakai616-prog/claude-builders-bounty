@@ -14,13 +14,93 @@ plus 说明.txt; `extra` adds files from elsewhere into a subfolder.
 `main` maps the four deliverables to file names inside src (None = missing):
     musicxml  西贝柳斯工程      pdf    总谱 PDF
     strings   弦乐总 MIDI       vocal  人声带歌词 MIDI
+An instrumental work has no vocal MIDI: give it `parts` (分谱 PDF) instead,
+plus `other_note` (what 2_其他文件 holds) and `howto` (the ACE line of
+说明.txt).
 To add a new song: append an entry here (newest work at the top is fine,
 the page sorts by `updated`), then run tools/deliver/package.py <slug>.
-Instrumental works relabel the slots with `labels` and replace the zip's
-explanation with `layout_note` and `howto` (lists of lines).
 """
 
 WORKS = [
+    dict(
+        slug="dongfeng", section="song", ref=None,
+        title="冬风", subtitle="全曲 · 弦乐四重奏 · 肖邦练习曲 Op. 25 No. 11",
+        artist="", key="a 小调（原调）", tempo="二分音符=69（♩=138）",
+        instrumentation="弦乐四重奏 · 纯器乐（肖邦 a 小调练习曲「冬风」）",
+        src="dongfeng/output", layout="standard",
+        main=dict(musicxml="冬风_弦乐四重奏.musicxml",
+                  pdf="冬风_总谱.pdf",
+                  strings="冬风_弦乐四重奏_全轨.mid",
+                  parts="冬风_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF（封面 + 12 页）、弦乐总 MIDI 和分谱 PDF。全曲 96 小节，约 3 分 05 秒。肖邦的每个音都和你给的 17 页钢琴谱逐一核对过。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是每件乐器单独的 MIDI 和试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨，保留速度信息），每轨加载 String Section，speaker 选 Violins I / Violins II / Violas / Celli（想要更独奏的声音就选单把的小提琴、中提琴、大提琴）。没有弱起，ACE 第 N 小节 = 总谱第 N 小节。",
+               "谱上的 sul tasto（1–4 小节）、sul ponticello（65–68）、震音（59–60 大提琴，62、64 中提琴和大提琴，66–68）、跳弓（81–84 第一小提琴）在 MIDI 里是普通音符或重复的三十二分音符，需要的话在 ACE 里手动选演奏法。想一轨一轨导入，就用「2_其他文件」里的分轨 MIDI。"],
+        questions=[
+            "调保留原调 a 小调（A、E、D、G 空弦都能共鸣）。要换调告诉我。",
+            "速度按肖邦的二分音符 = 69，弦乐四重奏拉这首非常吃力；要给真人乐手演，可以放慢到 60–63。",
+            "第 16 小节第 4 拍第一个音，两份谱都没写还原号，这里按半音阶上行写成 D 还原。你的版本明确是 D♭ 的话告诉我。",
+            "结尾第 95 小节：肖邦是双手八度、四个八度的音阶。这里改成四件乐器同时从各自的 C 起、一人两个八度，合起来仍是四个八度，落到最后的 A 和弦。想要照原样一件接一件，告诉我。",
+        ]),
+    dict(
+        slug="wohewodezuguo", section="song", ref=None,
+        title="我和我的祖国", subtitle="全曲 · 四声部独唱与弦乐四重奏",
+        artist="李谷一", key="♭E 大调（原谱调）", tempo="♩.=56",
+        instrumentation="S.A.T.B. 四声部独唱 + 弦乐四重奏",
+        src="wohewodezuguo/output", layout="standard",
+        main=dict(musicxml="我和我的祖国_全曲_四声部人声弦乐四重奏.musicxml",
+                  pdf="我和我的祖国_全曲_总谱.pdf",
+                  strings="我和我的祖国_弦乐四重奏_伴奏.mid",
+                  vocal="我和我的祖国_四声部人声_带歌词.mid"),
+        labels=dict(vocal="四声部人声带歌词 MIDI"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="四个声部各一位歌手（单人合唱）。先看压缩包里的「使用说明.md」：ACE 导入、拨弦位置、气口 br、多音字。",
+        questions=[
+            "第一段主歌交给女低音独唱（旋律 ♭B3–F5 正好在她的音区），女高音留到副歌「我最亲爱的祖国」才第一次开口。想让女高音从头唱，告诉我。",
+            "歌词：原谱第 54 小节印的「浪的忧愁」按通行歌词唱成「海的忧愁」。第 27 小节「紧贴着」（常见是「紧依着」）、第 11–12 小节「分隔」（常见是「分割」）照原谱没改，要改告诉我。",
+            "速度定的是附点四分音符 = 56（Moderato）。想贴合某个录音的速度，告诉我。",
+            "每个乐句前有一个歌词为 br 的短音标换气。如果 ACE 把它唱成字，删掉这些短音即可。",
+        ]),
+    dict(
+        slug="unravel", section="song", ref=None,
+        title="Unravel", subtitle="全曲 · 弦乐四重奏 · 东京喰种 OP · 依 Animenz 钢琴版改编",
+        artist="TK from 凛として時雨", key="g 小调（原调）", tempo="♩=134",
+        instrumentation="弦乐四重奏 · 纯器乐",
+        src="unravel/output", layout="standard",
+        main=dict(musicxml="Unravel_全曲_弦乐四重奏.musicxml",
+                  pdf="Unravel_全曲_总谱.pdf",
+                  strings="Unravel_弦乐四重奏.mid",
+                  parts="Unravel_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF（封面 + 15 页）、弦乐总 MIDI 和分谱 PDF。全曲约 3 分 57 秒。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section（有独奏小提琴、中提琴、大提琴就用独奏的）。MIDI 开头空一小节，弱起在它的最后一个八分音符上，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "总谱第 78–81 小节（ACE 第 79–82 小节）的震音在 MIDI 里写成了快速重复音；ACE 有 tremolo 演奏法的话，可以改成长音再选 tremolo。"],
+        questions=[
+            "八音盒段（第 90–96、129–130 小节）钢琴原谱在 8va 下最高到 G7，小提琴拉不到，这里第一小提琴整体低八度拉，旋律形状不变。",
+            "终副歌第 112 小节用了 fff（钢琴原谱是 ff），让最后一次副歌成为全曲顶点；不要的话改回 ff。",
+        ]),
+    dict(
+        slug="alla-turca", section="song", ref=None,
+        title="土耳其进行曲", subtitle="全曲 · 弦乐四重奏",
+        artist="", key="a 小调 / A 大调（原调）", tempo="♩=120",
+        instrumentation="弦乐四重奏（莫扎特 K.331 第三乐章）",
+        src="alla-turca/output", layout="standard",
+        main=dict(musicxml="土耳其进行曲_弦乐四重奏.musicxml",
+                  pdf="土耳其进行曲_总谱.pdf",
+                  strings="土耳其进行曲_弦乐四重奏.mid",
+                  parts="土耳其进行曲_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐曲，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF、弦乐总 MIDI 和分谱 PDF。反复全部写开，第二遍换配器，全曲约 3 分 44 秒。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨），每轨加载 String Section。MIDI 开头空一拍，ACE 的第 N 小节 = 总谱第 N−1 小节。",
+               "拨弦（pizz.）要在 ACE 里把演奏法改成 Pizzicato（ACE 小节号）：Violin I 74–81、106–108；Violin II 74–81、106–112；Viola 10–16、42–49、58–65、122–129、138–144、170–177；Violoncello 10–17、42–49、58–65、74–81、106–113、122–129、138–145、170–177。"],
+        questions=[
+            "谱上 m52（总谱第 92、108 小节）第 6 个十六分音符是 B♯5，原典版是 D6；m55（第 95、111 小节）第 4 个音是 F♯5，原典版是 A5。现在照你给的谱，要改成原典版告诉我。",
+            "速度按 Allegretto ♩=120，反复全部保留（约 3 分 44 秒）。想要更快或少几遍反复告诉我。",
+            "拨弦段落在 ACE 里要手动改成 Pizzicato，小节号写在压缩包的说明.txt 里。",
+        ]),
     dict(
         slug="wobunanguo", section="song", ref=None,
         title="我不难过", subtitle="副歌 · 人声与弦乐四重奏",
@@ -32,9 +112,7 @@ WORKS = [
                   strings="我不难过_弦乐四重奏_伴奏.mid",
                   vocal="我不难过_人声_带歌词.mid"),
         pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
-        questions=[
-            "谱上几处低八度请核对：「陪」「寞」「看」（以及后半段同位置的「你」「我」「不」）照谱写成了低八度，旋律会在高音之间突然掉下去。原唱不是这样的话告诉我，我改成高八度。",
-        ]),
+        questions=[]),  # 用户说这首不用再重做，别再问
     dict(
         slug="qingge", section="song", ref="origin/claude/serene-darwin-2l4jy4",
         title="情歌", subtitle="最后一遍副歌 · 人声与弦乐四重奏",

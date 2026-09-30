@@ -55,7 +55,7 @@
   </credit>
   <credit page="1">
     <credit-type>lyricist</credit-type>
-    <credit-words default-x="84.7" default-y="2100.7" font-size="10.5" justify="left" valign="bottom" />
+    <credit-words default-x="84.7" default-y="2100.7" font-size="10.5" justify="left" valign="bottom">原曲：a 小调练习曲 Op. 25 No. 11</credit-words>
   </credit>
   <credit page="1">
     <credit-type>composer</credit-type>
@@ -3159,11 +3159,6 @@
     </measure>
     <measure number="15">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <words font-style="italic">dim.</words>
-        </direction-type>
-      </direction>
       <note>
         <rest measure="yes" />
         <duration>96</duration>
@@ -18486,11 +18481,6 @@
     </measure>
     <measure number="71">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <words font-style="italic">dim.</words>
-        </direction-type>
-      </direction>
       <note>
         <rest measure="yes" />
         <duration>96</duration>
@@ -20814,11 +20804,6 @@
     </measure>
     <measure number="79">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <words font-style="italic">dim.</words>
-        </direction-type>
-      </direction>
       <note>
         <rest measure="yes" />
         <duration>96</duration>

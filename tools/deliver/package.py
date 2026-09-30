@@ -5,6 +5,10 @@
     python3 tools/deliver/package.py wobunanguo # just one
     python3 tools/deliver/package.py wobunanguo --files
         # also print the Artifact `files` map to publish for that work
+    python3 tools/deliver/package.py --snapshot <dir>
+        # <dir> = an ArtifactData `list` of collection `works` saved with
+        # out_dir (<dir>/works/<slug>.json); writes dist/files/works.json,
+        # the list the page shows when its database does not answer
 
 For each work it pulls the files from the work's git ref (or the working
 tree), and writes to tools/deliver/dist/ (not committed):
@@ -50,7 +54,8 @@ from catalog import WORKS  # noqa: E402
 MEDIA = {".pdf", ".mp3", ".mp4", ".webm", ".wav", ".ogg", ".png", ".jpg",
          ".jpeg", ".gif", ".webp", ".otf", ".ttf", ".woff", ".woff2"}
 LABELS = dict(musicxml="西贝柳斯工程", pdf="总谱 PDF", strings="弦乐总 MIDI",
-              vocal="人声带歌词 MIDI")
+              vocal="人声带歌词 MIDI", parts="分谱 PDF")
+MAIN_KEYS = ("musicxml", "pdf", "strings", "vocal")  # a song's usual four
 MAIN_DIR, OTHER_DIR = "1_四样主文件", "2_其他文件"
 CREDIT = "花开当富贵"
 
@@ -111,10 +116,11 @@ def readme_txt(w, main_rel, layout_note):
             label = (w.get("labels") or {}).get(k, LABELS[k])
             lines.append(f"  · {label}：{rel if rel else '（这首还没有）'}")
         lines.append("")
-        lines += ["怎么用："] + [f"  · {x}" for x in (w.get("howto") or [
-                  "西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。",
-                  "ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。"])] \
-            + [""]
+        lines += ["怎么用：",
+                  "  · 西贝柳斯：文件 → 打开，选 .musicxml（或 .mxl），打开后「另存为」就是 .sib 工程。"]
+        lines += [f"  · {x}" for x in w.get("howto", [
+            "ACE Studio：导入「全轨」MIDI（或人声带歌词 MIDI），歌词已经在音符上；乱码就换 GBK 那份。"])]
+        lines.append("")
     if layout_note:
         lines += [layout_note, ""]
     if w.get("note"):
@@ -160,10 +166,12 @@ def package(w):
                 sub = MAIN_DIR if f in main_names else OTHER_DIR
                 entries.append((f"{top}/{sub}/{f}", os.path.join(src, f)))
             entries.sort()  # 1_四样主文件 before 2_其他文件
-            for k in ("musicxml", "pdf", "strings", "vocal"):
+            # the usual four, or the work's own set (an instrumental piece
+            # has part PDFs where a song has its vocal MIDI)
+            for k in (MAIN_KEYS if set(main) <= set(MAIN_KEYS) else main):
                 v = main.get(k)
                 main_rel.append((k, f"{MAIN_DIR}/{v}" if v else None))
-            note = w.get("layout_note") or (
+            note = w.get("other_note") or (
                 f"「{MAIN_DIR}」是你要的四样，「{OTHER_DIR}」里是 GBK 备用歌词、"
                 "全轨 MIDI、试听 mp3 和字幕。")
         else:
@@ -178,7 +186,7 @@ def package(w):
                 for p in ps:
                     entries.append((f"{top}/{folder}/{os.path.basename(p)}",
                                     os.path.join(tmp, p)))
-            for k in ("musicxml", "pdf", "strings", "vocal"):
+            for k in MAIN_KEYS:
                 if k in w["main"]:
                     v = w["main"][k]
                     main_rel.append((k, v))
@@ -283,7 +291,26 @@ def package(w):
         return row
 
 
+def snapshot(src):
+    d = os.path.join(src, "works") if os.path.isdir(os.path.join(src, "works")) \
+        else src
+    rows = {}
+    for f in sorted(os.listdir(d)):
+        if f.endswith(".json"):
+            with open(os.path.join(d, f), encoding="utf-8") as fh:
+                rows[f[:-5]] = json.load(fh)
+    out = os.path.join(DIST, "files", "works.json")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w", encoding="utf-8") as fh:
+        json.dump(rows, fh, ensure_ascii=False)
+    print(f"{len(rows)} works -> {out}")
+    print(json.dumps({"files/works.json": out}, ensure_ascii=False))
+
+
 def main():
+    if "--snapshot" in sys.argv:
+        snapshot(sys.argv[sys.argv.index("--snapshot") + 1])
+        return
     want = {a for a in sys.argv[1:] if not a.startswith("--")}
     works = [w for w in WORKS if not want or w["slug"] in want]
     os.makedirs(DIST, exist_ok=True)

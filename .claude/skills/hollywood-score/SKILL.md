@@ -1,11 +1,13 @@
 ---
 name: hollywood-score
-description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), the Hollywood layout (tools/hollywood), and the hand-off: every finished work goes into the pinned 编曲交付中心 page (tools/deliver) and is merged into main. Follow it without asking the user about layout, credits, deliverables or merging.
+description: House standard for delivering a song arrangement in this repo (voice + strings from a jianpu screenshot). Use whenever you create or update a song's score, PDF, Sibelius file or MIDI. It fixes the deliverable set (Sibelius MusicXML, Hollywood-standard PDF with cover, full strings MIDI, vocal MIDI with lyrics), the credits (改编 and 制谱 are both 花开当富贵), the Hollywood layout (tools/hollywood), and the hand-off: every finished work goes into the pinned 编曲交付中心 page (tools/deliver) and is merged into main. Follow it without asking the user about layout, credits, deliverables or merging. It fixes the delivery format only; the music (texture, harmony, structure) must be conceived fresh for each song, never copied from an earlier one.
 ---
 
 # Hollywood score delivery
 
 The user set these rules once and does not want to be asked again.
+
+**This skill is about the delivery format, not the music.** When the user says 「像之前一样」, they mean the same delivery: the files, the PDF, the credits and the delivery center. They do not mean the same arrangement. 我不难过 copied 泪海's textures and chords almost one for one, and the user called it 难听. Conceive each song's texture, harmony, intro and ending from that song itself, and say in the README how it differs from earlier work. The full rule is in `AGENTS.md` under 「用户怎么提需求」.
 
 ## Standing rules
 
@@ -15,7 +17,7 @@ The user set these rules once and does not want to be asked again.
    - **Full strings MIDI**: all string parts in one file, `<歌名>_弦乐<编制>_伴奏.mid`.
    - **Vocal MIDI with per-syllable lyrics**: `<歌名>_人声_带歌词.mid`, plus the GBK fallback.
    - Also keep the usual extras: full-track MIDI for ACE, plain vocal MIDI, GM preview mp3, SRT.
-   - **Instrumental works** (no voice, e.g. `dongfeng/`, 冬风): the fourth file is the players' **parts PDF** (A4, every part in one file, `hollywood.render_parts_pdf`), and the extras are the full-track MIDI plus one MIDI per instrument and the mp3. In the delivery catalog, relabel the slot with `labels=dict(vocal="四个声部分谱 PDF")` and give `layout_note` / `howto`.
+   - **Instrumental works** (no voice, `alla-turca/`, `unravel/`, `dongfeng/`): four main files with a parts PDF in place of the vocal MIDI, see「Instrumental works and parts」below. `META["original"]` prints as 原曲; `META["source"]` prints as 改编自 / Based on (the version an arrangement follows, e.g. "Animenz 钢琴版"). A Latin-script title gets tight tracking on the cover automatically.
 2. **Credits**: 改编 (arranger) and 制谱 (engraver / music preparation) are both **花开当富贵**. They appear on the cover, in the first-page title block, in every page footer, in the MusicXML `<creator type="arranger">` and `<encoder>`, and in the PDF metadata. `tools/hollywood` defaults to this; never leave either credit out.
 3. **Layout must be refined** (精益求精). Render, look at every page, and fix problems before you deliver (see the QA list below).
 4. **The user must be able to find the files without GitHub** (they said 「我不太会用 GitHub」). Every finished work goes into the pinned **编曲交付中心** page, and the first line of your reply is its link: https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN . There, one click saves a zip to the computer's Downloads folder. Never tell the user to look for files on a branch.
@@ -72,9 +74,14 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
 - **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
-
-- **Parts** (instrumental works): `hollywood.render_parts_pdf([(musicxml, "Violin I", "第一小提琴"), ...], out_pdf, meta)` engraves each single-part MusicXML on A4 (house style adapted: 7 mm staves, multi-bar rests), adds the running header ("冬风 · 第一小提琴 Violin I", "VIOLIN I PART") and footer, and merges the parts into one PDF with a bookmark per part. `meta["credit_left"]` puts the part name in the title block's left corner. See `write_parts()` in `dongfeng/build.py`.
-- **Tuplets**: MS4 ignores MusicXML `show-number="none"`; `dongfeng/build.py`'s `_mscx_hook` hides the bracket of every tuplet and the number of every tuplet that arrived without one (the engine prints "6" / "3" only on the first group of each run).
+- **Engraving rules learned on Unravel** (`unravel/build.py` has them; copy into new engines):
+  - `rebeam()` after `polish_musicxml`: music21 beams across the middle of a 4/4 bar and leaves orphan `end` beams. Rebeam per beat, merge beats only where a note crosses the beat (3+3+2 figures), never across beat 3; secondary beams per beat, a lone 16th hooked toward the note it completes.
+  - Rests never hide a beat: dotted rests only on the beat, shorter rests inside their beat (`_fits_rest`).
+  - Expressive words (`dolce`, `cantabile`, `espressivo`, `subito`, `morendo`, …) go **below** the staff; when a dynamic sits on the same beat they are merged into its `<direction>` so MS4 and Sibelius print one line ("*f* subito", "*p* dolce"). Techniques (sul tasto, spicc., marcato, legato) stay above. Don't hang an expressive word on a pickup: it runs through the barline (the quartet's barlines are connected); put it on the next downbeat.
+  - Ties are per pitch: `Bb4/8~ Bb4+D5/32` ties the Bb4 and strikes the D5 (MusicXML and MIDI), so a chord can grow without a second voice.
+  - Per-bar engraving overrides (`STEMS`, `SLURS_BELOW` in `unravel/arrangement.py`) fix a run whose tuplet number pushes a dynamic toward the next staff, or slurs flipping side in repeated cells.
+  - Keep a courtesy dynamic right after a rehearsal letter.
+- **Layout options in `META`** (all optional): `title_frame_sp` (title frame height, default 21), `title_gap_sp` (frame to first system; 10 gives the tempo mark room under the credits), `section_lift` (default 5) and `section_pin=True` (title set 1 sp right of the letter so a wide M/N/H doesn't stack them; use with `section_lift=9` when sections open with tall chord stacks or under an 8va).
 
 Then run:
 
@@ -95,7 +102,60 @@ apt-get install -y fonts-noto-cjk fonts-ebgaramond fonts-ebgaramond-extra popple
 - **Chromium**: found under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`, or set `CHROME=/path`.
 - On the user's Mac: MuseScore 4 at `/Applications/MuseScore 4.app`, Chrome at `/Applications/Google Chrome.app`. Both are picked up automatically.
 
+## Instrumental works and parts
+
+Not every job is a song.  An instrumental piece (the first one: `alla-turca/`,
+Mozart's Rondo alla Turca for string quartet, from a piano score PDF) follows
+the same standard with these differences:
+
+- **The four main files** are the Sibelius MusicXML, the Hollywood PDF, the
+  strings MIDI (one track per instrument, for ACE) and a **parts PDF**
+  (`<名>_分谱.pdf`) in place of the vocal MIDI.  In `tools/deliver/catalog.py`
+  give the entry `main=dict(musicxml=…, pdf=…, strings=…, parts=…)`, plus
+  `other_note` and `howto` for its 说明.txt.  No SRT, no GBK file.
+- **Credits**: set `META["original"]` (e.g. "A大调钢琴奏鸣曲 K.331 第三乐章");
+  it prints as 原曲 on the cover and in the title block, where a song has
+  作词 / 原唱.
+- **Parts**: `hollywood.polish_musicxml(path, META, part=("Violin I",
+  "第一小提琴"))` lays a one-instrument MusicXML out as a 9 × 12 in part
+  (`hollywood_part.mss`: same fonts, boxed bar numbers, multi-rests), and
+  `hollywood.render_parts_pdf([(xml, en, zh), …], out, META)` engraves them
+  into one PDF with a bookmark per instrument and the instrument named in
+  every header and footer.  Give every part the tempo mark and the
+  rehearsal letters (`make_m21(…, lead=True)` in `alla-turca/build.py`).
+- **Transcribing a printed score** (not jianpu): keep the piano original
+  in `<piece>/source_piano.py` and let `--check` compare the arrangement
+  with it (melody attacked, bass on every downbeat, no pitch class foreign
+  to the bar, no minor 2nd / 9th the original lacks).  Deliberate
+  departures go into `ALLOW`, keyed by the original's bar numbers.
+  A copyrighted source (Unravel follows Animenz's piano arrangement) stays
+  out of the public repo: keep its transcription in the scratchpad and
+  point `--check` at it (`UNRAVEL_PIANO=… python3 unravel/build.py
+  --check`); without it the check runs ranges and double stops only.
+- **The MIDI's barlines** must match the score's: with a pickup, start the
+  MIDI with a whole empty bar holding the pickup at its end (ACE bar N =
+  score bar N−1) and say so in `howto`.
+- **Piano textures that no single string instrument can play** (冬风 /
+  `dongfeng/`, Chopin's four-octave sextuplets): `dongfeng/engine.py`
+  writes the MusicXML itself (music21 turns 6:4 sextuplets into 3:2 and
+  beams per half bar) and prints "6" only on the first group of a run.
+  MS4 ignores `show-number="none"`, so `META["mscx_hook"]` and
+  `META["mscx_part_hook"]` (`_mscx_hook` in `dongfeng/build.py`) hide
+  the bracket and number of every tuplet that arrived without a number.
+- **Repeats**: written out (`FORM`), so the second time can be scored
+  differently and the MIDI needs no unrolling; `ALIAS` reuses a strain's
+  data for its reprise.
+
+## Song-specific style values
+
+`META["style"] = {"measureSpacing": 1.3}` (and `META["part_style"]` for the
+parts) replaces or adds keys of the house style for one piece only;
+`render_pdf` writes a temporary copy of `hollywood.mss`.  Use it sparingly:
+the house values are the standard.
+
 ## Choosing system breaks (3 systems per page)
+
+For a long score, `unravel/layout.py` plans the breaks automatically: it estimates each bar's width from its onsets, starts a system at every rehearsal letter, packs 3 systems per page and prints `SYSTEM_BREAKS` / `PAGE_BREAKS` (budget 74 fits MuseScore 4 on 11×17 with four staves). `build.py` there also supports `PAGE_BREAKS` and positional 8va lines (`(part, bar1, pos1, bar2, pos2)`).
 
 On 11 × 17 at 7.2 mm staves:
 
@@ -103,6 +163,15 @@ On 11 × 17 at 7.2 mm staves:
 - **Height**: 5 staves + lyrics = one system. The first page holds the title block + 3 systems; the other pages hold 3.
 - Count the systems and make the total a multiple of 3 (page 1 counts as 3). Move one break if the last page would get 1–2 lonely systems. Start systems at rehearsal letters where possible.
 - Explicit breaks that are too full make MS4 wrap a bar on its own. If you see a one-bar system, take a bar out of that system.
+- To see the real layout without eyeballing every page, read the boxed bar
+  numbers back from the PDF: `pdftotext -bbox <pdf> -` gives each number's
+  position; group them by y (systems are 100+ pt apart) to list the bars of
+  every system on every page.  A lowered `measureSpacing` does not help when
+  the systems are already at their minimum width; take bars out or make
+  them narrower.
+- Instrumental 2/4 music (the string quartet): Mozart's 8-bar phrases fit one
+  system; 16th-note passages 4 bars; the first system (full instrument
+  names) holds about 6.
 
 ## QA before delivering (look at every page)
 
@@ -123,7 +192,8 @@ xmllint --noout --schema musicxml.xsd <song>/output/*.musicxml   # schema from w
 - MS4 **ignores `-S style` when it imports MusicXML directly**. `render_pdf` imports to `.mscz` first, then exports with the style.
 - MS4 gives imported MusicXML credits odd offsets: the composer drifts to the top and the lyricist falls into the music. `render_pdf` resets the title frame (`_fix_title_frame`).
 - The boxed bar numbers sit above every bar, so a rehearsal letter and its bold section title would share their row and run into the section's first bar number ("A Chorus 副歌 [10]"). `render_pdf` lifts both by 5 spaces onto their own row (`_lift_sections`). MS4 ignores `default-y` from MusicXML, so the offset is written into the imported `.mscz`. Set `META["section_lift"] = 0` to turn it off.
-- `render_pdf` also sets the Chinese in staff texts ("Chorus 副歌") in Noto Serif CJK SC (otherwise MS4 falls back to WenQuanYi Zen Hei, a sans) and labels 8va lines "8va" (MS4 imports them as a bare "8" and `-S` does not reset that). `polish_musicxml` makes rehearsal letters bold.
+- `render_pdf` also sets the Chinese in staff texts ("Chorus 副歌") in Noto Serif CJK SC (otherwise MS4 falls back to WenQuanYi Zen Hei, a sans) and labels 8va lines "8va", "(8va)" after a system break (MS4 imports them as a bare "8" and `-S` does not reset that: `_engrave_fixes` edits the score's own style). `polish_musicxml` makes rehearsal letters bold.
+- `hollywood.mss` places ties **between the noteheads** (`tiePlacement… inside`): with the default "outside" a phrase slur ending on a tied note meets the tie in one point.
 - Letter-spaced cover lines need `padding-left` equal to their `letter-spacing`, or they sit left of the page axis (CSS adds the spacing after the last glyph too).
 - music21 writes the tempo words and the metronome as two directions. Use `tempo_text` so they print as one mark.
 - The cover and header are an HTML page printed by headless Chromium on a transparent background and merged onto the MS4 pages. Page size must stay 11 × 17 in on both sides.
@@ -138,6 +208,11 @@ The page is `tools/deliver/center.html`, published at https://claude.ai/artifact
 - It serves each work's files from `files/<slug>/`.
 - 「下载到电脑」 builds `<歌名>_编曲交付.zip` in the browser from `bundle.json` and saves it through the `downloads` capability. The zip has `说明.txt`, `1_四样主文件/` and `2_其他文件/`. (The artifact host refuses to serve .zip, .mid or .musicxml files, so small files travel base64 inside `bundle.json`; PDF, mp3, mp4, png and fonts are served as themselves.)
 - 「全部歌曲一次下载」 merges every song into one zip.
+- 「选择文件」 opens a file browser inside the card. Folders are collapsed; clicking a folder's name opens it. Every folder and file has a checkbox and its own 下载 / 删除; the bar at the bottom downloads or deletes the selection, and 「删除整个…」 deletes the whole work.
+  - The save dialog only takes some types (pdf, zip, mp4, txt, json, png, jpg …). A single MIDI / MusicXML / mp3 / srt goes out as `<name>.zip`; several files go out as one zip.
+  - Every delete opens an in-page confirmation first (`window.confirm` is blocked in artifacts).
+  - Deletes never touch the published files. They go on the work's db row: `removed` holds paths relative to the bundle's top folder, and `deleted: true` hides the whole work. The 「已删除」 section at the bottom restores either.
+  - Deleted files are left out of every zip, and the PDF / video buttons hide when those files are removed.
 
 To add or update a work, after its files are built and committed:
 
@@ -151,13 +226,22 @@ To add or update a work, after its files are built and committed:
    - `file_path` = `tools/deliver/center.html`;
    - `files` = the printed map.
    Files you leave out are kept. Omit `capabilities` and `icon` so they stay as they are.
-5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`.
-6. Reply to the user with the page link first, then what changed.
-7. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row, because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
+6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
+7. Reply to the user with the page link first, then what changed.
+8. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+
+Whenever you edit `center.html`, check that its script still parses before publishing. One syntax error and the page shows no songs and no download buttons at all:
+
+```bash
+python3 -c "s=open('tools/deliver/center.html',encoding='utf-8').read(); open('/tmp/page.js','w').write(s[s.index('<script>\n')+9:s.rindex('</script>')])" && node --check /tmp/page.js
+```
+
+Shell commands inside a JS template literal (`MAC_CMD`) must escape `${` as `\${`; an unescaped `${p%/…}` broke the page once.
 
 ### Mac Dock app
 
-The user asked for the delivery center as an app in the Mac Dock. The card at the top of the page, 「放进 Mac 程序坞」, handles it:
+The user asked for the delivery center as an app in the Mac Dock. The card below the song list, 「放进 Mac 程序坞」 (collapsed by default so the songs come first), handles it:
 
 - 「下载 Mac 应用」 saves `编曲交付中心_安装包.zip`. It contains a ready-made `编曲交付中心.app` (a shell-script launcher with the icon), `安装.sh`, and `安装说明.txt`.
 - 「复制安装命令」 copies a one-line `bash -c '…'` command. The command finds the newest download in `~/Downloads`, which is the zip for Chrome and the unpacked folder for Safari, and runs `安装.sh`.

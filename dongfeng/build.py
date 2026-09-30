@@ -704,7 +704,7 @@ hair(10, 0, 10, 72, "dim")
 dyn(11, 0, "mf")
 hair(12, 0, 12, 48, "cresc", "vn1", "vn2", "vc")
 dyn(13, 0, "f")
-words(15, 0, "dim.")
+words(15, 0, "dim.", "vn2", "va", "vc")
 hair(15, 0, 15, 90, "dim-")
 dyn(16, 0, "mf")
 hair(16, 48, 16, 90, "cresc", "vn2", "va", "vc")
@@ -780,7 +780,7 @@ dyn(69, 0, "f", "vn1", "vn2")
 dyn(69, 0, "f", "vc")
 dyn(69, 0, "=fz", "vc")
 dyn(69, 24, "f", "va")
-words(71, 0, "dim.")
+words(71, 0, "dim.", "vn2", "va", "vc")
 hair(71, 0, 71, 72, "dim-")
 dyn(72, 0, "mf")
 hair(72, 0, 72, 72, "cresc", "va", "vc")
@@ -791,7 +791,7 @@ hair(74, 0, 74, 72, "dim")
 dyn(75, 0, "mf")
 hair(76, 0, 76, 48, "cresc", "vn1", "vn2", "vc")
 dyn(77, 0, "f")
-words(79, 0, "dim.")
+words(79, 0, "dim.", "vn2", "va", "vc")
 hair(79, 0, 79, 90, "dim-")
 dyn(80, 0, "mf")
 hair(80, 0, 80, 90, "cresc", "vn2", "va", "vc")
@@ -866,6 +866,7 @@ META = dict(
     subtitle="肖邦练习曲 Op. 25 No. 11 · 弦乐四重奏",
     subtitle_en="Étude in A minor, Op. 25 No. 11 — for String Quartet",
     composer="肖邦 Frédéric Chopin", lyricist="", artist="",
+    original="a 小调练习曲 Op. 25 No. 11",
     instrumentation=[("Violin I", "第一小提琴"), ("Violin II", "第二小提琴"),
                      ("Viola", "中提琴"), ("Violoncello", "大提琴")],
     key="A Minor · a 小调", tempo="Allegro con brio 𝅗𝅥 = 69",
@@ -887,7 +888,17 @@ def _mscx_hook(x):
     return re.sub(r"<Tuplet>.*?</Tuplet>", fix, x, flags=re.S)
 
 
-META["mscx_hook"] = _mscx_hook
+META["mscx_hook"] = META["mscx_part_hook"] = _mscx_hook
+# Parts on a 6.6 mm staff (house parts: 7 mm): Violin I's sextuplet bars
+# (24 sixteenths each) then fit two to a line throughout; at 7 mm every
+# odd one out ended up alone on a line.
+META["part_style"] = {"Spatium": 1.65}
+# extra line starts in the parts (besides the sections), read back from
+# the engraved PDF, so that no bar stands alone on a line
+PART_BREAKS = {"vn1": (59, 67), "va": (53, 57, 63, 95), "vc": (63,)}
+# and page starts: the last section on a page of its own (three lines),
+# not the last two bars alone on the last page
+PART_PAGE_BREAKS = {"vn1": (89,), "va": (89,)}
 
 
 def auto_marks(parsed):
@@ -1097,26 +1108,28 @@ def write_mp3():
 
 
 def write_parts():
-    """Players' parts: one A4 PDF with Violin I, Violin II, Viola, Cello."""
+    """Players' parts (9 x 12 in, tools/hollywood): one PDF with Violin I,
+    Violin II, Viola and Cello, a bookmark per part."""
     import copy
     import tempfile
     parsed = parse_all()
     spec = make_spec(parsed)
-    pspec = copy.copy(spec)
-    # parts: MS4 fills the lines itself, but every section starts a new line
-    pspec.system_breaks = tuple(s for s, _, _ in SECTIONS if s > 1)
-    pspec.page_breaks = ()
     items = []
     with tempfile.TemporaryDirectory() as tmp:
         for i, p in enumerate(PARTS, 1):
+            # MS4 fills the lines itself; every section starts a new line,
+            # and PART_BREAKS keeps a bar from ending up alone on a line
+            pspec = copy.copy(spec)
+            pspec.system_breaks = tuple(sorted(
+                {s for s, _, _ in SECTIONS if s > 1}
+                | set(PART_BREAKS.get(p["id"], ()))))
+            pspec.page_breaks = tuple(PART_PAGE_BREAKS.get(p["id"], ()))
             xml = os.path.join(tmp, f"part{i}.musicxml")
             engine.write_musicxml(xml, [p], {p["id"]: parsed[p["id"]]}, pspec)
-            pm = dict(META, credit_left=[f"{p['name']}", ZH[p["id"]]],
-                      subtitle="弦乐四重奏 · 分谱")
-            hollywood.polish_musicxml(xml, pm)
+            hollywood.polish_musicxml(xml, META, part=(p["name"], ZH[p["id"]]))
             items.append((xml, p["name"], ZH[p["id"]]))
-        dst = os.path.join(OUT, f"{NAME}_分谱_四个声部.pdf")
-        n = hollywood.render_parts_pdf(items, dst, META, title_frame=17)
+        dst = os.path.join(OUT, f"{NAME}_分谱.pdf")
+        n = hollywood.render_parts_pdf(items, dst, META)
     print(f"Parts: {dst} ({n} pages)")
 
 
