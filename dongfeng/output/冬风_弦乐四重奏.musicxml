@@ -2133,7 +2133,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2190,6 +2190,11 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <octave-shift type="down" size="8" number="1" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -2199,7 +2204,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2265,7 +2270,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -2292,11 +2297,6 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <octave-shift type="down" size="8" number="1" />
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <wedge type="stop" number="1" />
@@ -3739,7 +3739,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3795,7 +3795,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -3889,111 +3889,6 @@
         <beam number="2">end</beam>
         <notations>
           <slur type="stop" number="1" />
-          <tuplet type="stop" number="1" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">begin</beam>
-        <beam number="2">begin</beam>
-        <notations>
-          <slur type="start" number="1" />
-          <tuplet type="start" number="1" bracket="no" show-number="none" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-        <notations>
-          <slur type="stop" number="1" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">continue</beam>
-        <beam number="2">continue</beam>
-        <notations>
-          <slur type="start" number="1" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <time-modification>
-          <actual-notes>6</actual-notes>
-          <normal-notes>4</normal-notes>
-        </time-modification>
-        <beam number="1">end</beam>
-        <beam number="2">end</beam>
-        <notations>
           <tuplet type="stop" number="1" />
         </notations>
       </note>
@@ -4002,6 +3897,111 @@
           <octave-shift type="down" size="8" number="1" />
         </direction-type>
       </direction>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <notations>
+          <slur type="start" number="1" />
+          <tuplet type="start" number="1" bracket="no" show-number="none" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <alter>-1</alter>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <notations>
+          <slur type="stop" number="1" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <notations>
+          <slur type="start" number="1" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <time-modification>
+          <actual-notes>6</actual-notes>
+          <normal-notes>4</normal-notes>
+        </time-modification>
+        <beam number="1">end</beam>
+        <beam number="2">end</beam>
+        <notations>
+          <tuplet type="stop" number="1" />
+        </notations>
+      </note>
       <note>
         <pitch>
           <step>G</step>
@@ -4081,7 +4081,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4183,7 +4183,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4210,11 +4210,6 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <octave-shift type="stop" size="8" number="1" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -4313,6 +4308,11 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <octave-shift type="stop" size="8" number="1" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -4322,7 +4322,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4388,7 +4388,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -4442,7 +4442,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">natural</accidental>
+        <accidental cautionary="yes" parentheses="no">natural</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6669,7 +6669,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6686,7 +6686,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6737,7 +6737,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6758,7 +6758,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -6805,7 +6805,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11100,7 +11100,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11121,7 +11121,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11238,7 +11238,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11255,7 +11255,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11316,7 +11316,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11337,7 +11337,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -11973,6 +11973,9 @@
         <notations>
           <slur type="start" number="1" />
           <tuplet type="start" number="1" bracket="no" show-number="actual" />
+          <articulations>
+            <accent />
+          </articulations>
         </notations>
       </note>
       <note>
@@ -13206,7 +13209,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -13337,7 +13340,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -13412,7 +13415,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -19776,7 +19779,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -19833,6 +19836,11 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
+      <direction placement="above">
+        <direction-type>
+          <octave-shift type="down" size="8" number="1" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -19842,7 +19850,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -19908,7 +19916,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -19935,11 +19943,6 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <octave-shift type="down" size="8" number="1" />
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <wedge type="stop" number="1" />
@@ -20976,7 +20979,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21038,7 +21041,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21111,7 +21114,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21201,7 +21204,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21272,7 +21275,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21338,7 +21341,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">sharp</accidental>
+        <accidental cautionary="yes" parentheses="no">sharp</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21379,7 +21382,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21399,7 +21402,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21446,7 +21449,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21463,7 +21466,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21516,7 +21519,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -21533,7 +21536,7 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental cautionary="yes">flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>6</actual-notes>
           <normal-notes>4</normal-notes>
@@ -40903,11 +40906,6 @@
     </measure>
     <measure number="7">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <words font-style="italic">dim.</words>
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -41008,6 +41006,11 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <words font-style="italic">dim.</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -46876,16 +46879,14 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <words font-style="italic">dolce, espressivo</words>
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <dynamics>
             <p />
           </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-style="italic">dolce, espressivo</words>
         </direction-type>
       </direction>
       <note>
@@ -48075,16 +48076,14 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <words font-style="italic">espressivo</words>
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <dynamics>
             <mf />
           </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-style="italic">espressivo</words>
         </direction-type>
       </direction>
       <note>
@@ -48181,11 +48180,6 @@
     </measure>
     <measure number="59">
       <print new-system="yes" />
-      <direction placement="below">
-        <direction-type>
-          <wedge type="crescendo" number="1" />
-        </direction-type>
-      </direction>
       <note>
         <rest />
         <duration>24</duration>
@@ -48197,6 +48191,11 @@
           <dynamics>
             <f />
           </dynamics>
+        </direction-type>
+      </direction>
+      <direction placement="below">
+        <direction-type>
+          <wedge type="crescendo" number="1" />
         </direction-type>
       </direction>
       <note>
@@ -49294,16 +49293,14 @@
         <voice>1</voice>
         <type>half</type>
       </note>
-      <direction placement="above">
-        <direction-type>
-          <words font-style="italic">sul pont.</words>
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <dynamics>
             <pp />
           </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-style="italic">sul pont.</words>
         </direction-type>
       </direction>
       <note>
@@ -52360,6 +52357,9 @@
         </time-modification>
         <notations>
           <tuplet type="start" number="1" bracket="no" show-number="actual" />
+          <articulations>
+            <accent />
+          </articulations>
         </notations>
       </note>
       <note>
@@ -53499,11 +53499,6 @@
       </note>
     </measure>
     <measure number="90">
-      <direction placement="below">
-        <direction-type>
-          <words font-style="italic">dim.</words>
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -53605,6 +53600,11 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
+      <direction placement="below">
+        <direction-type>
+          <words font-style="italic">dim.</words>
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -61988,16 +61988,14 @@
       </note>
     </measure>
     <measure number="66">
-      <direction placement="above">
-        <direction-type>
-          <words font-style="italic">sul pont.</words>
-        </direction-type>
-      </direction>
       <direction placement="below">
         <direction-type>
           <dynamics>
             <pp />
           </dynamics>
+        </direction-type>
+        <direction-type>
+          <words font-style="italic">sul pont.</words>
         </direction-type>
       </direction>
       <note>

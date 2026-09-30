@@ -373,8 +373,8 @@ VLC[48] = "B2/48 E2+B2/24A r/24"
 # ===========================================================================
 # D. Development, bars 49-60
 # ===========================================================================
-# 49-52: Chopin's left hand is a bass line in octaves; here it is tripled
-#    (cello, viola, Violin II), marcato, under the wind
+# 49-52: Chopin's left hand is a bass line in octaves; here it is doubled
+#    (cello, viola), marcato, while the two violins trade the wind bar by bar
 VN1[49] = W(49)
 VN2[49] = REST
 VLA[49] = "E4/24> (B3/8 G#3/8 B3/8) E3/12. r/6 E3/6 F#3/18> E3/6"
@@ -397,7 +397,7 @@ VLC[52] = "G2/24> E2/24 G2/24 (A2/8 A#2/8 B2/8)"
 
 # 53-54: Chopin's rolled chords round the circle of fifths become
 #    strummed triple stops in the lower three
-VN1[53] = W(53)
+VN1[53] = W(53, first=">")
 VN2[53] = W(53, first=">")
 VLA[53] = "C4/24> G3+E4/24>A F3+C4+A4/24>A A3+F#4/24>A"
 VLC[53] = "C3/24> C2+G2+E3/24>A F2+C3+A3/24>A B2+D#3/24>A"
@@ -551,7 +551,7 @@ VLC[81] = "D2/24. r/8 C#3/8 D3/8 D#3/24 D#2/24>"
 
 VN1[82] = W(82, 0, 2, slur=0) + " " + W(82, 2, 4, sh=-1, rng=VN, slur=0)
 VN2[82] = "r/24 Bb3+G4/8> r/16 D4+Bb4/24A r/24"
-VLA[82] = "r/24 Bb3/8 r/16 F3+Bb3/24A r/24"
+VLA[82] = "r/24 Bb3/8> r/16 F3+Bb3/24A r/24"
 VLC[82] = "E2/24. r/8 D#3/8 E3/8 F3/24 F2/24>"
 
 # 83-84 (ff): the march on F in three octaves against the wind
@@ -693,7 +693,8 @@ dyn(5, 0, "f", "vc")
 dyn(5, 0, "=fz", "vc")
 dyn(5, 24, "f", "vn2", "va")
 words(5, 0, "ord.")
-words(7, 0, "dim.", "va", "vc", "vn2")
+words(7, 0, "dim.", "vc", "vn2")
+words(7, 24, "dim.", "va")  # clear of the "6"
 hair(7, 0, 7, 72, "dim-", "va", "vc", "vn2")
 dyn(8, 0, "mf", "vc", "va", "vn2")
 hair(8, 0, 8, 72, "cresc", "vc", "va")
@@ -731,10 +732,9 @@ dyn(41, 0, "f cantabile, con forza", "vn1")
 dyn(41, 0, "f", "vn2", "va", "vc")
 dyn(45, 0, "fp", "vn1")
 dyn(45, 0, "p", "vc")
-dyn(45, 24, "p", "va")
+dyn(45, 24, "p dolce, espressivo", "va")
 dyn(45, 48, "pp", "vn2")
 words(45, 0, "leggiero", "vn1")
-words(45, 24, "dolce, espressivo", "va")
 hair(45, 48, 45, 66, "cresc", "va")
 hair(45, 72, 45, 90, "dim", "va")
 dyn(47, 0, "p")
@@ -745,13 +745,14 @@ words(49, 0, "marcato", "va", "vc")
 hair(49, 0, 49, 48, "cresc", "vn1", "va", "vc")
 dyn(53, 0, "ff")
 dyn(55, 0, "f")
-dyn(57, 0, "mf")
-words(57, 24, "espressivo", "va")
+dyn(57, 0, "mf", "vn1", "vn2", "vc")
+dyn(57, 24, "mf espressivo", "va")
 words(57, 0, "poco a poco cresc.", "vn1")
 hair(57, 0, 58, 90, "cresc-")
 words(58, 0, "cresc.", "va", "vc", "vn2")
 dyn(59, 0, "f")
-hair(59, 0, 60, 90, "cresc")
+hair(59, 0, 60, 90, "cresc", "vn1", "vn2", "vc")
+hair(59, 24, 60, 90, "cresc", "va")
 # E. Storm
 dyn(61, 0, "ff")
 words(61, 0, "con fuoco", "vn1")
@@ -763,10 +764,8 @@ dyn(64, 48, "=ff")
 # F. Eye of the storm
 dyn(65, 0, "p", "vn1", "vn2")
 words(65, 0, "sul ponticello", "vn1", "vn2")
-dyn(66, 0, "pp", "vc")
-dyn(66, 48, "pp", "va")
-words(66, 0, "sul pont.", "vc")
-words(66, 48, "sul pont.", "va")
+dyn(66, 0, "pp sul pont.", "vc")
+dyn(66, 48, "pp sul pont.", "va")
 words(66, 0, "cresc. poco a poco", "vn1", "vn2")
 hair(66, 0, 67, 90, "cresc-", "vn1", "vn2")
 hair(66, 0, 67, 90, "cresc-", "vc", "va")
@@ -813,7 +812,8 @@ hair(85, 0, 86, 90, "cresc-")
 dyn(87, 0, "f")
 dyn(87, 0, "=fz", "vn2", "va", "vc")
 dyn(89, 0, "ff")
-words(90, 0, "dim.", "vn1", "va", "vc")
+words(90, 0, "dim.", "vn1", "vc")
+words(90, 24, "dim.", "va")  # clear of the "6"
 hair(90, 0, 90, 90, "dim-")
 dyn(91, 0, "f")
 hair(91, 0, 91, 90, "cresc", "vn1", "vn2", "vc")
@@ -872,7 +872,7 @@ META = dict(
     key="A Minor · a 小调", tempo="Allegro con brio 𝅗𝅥 = 69",
     duration="ca. 3′05″",
     year="2026", tempo_text="",
-    title_gap_sp=10)  # room for the Lento mark under the credit lines
+    title_gap_sp=13)  # room for the Lento mark under the credit lines
 
 def _mscx_hook(x):
     """MS4 touch-ups on the imported score (MS4 ignores these from MusicXML):
@@ -886,20 +886,127 @@ def _mscx_hook(x):
         extra = ("<bracketType>2</bracketType>\n"
                  "            <numberType>2</numberType>\n")
         return t.replace("<normalNotes>", extra + "            <normalNotes>", 1)
-    return re.sub(r"<Tuplet>.*?</Tuplet>", fix, x, flags=re.S)
+    x = re.sub(r"<Tuplet>.*?</Tuplet>", fix, x, flags=re.S)
+    x = _bar_tuplets(x)
+    # 8va lines: the closing hook a little short of the next (loco) note
+    return x.replace(
+        "<subtype>8va</subtype>",
+        "<subtype>8va</subtype>\n<Segment><subtype>0</subtype>"
+        '<offset x="0" y="0"/><off2 x="-1.5" y="0"/></Segment>')
 
 
-META["mscx_hook"] = META["mscx_part_hook"] = _mscx_hook
+# a section title as MS4 imports it (12 pt, bold, CJK font tags added by
+# hollywood._engrave_fixes)
+TITLE = (r'(<StaffText>\s*<eid>[^<]*</eid>\s*<text><font size="12"/><b>'
+         r"(?:(?!</text>).)*</b></text>)")
+
+
+def _staff_measures(x, fn):
+    """fn(bar, measure_xml) -> measure_xml on every bar of every staff."""
+    head = x.rindex("</Part>")
+
+    def staff(mo):
+        k = [0]
+
+        def meas(mm):
+            k[0] += 1
+            return fn(k[0], mm.group(0))
+        return re.sub(r"<Measure[^>]*>.*?</Measure>", meas, mo.group(0),
+                      flags=re.S)
+    return x[:head] + re.sub(r'<Staff id="\d+">.*?</Staff>', staff, x[head:],
+                             flags=re.S)
+
+
+def _bar_tuplets(x):
+    """Tuplet numbers MS4 would set on a slur or beside a dynamic: bar 92's
+    triplet "3" above the accents (not "ff 3"), bar 95's "6" under the
+    one-bow scale's slur."""
+    def fn(bar, m):
+        if bar not in (92, 95):
+            return m
+
+        def tup(mo):
+            t = mo.group(0)
+            if "<Number>" not in t or (bar == 92 and
+                                       "<actualNotes>3<" not in t):
+                return t
+            d = "up" if bar == 92 else "down"
+            return re.sub(r"(<eid>[^<]*</eid>)",
+                          rf"\1\n            <direction>{d}</direction>", t, 1)
+        return re.sub(r"<Tuplet>.*?</Tuplet>", tup, m, flags=re.S)
+    return _staff_measures(x, fn)
+
+
+def _part_hook(x):
+    """Parts only.  The rehearsal letter beside its section title (and the
+    tempo), on one row right above the section's first line: stacked, the
+    letter rose to the line before.  A rolled chord right after a triplet's
+    rest gets room, or its arpeggio line runs into the rest."""
+    x = _mscx_hook(x)
+
+    def sec(mo):
+        m = mo.group(0)
+        if "<RehearsalMark>" not in m:
+            return m
+        m = re.sub(TITLE, r'\1\n<offset x="3" y="0"/>', m, flags=re.S)
+        return re.sub(r"(<Tempo>(?:(?!</Tempo>).)*?</text>)",
+                      r'\1\n<offset x="3" y="0"/>', m, flags=re.S)
+    x = re.sub(r"<Measure[^>]*>.*?</Measure>", sec, x, flags=re.S)
+    return re.sub(r"(</Rest>\s*<endTuplet/>\s*<Chord>(?:(?!</Chord>).)*?"
+                  r"<Arpeggio>(?:(?!</Chord>).)*?</Chord>)",
+                  r"\1\n<Segment><leadingSpace>1.2</leadingSpace></Segment>",
+                  x, flags=re.S)
+
+
+def _score_hook(x):
+    """Full score: the section title beside its letter, both lifted onto a
+    row of their own above the boxed bar numbers, as hollywood's
+    _lift_sections(pin=True) does; it misses these titles, which the
+    engine writes 12 pt (MS4 imports them with <font> tags)."""
+    x = _mscx_hook(x)
+    x = _spacer(x, staff=2, bar=86, sp=9)  # Violin II's p cresc. poco a poco
+    return re.sub(TITLE, r'\1\n<offset x="1" y="-5"/>', x, flags=re.S)
+
+
+def _spacer(x, staff, bar, sp):
+    """More room below one staff on the line holding that bar: its entrance
+    marking sits under the beam and the "6", and would read as belonging
+    to the staff below."""
+    head = x.rindex("</Part>")
+
+    def st(mo):
+        if mo.group(1) != str(staff):
+            return mo.group(0)
+        k = [0]
+
+        def meas(mm):
+            k[0] += 1
+            if k[0] != bar:
+                return mm.group(0)
+            return re.sub(r"(<Measure[^>]*>)",
+                          rf"\1\n<vspacerDown>{sp}</vspacerDown>",
+                          mm.group(0), 1)
+        return re.sub(r"<Measure[^>]*>.*?</Measure>", meas, mo.group(0),
+                      flags=re.S)
+    return x[:head] + re.sub(r'<Staff id="(\d+)">.*?</Staff>', st, x[head:],
+                             flags=re.S)
+
+
+META["mscx_hook"] = _score_hook
+META["mscx_part_hook"] = _part_hook
+META["part_section_lift"] = 0  # the part hook sets letter and title
 # Parts on a 6.6 mm staff (house parts: 7 mm): Violin I's sextuplet bars
 # (24 sixteenths each) then fit two to a line throughout; at 7 mm every
 # odd one out ended up alone on a line.
 META["part_style"] = {"Spatium": 1.65}
 # extra line starts in the parts (besides the sections), read back from
 # the engraved PDF, so that no bar stands alone on a line
-PART_BREAKS = {"vn1": (37, 53, 55, 57, 59, 67), "va": (53, 57, 63, 95), "vc": (63,)}
-# and page starts: the last section on a page of its own (three lines),
-# not the last two bars alone on the last page
-PART_PAGE_BREAKS = {"vn1": (89,), "va": (89,)}
+PART_BREAKS = {"vn1": (37, 51, 53, 55, 57, 59, 67),
+               "va": (53, 57, 63, 85, 95), "vc": (63,)}
+# and page starts, for page turns at rests (Violin I: bars 64 and 79-80;
+# viola: bar 86; cello: the open-C whole note in bar 43 turns to a
+# two-page spread) and no last page holding only the final bars
+PART_PAGE_BREAKS = {"vn1": (65, 81), "va": (87,), "vc": (81,)}
 
 
 def auto_marks(parsed):
@@ -943,6 +1050,28 @@ def auto_marks(parsed):
                 ns = [mid(x) for e in evs if a <= e["abs"] < z
                       for x in e["pitches"]]
                 return all(x >= 72 for x in ns)
+            # a neighbouring beat that also reaches A6 (and stays from C5
+            # up) joins the line: no loco A6 on four ledger lines right
+            # before or after it, no hook ending on a high note
+            a6 = dia("A6")
+
+            def beat_ok(k):
+                ns = [e for e in evs if k * 24 <= e["abs"] < k * 24 + 24]
+                return ns and max(dia(x) for e in ns for x in e["pitches"]) \
+                    >= a6 and all(mid(x) >= 72 for e in ns
+                                  for x in e["pitches"])
+            for sp in spans:
+                while sp[0] > 0 and beat_ok(sp[0] - 1):
+                    sp[0] -= 1
+                while beat_ok(sp[1]):
+                    sp[1] += 1
+            merged = []
+            for sp in spans:
+                if merged and sp[0] <= merged[-1][1]:
+                    merged[-1][1] = max(merged[-1][1], sp[1])
+                else:
+                    merged.append(sp)
+            spans = merged
             for sp in spans:
                 a, z = sp[0] * 24, sp[1] * 24
                 ba, bz = a - a % BAR, z + (-z) % BAR

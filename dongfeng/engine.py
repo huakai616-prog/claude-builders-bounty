@@ -691,8 +691,9 @@ def _emit_note(m, e, j, n, pc, v, show, beams, tup_first, tup_last, idx,
             acc = show.get((id(e), p))
             if acc is not None:
                 ael = _sub(ne, "accidental", ACC_NAME[acc])
-                if e.get("ott_bar"):  # kept as written (see ott_bars)
-                    ael.set("cautionary", "yes")
+                if e.get("ott_bar"):  # kept as written (see ott_bars);
+                    ael.set("cautionary", "yes")  # MS4 keeps it, and without
+                    ael.set("parentheses", "no")  # this prints it as (#)
         _tm(ne, tup, d)
         if pi == 0:
             for lvl in sorted(beams):
