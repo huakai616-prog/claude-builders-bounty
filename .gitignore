@@ -7,3 +7,6 @@ wohewodezuguo/video/strip/*.spos
 wohewodezuguo/video/strip/*.mpos
 wohewodezuguo/video/strip/excerpt.musicxml
 wohewodezuguo/video/strip/strip.mss
+wohewodezuguo/video/mix/
+wohewodezuguo/video/node_modules/
+*.mp4
