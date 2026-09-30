@@ -275,7 +275,7 @@ def page(body, text_for_fonts=""):
 
 CREDIT_TEXT = "改编 · 制作人"
 PRODUCER = "花开当富贵"
-AI_LINE = "演唱 周雨桐 · 刘蔓 · 程一帆 · 秦岳峰（ACE Studio AI 歌手）"
+AI_LINE = "演唱 周雨桐 · 刘蔓 · 程一帆 · 秦岳峰"
 WORK_LINE = "《我和我的祖国》 词 张藜 · 曲 秦咏诚 · 原唱 李谷一"
 
 
@@ -288,8 +288,7 @@ def credits_block(y, center=False):
 
 
 def ai_tag(y=168, size=22):
-    return (f'<div class="t" style="left:60px;top:{y}px;font-size:{size}px;'
-            f'color:{LABEL}">演唱由 AI 生成</div>')
+    return ""
 
 
 # ---------------------------------------------------------------- layouts
@@ -387,7 +386,120 @@ def v4(t):
     return page(body, hook)
 
 
-LAYOUTS = [("A_手记全谱", v1, 128.2), ("B_人声四行", v2, 128.2),
+# ---------------------------------------------------------------- flag
+FLAG_RED, FLAG_YELLOW = "#EE1C25", "#FFFF00"
+
+
+def star(cx, cy, r, toward=None):
+    """Five-pointed star; one point straight up, or aimed at `toward`."""
+    import math
+    a0 = (math.atan2(toward[1] - cy, toward[0] - cx) if toward
+          else -math.pi / 2)
+    ri = r * math.sin(math.radians(18)) / math.sin(math.radians(54))
+    pts = []
+    for k in range(10):
+        rr = r if k % 2 == 0 else ri
+        a = a0 + k * math.pi / 5
+        pts.append(f"{cx + rr * math.cos(a):.3f},{cy + rr * math.sin(a):.3f}")
+    return " ".join(pts)
+
+
+def flag_svg(w):
+    """The national flag to GB 12982: 3:2, the hoist-side quarter ruled
+    15 x 10; big star centre (5,5) radius 3; small stars at (10,2) (12,4)
+    (12,7) (10,9) radius 1, each with one point aimed at the big star's
+    centre.  Drawn whole, flat, nothing on top of it."""
+    u = w / 30
+    stars = [f'<polygon fill="{FLAG_YELLOW}" points="{star(5 * u, 5 * u, 3 * u)}"/>']
+    for x, y in [(10, 2), (12, 4), (12, 7), (10, 9)]:
+        stars.append(f'<polygon fill="{FLAG_YELLOW}" points="'
+                     f'{star(x * u, y * u, u, toward=(5 * u, 5 * u))}"/>')
+    return (f'<svg style="display:block" width="{w:.0f}" height="{w * 2 / 3:.0f}" '
+            f'viewBox="0 0 {w} {w * 2 / 3}">'
+            f'<rect width="{w}" height="{w * 2 / 3}" fill="{FLAG_RED}"/>'
+            f'{"".join(stars)}</svg>')
+
+
+GOLD = "#C9A04A"
+
+
+def final(t, deco="banner", credit="row"):
+    """用户定稿的版式（10-01）：只放四个人声声部，不写 AI 标注，
+    词曲原唱放大，背景加一点国旗元素。deco: banner 题头小旗 /
+    handflag 手持小国旗 / redgold 红金点缀（不用国旗本体）。"""
+    sc = Score(["sop", "alt", "ten", "bas"], 0, 846, W, 8.8, 150, 420,
+               bottom_pad=6.0)
+    lineup = "".join(
+        f'<div style="display:inline-block;margin:0 18px;text-align:center">'
+        f'<div class="serif" style="font-size:32px;font-weight:600;letter-spacing:2px">{SINGERS[p][0]}</div>'
+        f'<div style="font-size:18px;color:{LABEL};letter-spacing:3px;margin-top:4px">{SINGERS[p][1]}</div></div>'
+        for p in ["sop", "alt", "ten", "bas"])
+    work = "".join(
+        f'<span style="font-size:24px;color:{LABEL};letter-spacing:3px">{role}</span>'
+        f'<span class="serif" style="font-size:38px;font-weight:600;letter-spacing:3px;'
+        f'margin:0 30px 0 12px">{name}</span>'
+        for role, name in [("作词", "张藜"), ("作曲", "秦咏诚"), ("原唱", "李谷一")])
+    title_y = 262
+    top = ""
+    if deco == "banner":
+        fw = 138
+        top = (f'<div class="t" style="left:{(W - fw) / 2:.0f}px;top:152px;'
+               f'box-shadow:0 2px 6px rgba(60,40,20,.18)">{flag_svg(fw)}</div>')
+        title_y = 266
+    elif deco == "handflag":
+        fw = 150
+        top = (f'<div class="t" style="left:66px;top:150px;width:7px;height:250px;'
+               f'border-radius:3px;background:linear-gradient(90deg,#8a6a3c,#c9a26a,#8a6a3c)"></div>'
+               f'<div class="t" style="left:62px;top:141px;width:15px;height:15px;'
+               f'border-radius:50%;background:radial-gradient(circle at 35% 35%,#f4dc9c,{GOLD} 60%,#8a6a2c)"></div>'
+               f'<div class="t" style="left:73px;top:158px;box-shadow:2px 3px 6px rgba(60,40,20,.2)">'
+               f'{flag_svg(fw)}</div>')
+    elif deco == "redgold":
+        orn = (f'<svg width="560" height="60" viewBox="0 0 560 60">'
+               f'<line x1="0" y1="30" x2="236" y2="30" stroke="{GOLD}" stroke-width="2"/>'
+               f'<line x1="324" y1="30" x2="560" y2="30" stroke="{GOLD}" stroke-width="2"/>'
+               f'<polygon fill="{FLAG_RED}" points="{star(280, 32, 26)}"/>'
+               f'<polygon fill="{GOLD}" points="{star(248, 30, 7)}"/>'
+               f'<polygon fill="{GOLD}" points="{star(312, 30, 7)}"/></svg>')
+        sprinkle = "".join(
+            f'<polygon fill="{GOLD}" opacity="{o}" points="{star(x, y, r)}"/>'
+            for x, y, r, o in [(120, 250, 9, .35), (955, 205, 7, .3), (90, 560, 6, .25),
+                               (990, 470, 10, .3), (170, 700, 5, .22), (930, 690, 6, .25)])
+        top = (f'<div class="t" style="left:0;top:0;width:1080px;height:900px;'
+               f'background:radial-gradient(ellipse 760px 560px at 50% 18%,'
+               f'rgba(238,28,37,.10),rgba(238,28,37,.03) 55%,transparent 75%)"></div>'
+               f'<svg class="t" style="left:0;top:0" width="1080" height="900">'
+               f'<polygon fill="{GOLD}" fill-opacity=".06" stroke="{GOLD}" stroke-opacity=".28" '
+               f'stroke-width="3" points="{star(540, 470, 360)}"/>{sprinkle}</svg>'
+               f'<div class="t" style="left:260px;top:180px">{orn}</div>')
+        title_y = 266
+    rule = (f'<div class="t" style="left:340px;top:{title_y + 128}px;width:400px;height:2px;'
+            f'background:linear-gradient(90deg,transparent,{FLAG_RED if deco != "banner" else CINNABAR},transparent);opacity:.55"></div>')
+    body = (
+        top +
+        f'<div class="t serif" style="left:0;width:1080px;top:{title_y}px;text-align:center;'
+        f'font-size:104px;font-weight:700;letter-spacing:10px">我和我的祖国</div>'
+        + rule +
+        f'<div class="t" style="left:0;width:1080px;top:{title_y + 146}px;text-align:center;'
+        f'padding-left:30px">{work}</div>'
+        f'<div class="t" style="left:0;width:1080px;top:{title_y + 240}px;text-align:center">'
+        f'<span style="font-size:24px;color:{LABEL};letter-spacing:4px">{CREDIT_TEXT}　</span>'
+        f'<span class="serif" style="font-size:46px;font-weight:700;letter-spacing:5px">{PRODUCER}</span></div>'
+        f'<div class="t" style="left:0;width:1080px;top:600px;text-align:center">{lineup}</div>'
+        f'<div class="t" style="left:0;width:1080px;top:716px;text-align:center;font-size:22px;'
+        f'color:{LABEL};letter-spacing:5px">四声部独唱 · 弦乐四重奏</div>'
+        + lyric_line(t, 758, 44, gap=2)
+        + sc.html(t))
+    return page(body)
+
+
+
+LAYOUTS = [
+    ("E1_题头小旗", lambda t: final(t, "banner"), CLIP_START + 0.35),
+    ("E2_手持小国旗", lambda t: final(t, "handflag"), CLIP_START + 0.35),
+    ("E3_红金点缀", lambda t: final(t, "redgold"), CLIP_START + 0.35),
+    ("E1_题头小旗_2m08副歌", lambda t: final(t, "banner"), 128.2),
+    ("A_手记全谱", v1, 128.2), ("B_人声四行", v2, 128.2),
            ("B2_人声四行_1m46男低音", v2, 106.35),
            ("C_歌手名牌", v3, 128.2), ("D_片头封面", v4, CLIP_START + 0.35)]
 
