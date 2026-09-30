@@ -76,7 +76,7 @@ def line_at(t):
     ls = T["lines"]
     for k, l in enumerate(ls):
         nxt = ls[k + 1]["start"] if k + 1 < len(ls) else 1e9
-        if l["start"] - 0.25 <= t < max(l["end"] + 0.6, min(nxt - 0.25, l["end"] + 3)):
+        if l["start"] - 0.25 <= t < min(l["end"] + 3, nxt - 0.25):
             return l
     return next((l for l in ls if l["start"] > t), ls[-1])
 
@@ -158,18 +158,17 @@ class Score:
         out.append(f'<style>{"".join(css)}</style>'
                    f'<div class="clip fade" style="left:{body_x:.1f}px;top:0;'
                    f'width:{self.w - body_x:.1f}px;height:{self.h:.0f}px">'
-                   f'<div class="body" style="transform:translate({tx:.2f}px,'
+                   f'<div class="body" id="scorebody" style="transform:translate({tx:.2f}px,'
                    f'{ty:.2f}px) scale({s:.5f})">{SVG}</div></div>')
         # silent rows fade (body only)
         if self.dim_silent:
             for pid in self.rows:
-                if sounding(pid, t):
-                    continue
                 k = ROWS.index(pid)
                 y0 = self.Y(st[k][0] - 3.2 * 24.8)
                 y1 = self.Y(st[k][4] + (4.2 if pid in SINGERS else 2.4) * 24.8)
-                out.append(f'<div class="veil" style="left:{body_x:.0f}px;top:{y0:.0f}px;'
-                           f'width:{self.w - body_x:.0f}px;height:{y1 - y0:.0f}px"></div>')
+                out.append(f'<div class="veil" id="veil-{pid}" style="left:{body_x:.0f}px;'
+                           f'top:{y0:.0f}px;width:{self.w - body_x:.0f}px;height:{y1 - y0:.0f}px;'
+                           f'opacity:{0 if sounding(pid, t) else .62}"></div>')
         if self.highlight:
             k = ROWS.index(self.highlight)
             y0 = self.Y(st[k][0] - 1.6 * 24.8)
@@ -184,7 +183,7 @@ class Score:
             if pid in SINGERS:
                 name, role = SINGERS[pid]
                 if self.label_style == "stack":
-                    out.append(f'<div class="lab singer{" on" if on else ""}" '
+                    out.append(f'<div class="lab singer{" on" if on else ""}" id="lab-{pid}" '
                                f'style="top:{cy:.0f}px;width:{self.label_w - 10}px">'
                                f'<b>{name}</b><i>{role}</i></div>')
                 else:
@@ -263,7 +262,7 @@ def lyric_line(t, y, size=64, x=None, gap=0):
         spans.append(f'<span style="color:{col};opacity:{op}">{esc(c["char"])}</span>')
     pos = (f"left:{x}px" if x is not None else
            "left:0;width:1080px;text-align:center")
-    return (f'<div class="t serif" style="{pos};top:{y}px;font-size:{size}px;'
+    return (f'<div class="t serif" id="bigline" style="{pos};top:{y}px;font-size:{size}px;'
             f'font-weight:600;letter-spacing:{gap}px">{"".join(spans)}</div>')
 
 
