@@ -806,6 +806,10 @@ def _part_css():
     css = CSS.replace("size: 11in 17in", f"size: {PART_W:g}in {PART_H:g}in")
     css = css.replace("width: 11in; height: 17in",
                       f"width: {PART_W:g}in; height: {PART_H:g}in")
+    # the header rule sits clear above the part's title (MS4's top margin
+    # is .85 in, and .42 + .42 in put the rule right on the title)
+    css = css.replace(".hd { position: absolute; top: .42in;",
+                      ".hd { position: absolute; top: .30in;")
     return css.replace("left: .6in; right: .6in",
                        f"left: {PART_MARGIN_X}in; right: {PART_MARGIN_X}in")
 

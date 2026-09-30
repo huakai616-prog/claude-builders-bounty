@@ -38,9 +38,10 @@
 | 土耳其进行曲（全曲，莫扎特 K.331 第三乐章） | 弦乐四重奏，不用钢琴，古典风格 · a 小调 / A 大调（原调） · ♩=120 | `main`（原 `claude/epic-ramanujan-6iapv9`） | `alla-turca/` | 已完成：用户给的是钢琴谱 PDF（五线谱，不是简谱）。反复全部写开、第二遍换配器，好莱坞总谱 13 页 + 分谱。待用户确认 m52 / m55 两处照谱还是照原典版；拨弦段在 ACE 里要手动改演奏法 |
 | 泪海 ×《等潮》视频 | 抖音竖屏 · TapNow 分镜与提示词 | `claude/elegant-pascal-83rncr` | `leihai/video/` | 制作包已提交，等用户在 TapNow 里生成镜头 |
 | Unravel（全曲，东京喰种 OP，Animenz 钢琴版） | 弦乐四重奏 · 纯器乐 · g 小调（原调） · ♩=134 | `main`（原 `claude/vigilant-sagan-df1y75`） | `unravel/` | 已完成：好莱坞总谱 PDF（封面 + 15 页，逐页查过）、MusicXML、弦乐 MIDI（开头空一小节，小节线和总谱对齐）、分谱、试听 mp3。钢琴谱是五线谱，不是简谱；转写数据不进仓库（版权）。待用户确认八音盒段低八度、第 112 小节 fff；待在 ACE Studio 渲染 |
+| 冬风（全曲 96 小节，肖邦练习曲 Op. 25 No. 11） | 弦乐四重奏 · 纯器乐 · a 小调（原调） · 𝅗𝅥=69 | `main`（原 `claude/zealous-planck-f3owl6`） | `dongfeng/` | 已完成：好莱坞总谱 PDF（封面 + 12 页，逐页查过）、MusicXML、弦乐 MIDI（另有每件乐器一个 MIDI）、分谱、试听 mp3。用户给的是 17 页钢琴谱 PDF（五线谱），肖邦原文在 `dongfeng/chopin.py`，已逐音和用户的谱核对。待用户确认：原调 a 小调、速度 𝅗𝅥=69（真人演奏可放慢到 60–63）、第 16 小节 D 还原、第 95 小节结尾音阶的改法；待在 ACE Studio 渲染 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 泪海、我不难过、茶汤、土耳其进行曲、Unravel、我和我的祖国、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
+- 泪海、我不难过、茶汤、土耳其进行曲、Unravel、我和我的祖国、冬风、好莱坞模板和交付中心工具在 `main` 上。其他歌还在各自的分支上，但成品都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并以后记得更新这张表。
 - 情歌、大东北、泪海、甲乙丙丁、茉莉花的 PDF 或署名还没按好莱坞标准重做。用户要的时候，用 `tools/hollywood` 重出，再更新交付中心。
 - 新歌如果是多个人声声部或 6/8、9/8 这类复合拍子，代码从 `wohewodezuguo/`（`build.py` + `engine.py`）接；单人声 4/4 的仍从 `chatang/build.py` 接。
 - 茶汤那一轮给模板加了几项：封面居中、排练号加粗和段落名独立一行、十六分音符连梁、PDF 文字层修正、页眉页脚细节，`chatang/build.py` 还修了长音上的渐强渐弱（hairpin 不再丢）。新歌的代码从 `chatang/build.py` 接。
@@ -146,7 +147,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 
 ## 钢琴谱 → 弦乐四重奏（纯器乐，Unravel 的做法）
 
-用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，有两个现成的做法：`alla-turca/`（古典原作，原谱数据 `source_piano.py` 进仓库）和 `unravel/`（有版权的改编谱，全曲 133 小节，分段并行写）。Unravel 的做法：
+用户发五线谱钢琴 PDF（不是简谱）、要纯器乐四重奏时，有三个现成的做法：`alla-turca/`（古典原作，原谱数据 `source_piano.py` 进仓库）、`dongfeng/`（肖邦练习曲，钢琴织体要拆给四件乐器，见下面「冬风的做法」）和 `unravel/`（有版权的改编谱，全曲 133 小节，分段并行写）。Unravel 的做法：
 
 - **先问**：调（默认原调）、编制、范围（全曲 / 片段）、有没有人声、风格。用户选过「四重奏、原调、全曲、纯器乐、忠实原编配」。
 - **转写**：
@@ -175,6 +176,15 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - `tools/deliver/catalog.py` 里 `main` 写这四样，另写 `other_note` 和 `howto`；
   - 有弱起时 MIDI 开头空一小节，让小节线和总谱对齐，并在 `howto` 里写「ACE 第 N 小节 = 总谱第 N−1 小节」；
   - 好莱坞模板 META 里用 `source`（改编自，例如「Animenz 钢琴版」）写明依据的版本，`original`（原曲）写原作，封面和首页标题栏会显示。
+
+### 冬风的做法（钢琴织体要重新分配时）
+
+肖邦 Op. 25 No. 11 右手是跨四个八度的六连音，任何一件弦乐器都拉不下来，所以不是「照抄声部」，而是把「风」按小节在四件乐器之间传递，其余乐器奏左手的进行曲主题。见 `dongfeng/README.md`。
+
+- **底稿**：公版原作先找公开的机读乐谱（冬风用 ASAP 数据集，`raw.githubusercontent.com` 能下载），再多个 agent 逐页逐音和用户的 PDF 核对、独立复核，差异写进 `dongfeng/chopin.py` 的说明。
+- **引擎** `dongfeng/engine.py`（自己写 MusicXML，不经 music21：music21 会把 6:4 六连音改成 3:2、按半小节连梁）：六连音 / 三连音混用、双声部、谱号变化、8va、弓法、震音、琶音和弦；「6」只标在一串六连音的第一组。
+- **`--check`**：音域、快速音型的最高音、双音能不能按（按空弦和把位算）、快速音型里的大跳、连音线两端音高不同。**`--harm`** 逐拍对照原作的低音和和声，剩下的差异要么有意、要么改掉。**`--dump`** 把每小节打印成文字，方便审稿。
+- MS4 不认 MusicXML 的 `show-number="none"`，`dongfeng/build.py` 的 `_mscx_hook`（总谱和分谱都用）把没有数字的连音括号和数字藏起来。
 
 ## 踩过的坑
 

@@ -23,6 +23,27 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="dongfeng", section="song", ref=None,
+        title="冬风", subtitle="全曲 · 弦乐四重奏 · 肖邦练习曲 Op. 25 No. 11",
+        artist="", key="a 小调（原调）", tempo="二分音符=69（♩=138）",
+        instrumentation="弦乐四重奏 · 纯器乐（肖邦 a 小调练习曲「冬风」）",
+        src="dongfeng/output", layout="standard",
+        main=dict(musicxml="冬风_弦乐四重奏.musicxml",
+                  pdf="冬风_总谱.pdf",
+                  strings="冬风_弦乐四重奏_全轨.mid",
+                  parts="冬风_分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐，没有人声：四样主文件是西贝柳斯工程、好莱坞总谱 PDF（封面 + 12 页）、弦乐总 MIDI 和分谱 PDF。全曲 96 小节，约 3 分 05 秒。肖邦的每个音都和你给的 17 页钢琴谱逐一核对过。",
+        other_note="「1_四样主文件」是西贝柳斯工程、总谱 PDF、弦乐总 MIDI 和分谱 PDF，「2_其他文件」里是每件乐器单独的 MIDI 和试听 mp3。",
+        howto=["ACE Studio：在第 1 小节导入弦乐总 MIDI（四条乐器轨，保留速度信息），每轨加载 String Section，speaker 选 Violins I / Violins II / Violas / Celli（想要更独奏的声音就选单把的小提琴、中提琴、大提琴）。没有弱起，ACE 第 N 小节 = 总谱第 N 小节。",
+               "谱上的 sul tasto（1–4 小节）、sul ponticello（65–68）、震音（59–60 大提琴，62、64 中提琴和大提琴，66–68）、跳弓（81–84 第一小提琴）在 MIDI 里是普通音符或重复的三十二分音符，需要的话在 ACE 里手动选演奏法。想一轨一轨导入，就用「2_其他文件」里的分轨 MIDI。"],
+        questions=[
+            "调保留原调 a 小调（A、E、D、G 空弦都能共鸣）。要换调告诉我。",
+            "速度按肖邦的二分音符 = 69，弦乐四重奏拉这首非常吃力；要给真人乐手演，可以放慢到 60–63。",
+            "第 16 小节第 4 拍第一个音，两份谱都没写还原号，这里按半音阶上行写成 D 还原。你的版本明确是 D♭ 的话告诉我。",
+            "结尾第 95 小节：肖邦是双手八度、四个八度的音阶。这里改成四件乐器同时从各自的 C 起、一人两个八度，合起来仍是四个八度，落到最后的 A 和弦。想要照原样一件接一件，告诉我。",
+        ]),
+    dict(
         slug="wohewodezuguo", section="song", ref=None,
         title="我和我的祖国", subtitle="全曲 · 四声部独唱与弦乐四重奏",
         artist="李谷一", key="♭E 大调（原谱调）", tempo="♩.=56",

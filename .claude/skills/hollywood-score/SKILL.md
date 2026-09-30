@@ -17,7 +17,7 @@ The user set these rules once and does not want to be asked again.
    - **Full strings MIDI**: all string parts in one file, `<歌名>_弦乐<编制>_伴奏.mid`.
    - **Vocal MIDI with per-syllable lyrics**: `<歌名>_人声_带歌词.mid`, plus the GBK fallback.
    - Also keep the usual extras: full-track MIDI for ACE, plain vocal MIDI, GM preview mp3, SRT.
-   - **Instrumental works** (no voice, `alla-turca/`, `unravel/`): four main files with a parts PDF in place of the vocal MIDI, see「Instrumental works and parts」below. `META["original"]` prints as 原曲; `META["source"]` prints as 改编自 / Based on (the version an arrangement follows, e.g. "Animenz 钢琴版"). A Latin-script title gets tight tracking on the cover automatically.
+   - **Instrumental works** (no voice, `alla-turca/`, `unravel/`, `dongfeng/`): four main files with a parts PDF in place of the vocal MIDI, see「Instrumental works and parts」below. `META["original"]` prints as 原曲; `META["source"]` prints as 改编自 / Based on (the version an arrangement follows, e.g. "Animenz 钢琴版"). A Latin-script title gets tight tracking on the cover automatically.
 2. **Credits**: 改编 (arranger) and 制谱 (engraver / music preparation) are both **花开当富贵**. They appear on the cover, in the first-page title block, in every page footer, in the MusicXML `<creator type="arranger">` and `<encoder>`, and in the PDF metadata. `tools/hollywood` defaults to this; never leave either credit out.
 3. **Layout must be refined** (精益求精). Render, look at every page, and fix problems before you deliver (see the QA list below).
 4. **The user must be able to find the files without GitHub** (they said 「我不太会用 GitHub」). Every finished work goes into the pinned **编曲交付中心** page, and the first line of your reply is its link: https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN . There, one click saves a zip to the computer's Downloads folder. Never tell the user to look for files on a branch.
@@ -135,6 +135,20 @@ the same standard with these differences:
 - **The MIDI's barlines** must match the score's: with a pickup, start the
   MIDI with a whole empty bar holding the pickup at its end (ACE bar N =
   score bar N−1) and say so in `howto`.
+- **Piano textures that no single string instrument can play** (冬风 /
+  `dongfeng/`, Chopin's four-octave sextuplets): `dongfeng/engine.py`
+  writes the MusicXML itself (music21 turns 6:4 sextuplets into 3:2 and
+  beams per half bar) and prints "6" only on the first group of a run.
+  MS4 ignores `show-number="none"`, so `META["mscx_hook"]` and
+  `META["mscx_part_hook"]` (`_mscx_hook` in `dongfeng/build.py`) hide
+  the bracket and number of every tuplet that arrived without a number.
+- **MuseScore-file touch-ups learned on 冬风** (`dongfeng/build.py` hooks):
+  - Section titles written at 12 pt import as `<text><font size="12"/><b>…`, and after `_engrave_fixes` they also carry CJK `<font face>` tags, so `_lift_sections` (which matches `<text><b>[^<]*</b>`) never lifts them. Match them with `<text><font size="12"/><b>(?:(?!</text>).)*</b></text>` and apply the offsets in the song's hook.
+  - More room under one staff on one line: `<vspacerDown>9</vspacerDown>` right after that staff's `<Measure>` (a `<Spacer>` inside `<voice>` is ignored).
+  - A tuplet number's side: `<direction>up|down</direction>` after the `<Tuplet>`'s `<eid>` (MS4 ignores MusicXML `placement` on `<tuplet>`).
+  - An 8va hook short of the next note: `<Segment><subtype>0</subtype><offset x="0" y="0"/><off2 x="-1.5" y="0"/></Segment>` after `<subtype>8va</subtype>`.
+  - MS4 decides accidentals by written position, so after an 8va ends mid-bar it drops an accidental written for the other octave. `<accidental cautionary="yes" parentheses="no">` keeps it and prints it plain; `cautionary="yes"` alone prints it in parentheses.
+- **Parts layout**: read each line's bars back from the PDF (`pdftotext -bbox`, boxed bar numbers are 8.6 pt high) and add explicit line starts wherever a bar stands alone; give each part page starts so page turns fall on rests (plan for page 1 alone, then two-page spreads), and so no last page holds only the final bars. Parts carry the rehearsal letters and tempo marks but not the section titles: a title next to a letter gets pushed around by the first bar-number box and never lines up.
 - **Repeats**: written out (`FORM`), so the second time can be scored
   differently and the MIDI needs no unrolling; `ALIAS` reuses a strain's
   data for its reprise.
