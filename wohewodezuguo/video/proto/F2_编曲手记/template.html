@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>编曲手记 样帧</title>
+<style>
+/*FONTS*/
+  html, body { margin: 0; padding: 0; width: 1080px; height: 1920px; overflow: hidden; background: #F3EEE4; }
+  canvas, svg.ov { position: absolute; left: 0; top: 0; }
+  #grain { mix-blend-mode: multiply; }
+  svg.ov text { font-kerning: none; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<svg class="ov" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 石墨：高频噪声做成颗粒透明度，再轻微位移出手抖 -->
+    <filter id="graphite" x="-10%" y="-30%" width="120%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  2.4 0 0 0 -0.55" result="g"/>
+      <feComposite in="SourceGraphic" in2="g" operator="in" result="gr"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="1" seed="9" result="w"/>
+      <feDisplacementMap in="gr" in2="w" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="shadow" x="-10%" y="-20%" width="120%" height="150%">
+      <feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#3a2a14" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+<!--SVG-->
+</svg>
+<canvas id="grain" width="1080" height="1920"></canvas>
+<script>
+/*CFG*/
+(function () {
+  const W = 1080, H = 1920;
+  const cv = document.getElementById('c');
+  const ctx = cv.getContext('2d');
+
+  // 可复现的随机数
+  let seed = 20261001;
+  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+
+  // ---------- 1. 纸 ----------
+  ctx.fillStyle = '#F3EEE4';
+  ctx.fillRect(0, 0, W, H);
+
+  // 低频斑驳：小画布放大
+  const m = document.createElement('canvas'); m.width = 54; m.height = 96;
+  const mc = m.getContext('2d'); const md = mc.createImageData(54, 96);
+  for (let i = 0; i < md.data.length; i += 4) {
+    const v = rand();
+    md.data[i] = 120; md.data[i + 1] = 100; md.data[i + 2] = 70; md.data[i + 3] = Math.floor(v * 16);
+  }
+  mc.putImageData(md, 0, 0);
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.globalAlpha = 0.5; ctx.drawImage(m, 0, 0, W, H); ctx.globalAlpha = 1;
+
+  // 纤维
+  for (let k = 0; k < 1400; k++) {
+    const x = rand() * W, y = rand() * H, L = 8 + rand() * 34, a = rand() * Math.PI;
+    const dark = rand() < 0.6;
+    ctx.strokeStyle = dark ? 'rgba(110,92,64,' + (0.03 + rand() * 0.05).toFixed(3) + ')'
+                           : 'rgba(255,253,246,' + (0.10 + rand() * 0.15).toFixed(3) + ')';
+    ctx.lineWidth = 0.5 + rand() * 0.8;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.quadraticCurveTo(x + Math.cos(a) * L * 0.5 + (rand() - 0.5) * 8, y + Math.sin(a) * L * 0.5 + (rand() - 0.5) * 8,
+                         x + Math.cos(a) * L, y + Math.sin(a) * L);
+    ctx.stroke();
+  }
+
+  // 像素噪点 ~3%
+  let id = ctx.getImageData(0, 0, W, H), d = id.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const n = (rand() - 0.5) * 16;
+    d[i] += n; d[i + 1] += n; d[i + 2] += n * 0.9;
+  }
+  ctx.putImageData(id, 0, 0);
+
+  // ---------- 2. 暗角，再上台灯暖光 ----------
+  ctx.globalCompositeOperation = 'multiply';
+  let g = ctx.createRadialGradient(W * 0.36, H * 0.30, 420, W * 0.36, H * 0.30, 1650);
+  g.addColorStop(0, 'rgba(255,255,255,1)');
+  g.addColorStop(1, 'rgba(196,184,164,1)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'screen';
+  g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1000);
+  g.addColorStop(0, 'rgba(255,228,176,0.50)');
+  g.addColorStop(0.45, 'rgba(255,231,184,0.16)');
+  g.addColorStop(1, 'rgba(255,231,184,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.globalCompositeOperation = 'source-over';
+  g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1400);
+  g.addColorStop(0, 'rgba(255,208,140,0.13)');
+  g.addColorStop(1, 'rgba(255,214,150,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+  // ---------- 3. 女高音行朱砂淡带 ----------
+  const bt = CFG.OY + 35, bb = CFG.OY + 160;
+  g = ctx.createLinearGradient(0, bt, 0, bb);
+  g.addColorStop(0, 'rgba(179,38,30,0)');
+  g.addColorStop(0.14, 'rgba(179,38,30,0.07)');
+  g.addColorStop(0.86, 'rgba(179,38,30,0.07)');
+  g.addColorStop(1, 'rgba(179,38,30,0)');
+  ctx.fillStyle = g; ctx.fillRect(130, bt, W - 130, bb - bt);
+
+  // ---------- 4. 谱面 ----------
+  const img = new Image();
+  img.onload = function () {
+    const iw = img.width, ih = img.height;
+    const o = document.createElement('canvas'); o.width = iw; o.height = ih;
+    const oc = o.getContext('2d'); oc.drawImage(img, 0, 0);
+    const od = oc.getImageData(0, 0, iw, ih), p = od.data;
+    const INK = [42, 42, 40], RED = [179, 38, 30];
+    // 图内 y 分区：[y0, y1, 颜色, 不透明度]
+    const bands = [
+      [0, 16, INK, 0],        // 被裁掉的排练号：去掉
+      [16, 44, INK, 0.50],    // 小节号
+      [44, 168, RED, 1.0],    // 女高音
+      [168, 312, INK, 0.46],  // 女低音
+      [312, 452, INK, 0.46],  // 男高音
+      [452, 604, INK, 0.46],  // 男低音
+      [604, 748, INK, 0.24],  // 第一小提琴（休止）
+      [748, 846, INK, 0.46],  // 第二小提琴
+      [846, 946, INK, 0.46],  // 中提琴
+      [946, 2000, INK, 0.46]  // 大提琴
+    ];
+    for (let y = 0; y < ih; y++) {
+      let b = bands.find(bb => y >= bb[0] && y < bb[1]);
+      for (let x = 0; x < iw; x++) {
+        const i = (y * iw + x) * 4;
+        const L = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
+        let a = Math.min(1, (255 - L) / 255 * 1.12);
+        let col = b[2], op = b[3];
+        if (x < 152 || (y < 26 && x < 300)) op = 0;                                   // 英文谱头
+        else if (x < 184) { col = INK; op = 0.5; }             // 括号
+        if (y >= 134 && y <= 164 && x >= 255 && x <= 1300) op = 0;  // 女高音歌词另排
+        p[i] = col[0]; p[i + 1] = col[1]; p[i + 2] = col[2]; p[i + 3] = Math.round(a * op * 255);
+      }
+    }
+    oc.putImageData(od, 0, 0);
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(o, CFG.OX, CFG.OY, iw * CFG.S, ih * CFG.S);
+    ctx.globalCompositeOperation = 'source-over';
+
+    // ---------- 5. 播放线 ----------
+    const PX = CFG.PX, top = CFG.OY + 2, hgt = ih * CFG.S - 2;
+    g = ctx.createLinearGradient(PX - 9, 0, PX + 9, 0);
+    g.addColorStop(0, 'rgba(179,38,30,0)');
+    g.addColorStop(0.5, 'rgba(179,38,30,0.13)');
+    g.addColorStop(1, 'rgba(179,38,30,0)');
+    ctx.fillStyle = g; ctx.fillRect(PX - 9, top, 18, hgt);
+    ctx.fillStyle = 'rgba(42,42,40,0.55)'; ctx.fillRect(PX - 1, top, 2, hgt);
+    // 播放线顶端：朱砂小三角
+    ctx.fillStyle = '#B3261E';
+    ctx.beginPath(); ctx.moveTo(PX - 7, top - 9); ctx.lineTo(PX + 7, top - 9); ctx.lineTo(PX, top + 1); ctx.closePath(); ctx.fill();
+    // 正在唱的音：一点朱砂光
+    const [nx, ny] = CFG.NOTE;
+    g = ctx.createRadialGradient(nx, ny, 0, nx, ny, 22);
+    g.addColorStop(0, 'rgba(179,38,30,0.22)'); g.addColorStop(1, 'rgba(179,38,30,0)');
+    ctx.fillStyle = g; ctx.fillRect(nx - 24, ny - 24, 48, 48);
+  };
+  img.src = CFG.SYS;
+
+  // ---------- 6. 顶层石墨颗粒 2% ----------
+  const gc = document.getElementById('grain').getContext('2d');
+  const gd = gc.createImageData(W, H);
+  for (let i = 0; i < gd.data.length; i += 4) {
+    const v = rand();
+    gd.data[i] = 60; gd.data[i + 1] = 58; gd.data[i + 2] = 54;
+    gd.data[i + 3] = v > 0.5 ? Math.floor((v - 0.5) * 2 * 14) : 0;
+  }
+  gc.putImageData(gd, 0, 0);
+})();
+</script>
+</body>
+</html>

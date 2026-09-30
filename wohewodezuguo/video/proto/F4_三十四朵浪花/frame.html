@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>F4 样帧 · 像海和浪花一朵</title>
+<style>
+  html,body{margin:0;padding:0;background:#0B1520;overflow:hidden}
+  canvas{display:block}
+  #check{position:absolute;left:0;top:1930px;font:12px monospace;color:#fff;white-space:pre}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<div id="check"></div>
+<script>
+/*
+  F4《像海和浪花一朵》样帧 —— 歌曲 163.6 s（第 71 小节「心中的」之「中」，延长记号，速度 28）
+  MIDI 实测此刻和弦：S=F5(77) A=♭A4(68) T=D4(62) B=♭B2(46)；弦乐 F6 / ♭A5 / D4+F4 / ♭B2 —— ♭B7 属七和弦，ff 撑住。
+  女高 → 72px 短浪（音最高，浪尖最尖）；女低 → 88px 短浪；男高 → 620px 长涌；男低 → 760px 长涌（最宽）。
+  波长、振幅都是「中景 y≈1100 处」的屏幕尺寸，按透视向远处收窄、变矮，向近处放宽、变高。
+*/
+const W = 1080, H = 1920, HZ = 760;
+const SERIF = '"Noto Serif CJK SC"', SANS = '"Noto Sans CJK SC"';
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const TAU = Math.PI*2;
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const hex = h => [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const lerp = (a,b,t)=>a+(b-a)*t;
+function ramp(stops, t){
+  t=Math.max(0,Math.min(1,t));
+  for(let k=0;k<stops.length-1;k++){
+    const [t0,c0]=stops[k],[t1,c1]=stops[k+1];
+    if(t<=t1){const u=(t-t0)/(t1-t0);const a=hex(c0),b=hex(c1);return [0,1,2].map(j=>Math.round(lerp(a[j],b[j],u)));}
+  }
+  return hex(stops[stops.length-1][1]);
+}
+
+/* ================= 海面几何 ================= */
+const lineY0 = i => HZ + 640*Math.pow(i/139,1.8);      // 140 条基准线到 y=1400，之后按同一透视继续铺到画面底
+const LINES=[]; for(let i=1;;i++){const y=lineY0(i); if(y>H+40) break; LINES.push(i);}
+const Zof = i => 340/(lineY0(i)-HZ);                     // 相对深度：y=1100 处 Z=1
+const sharp = (s,k)=> 1 - 2*Math.pow((1-s)/2,k);          // k>1：浪尖（屏幕上方）变尖
+const deg = d=>d*Math.PI/180;
+const WAVES = [ // 四个人声 → 四组主浪；四把琴 → 四组细浪/副涌（让海面不成规则网纹）
+  {name:'S',  L:72,  A:3.0, th:deg(38),  k:2.2, ph:0.3, crest:1},   // 女高 F5：最尖
+  {name:'A',  L:88,  A:2.2, th:deg(-52), k:1.6, ph:1.9, crest:0.7}, // 女低 ♭A4
+  {name:'v1', L:51,  A:0.9, th:deg(-18), k:1.4, ph:2.6},             // 小提琴一 F6
+  {name:'v2', L:63,  A:0.8, th:deg(71),  k:1.2, ph:5.1},             // 小提琴二 ♭A5
+  {name:'T',  L:620, A:4.5, th:deg(16),  k:1.0, ph:1.3},             // 男高 D4
+  {name:'va', L:430, A:2.6, th:deg(-38), k:1.0, ph:0.7},             // 中提琴 D4+F4
+  {name:'B',  L:760, A:9.0, th:deg(-8),  k:1.0, ph:4.0},             // 男低 ♭B2：最宽的涌
+  {name:'vc', L:990, A:4.0, th:deg(27),  k:1.0, ph:2.2},             // 大提琴 ♭B2
+].map(w=>({...w,c:Math.cos(w.th),s:Math.sin(w.th)}));
+let CREST=0; // dBase 顺带算出的「浪尖程度」
+function dBase(i,x){
+  const Z=Zof(i), X=(x-540)*Z, Zw=Z*1000;
+  const scL=Math.pow(1/Z,0.8), scS=Math.min(Math.pow(1/Z,1.2),Math.pow(1/Z,0.8));  // 短浪往远处衰减得更快：远海平静、只剩细闪
+  let d=0; CREST=0;
+  for(const w of WAVES){
+    let v=Math.sin(TAU/w.L*(X*w.c+Zw*w.s)+w.ph); if(w.k>1) v=sharp(v,w.k);
+    d+=w.A*v*(w.L<200?scS:scL); if(w.crest) CREST=Math.max(CREST, w.crest*Math.pow((1-v)/2,7));
+  }
+  return d;
+}
+
+/* ================= 34 个简称：Poisson 圆盘 seed=1001 → 轻度松弛 → 骑上浪尖 → 自检 ================= */
+const NAMES = '京津沪渝冀晋辽吉黑苏浙皖闽赣鲁豫鄂湘粤琼川贵云陕甘青蒙桂藏宁新台港澳'.split('');
+const FS = 68;
+const BX0=115,BX1=845,BY0=835,BY1=1345;
+ctx.font = `900 ${FS}px ${SERIF}`; ctx.textAlign='center'; ctx.textBaseline='middle';
+const MET = {}; for(const ch of NAMES){const m=ctx.measureText(ch); MET[ch]={asc:m.actualBoundingBoxAscent,desc:m.actualBoundingBoxDescent,l:m.actualBoundingBoxLeft,r:m.actualBoundingBoxRight};}
+
+let pts, dmin, seedUsed, errs, bumpsFor;
+function layout(seed){
+  let rng;
+  for(dmin=112;;dmin-=4){
+    rng=mulberry32(seed); pts=[];
+    for(let t=0;t<40000 && pts.length<34;t++){
+      const x=BX0+rng()*(BX1-BX0), y=BY0+rng()*(BY1-BY0);
+      if(pts.every(p=>(p.x-x)**2+(p.y-y)**2>=dmin*dmin)) pts.push({x,y});
+    }
+    if(pts.length>=34) break;
+  }
+  // 几轮 Lloyd 松弛：把 Poisson 留下的大空洞填掉、挤在一起的拆开（仍然随机，不成网格，更不成地图）
+  const GX0=BX0-45,GX1=BX1+45,GY0=BY0-40,GY1=BY1+40, AS=1.12; // AS：纵向略拉开，字是方的
+  for(let it=0;it<7;it++){
+    const sx=new Float64Array(pts.length), sy=new Float64Array(pts.length), n=new Float64Array(pts.length);
+    for(let y=GY0;y<=GY1;y+=6)for(let x=GX0;x<=GX1;x+=6){
+      let bi=0,bd=1e18; for(let k=0;k<pts.length;k++){const dx=pts[k].x-x, dy=(pts[k].y-y)*AS, d=dx*dx+dy*dy; if(d<bd){bd=d;bi=k;}}
+      sx[bi]+=x; sy[bi]+=y; n[bi]++;
+    }
+    pts.forEach((p,k)=>{ if(n[k]){ p.x=lerp(p.x,sx[k]/n[k],0.85); p.y=lerp(p.y,sy[k]/n[k],0.85);} p.x=Math.max(BX0,Math.min(BX1,p.x)); p.y=Math.max(BY0,Math.min(BY1,p.y)); });
+  }
+  const order=NAMES.slice();
+  for(let k=order.length-1;k>0;k--){const j=Math.floor(rng()*(k+1));[order[k],order[j]]=[order[j],order[k]];}
+  pts.forEach((p,k)=>{p.ch=order[k]; Object.assign(p,MET[p.ch]);});
+  // 找每个字骑的那条线
+  for(const p of pts){
+    const target=p.y+p.desc+6; let best=LINES[0],bd=1e9;
+    for(const i of LINES){const dd=Math.abs(lineY0(i)-target); if(dd<bd){bd=dd;best=i;}}
+    p.ride=best;
+  }
+  bumpsFor = {}; // 每条线上的小浪丘（字把浪托高一点：浪花托着字）
+  const BW={'-2':0.3,'-1':0.65,'0':1,'1':0.8,'2':0.55,'3':0.32,'4':0.15};
+  for(const p of pts) for(const k in BW){const i=p.ride+ +k; (bumpsFor[i]=bumpsFor[i]||[]).push({x:p.x,w:BW[k]});}
+  for(const p of pts){ p.cx=p.x; p.cy=lineY(p.ride,p.x)-5-p.desc; }
+  // 自检
+  errs=[];
+  if(pts.length!==34) errs.push('字数 '+pts.length);
+  if(new Set(pts.map(p=>p.ch)).size!==34) errs.push('字重复');
+  for(const p of pts){p.box={x0:p.cx-p.l,x1:p.cx+p.r,y0:p.cy-p.asc,y1:p.cy+p.desc};}
+  for(const p of pts){const b=p.box; if(b.x0<60||b.x1>900||b.y0<790||b.y1>1420) errs.push('出界 '+p.ch);}
+  for(let a=0;a<34;a++)for(let b=a+1;b<34;b++){const A=pts[a].box,B=pts[b].box;
+    if(A.x0<B.x1+10&&B.x0<A.x1+10&&A.y0<B.y1+10&&B.y0<A.y1+10) errs.push('太挤 '+pts[a].ch+pts[b].ch);}
+  return errs.length===0;
+}
+function dAll(i,x){
+  let d=dBase(i,x);
+  const bs=bumpsFor && bumpsFor[i];
+  if(bs){ const amp=6.5*(0.55+0.45*Math.min(1,1/Zof(i)));
+    for(const b of bs){const u=(x-b.x)/40; if(u>-3&&u<3) d-=amp*b.w*Math.exp(-u*u);} }
+  return d;
+}
+const lineY=(i,x)=>lineY0(i)+dAll(i,x);
+for(seedUsed=1001; seedUsed<1100 && !layout(seedUsed); seedUsed++);
+
+/* ================= 1 天空 ================= */
+let g=ctx.createLinearGradient(0,0,0,HZ);
+g.addColorStop(0,'#3B2A4A'); g.addColorStop(380/760,'#7A3E52'); g.addColorStop(640/760,'#D8663F'); g.addColorStop(1,'#F3B562');
+ctx.fillStyle=g; ctx.fillRect(0,0,W,HZ);
+// 天上几簇线描薄云（和海同一种笔法；被朝霞从下面照亮。不画太阳、不画光芒）
+{
+  const cr=mulberry32(2024);
+  const CL=[{x:250,y:548,n:4,len:300},{x:760,y:520,n:3,len:260},{x:560,y:608,n:5,len:420},{x:120,y:630,n:3,len:240},{x:960,y:640,n:4,len:300}];
+  for(const cl of CL){
+    for(let k=0;k<cl.n;k++){
+      const y=cl.y+k*(5+cr()*4), len=cl.len*(0.45+0.55*cr()), x0=cl.x-len/2+(cr()-0.5)*70;
+      const warm=Math.min(1,Math.max(0,(y-500)/150));
+      const [r,gg,b]=ramp([[0,'#EFA7A2'],[0.6,'#FFC99E'],[1,'#FFE2B4']],warm);
+      const a=(0.16+0.22*cr())*(0.55+0.45*warm);
+      const gr=ctx.createLinearGradient(x0,0,x0+len,0);
+      gr.addColorStop(0,`rgba(${r},${gg},${b},0)`); gr.addColorStop(0.3,`rgba(${r},${gg},${b},${a})`);
+      gr.addColorStop(0.75,`rgba(${r},${gg},${b},${a*0.85})`); gr.addColorStop(1,`rgba(${r},${gg},${b},0)`);
+      ctx.strokeStyle=gr; ctx.lineWidth=0.9+cr()*1.4; ctx.lineCap='round';
+      const ph=cr()*TAU, wl=160+cr()*200, am=0.8+cr()*1.4;
+      ctx.beginPath(); for(let x=x0;x<=x0+len;x+=5){const yy=y+am*Math.sin(TAU*x/wl+ph); x===x0?ctx.moveTo(x,yy):ctx.lineTo(x,yy);} ctx.stroke();
+    }
+  }
+}
+
+/* ================= 3 海底色 ================= */
+const seaGrad=ctx.createLinearGradient(0,HZ,0,H);
+seaGrad.addColorStop(0,'#2A3550'); seaGrad.addColorStop((1400-HZ)/(H-HZ),'#12202F'); seaGrad.addColorStop(1,'#0B1520');
+ctx.fillStyle=seaGrad; ctx.fillRect(0,HZ,W,H-HZ);
+
+/* ================= 4 海面线（离屏层：由远到近画，近浪遮远浪；再给字让位） ================= */
+const L=document.createElement('canvas'); L.width=W; L.height=H; const lx=L.getContext('2d');
+const lg=lx.createLinearGradient(0,HZ,0,H);
+lg.addColorStop(0,'#2A3550'); lg.addColorStop((1400-HZ)/(H-HZ),'#12202F'); lg.addColorStop(1,'#0B1520');
+const COL=[[0,'#F8D8A6'],[0.12,'#F0AE80'],[0.36,'#BE8790'],[0.7,'#8E8FA8'],[1,'#7D93A8']];
+const drng=mulberry32(77);
+const glints=[];
+for(const i of LINES){
+  const t=i/139, y0=lineY0(i);
+  const [r,gg,b]=ramp(COL,t);
+  let a = lerp(0.55,0.62,Math.min(t,1));
+  if(t>1) a = 0.62 - 0.42*Math.min(1,Math.pow((t-1)/0.42,0.8));   // y>1400 渐隐：底部留给抖音标题，视线留在字上
+  const step = y0<900?2:4;
+  const P=[]; for(let x=-12;x<=W+12;x+=step){ const y=lineY(i,x); P.push([x,y,CREST]); }
+  if(y0>905){ // 遮挡：线下方用海底色填实
+    lx.fillStyle=lg; lx.beginPath(); lx.moveTo(P[0][0],P[0][1]);
+    for(const q of P) lx.lineTo(q[0],q[1]);
+    lx.lineTo(W+12,Math.min(H,y0+90)); lx.lineTo(-12,Math.min(H,y0+90)); lx.closePath(); lx.fill();
+  }
+  lx.strokeStyle=`rgba(${r},${gg},${b},${a})`;
+  lx.lineWidth = Math.min(2.1, 1 + 1.5*t);
+  lx.lineJoin='round'; lx.lineCap='round';
+  lx.beginPath(); P.forEach((q,k)=>k?lx.lineTo(q[0],q[1]):lx.moveTo(q[0],q[1])); lx.stroke();
+  // 浪尖反光：短浪的尖顶那一小段描亮（女声 = 浪花），再零星点几个亮点
+  if(y0>790){
+    const fade = t>1?Math.max(0.05,1-(t-1)*2.6):1;
+    const ph1=drng()*TAU, ph2=drng()*TAU;
+    lx.lineWidth = Math.min(2.4, 1.2 + 1.5*t); lx.lineCap='round';
+    for(let k=1;k<P.length;k++){
+      const cr=(P[k][2]+P[k-1][2])/2; if(cr<0.18) continue;
+      const x=P[k][0];
+      const patch=0.55+0.45*Math.sin(x/97+ph1)*Math.sin(x/233+ph2);   // 成片的闪，不均匀
+      const glint=0.45+0.55*Math.exp(-(((x-500)/420)**2));
+      const al=Math.min(1,cr*1.25)*patch*glint*fade*0.85;
+      if(al<0.04) continue;
+      lx.strokeStyle=`rgba(255,222,170,${al.toFixed(3)})`;
+      lx.beginPath(); lx.moveTo(P[k-1][0],P[k-1][1]); lx.lineTo(P[k][0],P[k][1]); lx.stroke();
+      if(cr>0.9 && drng()<0.10*fade){
+        lx.fillStyle=`rgba(255,236,200,${(0.9*glint).toFixed(3)})`;
+        lx.beginPath(); lx.arc(x,P[k][1]-0.5,1.3+0.6*Math.min(t,1),0,TAU); lx.fill();
+      }
+    }
+  }
+}
+// 给 34 个字让位：字形膨胀 + 羽化，从海面线层挖掉
+const M=document.createElement('canvas'); M.width=W; M.height=H; const mx=M.getContext('2d');
+mx.font=`900 ${FS}px ${SERIF}`; mx.textAlign='center'; mx.textBaseline='middle';
+mx.lineJoin='round'; mx.lineWidth=20; mx.strokeStyle='#000'; mx.fillStyle='#000';
+mx.filter='blur(3px)';
+for(const p of pts){ mx.strokeText(p.ch,p.cx,p.cy); mx.fillText(p.ch,p.cx,p.cy); }
+lx.globalCompositeOperation='destination-out'; lx.drawImage(M,0,0); lx.globalCompositeOperation='source-over';
+ctx.drawImage(L,0,0);
+
+/* ================= 2 地平线光带 ================= */
+ctx.save(); ctx.filter='blur(18px)'; ctx.globalCompositeOperation='screen';
+ctx.fillStyle='rgba(255,208,138,0.35)'; ctx.fillRect(-60,730,W+120,60);
+ctx.restore();
+
+/* ================= 暗角（很轻，把视线收向中间） ================= */
+{ const vg=ctx.createRadialGradient(480,980,380,480,980,1250);
+  vg.addColorStop(0,'rgba(8,10,20,0)'); vg.addColorStop(1,'rgba(8,10,20,0.42)');
+  ctx.fillStyle=vg; ctx.fillRect(0,0,W,H); }
+
+/* ================= 字底下那一段浪尖：高光（浪花） ================= */
+for(const p of pts){
+  const x0=p.cx-58, x1=p.cx+58;
+  const gr=ctx.createLinearGradient(x0,0,x1,0);
+  gr.addColorStop(0,'rgba(255,226,176,0)'); gr.addColorStop(0.5,'rgba(255,230,186,0.95)'); gr.addColorStop(1,'rgba(255,226,176,0)');
+  ctx.save(); ctx.strokeStyle=gr; ctx.lineWidth=2.8; ctx.lineCap='round';
+  ctx.shadowColor='rgba(255,196,120,0.9)'; ctx.shadowBlur=14;
+  ctx.beginPath(); for(let x=x0;x<=x1;x+=2){const y=lineY(p.ride,x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+  ctx.restore();
+}
+
+/* ================= 字的倒光：字下方几条浪线上的碎光（字本身不下沉、不变淡） ================= */
+for(const p of pts){
+  for(let k=1;k<=7;k++){
+    const j=p.ride+k; const w=34-3.2*k; const al=0.42*(1-k/8);
+    const x0=p.cx-w, x1=p.cx+w;
+    const gr=ctx.createLinearGradient(x0,0,x1,0);
+    gr.addColorStop(0,'rgba(255,232,196,0)'); gr.addColorStop(0.5,`rgba(255,232,196,${al})`); gr.addColorStop(1,'rgba(255,232,196,0)');
+    ctx.strokeStyle=gr; ctx.lineWidth=1.6; ctx.lineCap='round';
+    ctx.beginPath(); for(let x=x0;x<=x1;x+=2){const y=lineY(j,x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+  }
+}
+
+/* ================= 5 34 个字 ================= */
+ctx.font=`900 ${FS}px ${SERIF}`; ctx.textAlign='center'; ctx.textBaseline='middle';
+ctx.save(); ctx.shadowColor='rgba(255,233,196,0.55)'; ctx.shadowBlur=10; ctx.fillStyle='#F4EBD9';
+for(const p of pts) ctx.fillText(p.ch,p.cx,p.cy);
+ctx.restore();
+ctx.save(); ctx.lineWidth=2; ctx.strokeStyle='rgba(42,30,36,0.35)'; ctx.lineJoin='round';
+for(const p of pts) ctx.strokeText(p.ch,p.cx,p.cy);
+ctx.fillStyle='#F4EBD9'; for(const p of pts) ctx.fillText(p.ch,p.cx,p.cy);
+ctx.restore();
+
+/* ================= 6 歌词：「心中的歌」逐字点亮 ================= */
+function drawSpaced(str, cx, y, font, spacing, styleFn){
+  ctx.font=font; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+  const chars=[...str]; const ws=chars.map(ch=>ctx.measureText(ch).width);
+  const total=ws.reduce((a,b)=>a+b,0)+spacing*(ws.length-1);
+  let x=cx-total/2;
+  chars.forEach((ch,k)=>{ctx.save(); styleFn(k,ch,x,ws[k]); ctx.fillText(ch,x,y); ctx.restore(); x+=ws[k]+spacing;});
+  return total;
+}
+drawSpaced('永远给我碧浪清波',480,262,`600 40px ${SERIF}`,6,()=>{ctx.fillStyle='rgba(246,239,230,0.40)';});
+drawSpaced('心中的歌',480,368,`700 86px ${SERIF}`,18,(k,ch,x)=>{
+  if(k===0){ctx.fillStyle='rgba(246,239,230,0.94)';}
+  else if(k===1){ // 正在延长的「中」
+    ctx.fillStyle='#FFE3B3'; ctx.shadowColor='rgba(255,200,120,0.95)'; ctx.shadowBlur=26;
+    ctx.fillText(ch,x,368); ctx.shadowBlur=10; ctx.shadowColor='rgba(255,236,200,0.9)';
+  }
+  else {ctx.fillStyle='rgba(246,239,230,0.26)';}
+});
+/* ================= 7 提示字 ================= */
+const hw=drawSpaced('暂停，找找你家',480,456,`500 42px ${SANS}`,5,()=>{ctx.fillStyle='rgba(255,243,224,0.94)';});
+ctx.strokeStyle='rgba(255,243,224,0.55)'; ctx.lineWidth=1.5;
+ctx.beginPath(); ctx.moveTo(480-hw/2-72,441); ctx.lineTo(480-hw/2-24,441); ctx.moveTo(480+hw/2+24,441); ctx.lineTo(480+hw/2+72,441); ctx.stroke();
+
+/* ================= 8 署名（地平线上方：暗字压在亮天上） ================= */
+drawSpaced('弦乐 · 合唱改编　花开当富贵',480,686,`700 32px ${SERIF}`,3,()=>{ctx.fillStyle='rgba(52,26,40,0.86)';});
+drawSpaced('词 张藜 · 曲 秦咏诚　｜　四位 AI 歌手 + AI 弦乐四重奏（ACE Studio）',480,727,`400 23px ${SANS}`,1,()=>{ctx.fillStyle='rgba(52,26,40,0.72)';});
+
+/* ================= 9 AI 标识 ================= */
+ctx.font=`500 24px ${SANS}`; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+ctx.fillStyle='rgba(255,243,224,0.7)'; ctx.fillText('演唱由 AI 生成',60,190);
+
+/* ================= 10 颗粒 2% ================= */
+const img=ctx.getImageData(0,0,W,H), Dd=img.data, nr=mulberry32(4242);
+for(let k=0;k<Dd.length;k+=4){const n=(nr()-0.5)*2*0.02*255; Dd[k]+=n; Dd[k+1]+=n; Dd[k+2]+=n;}
+ctx.putImageData(img,0,0);
+
+/* ================= 自检输出 ================= */
+document.getElementById('check').textContent=(errs.length?'FAIL '+errs.join('; '):'OK 34/34')+' seed='+seedUsed+' dmin='+dmin+'\n'+
+  JSON.stringify(pts.map(p=>[p.ch,Math.round(p.box.x0),Math.round(p.box.y0),Math.round(p.box.x1),Math.round(p.box.y1)]));
+if(location.hash==='#ui'){ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(0,0,W,154);ctx.fillRect(930,154,150,H-154);ctx.fillRect(0,1498,930,H-1498);
+  ctx.fillStyle='#fff';ctx.font='30px sans-serif';ctx.fillText('抖音 UI 区',40,1700);}
+if(errs.length){ctx.fillStyle='red';ctx.font='40px sans-serif';ctx.fillText('CHECK FAIL',100,100);}
+</script>
+</body>
+</html>
