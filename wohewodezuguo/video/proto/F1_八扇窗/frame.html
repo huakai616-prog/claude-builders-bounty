@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>八扇窗 样帧</title>
+<style>html,body{margin:0;padding:0;background:#0B101A;overflow:hidden}canvas{display:block}</style>
+</head><body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// 《八扇窗》样帧 · 0:53.75 女高音第一次开口「我」
+const W=1080,H=1920,GY=1180,HZ=1091,VPX=500;
+const BX0=190,BX1=810,BY0=470;
+const SHOW_UI = location.hash.includes('ui');
+const cv=document.getElementById('c'); const ctx=cv.getContext('2d');
+function mk(w,h){const k=document.createElement('canvas');k.width=w;k.height=h;return k;}
+
+// ---------- 随机与噪声 ----------
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+let R=mulberry32(20261001);
+const PERM=new Uint16Array(512),VAL=new Float32Array(256);
+{const p=[...Array(256).keys()];for(let i=255;i>0;i--){const j=Math.floor(R()*(i+1));[p[i],p[j]]=[p[j],p[i]]}for(let i=0;i<512;i++)PERM[i]=p[i&255];for(let i=0;i<256;i++)VAL[i]=R();}
+function vn(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+ const X=xi&255,Y=yi&255,X1=(X+1)&255,Y1=(Y+1)&255;
+ const a=VAL[PERM[PERM[X]+Y]],b=VAL[PERM[PERM[X1]+Y]],c=VAL[PERM[PERM[X]+Y1]],d=VAL[PERM[PERM[X1]+Y1]];
+ return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v;}
+function fbm(x,y,o=4){let s=0,a=0.5,f=1,n=0;for(let i=0;i<o;i++){s+=a*vn(x*f+i*17.3,y*f+i*9.1);n+=a;a*=0.5;f*=2.03;}return s/n;}
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+function ss(a,b,x){const t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t);}
+function hex(h){return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function mix(a,b,t){return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];}
+function rgba(c,a=1){return `rgba(${Math.round(c[0])},${Math.round(c[1])},${Math.round(c[2])},${a})`;}
+
+// ---------- 0:53.75 这一刻的灯（由 MIDI 推出） ----------
+// 女高音 53.57 起唱「我」；第二小提琴/中提琴/大提琴 53.57 起音；第一小提琴休止
+// 楼道灯：51.43 大提琴 → 52.14 中提琴 → 52.68 第二小提琴 接力上行的余光
+const C_SOP=hex('#FFF1D6'),C_VOX=hex('#FFB45E'),C_STR=hex('#FFE2B0'),C_STAIR=hex('#FFD27A');
+const WINW=150,WINH=100,LX=250,RX=600,FY={4:520,3:680,2:840,1:1000};
+const WINDOWS=[
+ {id:'L4',x:LX,y:FY[4],col:C_SOP,b:1.00,cur:'sop'},
+ {id:'L3',x:LX,y:FY[3],col:C_VOX,b:0.85,cur:'amber',plant:true},
+ {id:'L2',x:LX,y:FY[2],col:C_VOX,b:0.80,cur:'amberL'},
+ {id:'L1',x:LX,y:FY[1],col:C_VOX,b:0.80,cur:'amber',bars:true},
+ {id:'R4',x:RX,y:FY[4],col:C_STR,b:0.12,cur:'dim'},
+ {id:'R3',x:RX,y:FY[3],col:C_STR,b:0.70,cur:'sheer'},
+ {id:'R2',x:RX,y:FY[2],col:C_STR,b:0.70,cur:'sheerR',lamp:true},
+ {id:'R1',x:RX,y:FY[1],col:C_STR,b:0.75,cur:'sheer',plant:true,bars:true},
+];
+const STAIRS=[{y:1015,b:0.55},{y:855,b:0.70},{y:695,b:0.85},{y:535,b:0.0}];
+const DARKWIN=hex('#121826');
+
+// ---------- 天空 ----------
+function drawSky(g){
+ const gr=g.createLinearGradient(0,0,0,GY);
+ gr.addColorStop(0,'#1B2A44');gr.addColorStop(900/GY,'#2B3D60');gr.addColorStop(1,'#3A4F76');
+ g.fillStyle=gr;g.fillRect(0,0,W,GY);
+ // 天边一点城市与将明的暖灰
+ const hg=g.createLinearGradient(0,820,0,GY);
+ hg.addColorStop(0,'rgba(150,130,150,0)');hg.addColorStop(1,'rgba(160,140,160,0.20)');
+ g.fillStyle=hg;g.fillRect(0,820,W,GY-820);
+ // 云：低对比的长条云
+ const cw=270,ch=300,cc=mk(cw,ch),cg=cc.getContext('2d'),id=cg.createImageData(cw,ch);
+ for(let y=0;y<ch;y++)for(let x=0;x<cw;x++){
+  const X=x*4,Y=y*4; const n=fbm(X/520+3,Y/70+1,5);
+  const env=ss(60,360,Y)*(1-ss(820,1100,Y));
+  const body=ss(0.50,0.72,n)*env, rim=ss(0.44,0.52,n)*(1-ss(0.52,0.62,n))*env;
+  const i=(y*cw+x)*4;
+  const cb=[20,29,50],cr=[96,108,146];
+  const a=body*0.55+rim*0.16;
+  const t=a>0?(rim*0.16)/a:0; const col=mix(cb,cr,t);
+  id.data[i]=col[0];id.data[i+1]=col[1];id.data[i+2]=col[2];id.data[i+3]=a*255;
+ }
+ cg.putImageData(id,0,0);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
+ g.drawImage(cc,0,0,W,1200);
+ // 残星
+ for(let i=0;i<70;i++){const x=R()*W,y=R()*620+6;const a=(0.12+R()*0.5)*(1-y/760);const s=R()<0.08?1.5:0.9;
+  g.fillStyle=`rgba(225,232,255,${a.toFixed(3)})`;g.beginPath();g.arc(x,y,s,0,7);g.fill();}
+}
+
+// ---------- 远处楼群 ----------
+function windowsGrid(g,x0,x1,y0,y1,ww,wh,sx,sy,litP,litCol,litA,darkCol,rr){
+ for(let y=y0;y+wh<=y1;y+=sy){for(let x=x0;x+ww<=x1;x+=sx){
+  if(rr()<litP){const a=litA*(0.55+rr()*0.45);g.fillStyle=rgba(litCol,a);g.fillRect(x,y,ww,wh);
+   g.fillStyle=rgba(litCol,a*0.18);g.fillRect(x-3,y-3,ww+6,wh+6);}
+  else{g.fillStyle=darkCol;g.fillRect(x,y,ww,wh);} }}
+}
+function drawFar(g){
+ const r=mulberry32(77);
+ // 最远的高层：被雾吃掉一半
+ const far=[[10,150,640],[108,236,730],[860,1010,600],[965,1080,690],[700,850,770],[250,380,800]];
+ for(const [x0,x1,top] of far){
+  const col=[36,50,80];
+  g.fillStyle=rgba(col,1);g.fillRect(x0,top,x1-x0,GY-top);
+  g.fillStyle='rgba(30,42,68,1)';g.fillRect(x0+(x1-x0)*0.35,top-14,(x1-x0)*0.3,14); // 屋顶机房
+  windowsGrid(g,x0+10,x1-8,top+16,GY,10,8,20,24,0.07,[255,200,140],0.45,'rgba(28,40,66,1)',r);
+ }
+ // 薄雾
+ const mg=g.createLinearGradient(0,600,0,GY);
+ mg.addColorStop(0,'rgba(58,79,118,0.0)');mg.addColorStop(1,'rgba(64,84,122,0.55)');
+ g.fillStyle=mg;g.fillRect(0,600,W,GY-600);
+}
+function drawMid(g){
+ const r=mulberry32(4242);
+ const blocks=[[0,170,860],[830,1080,800],[150,930,980]];
+ for(const [x0,x1,top] of blocks){
+  g.fillStyle='#141D33';g.fillRect(x0,top,x1-x0,GY-top);
+  g.fillStyle='#10182B';g.fillRect(x0,top,x1-x0,6);
+  windowsGrid(g,x0+14,x1-10,top+22,GY-20,18,14,34,40,0.10,hex('#FFC47A'),0.6,'#0F1628',r);
+ }
+ // 楼顶水箱
+ g.fillStyle='#111a2e';g.fillRect(40,838,46,22);g.fillRect(900,776,58,24);g.fillRect(935,760,6,16);
+}
+// 树冠剪影
+function canopy(g,cx,cy,rx,ry,n,col,seed){
+ const r=mulberry32(seed);g.fillStyle=col;
+ for(let i=0;i<n;i++){const a=r()*Math.PI*2,d=Math.sqrt(r());const x=cx+Math.cos(a)*rx*d*0.8,y=cy+Math.sin(a)*ry*d*0.8;
+  const rad=(10+r()*22)*(1-d*0.35);g.beginPath();g.arc(x,y,rad,0,7);g.fill();}
+ for(let i=0;i<n*5;i++){const a=r()*Math.PI*2,d=0.78+r()*0.3;const x=cx+Math.cos(a)*rx*d,y=cy+Math.sin(a)*ry*d;
+  g.beginPath();g.ellipse(x,y,2+r()*4,1.5+r()*3,r()*3,0,7);g.fill();}
+}
+function drawTree(g,x0,yb,seed){
+ const r=mulberry32(seed),col='#070b14',clumps=[];
+ g.strokeStyle=col;g.fillStyle=col;g.lineCap='round';
+ const br=(x,y,ang,len,w,dep)=>{
+  const bend=(r()-0.5)*0.5,x2=x+Math.cos(ang)*len,y2=y+Math.sin(ang)*len;
+  const mx=x+Math.cos(ang+bend)*len*0.5,my=y+Math.sin(ang+bend)*len*0.5;
+  g.lineWidth=w;g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(mx,my,x2,y2);g.stroke();
+  if(dep===0||len<18){clumps.push([x2,y2,w]);return;}
+  const n=r()<0.45?3:2;
+  for(let i=0;i<n;i++){let a=ang+(i-(n-1)/2)*0.62+(r()-0.5)*0.35; if(x2>170&&Math.cos(a)>0)a-=0.5;
+   br(x2,y2,a,len*(0.66+r()*0.14),w*0.64,dep-1);}
+  if(dep<3)clumps.push([x2,y2,w]);
+ };
+ // 主干分两股
+ g.lineWidth=20;g.beginPath();g.moveTo(x0-10,yb);g.quadraticCurveTo(x0+4,yb-120,x0,yb-230);g.stroke();
+ br(x0,yb-228,-Math.PI/2-0.38,120,14,5);br(x0,yb-228,-Math.PI/2+0.30,110,12,5);br(x0,yb-200,-Math.PI/2-1.0,80,8,4);
+ // 叶团：很多小叶片，边缘稀疏
+ for(const [cx,cy] of clumps){const n=120;
+  for(let i=0;i<n;i++){const a=r()*Math.PI*2,d=Math.pow(r(),0.7)*40;const x=cx+Math.cos(a)*d*1.2,y=cy+Math.sin(a)*d*0.85;
+   if(x>236-r()*18)continue;
+   g.globalAlpha=0.55+r()*0.45;g.beginPath();g.ellipse(x,y,2.2+r()*3.6,1.4+r()*2.2,r()*3.14,0,7);g.fill();}}
+ g.globalAlpha=1;
+}
+function trunk(g,x,yb,yt,w,col){g.fillStyle=col;g.beginPath();g.moveTo(x-w,yb);g.lineTo(x-w*0.45,yt);g.lineTo(x+w*0.45,yt);g.lineTo(x+w,yb);g.closePath();g.fill();}
+
+// ---------- 主楼 ----------
+function drawBuilding(g){
+ const r=mulberry32(1949);
+ // 砖
+ g.fillStyle='#3E2C28';g.fillRect(BX0,BY0,BX1-BX0,GY-BY0);
+ const base=hex('#4A3530');
+ g.save();g.beginPath();g.rect(BX0,BY0,BX1-BX0,GY-BY0);g.clip();
+ for(let row=0,y=BY0;y<GY;row++,y+=8){const off=(row%2)*12;
+  for(let x=BX0-off;x<BX1;x+=24){
+   let k=0.86+r()*0.26; let c=[base[0]*k,base[1]*k,base[2]*k];
+   const q=r(); if(q<0.06)c=mix(c,[40,26,24],0.5); else if(q<0.11)c=mix(c,[96,62,48],0.35); else if(q<0.14)c=mix(c,[70,62,62],0.4);
+   g.fillStyle=rgba(c);g.fillRect(x+1,y+1,23,7);
+   g.fillStyle=rgba([c[0]*1.12,c[1]*1.1,c[2]*1.08],0.35);g.fillRect(x+1,y+1,23,1);
+  }}
+ g.restore();
+ // 老化：竖向雨痕、斑驳、墙根返潮
+ const id=g.getImageData(BX0,BY0,BX1-BX0,GY-BY0),d=id.data,w=BX1-BX0,h=GY-BY0;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  const Y=y+BY0,X=x+BX0;
+  const streak=fbm(X/7,Y/300,3), blot=fbm(X/55+40,Y/45,4);
+  let f=1-0.30*ss(0.52,0.78,streak)-0.22*(blot-0.5)-0.28*ss(1040,1180,Y)+0.06*(1-ss(470,700,Y));
+  const i=(y*w+x)*4;d[i]*=f;d[i+1]*=f;d[i+2]*=f;
+ }
+ g.putImageData(id,BX0,BY0);
+ // 蓝调天光：上亮下暗，偏冷
+ const tg=g.createLinearGradient(0,BY0,0,GY);
+ tg.addColorStop(0,'rgba(70,88,130,0.20)');tg.addColorStop(0.45,'rgba(24,30,52,0.26)');tg.addColorStop(1,'rgba(6,8,14,0.45)');
+ g.fillStyle=tg;g.fillRect(BX0,BY0,BX1-BX0,GY-BY0);
+ // 左右墙角暗一点（体积感）
+ const sg=g.createLinearGradient(BX0,0,BX1,0);
+ sg.addColorStop(0,'rgba(0,0,0,0.22)');sg.addColorStop(0.08,'rgba(0,0,0,0)');sg.addColorStop(0.92,'rgba(0,0,0,0)');sg.addColorStop(1,'rgba(0,0,0,0.28)');
+ g.fillStyle=sg;g.fillRect(BX0,BY0,BX1-BX0,GY-BY0);
+
+ // 圈梁（每层窗顶的水泥带）
+ for(const f of [4,3,2,1]){const y=FY[f]-22;concreteBand(g,BX0,y,BX1-BX0,12,r);}
+ // 勒脚
+ concreteBand(g,BX0,1138,BX1-BX0,42,r,true);
+ // 窗下雨痕
+ for(const wi of WINDOWS){dirtStreak(g,wi.x-4,wi.y+WINH+10,WINW+8,70,r);}
+ for(const s of STAIRS){dirtStreak(g,475,s.y+70+6,50,40,r);}
+ // 女儿墙
+ g.fillStyle='#3A2A26';g.fillRect(180,450,640,20);
+ g.fillStyle='#4b4f5a';g.fillRect(176,445,648,7);g.fillStyle='rgba(140,155,185,0.25)';g.fillRect(176,445,648,1.5);
+ g.fillStyle='rgba(0,0,0,0.35)';g.fillRect(180,470,640,5);
+ // 落水管
+ for(const px of [207,793]){pipe(g,px,452,GY-6);}
+}
+function concreteBand(g,x,y,w,h,r,plinth){
+ const c=plinth?[52,55,62]:[60,58,62];
+ g.fillStyle=rgba(c);g.fillRect(x,y,w,h);
+ g.fillStyle=rgba([c[0]*1.18,c[1]*1.18,c[2]*1.2],0.45);g.fillRect(x,y,w,1.5);
+ for(let i=0;i<w;i+=2){const n=fbm((x+i)/30,y/10,3);g.fillStyle=`rgba(0,0,0,${(0.28*n*n).toFixed(3)})`;g.fillRect(x+i,y+2,2,h-2);}
+ const sh=g.createLinearGradient(0,y+h,0,y+h+10);sh.addColorStop(0,'rgba(0,0,0,0.45)');sh.addColorStop(1,'rgba(0,0,0,0)');
+ if(!plinth){g.fillStyle=sh;g.fillRect(x,y+h,w,10);}
+}
+function dirtStreak(g,x,y,w,h,r){
+ for(let i=0;i<w;i+=3){const len=h*(0.3+r()*0.7);const a=0.10+r()*0.16;
+  const gr=g.createLinearGradient(0,y,0,y+len);gr.addColorStop(0,`rgba(12,8,8,${a})`);gr.addColorStop(1,'rgba(12,8,8,0)');
+  g.fillStyle=gr;g.fillRect(x+i,y,3,len);}
+}
+function pipe(g,x,y0,y1){
+ g.fillStyle='#2b2f38';g.fillRect(x-4,y0,8,y1-y0);
+ g.fillStyle='rgba(120,135,165,0.35)';g.fillRect(x-3,y0,1.5,y1-y0);
+ g.fillStyle='rgba(0,0,0,0.4)';g.fillRect(x+3,y0,1,y1-y0);
+ for(let y=y0+60;y<y1-20;y+=150){g.fillStyle='#232730';g.fillRect(x-6,y,12,4);}
+ g.fillStyle='#2b2f38';g.fillRect(x-4,y1-4,14,6);
+}
+
+// 窗内
+function interior(g,wi,x,y,w,h){
+ const {col,b,cur}=wi;
+ if(b<0.2){ // 几乎暗：只有屋里深处一点灯
+  g.fillStyle=rgba(DARKWIN);g.fillRect(x,y,w,h);
+  const rg=g.createRadialGradient(x+w*0.62,y+h*0.9,2,x+w*0.62,y+h*0.9,w*0.55);
+  rg.addColorStop(0,rgba(col,0.55*b*4));rg.addColorStop(1,rgba(col,0));
+  g.fillStyle=rg;g.fillRect(x,y,w,h);
+  skyReflect(g,x,y,w,h,0.8);return;
+ }
+ const hot=mix(col,[255,252,244],0.55), deep=[col[0]*0.78,col[1]*0.50,col[2]*0.26];
+ const k=b; const dk=[26,18,16];
+ const cH=mix(dk,hot,k), cM=mix(dk,col,k), cD=mix(dk,deep,k);
+ const lx=cur==='sop'?0.5:(cur==='amberL'?0.75:0.45);
+ const rg=g.createRadialGradient(x+w*lx,y+h*0.28,2,x+w*lx,y+h*0.45,w*0.78);
+ rg.addColorStop(0,rgba(cH));rg.addColorStop(0.45,rgba(cM));rg.addColorStop(1,rgba(cD));
+ g.fillStyle=rg;g.fillRect(x,y,w,h);
+ // 屋顶（天花板）亮、下面暗一点：真实屋里的层次
+ const vg=g.createLinearGradient(0,y,0,y+h);vg.addColorStop(0,'rgba(0,0,0,0.0)');vg.addColorStop(0.7,'rgba(0,0,0,0.05)');vg.addColorStop(1,'rgba(0,0,0,0.28)');
+ g.fillStyle=vg;g.fillRect(x,y,w,h);
+ // 室内剪影（远处的柜子、画框），很淡
+ g.fillStyle='rgba(30,18,12,0.16)';
+ if(cur==='amber'){g.fillRect(x+w*0.55,y+h*0.52,w*0.3,h*0.48);}
+ if(cur==='sheer'){g.fillRect(x+w*0.18,y+h*0.60,w*0.35,h*0.40);g.fillRect(x+w*0.66,y+h*0.22,w*0.12,h*0.16);}
+ if(cur==='amberL'){g.fillRect(x+w*0.12,y+h*0.25,w*0.14,h*0.18);}
+ // 吊灯（女高音那扇）
+ if(cur==='sop'){
+  const cx=x+w*0.5;g.strokeStyle='rgba(60,40,24,0.55)';g.lineWidth=1.2;g.beginPath();g.moveTo(cx,y);g.lineTo(cx,y+18);g.stroke();
+  g.fillStyle='rgba(70,46,26,0.85)';g.beginPath();g.moveTo(cx-7,y+18);g.lineTo(cx+7,y+18);g.lineTo(cx+19,y+31);g.lineTo(cx-19,y+31);g.closePath();g.fill();
+  const lg=g.createRadialGradient(cx,y+33,1,cx,y+40,36);lg.addColorStop(0,'rgba(255,255,250,1)');lg.addColorStop(0.3,'rgba(255,248,230,0.7)');lg.addColorStop(1,'rgba(255,240,210,0)');
+  g.fillStyle=lg;g.fillRect(x,y+18,w,h-18);
+ }
+ if(wi.lamp){ // 台灯
+  const cx=x+w*0.78,cy=y+h*0.62;const lg=g.createRadialGradient(cx,cy,1,cx,cy,30);lg.addColorStop(0,rgba(mix(col,[255,255,255],0.6),0.9*b));lg.addColorStop(1,rgba(col,0));
+  g.fillStyle=lg;g.fillRect(x,y,w,h);
+  g.fillStyle='rgba(60,40,26,0.7)';g.beginPath();g.moveTo(cx-9,cy-10);g.lineTo(cx+9,cy-10);g.lineTo(cx+13,cy);g.lineTo(cx-13,cy);g.closePath();g.fill();
+ }
+ // 窗帘
+ const curtain=(px,pw,dens,alpha,tint)=>{
+  for(let i=0;i<pw;i++){const s=0.5+0.5*Math.sin(i/pw*Math.PI*2*dens+px*0.1);
+   g.fillStyle=rgba(tint,alpha*(0.55+0.45*s));g.fillRect(px+i,y,1,h);
+   g.fillStyle=`rgba(0,0,0,${(0.22*(1-s)).toFixed(3)})`;g.fillRect(px+i,y,1,h);}
+  g.fillStyle='rgba(40,26,18,0.5)';g.fillRect(px,y+1,pw,2);
+ };
+ const amberT=mix(dk,[col[0]*0.92,col[1]*0.58,col[2]*0.30],k), sheerT=mix(dk,[col[0]*0.97,col[1]*0.9,col[2]*0.78],k);
+ if(cur==='sop'){curtain(x,w*0.2,2.2,0.55,mix(dk,[250,226,190],k));curtain(x+w*0.8,w*0.2,2.2,0.55,mix(dk,[250,226,190],k));}
+ if(cur==='amber'){curtain(x,w*0.30,3,0.85,amberT);curtain(x+w*0.70,w*0.30,3,0.85,amberT);}
+ if(cur==='amberL'){curtain(x,w*0.56,5,0.85,amberT);}
+ if(cur==='sheer'){curtain(x,w*0.34,3.5,0.45,sheerT);curtain(x+w*0.66,w*0.34,3.5,0.45,sheerT);}
+ if(cur==='sheerR'){curtain(x+w*0.46,w*0.54,5,0.45,sheerT);}
+ // 窗台盆栽
+ if(wi.plant){const px=cur==='sheer'?x+w*0.8:x+w*0.2, py=y+h;
+  g.fillStyle='rgba(28,20,16,0.82)';g.beginPath();g.moveTo(px-9,py-15);g.lineTo(px+9,py-15);g.lineTo(px+7,py);g.lineTo(px-7,py);g.closePath();g.fill();
+  const lr=mulberry32(px|0);
+  for(let i=0;i<9;i++){const a=-Math.PI/2+(lr()-0.5)*2.2,L=10+lr()*16;g.save();g.translate(px,py-15);g.rotate(a+Math.PI/2);
+   g.beginPath();g.ellipse(0,-L/2,2.6+lr()*2,L/2,0,0,7);g.fill();g.restore();}
+ }
+}
+function skyReflect(g,x,y,w,h,s){
+ const gr=g.createLinearGradient(0,y,0,y+h);gr.addColorStop(0,`rgba(58,79,118,${0.30*s})`);gr.addColorStop(0.55,`rgba(58,79,118,${0.10*s})`);gr.addColorStop(1,'rgba(58,79,118,0)');
+ g.fillStyle=gr;g.fillRect(x,y,w,h);
+ g.save();g.beginPath();g.rect(x,y,w,h);g.clip();g.fillStyle=`rgba(150,170,210,${0.06*s})`;
+ g.beginPath();g.moveTo(x+w*0.15,y);g.lineTo(x+w*0.45,y);g.lineTo(x+w*0.05,y+h);g.lineTo(x-w*0.25,y+h);g.closePath();g.fill();g.restore();
+}
+function drawWindow(g,wi){
+ const {x,y}=wi,w=WINW,h=WINH;
+ // 洞口阴影
+ g.fillStyle='rgba(10,6,6,0.9)';g.fillRect(x-4,y-4,w+8,h+8);
+ interior(g,wi,x+6,y+6,w-12,h-12);
+ // 窗框与窗棂：6px 外框，上亮子 + 中梃
+ g.fillStyle='#2A1E1B';
+ g.fillRect(x,y,w,6);g.fillRect(x,y+h-6,w,6);g.fillRect(x,y,6,h);g.fillRect(x+w-6,y,6,h);
+ g.fillRect(x+w/2-2,y,4,h);g.fillRect(x,y+34,w,3);
+ // 两扇窗各自的细框
+ g.fillStyle='rgba(42,30,27,0.85)';g.fillRect(x+w/2-5,y+37,2,h-43);g.fillRect(x+w/2+3,y+37,2,h-43);
+ // 框的受光边
+ if(wi.b>0.2){g.fillStyle=rgba(wi.col,0.20*wi.b);g.fillRect(x+6,y+6,w-12,1);g.fillRect(x+6,y+37,w-12,1);}
+ else{g.fillStyle='rgba(120,140,180,0.10)';g.fillRect(x,y,w,1);}
+ // 窗台
+ g.fillStyle='#474b55';g.fillRect(x-9,y+h+2,w+18,9);
+ g.fillStyle=wi.b>0.2?rgba(mix([110,114,124],wi.col,0.55*wi.b)):'#6a6f7b';g.fillRect(x-9,y+h+1,w+18,3);
+ const sg=g.createLinearGradient(0,y+h+11,0,y+h+24);sg.addColorStop(0,'rgba(0,0,0,0.5)');sg.addColorStop(1,'rgba(0,0,0,0)');
+ g.fillStyle=sg;g.fillRect(x-9,y+h+11,w+18,13);
+ // 一楼防盗窗
+ if(wi.bars){g.fillStyle='rgba(22,22,26,0.9)';for(let bx=x-2;bx<=x+w+2;bx+=15)g.fillRect(bx,y-8,2.5,h+12);
+  g.fillRect(x-6,y-10,w+12,3);g.fillRect(x-6,y+h/2,w+12,2.5);}
+}
+function drawStair(g,s){
+ const x=475,y=s.y,w=50,h=70;
+ g.fillStyle='rgba(10,6,6,0.9)';g.fillRect(x-3,y-3,w+6,h+6);
+ if(s.b>0){
+  const c=mix([30,20,14],C_STAIR,s.b);const cx=x+w/2,cy=y+14;
+  g.fillStyle=rgba(mix([24,16,12],C_STAIR,s.b*0.72));g.fillRect(x+4,y+4,w-8,h-8);
+  const lg=g.createRadialGradient(cx,cy,1,cx,cy+8,40);lg.addColorStop(0,rgba(mix(c,[255,255,245],0.7)));lg.addColorStop(0.35,rgba(c,0.9));lg.addColorStop(1,rgba(c,0));
+  g.fillStyle=lg;g.fillRect(x+4,y+4,w-8,h-8);
+  // 楼梯斜梁与扶手
+  g.save();g.beginPath();g.rect(x+4,y+4,w-8,h-8);g.clip();
+  g.fillStyle='rgba(28,18,14,0.62)';g.beginPath();g.moveTo(x,y+h*0.95);g.lineTo(x+w,y+h*0.55);g.lineTo(x+w,y+h*0.72);g.lineTo(x,y+h*1.12);g.closePath();g.fill();
+  g.strokeStyle='rgba(28,18,14,0.6)';g.lineWidth=1.5;g.beginPath();g.moveTo(x,y+h*0.72);g.lineTo(x+w,y+h*0.32);g.stroke();
+  for(let i=0;i<4;i++){const xx=x+8+i*11;g.beginPath();g.moveTo(xx,y+h*0.72-(xx-x)/w*h*0.4);g.lineTo(xx,y+h*0.95-(xx-x)/w*h*0.4);g.stroke();}
+  g.restore();
+  g.fillStyle=rgba([255,250,235],0.95*s.b);g.beginPath();g.arc(cx,cy,2.6,0,7);g.fill();
+ }else{g.fillStyle=rgba(DARKWIN);g.fillRect(x+4,y+4,w-8,h-8);skyReflect(g,x+4,y+4,w-8,h-8,0.8);}
+ g.fillStyle='#2A1E1B';g.fillRect(x,y,w,4);g.fillRect(x,y+h-4,w,4);g.fillRect(x,y,4,h);g.fillRect(x+w-4,y,4,h);g.fillRect(x,y+h*0.42,w,2);
+ g.fillStyle='#474b55';g.fillRect(x-6,y+h+2,w+12,6);g.fillStyle='#646a76';g.fillRect(x-6,y+h+1,w+12,2);
+}
+function drawDoor(g){
+ // 雨棚
+ g.fillStyle='#50545e';g.fillRect(446,1090,108,11);g.fillStyle='#6a707c';g.fillRect(446,1089,108,2);
+ const sg=g.createLinearGradient(0,1101,0,1116);sg.addColorStop(0,'rgba(0,0,0,0.55)');sg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sg;g.fillRect(452,1101,96,15);
+ // 门洞与铁门
+ g.fillStyle='#0d0b0b';g.fillRect(466,1104,68,76);
+ g.fillStyle='#1c2421';g.fillRect(470,1108,60,72);
+ g.fillStyle='rgba(255,255,255,0.05)';g.fillRect(470,1108,60,1);
+ g.fillStyle='#161d1a';g.fillRect(499,1108,2,72);
+ // 门上小窗：楼道灯漏出来
+ g.fillStyle=rgba(mix([20,14,10],C_STAIR,0.42));g.fillRect(476,1116,18,14);g.fillRect(506,1116,18,14);
+ g.fillStyle='#1c2421';for(let i=0;i<3;i++){g.fillRect(480+i*5,1116,1.5,14);g.fillRect(510+i*5,1116,1.5,14);}
+ // 门灯
+ const lg=g.createRadialGradient(500,1106,1,500,1112,46);lg.addColorStop(0,'rgba(255,225,160,0.55)');lg.addColorStop(1,'rgba(255,210,122,0)');
+ g.fillStyle=lg;g.fillRect(450,1100,100,60);
+ g.fillStyle='rgba(255,236,190,0.9)';g.beginPath();g.arc(500,1104,2.4,0,7);g.fill();
+ // 台阶
+ g.fillStyle='#3d414a';g.fillRect(456,1172,88,8);g.fillStyle='#565b66';g.fillRect(456,1172,88,1.5);
+}
+function roofTop(g){
+ const col='#111a2c';g.fillStyle=col;g.strokeStyle=col;
+ // 太阳能热水器
+ g.fillRect(648,448-44,124,15);g.beginPath();g.arc(648,411.5,7.5,Math.PI/2,Math.PI*1.5);g.fill();g.beginPath();g.arc(772,411.5,7.5,-Math.PI/2,Math.PI/2);g.fill();
+ for(let x=652;x<770;x+=6){g.fillRect(x,419,4,27);}
+ g.lineWidth=2;g.beginPath();g.moveTo(652,446);g.lineTo(640,419);g.moveTo(768,446);g.lineTo(780,419);g.stroke();
+ g.fillStyle='rgba(90,110,150,0.20)';for(let x=653;x<770;x+=6)g.fillRect(x,420,1,25);
+ // 天线
+ const ax=262;g.lineWidth=2;g.beginPath();g.moveTo(ax,446);g.lineTo(ax,392);g.stroke();
+ g.lineWidth=1.5;for(const [yy,ww] of [[398,24],[409,32],[420,40]]){g.beginPath();g.moveTo(ax-ww/2,yy);g.lineTo(ax+ww/2,yy);g.stroke();}
+ g.lineWidth=1;g.beginPath();g.moveTo(ax,396);g.quadraticCurveTo(226,424,214,446);g.stroke();
+ // 屋顶出口小房
+ g.fillStyle=col;g.fillRect(452,420,96,28);g.fillRect(446,416,108,6);
+}
+
+// ---------- 渲染上半（天空 + 楼） ----------
+const up=mk(W,GY),ug=up.getContext('2d');
+drawSky(ug);drawFar(ug);drawMid(ug);
+// 远处树
+canopy(ug,70,1105,120,70,60,'#0d1424',11);canopy(ug,960,1090,140,80,70,'#0d1424',12);
+canopy(ug,300,1150,160,34,40,'#0c1322',13);canopy(ug,720,1150,170,34,40,'#0c1322',14);
+roofTop(ug);
+drawBuilding(ug);
+for(const wi of WINDOWS)drawWindow(ug,wi);
+for(const s of STAIRS)drawStair(ug,s);
+drawDoor(ug);
+// 近处的树：左侧一棵，只挡楼角和落水管，不挡窗
+{const T=mk(W,GY),tg=T.getContext('2d');drawTree(tg,96,GY,31);ug.save();ug.filter='blur(1.4px)';ug.drawImage(T,0,0);ug.restore();}
+
+// 窗口辉光（spec: 330×260 椭圆，lighter）
+function glowEllipse(g,cx,cy,rx,ry,col,a){g.save();g.translate(cx,cy);g.scale(1,ry/rx);const gr=g.createRadialGradient(0,0,0,0,0,rx);
+ gr.addColorStop(0,rgba(col,a));gr.addColorStop(0.25,rgba(col,a*0.45));gr.addColorStop(0.6,rgba(col,a*0.12));gr.addColorStop(1,rgba(col,0));
+ g.fillStyle=gr;g.globalCompositeOperation='lighter';g.beginPath();g.arc(0,0,rx,0,7);g.fill();g.restore();}
+for(const wi of WINDOWS){if(wi.b<0.2)continue;const k=wi.id==='L4'?1.2:1;glowEllipse(ug,wi.x+WINW/2,wi.y+WINH/2,165*k,130*k,wi.col,0.35*wi.b*0.55);}
+for(const s of STAIRS){if(s.b>0)glowEllipse(ug,500,s.y+35,90,90,C_STAIR,0.25*s.b);}
+glowEllipse(ug,LX+WINW/2,FY[4]+WINH/2,300,230,C_SOP,0.18);
+{ug.save();ug.globalCompositeOperation='screen';const cx=LX+WINW/2,cy=FY[4]+WINH/2;const hg=ug.createRadialGradient(cx,cy,60,cx,cy,420);
+ hg.addColorStop(0,'rgba(255,236,200,0.16)');hg.addColorStop(0.5,'rgba(255,220,170,0.05)');hg.addColorStop(1,'rgba(255,220,170,0)');ug.fillStyle=hg;ug.fillRect(0,0,W,GY);ug.restore();}
+
+// 泛光 + 胶片光晕（halation）
+function bloom(src){
+ const bw=W/2,bh=GY/2;const b=mk(bw,bh),bg=b.getContext('2d');bg.drawImage(src,0,0,bw,bh);
+ const id=bg.getImageData(0,0,bw,bh),d=id.data;
+ for(let i=0;i<d.length;i+=4){const l=(0.3*d[i]+0.59*d[i+1]+0.11*d[i+2])/255;const t=ss(0.55,0.95,l);d[i]*=t;d[i+1]*=t;d[i+2]*=t;}
+ bg.putImageData(id,0,0);
+ const out=mk(W,GY),og=out.getContext('2d');
+ og.filter='blur(22px)';og.globalAlpha=0.55;og.drawImage(b,0,0,W,GY);
+ og.filter='blur(60px)';og.globalAlpha=0.45;og.globalCompositeOperation='lighter';og.drawImage(b,0,0,W,GY);
+ og.filter='none';
+ const hal=mk(W,GY),hg=hal.getContext('2d');hg.filter='blur(5px)';hg.drawImage(b,0,0,W,GY);hg.filter='none';
+ hg.globalCompositeOperation='multiply';hg.fillStyle='#ff4a1c';hg.fillRect(0,0,W,GY);
+ return {bloom:out,hal};
+}
+{const {bloom:bl,hal}=bloom(up);ug.save();ug.globalCompositeOperation='lighter';ug.globalAlpha=0.55;ug.drawImage(bl,0,0);ug.globalAlpha=0.35;ug.drawImage(hal,0,0);ug.restore();}
+// 地面薄雾
+{const mg=ug.createLinearGradient(0,1090,0,GY);mg.addColorStop(0,'rgba(70,90,130,0)');mg.addColorStop(1,'rgba(70,90,130,0.18)');ug.fillStyle=mg;ug.fillRect(0,1090,W,GY-1090);}
+
+// ---------- 地面：积水与倒影 ----------
+const GH=H-GY;
+function reflection(src,blurPx,amp){
+ const s=mk(W,GY),sg=s.getContext('2d');sg.filter=`blur(${blurPx}px)`;sg.drawImage(src,0,0);sg.filter='none';
+ const o=mk(W,GH),og=o.getContext('2d');
+ for(let y=0;y<GH;y++){const Y=GY+y;const dx=amp*Math.sin(Y/14)+amp*0.35*Math.sin(Y/37+1.7)+amp*0.25*Math.sin(Y/6.1+0.4)*ss(0,300,y);
+  const sy=GY-1-y; if(sy<0)break; og.drawImage(s,0,sy,W,1,dx,y,W,1);}
+ // 水面倒影竖向拖长一点
+ const v=mk(W,GH),vg=v.getContext('2d');
+ for(let k=-3;k<=3;k++){vg.globalAlpha=k===0?1:0.22/Math.abs(k);vg.drawImage(o,0,k*2);} 
+ vg.globalAlpha=1;return v;
+}
+const refSharp=reflection(up,1.2,2.6), refSoft=reflection(up,12,6);
+// 积水形状（透视压扁）
+const mask=mk(W,GH),mg=mask.getContext('2d'),mid=mg.createImageData(W,GH);
+for(let y=0;y<GH;y++){const py=(GY+y)-HZ;for(let x=0;x<W;x++){
+ const u=(x-VPX)/py*2.2,v=2600/py;let n=fbm(u+5,v*0.9+2,4);
+ const cen=Math.exp(-Math.pow((x-500)/360,2))*(1-ss(200,420,y));
+ n+=0.36*cen;
+ const a=ss(0.53,0.57,n);const i=(y*W+x)*4;mid.data[i]=mid.data[i+1]=mid.data[i+2]=255;mid.data[i+3]=a*255;}}
+mg.putImageData(mid,0,0);
+function drawGround(g){
+ g.save();g.translate(0,GY);
+ const bg=g.createLinearGradient(0,0,0,GH);bg.addColorStop(0,'#141b2a');bg.addColorStop(0.35,'#0E1420');bg.addColorStop(1,'#0B101A');
+ g.fillStyle=bg;g.fillRect(0,0,W,GH);
+ // 湿水泥：模糊倒影
+ g.globalAlpha=0.30;g.drawImage(refSoft,0,0);g.globalAlpha=1;
+ // 地面纹理 + 透视接缝
+ const tx=g.getImageData(0,GY,W,GH);
+ g.restore();
+ const d=tx.data;for(let y=0;y<GH;y++){const py=(GY+y)-HZ;for(let x=0;x<W;x++){const n=fbm((x-VPX)/py*9+1,900/py*4,3);const f=0.82+0.3*n;const i=(y*W+x)*4;d[i]*=f;d[i+1]*=f;d[i+2]*=f;}}
+ g.putImageData(tx,0,GY);
+ g.save();g.translate(0,GY);
+ g.strokeStyle='rgba(0,0,0,0.25)';g.lineWidth=1;
+ for(let k=-12;k<=12;k++){const xb=VPX+k*190;g.beginPath();g.moveTo(VPX+(xb-VPX)*((GY+6-HZ)/(H-HZ)),6);g.lineTo(xb,GH);g.stroke();}
+ for(const z of [1.35,1.9,2.9,4.8]){const yy=(GY-HZ)*z-(GY-HZ);if(yy<GH){g.beginPath();g.moveTo(0,yy);g.lineTo(W,yy);g.stroke();}}
+ // 积水：清晰倒影
+ const t=mk(W,GH),tg=t.getContext('2d');
+ tg.fillStyle='#0a0f19';tg.fillRect(0,0,W,GH);
+ tg.globalAlpha=0.78;tg.drawImage(refSharp,0,0);tg.globalAlpha=1;
+ tg.globalCompositeOperation='destination-in';tg.drawImage(mask,0,0);
+ g.drawImage(t,0,0);
+ // 积水边缘一点反光
+ g.restore();
+}
+drawGround(ctx);
+ctx.drawImage(up,0,0);
+// 墙根散水（楼前一条水泥）
+ctx.fillStyle='#2a2e37';ctx.fillRect(BX0-10,GY,BX1-BX0+20,8);ctx.fillStyle='rgba(120,135,165,0.25)';ctx.fillRect(BX0-10,GY,BX1-BX0+20,1);
+// 倒影里的竖向光柱（每列一条，被水波打碎，只落在积水里）
+{const L=mk(W,GH),lg=L.getContext('2d');const rr=mulberry32(99);
+ for(const [cx,col] of [[LX+WINW/2,C_VOX],[RX+WINW/2,C_STR]]){
+  for(let y=6;y<420;y+=2){const f=(1-ss(20,420,y))*ss(0,40,y);const wob=0.55+0.45*Math.sin(y/5.3+rr()*1.2);
+   const ww=WINW*0.5*(0.55+0.45*rr());lg.fillStyle=rgba(col,0.26*f*wob);lg.fillRect(cx-ww/2+4*Math.sin((GY+y)/14),y,ww,2);}}
+ lg.filter='blur(5px)';lg.drawImage(L,0,0);lg.filter='none';
+ lg.globalCompositeOperation='destination-in';lg.drawImage(mask,0,0);
+ ctx.save();ctx.globalCompositeOperation='lighter';ctx.drawImage(L,0,GY);ctx.restore();}
+// 抖音界面区：底部渐暗
+{const bg=ctx.createLinearGradient(0,1420,0,H);bg.addColorStop(0,'rgba(8,11,18,0)');bg.addColorStop(0.35,'rgba(8,11,18,0.55)');bg.addColorStop(1,'rgba(8,11,18,0.92)');ctx.fillStyle=bg;ctx.fillRect(0,1420,W,H-1420);}
+
+// ---------- 调色：低饱和、抬黑，暗角 ----------
+{const id=ctx.getImageData(0,0,W,H),d=id.data;
+ for(let i=0;i<d.length;i+=4){let r=d[i],g=d[i+1],b=d[i+2];const l=0.3*r+0.59*g+0.11*b;
+  r=l+(r-l)*0.86;g=l+(g-l)*0.86;b=l+(b-l)*0.86; // 降饱和
+  r=6+r*0.975;g=8+g*0.97;b=12+b*0.955; // 抬黑，暗部偏青
+  d[i]=r;d[i+1]=g;d[i+2]=b;}
+ ctx.putImageData(id,0,0);
+ const vg=ctx.createRadialGradient(W/2,H*0.42,H*0.28,W/2,H*0.45,H*0.78);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,0.25)');
+ ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+
+// ---------- 字 ----------
+const SERIF='"Noto Serif CJK SC"',SANS='"Noto Sans CJK SC"';
+const CREAM=hex('#F4EAD8');
+function lyric(){
+ const s='我最亲爱的祖国',sp=10;ctx.font=`600 64px ${SERIF}`;ctx.textBaseline='alphabetic';
+ const ws=[...s].map(ch=>ctx.measureText(ch).width);const tot=ws.reduce((a,b)=>a+b,0)+sp*(s.length-1);
+ let x=480-tot/2;const LY=272;
+ [...s].forEach((ch,i)=>{
+  if(i===0){ctx.save();ctx.fillStyle=rgba(C_SOP,1);ctx.shadowColor=rgba(C_SOP,0.9);ctx.shadowBlur=12;ctx.fillText(ch,x,LY);ctx.shadowBlur=30;ctx.shadowColor=rgba([255,200,120],0.65);ctx.fillText(ch,x,LY);ctx.restore();}
+  else{ctx.save();ctx.fillStyle=rgba(CREAM,0.4);ctx.shadowColor='rgba(0,0,0,0.3)';ctx.shadowBlur=8;ctx.fillText(ch,x,LY);ctx.restore();}
+  x+=ws[i]+sp;});
+}
+function hint(){
+ const y=350;const a='顶楼这扇，等了 ',n='53',b=' 秒';
+ ctx.save();ctx.font=`500 38px ${SANS}`;const wa=ctx.measureText(a).width,wb=ctx.measureText(b).width;
+ ctx.font=`700 52px ${SANS}`;const wn=ctx.measureText(n).width;
+ let x=480-(wa+wn+wb)/2;
+ ctx.shadowColor='rgba(0,0,0,0.45)';ctx.shadowBlur=8;
+ ctx.font=`500 38px ${SANS}`;ctx.fillStyle=rgba(CREAM,0.88);ctx.fillText(a,x,y);x+=wa;
+ ctx.font=`700 52px ${SANS}`;ctx.fillStyle=rgba(C_SOP,1);ctx.shadowColor=rgba([255,205,130],0.7);ctx.shadowBlur=16;ctx.fillText(n,x,y+2);x+=wn;
+ ctx.shadowColor='rgba(0,0,0,0.45)';ctx.shadowBlur=8;ctx.font=`500 38px ${SANS}`;ctx.fillStyle=rgba(CREAM,0.88);ctx.fillText(b,x,y);
+ ctx.restore();
+}
+function text(t,x,y,font,col,a,align='left'){ctx.save();ctx.font=font;ctx.textAlign=align;ctx.fillStyle=rgba(col,a);ctx.shadowColor='rgba(0,0,0,0.45)';ctx.shadowBlur=8;ctx.fillText(t,x,y);ctx.restore();}
+lyric();
+hint();
+// 窗边小字
+ctx.save();ctx.shadowColor=rgba([255,210,140],0.8);ctx.shadowBlur=14;ctx.font=`500 28px ${SANS}`;ctx.fillStyle=rgba(C_SOP,1);ctx.fillText('女高音',150,578);ctx.restore();
+ctx.fillStyle=rgba(C_SOP,0.7);ctx.fillRect(238,569,8,1.5);
+text('演唱与画面含 AI 生成',60,184,`400 26px ${SANS}`,CREAM,0.7);
+{const sg=ctx.createLinearGradient(0,0,960,0);sg.addColorStop(0,'rgba(6,9,16,0.62)');sg.addColorStop(0.7,'rgba(6,9,16,0.45)');sg.addColorStop(1,'rgba(6,9,16,0)');
+ ctx.save();const vg=ctx.createLinearGradient(0,1262,0,1450);ctx.fillStyle=sg;
+ ctx.beginPath();ctx.rect(0,1262,960,190);ctx.clip();
+ const m=mk(W,200),mg2=m.getContext('2d');mg2.fillStyle=sg;mg2.fillRect(0,0,W,200);
+ mg2.globalCompositeOperation='destination-in';const fg=mg2.createLinearGradient(0,0,0,200);fg.addColorStop(0,'rgba(0,0,0,0)');fg.addColorStop(0.3,'rgba(0,0,0,1)');fg.addColorStop(0.8,'rgba(0,0,0,1)');fg.addColorStop(1,'rgba(0,0,0,0)');
+ mg2.fillStyle=fg;mg2.fillRect(0,0,W,200);ctx.drawImage(m,0,1256);ctx.restore();}
+{ctx.save();ctx.font=`700 40px ${SERIF}`;ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=10;
+ const a='弦乐 · 合唱改编：';ctx.fillStyle=rgba(CREAM,0.95);ctx.fillText(a,60,1330);const wa=ctx.measureText(a).width;
+ ctx.fillStyle=rgba(hex('#FFDDA6'),1);ctx.fillText('花开当富贵',60+wa,1330);ctx.restore();}
+{ctx.save();ctx.font=`400 26px ${SANS}`;ctx.shadowColor='rgba(0,0,0,0.5)';ctx.shadowBlur=8;let x=60;
+ const segs=['《我和我的祖国》','词 张藜 · 曲 秦咏诚','原唱 李谷一','AI 歌手演唱'];
+ segs.forEach((t,i)=>{if(i){ctx.fillStyle=rgba(CREAM,0.35);ctx.fillRect(x+13,1359,1.5,26);x+=28;}ctx.fillStyle=rgba(CREAM,0.78);ctx.fillText(t,i===0?x-6:x,1380);x+=ctx.measureText(t).width-(i===0?12:0);});
+ ctx.restore();}
+text('示意帧：楼体为程序占位，成片换成 TapNow 写实图',60,1425,`400 22px ${SANS}`,hex('#9AA4B8'),1);
+
+// ---------- 胶片颗粒 ----------
+{const id=ctx.getImageData(0,0,W,H),d=id.data;const r=mulberry32(5);
+ for(let i=0;i<d.length;i+=4){const n=(r()+r()-1)*255*0.03*1.4;d[i]+=n;d[i+1]+=n;d[i+2]+=n;}
+ ctx.putImageData(id,0,0);}
+
+// ---------- 可选：抖音界面遮挡检查 ----------
+if(SHOW_UI){
+ ctx.save();
+ ctx.fillStyle='rgba(0,0,0,0.25)';ctx.fillRect(0,0,W,154);
+ ctx.fillStyle='rgba(255,255,255,0.8)';ctx.font=`500 34px ${SANS}`;ctx.textAlign='center';
+ ctx.fillText('关注      推荐',540,120);
+ const bx=1010;ctx.fillStyle='rgba(255,255,255,0.85)';
+ const icon=(y,lab)=>{ctx.globalAlpha=0.8;ctx.beginPath();ctx.arc(bx,y,34,0,7);ctx.fill();ctx.globalAlpha=0.9;ctx.font=`400 24px ${SANS}`;ctx.fillText(lab,bx,y+66);};
+ ctx.globalAlpha=0.8;ctx.beginPath();ctx.arc(bx,1000,44,0,7);ctx.fill();
+ icon(1140,'点赞');icon(1270,'评论');icon(1400,'收藏');icon(1530,'分享');
+ ctx.beginPath();ctx.arc(bx,1680,38,0,7);ctx.fill();
+ ctx.globalAlpha=0.9;ctx.textAlign='left';ctx.font=`500 34px ${SANS}`;ctx.fillText('@花开当富贵',40,1600);
+ ctx.font=`400 30px ${SANS}`;ctx.fillText('国庆清晨，一栋老楼的八扇窗一起唱《我和我的祖国》',40,1650);
+ ctx.fillText('#我和我的祖国 #国庆节快乐 #万家灯火',40,1695);
+ ctx.font=`400 26px ${SANS}`;ctx.fillText('♪ 原声 - 花开当富贵',40,1750);
+ ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(0,1800,W,120);
+ ctx.strokeStyle='rgba(255,90,90,0.9)';ctx.setLineDash([12,10]);ctx.lineWidth=3;ctx.strokeRect(60,154,870,1498-154);
+ ctx.restore();
+}
+document.title='done';
+</script></body></html>
