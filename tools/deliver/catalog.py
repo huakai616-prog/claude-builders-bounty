@@ -208,6 +208,14 @@ WORKS = [
         questions=[]),
     # ---- 视频与动画 --------------------------------------------------------
     dict(
+        slug="guoqing-video", section="media", ref=None,
+        title="我和我的祖国 · 国庆抖音版", subtitle="竖屏 83 秒（歌曲 1:32 到结尾）· 手写谱逐字同步",
+        artist="", key="", tempo="", instrumentation="",
+        src="wohewodezuguo/video/成片", layout="keep",
+        main={}, pdf_kind=None, audio=None, video="我和我的祖国_国庆版_竖屏.mp4",
+        note="可以直接发抖音。压缩包里有封面图和「发布说明.txt」（标题、简介、话题、发布时间）。发布时在「高级设置 → 作者声明」勾选「内容由 AI 生成」。",
+        questions=[]),
+    dict(
         slug="dengchao", section="media", ref="origin/claude/elegant-pascal-83rncr",
         title="《等潮》视频制作包", subtitle="泪海 · 抖音竖屏 · TapNow 分镜与提示词",
         artist="", key="", tempo="", instrumentation="",

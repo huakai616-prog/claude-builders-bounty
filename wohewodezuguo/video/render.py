@@ -56,9 +56,17 @@ def frame_data(t0, t1, sc):
     ts = t0 + np.arange(n) / FPS
     # score position: through every engraved segment, extended past the end
     tk = [a for a, _ in F.S["tmap"]] + [F.S["end"]["t"], F.S["end"]["t"] + 10]
-    xk = [b for _, b in F.S["tmap"]] + [F.S["width"] - 60, F.S["width"] + 400]
+    # ...and come to rest on the final barline
+    xk = [b for _, b in F.S["tmap"]] + [F.S["width"] - 60, F.S["width"] - 60]
     xs = pchip(tk, xk, ts)
     s = sc.s
+    # ending: ease to a stop with the final barline 330 px right of the
+    # playhead, so the last chord 「歌」 and its fermata stay on screen
+    x_stop = F.S["width"] - 60 - 330 / s
+    x_a = x_stop - 500
+    over = np.maximum(xs - x_a, 0)
+    xs = np.where(xs <= x_a, xs,
+                  x_a + (x_stop - x_a) * (1 - np.exp(-over / (x_stop - x_a))))
     body_x = sc.label_w + sc.hdr_w
     tx = (sc.play_x - sc.x - body_x) - xs * s
     # silent voices fade (0.62), eased
@@ -66,8 +74,11 @@ def frame_data(t0, t1, sc):
     for pid in ROWS:
         # lift a little before an entry, fade a little after the last note
         notes = F.T["parts"][pid]["notes"]
-        target = np.array([0 if any(nt["start"] - .35 <= t < nt["end"] + .3
-                                    for nt in notes) else .62 for t in ts])
+        end = max(nt["end"] for r in ROWS          # after the last sung
+                  for nt in F.T["parts"][r]["notes"]) - .2   # note: all lit
+        target = np.array([0 if t >= end or any(
+            nt["start"] - .35 <= t < nt["end"] + .3 for nt in notes)
+            else .62 for t in ts])
         v = np.empty_like(target)
         v[0] = target[0]
         k = 1 - np.exp(-1 / (FPS * .10))
