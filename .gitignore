@@ -2,3 +2,8 @@ __pycache__/
 *.pyc
 tools/deliver/dist/
 wohewodezuguo/video/proto/*/fontpkg/
+wohewodezuguo/video/frames/
+wohewodezuguo/video/strip/*.spos
+wohewodezuguo/video/strip/*.mpos
+wohewodezuguo/video/strip/excerpt.musicxml
+wohewodezuguo/video/strip/strip.mss
