@@ -96,7 +96,7 @@ python3 <song>/build.py --pdf     # MusicXML, MIDI, SRT and the Hollywood PDF
 bash tools/setup.sh   # quiet, idempotent; prints one line per component
 ```
 
-It installs whatever is missing: `pip install music21 mido pypdf cffi` (cffi: the system cryptography needs it for pypdf); `apt-get install fonts-noto-cjk fonts-ebgaramond fonts-ebgaramond-extra poppler-utils fluidsynth fluid-soundfont-gm ffmpeg libxml2-utils`; MuseScore 4; the MusicXML 4.0 schema for `qa.py xml`. All installer output goes to a log file; read the log only when a line says FAILED (the script then prints its tail).
+It installs whatever is missing: `pip install music21 mido pypdf cffi` (cffi: the system cryptography needs it for pypdf); `apt-get install --no-install-recommends fonts-noto-cjk fonts-ebgaramond fonts-ebgaramond-extra poppler-utils fluidsynth fluid-soundfont-gm ffmpeg libxml2-utils libegl1 libopengl0` (the MuseScore 4 AppImage needs `libegl1` and `libopengl0` and does not bundle them; the old command only worked because fluidsynth's recommended Qt packages happened to pull them in); MuseScore 4, checked by actually starting it; Chromium is only checked; the MusicXML 4.0 schema for `qa.py xml` (`~/.cache/musicxml/`). All installer output goes to `${TMPDIR:-/tmp}/setup-music.log`; read the log only when a line says FAILED (the script then prints its tail).
 
 - **MuseScore 4**: `hollywood.find_ms4()` downloads the 4.4.4 AppImage to `/opt/ms4` and extracts it if it is missing (about 170 MB, via github.com releases). Override with `MSCORE4=/path`.
 - **Chromium**: found under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`, or set `CHROME=/path`.
@@ -136,11 +136,12 @@ On 11 × 17 at 7.2 mm staves:
 ## QA before delivering (look at every page)
 
 ```bash
-python3 tools/hollywood/qa.py score <song>/output/<歌名>_副歌_总谱.pdf -v   # layout report, PROBLEM lines
+python3 tools/hollywood/qa.py score <song>/output/<歌名>_副歌_总谱.pdf -v   # layout report, PROBLEM lines (exit 0 = clean)
 python3 tools/hollywood/qa.py pages <song>/output/<歌名>_副歌_总谱.pdf <scratch>/pages   # PNGs; lists pages new or changed
 python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # MusicXML 4.0 schema
 ```
 
+- `qa.py` has its usage in its docstring (`python3 tools/hollywood/qa.py -h`). It also works on a parts PDF (told apart by page size). It takes the bar count and the part list from the one `*.musicxml` next to the PDF (or `--musicxml F`). `--systems N` sets the systems-per-page target when a score has fewer on purpose (我和我的祖国: 8 staves, 2 per page).
 - Run `score` after every render and fix what it reports before you look at pages. It reads the boxed bar numbers back from the PDF and lists the bars of every system on every page (`-v`); it flags missing bar numbers, one-bar systems, pages without 3 systems, a lonely last system, and missing headers, footers, page numbers, cover credits and instrumentation.
 - Then look at every page that `pages` lists under "look at" (all pages the first time). A page it reports unchanged is pixel-identical to the version you already looked at in an earlier round, so it needs no second look. By delivery, every page must have been looked at in its final form.
 - The eye checks the script cannot do:
