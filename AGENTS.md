@@ -18,21 +18,22 @@
 
 **用户在「编曲交付中心」找文件**：https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN
 - 已经钉在用户 claude.ai 的左侧边栏。
-- 用户要过把它放进 Mac 程序坞：页面底部（歌曲列表下面）的「放进 Mac 程序坞」卡片给一个安装包和一行终端命令，装好后点程序坞图标就用浏览器打开交付中心。用户问怎么装，就指这张卡片（源文件和做法见 `.claude/skills/hollywood-score/references/mac-app.md`）。
+- 用户要过把它放进 Mac 程序坞：页面底部（歌曲列表下面）的「放进 Mac 程序坞」卡片给一个安装包和一行终端命令，装好后点程序坞图标就用浏览器打开交付中心。用户问怎么装，就指这张卡片：卡片默认折叠，先点开；先点「下载 Mac 应用」，再点「复制安装命令」粘贴到终端。装不上，或要改这个应用，读 `.claude/skills/hollywood-score/references/mac-app.md`。
 - 每首歌点「下载到电脑」，就得到一个整理好的 zip。
 - 用户说过「我不太会用 GitHub」，所以别让用户去 GitHub 或分支里找文件。
 - 每次交付都要把作品加进交付中心，回复第一句给这个链接。步骤见 `.claude/skills/hollywood-score/references/delivery-center.md`。
-- GPT / Codex 发布不了这个页面，就在回复里写明「请 Claude 把它加进交付中心」。
+- GPT / Codex 发布不了这个页面：照 `.claude/skills/hollywood-score/references/delivery-center.md` 开头「GPT / Codex」那段做能做的几步（catalog 条目、打包检查、提交合并），然后在回复里写明「请 Claude 把它加进交付中心」。
 
 ## 什么时候读哪个文件
 
 | 什么时候 | 读 |
 |---|---|
 | 做新歌，或改哪首歌的总谱、PDF、MIDI | `.claude/skills/hollywood-score/SKILL.md`（交付格式和好莱坞模板。Claude 用 skill 加载，GPT / Codex 直接读） |
-| 动笔构思新歌之前、写完对照之前 | `docs/编配手法索引.md`（以前每首歌用过的织体、和声、前奏、高潮、尾奏） |
-| 用户提到某首旧歌，或要改它 | `docs/项目地图.md` 里那一行（编制、调、分支、待确认的事），再读那首歌目录里的 `README.md` |
-| 用户发的是五线谱钢琴谱，或要纯器乐 | `docs/钢琴谱改编.md`，再加 SKILL.md 的 `references/instrumental.md` |
-| 作品做完，要放进交付中心 | `.claude/skills/hollywood-score/references/delivery-center.md` |
+| 动笔构思新歌之前、写完对照之前 | `docs/编配手法索引.md`（简表：用过两次以上的手法，和每首歌的织体、和声、前奏、高潮、尾奏）；看着撞了再看 `docs/编配手法索引_详细.md` |
+| 用户提到某首旧歌，或要改它、确认它的待确认事项、重出它的 PDF | `docs/项目地图.md` 里那一行（编制、调、分支、待确认的事）和「改旧歌时」一节，再读那首歌目录里的 `README.md` |
+| 用户发的是五线谱钢琴谱，或要纯器乐 | `docs/钢琴谱改编.md`，再加 `.claude/skills/hollywood-score/references/instrumental.md` |
+| 作品做完，要放进交付中心；或用户问交付中心怎么用（选文件、删除和恢复、单个文件为什么下载成 zip） | `.claude/skills/hollywood-score/references/delivery-center.md` |
+| 用户问怎么放进 Mac 程序坞、装不上 | `.claude/skills/hollywood-score/references/mac-app.md` |
 | 要驱动 ACE Studio，或用户问怎么在 ACE 里渲染 | `docs/ACE-Studio.md` |
 
 ## 项目地图（精简版）
@@ -41,11 +42,11 @@
 
 | 歌 | 目录 | 分支 | 状态 |
 |---|---|---|---|
-| 泪海（副歌） | `leihai/` | `main` | 已完成，旧版 PDF 没有署名 |
-| 甲乙丙丁（副歌） | `jiayibingding/` | `claude/loving-bell-wsnmgy` | 已完成 |
-| 茉莉花 | `jasmine-flower/` | `claude/sleepy-wozniak-g09dmt` | 已完成，单个 `.mxl` |
+| 泪海（副歌） | `leihai/` | `main` | 已完成，用户已在 ACE 渲染、Logic 混音（唱两遍）；旧版 PDF 没有署名 |
+| 甲乙丙丁（副歌） | `jiayibingding/` | `claude/loving-bell-wsnmgy` | 已完成；PDF 不是好莱坞模板 |
+| 茉莉花 | `jasmine-flower/` | `claude/sleepy-wozniak-g09dmt` | 已完成，单个 `.mxl`；没有好莱坞 PDF |
 | 我不难过（副歌） | `wobunanguo/` | `main` | **反面教材**：用户说难听，**不用再重做**，也不要再重出 PDF、再问它的低八度 |
-| 情歌（最后一遍副歌） | `qingge/` | `claude/serene-darwin-2l4jy4` | 已完成，有待确认 |
+| 情歌（最后一遍副歌） | `qingge/` | `claude/serene-darwin-2l4jy4` | 已完成，有待确认；PDF 是 LilyPond A4 |
 | 茶汤（副歌） | `chatang/` | `main` | 已完成，有待确认 |
 | 大东北我的家乡（全曲） | `dadongbei/` | `claude/determined-archimedes-93zrgx` | 已完成，PDF 没有封面和署名 |
 | 我和我的祖国（全曲，SATB + 弦乐） | `wohewodezuguo/` | `main` | 已完成，有待确认 |
@@ -53,11 +54,11 @@
 | Unravel（纯器乐） | `unravel/` | `main` | 已完成，有待确认 |
 | 冬风（纯器乐） | `dongfeng/` | `main` | 已完成，有待确认 |
 | 诀别书（纯器乐，弦乐五重奏） | `juebieshu/` | `claude/determined-galileo-0epaj3` | 已完成，还没进交付中心 |
-| 视频：我和我的祖国 × 国庆抖音 / 泪海 ×《等潮》/ Clawd | `wohewodezuguo/video/`、`leihai/video/`、`claude-piano-pet/` | 见 `docs/项目地图.md` | 我和我的祖国视频在方案阶段，等用户选 |
+| 视频：我和我的祖国 × 国庆抖音 / 泪海 ×《等潮》/ Clawd | `wohewodezuguo/video/`、`leihai/video/`、`claude-piano-pet/` | 见 `docs/项目地图.md` | 国庆抖音成片已做完、已进交付中心；《等潮》等用户在 TapNow 生成镜头 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
 - 不在 `main` 上的歌，成品也都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支），诀别书除外。合并或交付以后，这张表和 `docs/项目地图.md` 都要更新。
-- 新歌如果是多个人声声部或 6/8、9/8 这类复合拍子，代码从 `wohewodezuguo/`（`build.py` + `engine.py`）接；单人声 4/4 的从 `chatang/build.py` 接。
+- 新歌如果是多个人声声部或 6/8、9/8 这类复合拍子，代码从 `wohewodezuguo/`（`build.py` + `engine.py`）接；单人声 4/4 的从 `chatang/build.py` 接（它有长音上的渐强渐弱修复、`print_hair`、`mscx_hook`、8va）。`wohewodezuguo/engine.py` 还支持 MIDI 里的 br 气口、拨弦/拉弦、延长记号，单人声的歌要用这些也从它抄；那首歌的做法经过两轮多视角审稿。
 - 每首歌的目录里都有自己的 `README.md`，写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
 
@@ -77,7 +78,7 @@
    - 封面；首页标题栏；每页页眉页脚和「第几页 / 共几页」；
    - 每小节有方框小节号；排练号用字母加框，旁边写段落名；
    - MuseScore 4 排版；尽量每页 3 行，不要单小节一行，最后一页不要只剩孤零零一行。
-4. 交付前先跑 `python3 tools/hollywood/qa.py score <PDF> -v`，把它报的问题改掉；再逐页看 PNG（`qa.py pages` 每轮只列出新出现或变过的页，没变的页和上一轮看过的一模一样，不用重看；交付时每一页的最终版都要看过），按 SKILL.md 的检查清单查一遍。
+4. 交付前先跑 `python3 tools/hollywood/qa.py score <PDF> -v`，把它报的问题改掉；再逐页看 PNG：`qa.py pages <PDF> <草稿目录>` 出图并列出要看的页，看完用 `qa.py seen <草稿目录>` 记下。之后每轮只列出还没看过的页（和看过的某一版一模一样的页不用重看；没标记看过的页每轮都会再列出来），所以交付时每一页的最终版都看过。按 SKILL.md 的检查清单查一遍。
 
 ## 用户怎么提需求
 
@@ -90,7 +91,7 @@
   1. 原曲本来的编曲、律动、速度感、情绪起伏和歌手的气质是什么（孙燕姿不是许茹芸，快歌不是慢歌）。
   2. 这首歌的旋律和歌词里有什么独特的东西，可以让弦乐来放大（节奏型、特别的音程、某个字、某个转折）。
   3. 写下这首的编配构想：织体用什么、和声色彩走什么方向、高潮怎么来、前奏尾奏的点子从哪里来。在回复和 README 里说清楚，这首和以前的作品有什么**不同**。
-  4. 下笔后对照已经做过的歌：读 `docs/编配手法索引.md`（每首歌的织体、和声、前奏、高潮、尾奏和标志性手法都在里面），同一个手法不要连着出现；真用到了常见手法，要能说出为什么这首歌需要它。索引里看着撞了，再去读那首歌的 `README.md`「编配思路」细看。
+  4. 下笔后对照已经做过的歌：读 `docs/编配手法索引.md`（用过两次以上的手法，和每首歌的织体、和声、前奏、高潮、尾奏、标志性手法），同一个手法不要连着出现；真用到了常见手法，要能说出为什么这首歌需要它。看着撞了，先看 `docs/编配手法索引_详细.md` 那首歌的一节，还拿不准再读它的 `README.md`「编配思路」（不在 `main` 上的歌用 `git show origin/<分支>:<目录>/README.md`）。
   5. 渲染试听 mp3 自己回头检查，问的是「好不好听、像不像这首歌」，不只是「有没有冲突和平行」。`--check` 干净只说明没有错音，不说明好听。
 - 调：用户指定最终调就整体移过去（泪海原谱 1=D，交付 F）。泪海、甲乙丙丁、茉莉花是 F 大调；我不难过用户没指定，问了之后选的是原调 ♭E。**用户没说调就先问**，别默认 F。
 - 下面两条是**用户用词的意思**，是方向，不是每首都套的公式：
@@ -103,16 +104,16 @@
 
 1. **转写**。放大截图逐小节读，规则如下：
    - 下划线数定时值：一条线是八分音符，两条线是十六分音符。
-   - 数字下方有点是低八度，上方有点是高八度。中音区的 1 记在第 4 八度，例如 1=D 时 1 是 D4。
+   - 数字下方有点是低八度，上方有点是高八度。中音区的 1 记在第 4 八度，例如 1=D 时 1 是 D4。调很高时按人声音区选八度，并在回复里说明（茶汤 1=A 记作 A3，待用户确认）。
    - 弧线连同音是连音线，连不同音是圆滑线（拖腔，一个字唱多个音）。
    - 数字左上角的小字是倚音。
    - 歌词对齐到音符。
    - 每小节加起来必须正好 4 拍。
 2. 移到用户要的调，检查人声音区。
-3. 先定和声骨架（每半小节一个和弦），再写声部。弦乐的旋律只在人声的长音和气口里动，不抢词。
+3. 先定和声骨架（每半小节一个和弦），再写声部。弦乐的旋律只在人声的长音和气口里动，不抢词。拨弦、弱音器 ACE 认不出来（见「踩过的坑」）。
 4. 把数据写进 `build.py`，运行 `--check` 直到没有任何输出，再生成文件。
 5. 渲染 PDF 和 PNG，用 `qa.py` 查过，再自己看一遍排版（见「交付标准」第 4 条）。
-6. 写目录 README，在 `docs/编配手法索引.md` 里给这首歌加一段，提交并推送。
+6. 写目录 README；在 `docs/编配手法索引.md` 第三节给这首歌加一段（标志 / 织体 / 和声 / 前奏 / 推进与高潮 / 尾奏，格式照前面几首），用到了第一节的手法就把歌名补进那一条；更新上面的精简表和 `docs/项目地图.md`；提交并推送。
 
 ## 交付物（每首歌一个目录，以泪海为例）
 
@@ -132,6 +133,7 @@
 
 ```bash
 bash tools/setup.sh               # 新的云端容器先跑一次：装依赖、字体、MuseScore 4、MusicXML schema，只打印几行
+                                  # 在用户的 Mac 上它只列出缺什么（pip3 install music21 mido pypdf cffi；brew install poppler fluid-synth ffmpeg）
 python3 leihai/build.py --check   # 只检查：音域、小二度/小九度冲突（含人声）、平行五八度
 python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT，并回读核对每小节 4 拍
 ```
@@ -142,8 +144,8 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   - `~` 连音线，`>` 重音，`( )` 圆滑线；
   - `=字` 歌词，`g:G4` 倚音。
 - 改完必须先 `--check` 干净（没有 RANGE / CLASH / PARALLEL 输出），再生成。
-- **好莱坞总谱 PDF**：`python3 <歌>/build.py --pdf`（需要 MuseScore 4 和 Chromium，`tools/setup.sh` 会装好；细节见 `.claude/skills/hollywood-score/SKILL.md`）。茶汤、我不难过已经接好，新歌照 `chatang/build.py` 接（**只抄代码和流程，不抄里面的音乐数据**）。
-- mp3 不在 `build.py` 里（我和我的祖国的 `build.py` 有 `write_mp3`），需要另外渲染：
+- **好莱坞总谱 PDF**：`python3 <歌>/build.py --pdf`（需要 MuseScore 4 和 Chromium：MuseScore 4 由 `tools/setup.sh` 装，Chromium 它只检查，云端在 `/opt/pw-browsers`，找不到就设 `CHROME=/path`；细节见 `.claude/skills/hollywood-score/SKILL.md`）。茶汤、我不难过已经接好，新歌照 `chatang/build.py` 接（**只抄代码和流程，不抄里面的音乐数据**）。
+- 单人声歌的 mp3 不在 `build.py` 里，需要另外渲染（我和我的祖国、土耳其进行曲、冬风、Unravel 的 `build.py` 自带，Unravel 是 `--mp3`）：
 
   ```bash
   cd leihai/output
@@ -151,8 +153,8 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   ffmpeg -y -i /tmp/p.wav -af loudnorm=I=-16:TP=-1.5 -b:a 160k 粗略试听_GM音色_非ACE效果.mp3
   ```
 
-- 看排版：`python3 tools/hollywood/qa.py score <PDF> -v`（每页每行是哪几小节、有什么问题）和 `qa.py pages <PDF> <草稿目录>`（按页出白底 PNG，列出要看的页）。泪海旧版 MuseScore 3 预览的做法见 `docs/项目地图.md` 末尾。
-- MusicXML 合法性以 MusicXML 4.0 schema 为准：`python3 tools/hollywood/qa.py xml <文件>`（用 xmllint；schema 从 w3c/musicxml 仓库下载，连同它 import 的 `xml.xsd` / `xlink.xsd` 缓存在 `~/.cache/musicxml/`）。MuseScore 3 的「not a valid MusicXML file」提示不可靠，不要以它为准。
+- 看排版：`python3 tools/hollywood/qa.py score <PDF> -v`（每页每行是哪几小节、有什么问题）和 `qa.py pages <PDF> <草稿目录>` / `qa.py seen <草稿目录>`（按页出白底 PNG、列出要看的页、记下看过的页）。草稿目录放在仓库外（会话的 scratchpad，或 `/tmp/qa-<歌>`），绝不要放进 `<歌>/output/`。泪海旧版 MuseScore 3 预览的做法见 `docs/项目地图.md` 末尾。
+- MusicXML 合法性以 MusicXML 4.0 schema 为准：`python3 tools/hollywood/qa.py xml <文件>`（用 xmllint；schema 从 w3c/musicxml 仓库下载，连同它 import 的 `xml.xsd` / `xlink.xsd` 缓存在 `~/.cache/musicxml/`；没有网络时把这三个文件手动放进去，`xml.xsd` / `xlink.xsd` 也可以写最小的桩）。MuseScore 3 的「not a valid MusicXML file」提示不可靠，不要以它为准。
 
 ## 踩过的坑
 
@@ -163,17 +165,19 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **人声长音附近的弦乐**：弦乐和人声的长音不要构成小九度。例如人声 C4 持续时，B♭m6 的 D♭ 只能放在 C4 下面，放在上面就成了小九度。`--check` 会抓出来。
 - **歌词 MIDI**：每个字一个 lyrics meta 事件；拖腔音符写 `-`；倚音带那个字，主音写 `-`。
 - **平行五八度检查**：只比较各声部的最高音。高潮处两把小提琴有意八度齐奏的地方，写进 `check()` 的 `allow` 白名单。
-- **圆滑线从连音线的后半个音开始**（例如 `Bb4/1~=时 (Bb4/1 Ab4/1)`）：泪海版 `merged_notes()` 会漏掉后面拖腔音符的 `-` 歌词。`wobunanguo/build.py` 已修，新歌从它复制。
+- **圆滑线从连音线的后半个音开始**（例如 `Bb4/1~=时 (Bb4/1 Ab4/1)`）：泪海版 `merged_notes()` 会漏掉后面拖腔音符的 `-` 歌词。`wobunanguo/build.py` 和 `chatang/build.py` 都已修，新歌从 `chatang/build.py` 复制。
 - **MuseScore 4 排 PDF 的坑**：直接导入 MusicXML 时 `-S` 样式不生效、导入的署名位置会乱，`tools/hollywood/hollywood.py` 都已经处理了（详见 SKILL.md 的 `references/template-internals.md`）。pypdf 报 `_cffi_backend` 时 `pip install cffi`（`tools/setup.sh` 已装）。
 - **MS4 一行放不下时**：它会把最后一两小节挤到下一行单独成行，调小 `measureSpacing` 没用（已经是最小宽度）。先用 `qa.py score <PDF> -v` 看实际分行（它从 `pdftotext -bbox` 读方框小节号、按纵坐标分组）。解决办法是每行少放小节，或者去掉占宽的东西（土耳其进行曲把大提琴的三个倚音琶音改成了琶音和弦）。
 - **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
-- 纯器乐、钢琴谱转弦乐、LilyPond 排谱的坑见 `docs/钢琴谱改编.md`；给用户 Mac 写 shell 脚本的坑（bash 3.2 吞中文字节）见 `.claude/skills/hollywood-score/references/mac-app.md`；ACE 的坑见 `docs/ACE-Studio.md`。
+- **拨弦、弱音器**：ACE 的智能模式不会从 MIDI 推出来，要用户手动改。要导给 ACE 的编配尽量不用；用了就在 README 和 `catalog.py` 的 `howto` 里写明第几小节要在 ACE 里手动改演奏法（照土耳其进行曲）。
+- **music21 的六连音**会被写成 3:2、按半小节连梁，MS4 也不认 `show-number="none"`：歌里有六连音、或要藏连音数字时，照 `dongfeng/`（`engine.py`、`build.py` 的 `_mscx_hook`）做，见 `docs/钢琴谱改编.md`「冬风的做法」。
+- **给用户 Mac 写 shell 脚本**：macOS 的 bash 3.2 会把紧跟在变量后面的中文字节吞进变量名，变量后面紧跟中文一律写 `${NAME}`（复现方法见 `.claude/skills/hollywood-score/references/mac-app.md`）。
+- 纯器乐、钢琴谱转弦乐、LilyPond 排谱的坑见 `docs/钢琴谱改编.md`；ACE 的其他事见 `docs/ACE-Studio.md`。
 
 ## 待办 / 待确认
 
-- **泪海唱几遍**：副歌目前唱两遍，第一遍抒情，第二遍高燃。用户还没确认要不要只唱一遍。如果只要一遍，把第 14–24 小节换成直接进尾奏的结尾（见 `leihai/README.md` 末尾）。
-- **泪海 ACE Studio 渲染**：只能在用户的 Mac 上做（见 `docs/ACE-Studio.md`）。
+- **泪海唱几遍**：副歌目前唱两遍，第一遍抒情，第二遍高燃。用户还没确认要不要只唱一遍。如果只要一遍，把第 14–24 小节换成直接进尾奏的结尾（见 `leihai/README.md` 末尾）。改之前先看 `docs/项目地图.md`「改旧歌时」（已经渲染混音过、视频按它对的时间）。
 - **合并分支**：用户已经授权：每次交付检查通过后，由 AI 自己开 PR 合并进 `main`，不用再问。别的对话建的旧分支里的歌，合并前要注意 AGENTS.md 冲突，只合并歌曲目录。
 - 其他每首歌待用户确认的事项见 `docs/项目地图.md`。
 

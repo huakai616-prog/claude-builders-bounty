@@ -24,10 +24,15 @@ pN is always the PDF page (a full score's cover is p1).
 
   qa.py pages <pdf> <dir>
       Renders the pages at 90 dpi on white into <dir>/round-K/pNN.png (K =
-      next free number), compares the decoded pixels with round K-1 and
-      prints the round's path, "look at:" (new or changed pages) and
-      "unchanged:".  Look at every "look at" page of every round, and each
-      page has been seen in its final form.
+      next free number) and prints the round's path, "look at:" (pages
+      whose decoded pixels you have not marked as seen) and "unchanged:"
+      (pixel-identical to a page you marked as seen).  Keep <dir> outside
+      the repo (e.g. the session scratchpad or /tmp/qa-<song>).
+  qa.py seen <dir> [pN ...]
+      After looking at the "look at" pages of the latest round, mark them
+      as seen (default: every page of that round; or only the pages
+      named).  A page you never marked stays "look at" in every later
+      round, so a rendered-but-unviewed round can never hide a page.
 
   qa.py xml <file.musicxml|.mxl>  "OK: valid" or the first 20 xmllint errors
   qa.py fetch-schema            only fill the schema cache (tools/setup.sh)
@@ -426,27 +431,66 @@ def cmd_pages(args):
         png = os.path.join(out, f"p{n:0{width}d}.png")
         os.replace(os.path.join(out, f), png)
         pages[str(n)] = png_hash(png)
-    # compare with the last round of the same PDF (other PDFs may share dir)
-    prev, since = {}, None
+    # pages whose pixels were marked seen (qa.py seen) need no second look
+    seen = load_seen(args.dir).get(pdf, {})
+    prev, since = {}, None  # last round of the same PDF (other PDFs may share dir)
     for k in reversed(done):
-        try:
-            with open(os.path.join(args.dir, f"round-{k}", "pages.json")) as fh:
-                rec = json.load(fh)
-        except (OSError, ValueError):
-            continue
-        if rec.get("pdf") == pdf and isinstance(rec.get("pages"), dict):
+        rec = load_round(args.dir, k)
+        if rec and rec.get("pdf") == pdf:
             prev, since = rec["pages"], k
             break
     with open(os.path.join(out, "pages.json"), "w") as fh:
         json.dump({"pdf": pdf, "pages": pages}, fh)
     show = lambda ns: " ".join(f"p{n}" for n in ns) or "none"
-    print(f"round: {out}" + (f" (compared with round-{since})" if since
-                             else " (no earlier round of this PDF)"))
-    print("look at:", show(n for n in pages if prev.get(n) != pages[n]))
-    print("unchanged:", show(n for n in pages if prev.get(n) == pages[n]))
+    print(f"round: {out}" + (f" (previous round of this PDF: round-{since})"
+                             if since else " (no earlier round of this PDF)"))
+    look = [n for n in pages if pages[n] not in seen.get(n, [])]
+    print("look at:", show(look))
+    print("unchanged:", show(n for n in pages if n not in look))
     if set(prev) - set(pages):
         print("gone (the PDF is shorter now):",
               show(sorted(set(prev) - set(pages), key=int)))
+    if look:
+        print(f"after looking at them: qa.py seen {args.dir}")
+    return 0
+
+
+def load_round(d, k):
+    try:
+        with open(os.path.join(d, f"round-{k}", "pages.json")) as fh:
+            rec = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    return rec if isinstance(rec.get("pages"), dict) else None
+
+
+def load_seen(d):
+    try:
+        with open(os.path.join(d, "seen.json")) as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return {}
+
+
+def cmd_seen(args):
+    done = sorted(int(m.group(1)) for d in os.listdir(args.dir)
+                  if (m := re.fullmatch(r"round-(\d+)", d))) \
+        if os.path.isdir(args.dir) else []
+    rec = load_round(args.dir, done[-1]) if done else None
+    if not rec:
+        raise SystemExit(f"ERROR: no round in {args.dir}; run qa.py pages first")
+    want = [p.lstrip("p") for p in args.pages] or list(rec["pages"])
+    bad = [p for p in want if p not in rec["pages"]]
+    if bad:
+        raise SystemExit(f"ERROR: round-{done[-1]} has no page " + " ".join(bad))
+    seen = load_seen(args.dir)
+    mine = seen.setdefault(rec["pdf"], {})
+    for p in want:
+        if rec["pages"][p] not in mine.setdefault(p, []):
+            mine[p].append(rec["pages"][p])
+    with open(os.path.join(args.dir, "seen.json"), "w") as fh:
+        json.dump(seen, fh)
+    print(f"seen: round-{done[-1]} " + " ".join(f"p{p}" for p in want))
     return 0
 
 
@@ -462,8 +506,13 @@ def download(url):
         r = subprocess.run(["curl", "-fsSL", "--max-time", "120", url],
                            capture_output=True)
         if r.returncode:
-            raise SystemExit(f"fetch-schema: cannot download {url}: "
-                             + r.stderr.decode(errors="replace").strip())
+            raise SystemExit(
+                f"fetch-schema: cannot download {url}: "
+                + r.stderr.decode(errors="replace").strip()
+                + f"\noffline? copy musicxml.xsd, xml.xsd and xlink.xsd from "
+                "w3c/musicxml v4.0 (schema/) into " + SCHEMA_DIR
+                + " (minimal xml.xsd / xlink.xsd stubs also work; each file "
+                "must end with </xs:schema>)")
         return r.stdout
 
 
@@ -546,6 +595,11 @@ def main():
     s.add_argument("pdf")
     s.add_argument("dir")
     s.set_defaults(fn=cmd_pages)
+    s = sub.add_parser("seen")
+    s.add_argument("dir")
+    s.add_argument("pages", nargs="*", help="pN ... (default: all pages "
+                   "of the latest round)")
+    s.set_defaults(fn=cmd_seen)
     s = sub.add_parser("xml")
     s.add_argument("file")
     s.set_defaults(fn=cmd_xml)

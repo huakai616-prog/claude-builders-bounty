@@ -28,6 +28,7 @@ the same standard with these differences:
   out of the public repo: keep its transcription in the scratchpad and
   point `--check` at it (`UNRAVEL_PIANO=… python3 unravel/build.py
   --check`); without it the check runs ranges and double stops only.
+- **Techniques ACE can't read**: ACE's smart mode does not pick up pizzicato, con sordino (or other techniques) from the MIDI. List in `howto`, by ACE bar number, where the user must switch them by hand (see the alla-turca, dongfeng and unravel entries in `tools/deliver/catalog.py`).
 - **The MIDI's barlines** must match the score's: with a pickup, start the
   MIDI with a whole empty bar holding the pickup at its end (ACE bar N =
   score bar N−1) and say so in `howto`.
@@ -39,7 +40,8 @@ the same standard with these differences:
   `META["mscx_part_hook"]` (`_mscx_hook` in `dongfeng/build.py`) hide
   the bracket and number of every tuplet that arrived without a number.
 - **MuseScore-file touch-ups learned on 冬风** (`dongfeng/build.py` hooks): see `ms4-touchups.md`.
-- **Parts layout**: read each line's bars back from the PDF (`pdftotext -bbox`, boxed bar numbers are 8.6 pt high) and add explicit line starts wherever a bar stands alone; give each part page starts so page turns fall on rests (plan for page 1 alone, then two-page spreads), and so no last page holds only the final bars. Parts carry the rehearsal letters and tempo marks but not the section titles: a title next to a letter gets pushed around by the first bar-number box and never lines up.
+- **Parts layout**: `python3 tools/hollywood/qa.py score <名>_分谱.pdf -v` reads each line's bars back from the PDF (`pdftotext -bbox`, boxed bar numbers are 8.6 pt high) and flags one-bar lines and a last page holding one system; add explicit line starts wherever a bar stands alone; give each part page starts so page turns fall on rests (plan for page 1 alone, then two-page spreads), and so no last page holds only the final bars. Parts carry the rehearsal letters and tempo marks but not the section titles: a title next to a letter gets pushed around by the first bar-number box and never lines up.
 - **Repeats**: written out (`FORM`), so the second time can be scored
   differently and the MIDI needs no unrolling; `ALIAS` reuses a strain's
   data for its reprise.
+- **Known layout debt**: `qa.py score` flags two delivered files that predate it: `unravel/output/Unravel_分谱.pdf` (Violin I, last page holds one system, bars 127–132) and `dongfeng/output/冬风_总谱.pdf` (pages 3–12 hold 4 systems, not 3). Don't take their page plans as models.

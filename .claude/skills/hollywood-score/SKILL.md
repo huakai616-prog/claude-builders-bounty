@@ -7,7 +7,7 @@ description: House standard for delivering a song arrangement in this repo (voic
 
 The user set these rules once and does not want to be asked again.
 
-**This skill is about the delivery format, not the music.** When the user says 「像之前一样」, they mean the same delivery: the files, the PDF, the credits and the delivery center. They do not mean the same arrangement. 我不难过 copied 泪海's textures and chords almost one for one, and the user called it 难听. Conceive each song's texture, harmony, intro and ending from that song itself, and say in the README how it differs from earlier work. The full rule is in `AGENTS.md` under 「用户怎么提需求」.
+**This skill is about the delivery format, not the music.** When the user says 「像之前一样」, they mean the same delivery: the files, the PDF, the credits and the delivery center. They do not mean the same arrangement. 我不难过 copied 泪海's textures and chords almost one for one, and the user called it 难听. Conceive each song's texture, harmony, intro and ending from that song itself, check it against `docs/编配手法索引.md` (the devices every earlier song used, and the ones already used twice or more), say in the README how it differs from earlier work, and add the new song's entry to that index when you deliver. The full rule is in `AGENTS.md` under 「用户怎么提需求」.
 
 ## Standing rules
 
@@ -47,7 +47,7 @@ The template lives in `tools/hollywood/`:
   - `polish_musicxml(path, meta)`: tabloid layout, credit block, creators, bar numbers, merged tempo text. This is what Sibelius sees.
   - `render_pdf(musicxml, pdf, meta)`: MuseScore 4 engraving, then the Chromium-drawn cover and header/footer, merged with pypdf.
 
-Wire a song's `build.py` like `wobunanguo/build.py`:
+Wire a song's `build.py` like `chatang/build.py` (single voice, 4/4: it has the Hollywood wiring plus the hairpin fallback, `print_hair`, `mscx_hook` and the 8va block below), or `wohewodezuguo/` (`build.py` + `engine.py`) for several voices or 6/8 / 9/8. Copy code and flow only, never the music data:
 
 ```python
 sys.path.insert(0, os.path.join(HERE, "..", "tools", "hollywood"))
@@ -71,8 +71,8 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - Create the `MetronomeMark` **without** text; `META["tempo_text"]` is joined to it.
 - **Hairpins on held notes**: the older `make_m21()` (泪海, 我不难过) pins a hairpin to note objects and silently drops it when both ends land on the same held note (a cresc under a whole note, a dim under a tie). `chatang/build.py` falls back to `spanner.SpannerAnchor` offsets in that case; copy its hairpin loop into new songs.
 - **Voice hairpins**: printed above the voice staff they push single bar-number boxes up. `print_hair=False` on the voice part keeps them in the MIDI only (`chatang/build.py`).
-- **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`.
-- **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display.
+- **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`. Ready-made recipes (section titles that won't lift, room under one staff, tuplet side, 8va hooks, accidentals after an 8va): `references/ms4-touchups.md`.
+- **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display. When an 8va ends mid-bar, MS4 can drop an accidental written for the other octave, and the 8va hook can run into the next note: check those bars on the page; fixes in `references/ms4-touchups.md`.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
 - **Engraving rules learned on Unravel** (`unravel/build.py` has them; copy into new engines):
   - `rebeam()` after `polish_musicxml`: music21 beams across the middle of a 4/4 bar and leaves orphan `end` beams. Rebeam per beat, merge beats only where a note crosses the beat (3+3+2 figures), never across beat 3; secondary beams per beat, a lone 16th hooked toward the note it completes.
@@ -137,16 +137,19 @@ On 11 × 17 at 7.2 mm staves:
 
 ```bash
 python3 tools/hollywood/qa.py score <song>/output/<歌名>_副歌_总谱.pdf -v   # layout report, PROBLEM lines (exit 0 = clean)
-python3 tools/hollywood/qa.py pages <song>/output/<歌名>_副歌_总谱.pdf <scratch>/pages   # PNGs; lists pages new or changed
+python3 tools/hollywood/qa.py pages <song>/output/<歌名>_副歌_总谱.pdf <scratch>/pages   # PNGs; lists pages not yet seen
+python3 tools/hollywood/qa.py seen <scratch>/pages                                   # after looking at them
 python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # MusicXML 4.0 schema
 ```
 
 - `qa.py` has its usage in its docstring (`python3 tools/hollywood/qa.py -h`). It also works on a parts PDF (told apart by page size). It takes the bar count and the part list from the one `*.musicxml` next to the PDF (or `--musicxml F`). `--systems N` sets the systems-per-page target when a score has fewer on purpose (我和我的祖国: 8 staves, 2 per page).
 - Run `score` after every render and fix what it reports before you look at pages. It reads the boxed bar numbers back from the PDF and lists the bars of every system on every page (`-v`); it flags missing bar numbers, one-bar systems, pages without 3 systems, a lonely last system, and missing headers, footers, page numbers, cover credits and instrumentation.
-- Then look at every page that `pages` lists under "look at" (all pages the first time). A page it reports unchanged is pixel-identical to the version you already looked at in an earlier round, so it needs no second look. By delivery, every page must have been looked at in its final form.
+- Then look at every page that `pages` lists under "look at" (all pages the first time), and record that with `python3 tools/hollywood/qa.py seen <scratch>/pages` (or `seen <dir> p2 p5` for only the pages you looked at). A page is listed as unchanged only when it is pixel-identical to a page you marked as seen; a page you never marked is listed again in every round. So by delivery every page has been looked at in its final form. Keep `<scratch>` outside the repo, never in `<song>/output/`.
+- Instrumental work: run `score` and `pages` on the parts PDF (`<名>_分谱.pdf`) too.
 - The eye checks the script cannot do:
   - The cover shows the title, credits table (both 花开当富贵 rows), key · tempo · duration, and instrumentation, with nothing clipped.
-  - No collisions between dynamics, texts, lyrics or hairpins; bar-number boxes clear of the music.
+  - No collisions between dynamics, texts, lyrics or hairpins; bar-number boxes, header and footer clear of the music.
+  - Accidentals and 8va hooks right where an 8va ends mid-bar.
   - The first-page title block is symmetric: left and right credit blocks share a bottom line and don't touch the music.
   - Systems are spread down the page and breaks fall at phrases.
 - The script's checks, for reference: every page has its header and footer and a correct "PAGE n OF N"; there is a boxed bar number on every bar; each page has 3 systems (the last page may have fewer, but not a lone system with half a page empty) and there is no one-bar system; the MusicXML validates against the schema.
@@ -167,9 +170,11 @@ The 「放进 Mac 程序坞」 card (Mac Dock app, `tools/deliver/macapp/`) is d
 
 ## Reference files (read when the task needs them)
 
+Paths are relative to `.claude/skills/hollywood-score/` (GPT / Codex: open `.claude/skills/hollywood-score/references/<file>`).
+
 | File | Read when |
 |---|---|
-| `references/delivery-center.md` | publishing a finished work, or editing `center.html` / `catalog.py` / `package.py` |
+| `references/delivery-center.md` | publishing a finished work, editing `center.html` / `catalog.py` / `package.py`, or the user asks how the page works (选择文件, deleting and restoring, why one file downloads as a zip) |
 | `references/instrumental.md` | an instrumental piece, a parts PDF, or a printed (staff-notation) score as the source |
 | `references/ms4-touchups.md` | the engraved PDF needs a fix MusicXML can't express (title rows, staff spacing, tuplet side, 8va hooks, accidentals after an 8va) |
 | `references/template-internals.md` | editing `tools/hollywood/`, or debugging the cover, header/footer, credits or fonts |

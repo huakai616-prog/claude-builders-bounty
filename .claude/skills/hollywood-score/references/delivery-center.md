@@ -1,5 +1,7 @@
 # Delivery center (编曲交付中心)
 
+**GPT / Codex** (no `Artifact` / `ArtifactData` tools): do step 1 (the catalog entry: `ref=None` if your branch is merged into `main`, else the branch name) and step 2 (`package.py <slug> --files`, only to check that the work packs), skip steps 3–6, do step 8, and end your reply with 「请 Claude 把它加进交付中心」.
+
 The page is `tools/deliver/center.html`, published at https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN and pinned in the user's claude.ai sidebar.
 
 - It lists the works from its database: collection `works`, one document per work, sorted newest first.
@@ -17,6 +19,8 @@ To add or update a work, after its files are built and committed:
 1. Add or edit its entry in `tools/deliver/catalog.py`.
    - `ref=None` means "the current working tree", i.e. the song you just built.
    - Fill in `main` (the four files), `pdf_kind` (`"hollywood"` for the tools/hollywood PDF), `audio`, and the open questions for the user.
+   - Instrumental work: `main=dict(musicxml=…, pdf=…, strings=…, parts=…)` plus `other_note` and `howto` (no SRT or GBK file); with a pickup, `howto` says 「ACE 第 N 小节 = 总谱第 N−1 小节」. See `instrumental.md`.
+   - Pizzicato or con sordino anywhere: ACE's smart mode does not read them from the MIDI, so `howto` lists the bars where the user must switch the technique by hand (see alla-turca).
 2. `python3 tools/deliver/package.py <slug> --files`. This prints the `files` map to publish. Output goes to `tools/deliver/dist/`, which is git-ignored.
 3. `Artifact` `action: "read"` on the URL. A publish from a new conversation is refused until you have read it.
 4. `Artifact` publish:
@@ -27,7 +31,7 @@ To add or update a work, after its files are built and committed:
 5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row, because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
 6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
 7. Reply to the user with the page link first, then what changed.
-8. Commit (including `catalog.py`), push, open a PR to `main`, and merge it.
+8. Commit (including `catalog.py`, the song's entry in `docs/编配手法索引.md`, and its rows in `docs/项目地图.md` and in AGENTS.md's 精简表), push, open a PR to `main`, and merge it.
 
 Whenever you edit `center.html`, check that its script still parses before publishing. One syntax error and the page shows no songs and no download buttons at all:
 

@@ -15,10 +15,21 @@
 # component and, when one fails, the last 15 lines of its log.  Exits
 # non-zero if anything failed.
 #
-# Plain POSIX sh, so `sh tools/setup.sh` and `bash tools/setup.sh` both work.
+# On macOS (the user's Mac) it installs nothing and only lists what is
+# missing.  Plain POSIX sh, so `sh tools/setup.sh` and `bash tools/setup.sh`
+# both work.
 
 if [ "$(uname)" = Darwin ]; then
-    echo "setup.sh is for Linux cloud containers; on the Mac, MuseScore 4 and Chrome are picked up from /Applications. Nothing to do."
+    # The user's Mac: install nothing, only say what is missing.
+    echo "setup.sh installs only on Linux cloud containers; on the Mac, MuseScore 4 and Chrome are picked up from /Applications."
+    miss=$(python3 -c "import importlib.util as u, sys
+print(' '.join(m for m in sys.argv[1:] if u.find_spec(m) is None))" music21 mido pypdf cffi 2>/dev/null)
+    [ -n "$miss" ] && echo "missing Python packages: pip3 install $miss"
+    tools=""
+    command -v pdftotext >/dev/null 2>&1 || tools="$tools poppler"
+    command -v fluidsynth >/dev/null 2>&1 || tools="$tools fluid-synth"
+    command -v ffmpeg >/dev/null 2>&1 || tools="$tools ffmpeg"
+    [ -n "$tools" ] && echo "missing tools: brew install$tools"
     exit 0
 fi
 
