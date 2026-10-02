@@ -34,6 +34,7 @@
 | 用户发的是五线谱钢琴谱，或要纯器乐 | `docs/钢琴谱改编.md`，再加 `.claude/skills/hollywood-score/references/instrumental.md` |
 | 作品做完，要放进交付中心；或用户问交付中心怎么用（选文件、删除和恢复、单个文件为什么下载成 zip） | `.claude/skills/hollywood-score/references/delivery-center.md` |
 | 用户问怎么放进 Mac 程序坞、装不上 | `.claude/skills/hollywood-score/references/mac-app.md` |
+| 用户说封面不好看、选封面方案、要换封面 | `tools/hollywood/covers/README.md`（8 版大师风格的封面参考，等用户选） |
 | 要驱动 ACE Studio，或用户问怎么在 ACE 里渲染（ACE 和操作它的 AI 必须在用户的 Mac 上，云端连不上） | `docs/ACE-Studio.md`（命令行、MCP、泪海的渲染步骤） |
 
 ## 项目地图（精简版）
