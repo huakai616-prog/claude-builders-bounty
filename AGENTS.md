@@ -53,11 +53,11 @@
 | 土耳其进行曲（纯器乐） | `alla-turca/` | `main` | 已完成，有待确认 |
 | Unravel（纯器乐） | `unravel/` | `main` | 已完成，有待确认 |
 | 冬风（纯器乐） | `dongfeng/` | `main` | 已完成，有待确认 |
-| 诀别书（纯器乐，弦乐五重奏） | `juebieshu/` | `claude/determined-galileo-0epaj3` | 已完成，还没进交付中心 |
+| 诀别书（纯器乐，弦乐五重奏） | `juebieshu/` | `claude/determined-galileo-0epaj3` | 已完成，已进交付中心 |
 | 视频：我和我的祖国 × 国庆抖音 / 泪海 ×《等潮》/ Clawd | `wohewodezuguo/video/`、`leihai/video/`、`claude-piano-pet/` | 见 `docs/项目地图.md` | 国庆抖音成片已做完、已进交付中心；《等潮》等用户在 TapNow 生成镜头 |
 
 - `codex/issue-2-…` 和 `codex/issue-3-…` 两个分支是悬赏板的任务，跟音乐无关。
-- 不在 `main` 上的歌，成品也都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支），诀别书除外。合并或交付以后，这张表和 `docs/项目地图.md` 都要更新。
+- 不在 `main` 上的歌，成品也都已经放进交付中心（`tools/deliver/catalog.py` 记着每首歌来自哪个分支）。合并或交付以后，这张表和 `docs/项目地图.md` 都要更新。
 - 新歌如果是多个人声声部或 6/8、9/8 这类复合拍子，代码从 `wohewodezuguo/`（`build.py` + `engine.py`）接；单人声 4/4 的从 `chatang/build.py` 接（它有长音上的渐强渐弱修复、`print_hair`、`mscx_hook`、8va）。`wohewodezuguo/engine.py` 还支持 MIDI 里的 br 气口、拨弦/拉弦、延长记号，单人声的歌要用这些也从它抄；那首歌的做法经过两轮多视角审稿。
 - 每首歌的目录里都有自己的 `README.md`（茉莉花除外，只有 `generate_score.py`），写了结构、编配思路、时间轴和导入步骤。改哪首歌就先读哪首的。
 - 仓库是公开的，谁都能看到这些文件。
