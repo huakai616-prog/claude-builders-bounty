@@ -31,7 +31,7 @@ To add or update a work, after its files are built and committed:
 5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row (write them into `tools/deliver/dist/rows/<slug>.json` before the `set`), because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
 6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
 7. Reply to the user with the page link first, then what changed.
-8. Commit (including `catalog.py`, the song's entry in `docs/编配手法索引.md`, and its rows in `docs/项目地图.md` and in AGENTS.md's 精简表), push, open a PR to `main`, and merge it.
+8. Commit (including `catalog.py`, the song's entry in `docs/编配手法索引.md` (at the end of section 三, plus its name in section 一 items, or a new section 一 item for a device it shares with one earlier song), and its rows in `docs/项目地图.md` and in AGENTS.md's 精简表), push, open a PR to `main`, and merge it.
 
 Whenever you edit `center.html`, check that its script still parses before publishing. One syntax error and the page shows no songs and no download buttons at all:
 

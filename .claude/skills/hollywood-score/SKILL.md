@@ -139,7 +139,7 @@ On 11 × 17 at 7.2 mm staves:
 python3 tools/hollywood/qa.py score <song>/output/<歌名>_副歌_总谱.pdf -v   # layout report, PROBLEM lines (exit 0 = clean)
 python3 tools/hollywood/qa.py pages <song>/output/<歌名>_副歌_总谱.pdf <scratch>/pages   # PNGs; lists pages not yet seen
 python3 tools/hollywood/qa.py seen --round K <scratch>/pages                         # after looking at them (pages prints it)
-python3 tools/hollywood/qa.py midi <song>/output                                   # lyric or '-' on every vocal note, GBK file, track names
+python3 tools/hollywood/qa.py midi <song>/output                                   # lyric or '-' on every vocal note, GBK file; prints track names
 python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # MusicXML 4.0 schema
 ```
 
@@ -154,7 +154,7 @@ python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # 
   - The first-page title block is symmetric: left and right credit blocks share a bottom line and don't touch the music.
   - Systems are spread down the page and breaks fall at phrases.
 - The script's checks, for reference: every page has its header and footer and a correct "PAGE n OF N"; there is a boxed bar number on every bar; each page has 3 systems (the last page may have fewer, but not a lone system with half a page empty) and there is no one-bar system; the MusicXML validates against the schema.
-- The MIDI reads back (`qa.py midi <song>/output`): every vocal note has a lyric or `-`, the GBK file decodes, and the track names are right (`Vocal 人声` / `Violin I` / `Violin II` / `Viola` / `Violoncello`, see AGENTS.md 交付物).
+- The MIDI reads back (`qa.py midi <song>/output`): every vocal note has a lyric or `-` (in the 带歌词 files and the 全轨 file), and the GBK file decodes. It prints each file's track names; check them yourself (single voice: `Vocal 人声` / `Violin I` / `Violin II` / `Viola` / `Violoncello`, see AGENTS.md 交付物; SATB and instrumental names come from the song's build.py).
 
 ## Known pitfalls
 

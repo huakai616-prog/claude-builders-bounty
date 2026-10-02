@@ -292,7 +292,12 @@ def find_ms4(install=True):
 
 def find_chrome():
     cands = [os.environ.get("CHROME", "")]
-    cands += sorted(glob.glob("/opt/pw-browsers/chromium-*/chrome-linux/chrome"))
+    for root in filter(None, (os.environ.get("PLAYWRIGHT_BROWSERS_PATH"),
+                              "/opt/pw-browsers",
+                              os.path.expanduser("~/.cache/ms-playwright"))):
+        # chrome-linux (older Playwright) or chrome-linux64 (newer)
+        cands += sorted(glob.glob(os.path.join(root, "chromium-*",
+                                               "chrome-linux*", "chrome")))
     cands += [shutil.which(x) or "" for x in
               ("chromium", "chromium-browser", "google-chrome")]
     cands.append("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")

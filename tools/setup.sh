@@ -20,12 +20,24 @@
 # both work.
 
 if [ "$(uname)" = Darwin ]; then
-    # The user's Mac: install nothing, only say what is missing.
+    # The user's Mac: install nothing, only say what is missing.  Exit 1 if
+    # anything is.
     echo "setup.sh installs only on Linux cloud containers; on the Mac it only lists what is missing."
     need=""
     if miss=$(python3 -c "import importlib.util as u, sys
 print(' '.join(m for m in sys.argv[1:] if u.find_spec(m) is None))" music21 mido pypdf cffi 2>/dev/null); then
-        [ -n "$miss" ] && need=1 && echo "missing Python packages: python3 -m pip install $miss"
+        # Homebrew's Python is externally managed (PEP 668): pip needs a flag
+        em=$(python3 -c "import os, sysconfig
+print(os.path.exists(os.path.join(sysconfig.get_path('stdlib'), 'EXTERNALLY-MANAGED')))" 2>/dev/null)
+        flags="--user"; [ "$em" = True ] && flags="--user --break-system-packages"
+        [ -n "$miss" ] && need=1 && echo "missing Python packages: python3 -m pip install $flags $miss"
+        # ask hollywood itself (standard library only), as the build will
+        hw() { python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); import hollywood
+print(eval(sys.argv[2]) or "")' "$(cd "$(dirname "$0")" && pwd)/hollywood" "$1" 2>/dev/null; }
+        [ -n "$(hw 'hollywood.find_ms4(install=False)')" ] \
+            || { need=1; echo "missing: MuseScore 4 in /Applications (musescore.org), or set MSCORE4=/path"; }
+        [ -n "$(hw 'hollywood.find_chrome()')" ] \
+            || { need=1; echo "missing: Google Chrome in /Applications (or set CHROME=/path)"; }
     else
         need=1
         echo "python3 does not run: install Python 3 (brew install python, or xcode-select --install)"
@@ -35,12 +47,8 @@ print(' '.join(m for m in sys.argv[1:] if u.find_spec(m) is None))" music21 mido
     command -v fluidsynth >/dev/null 2>&1 || tools="$tools fluid-synth"
     command -v ffmpeg >/dev/null 2>&1 || tools="$tools ffmpeg"
     [ -n "$tools" ] && need=1 && echo "missing tools: brew install$tools"
-    [ -n "$MSCORE4" ] || [ -e "/Applications/MuseScore 4.app/Contents/MacOS/mscore" ] \
-        || { need=1; echo "missing: MuseScore 4 in /Applications (musescore.org)"; }
-    [ -n "$CHROME" ] || [ -e "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ] \
-        || { need=1; echo "missing: Google Chrome in /Applications (or set CHROME=/path)"; }
-    [ -z "$need" ] && echo "nothing missing"
-    exit 0
+    [ -z "$need" ] && echo "nothing missing" && exit 0
+    exit 1
 fi
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)

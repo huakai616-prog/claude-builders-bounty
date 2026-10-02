@@ -37,9 +37,10 @@ pN is always the PDF page (a full score's cover is p1).
       unviewed round can never hide a page.
 
   qa.py midi <output dir>
-      Every *带歌词*.mid: each note has a lyric (a syllable or "-") at its
-      onset, and the lyrics decode (UTF-8, or GBK for the *GBK* file).
-      Every *.mid: prints its track names.  Exit 0 clean, 1 problems.
+      Every *带歌词*.mid, and the vocal tracks of the *全轨*.mid: each note
+      has a non-empty lyric (a syllable or "-") at its onset, and the
+      lyrics decode (UTF-8, or GBK for the *GBK* file).  Every *.mid: prints
+      its track names (check them yourself).  Exit 0 clean, 1 problems.
 
   qa.py xml <file.musicxml|.mxl>  "OK: valid" or the first 20 xmllint errors
   qa.py fetch-schema            only fill the schema cache (tools/setup.sh)
@@ -48,6 +49,7 @@ pN is always the PDF page (a full score's cover is p1).
 """
 import argparse
 import collections
+import fcntl
 import hashlib
 import html
 import json
@@ -446,7 +448,7 @@ def cmd_pages(args):
         os.replace(os.path.join(out, f), png)
         pages[str(n)] = png_hash(png)
     # pages whose pixels were marked seen (qa.py seen) need no second look
-    seen = load_seen(args.dir).get(pdf, {})
+    seen = seen_of(load_seen(args.dir), pdf)
     prev, since = {}, None  # last round of the same PDF (other PDFs may share dir)
     for k in reversed(done):
         rec = load_round(args.dir, k)
@@ -488,16 +490,22 @@ def load_seen(d):
     return data if isinstance(data, dict) else {}
 
 
+def seen_of(seen, pdf):
+    """The seen hashes of one PDF as {page: [hash, ...]}; anything malformed
+    counts as not seen (the safe direction)."""
+    mine = seen.get(pdf)
+    if not isinstance(mine, dict):
+        return {}
+    return {p: [h for h in v if isinstance(h, str)]
+            for p, v in mine.items() if isinstance(v, list)}
+
+
 def cmd_seen(args):
-    done = sorted(int(m.group(1)) for d in os.listdir(args.dir)
-                  if (m := re.fullmatch(r"round-(\d+)", d))) \
-        if os.path.isdir(args.dir) else []
-    k = args.round or next((k for k in reversed(done)
-                            if load_round(args.dir, k)), None)
-    rec = load_round(args.dir, k) if k else None
+    k = args.round
+    rec = load_round(args.dir, k) if os.path.isdir(args.dir) else None
     if not rec:
-        raise SystemExit(f"ERROR: no round{f'-{k}' if k else ''} in "
-                         f"{args.dir}; run qa.py pages first")
+        raise SystemExit(f"ERROR: no round-{k} in {args.dir}; run qa.py pages "
+                         "first and use the command it prints")
     want = []
     for p in args.pages:
         m = re.fullmatch(r"[pP]?0*(\d+)", p)
@@ -508,17 +516,17 @@ def cmd_seen(args):
     bad = [p for p in want if p not in rec["pages"]]
     if bad:
         raise SystemExit(f"ERROR: round-{k} has no page " + " ".join(bad))
-    seen = load_seen(args.dir)
-    mine = seen.setdefault(rec["pdf"], {})
-    if not isinstance(mine, dict):
-        mine = seen[rec["pdf"]] = {}
-    for p in want:
-        if rec["pages"][p] not in mine.setdefault(p, []):
-            mine[p].append(rec["pages"][p])
-    tmp = os.path.join(args.dir, "seen.json.part")
-    with open(tmp, "w") as fh:
-        json.dump(seen, fh)
-    os.replace(tmp, os.path.join(args.dir, "seen.json"))
+    with open(os.path.join(args.dir, "seen.lock"), "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)  # concurrent `seen` runs keep all marks
+        seen = load_seen(args.dir)
+        mine = seen[rec["pdf"]] = seen_of(seen, rec["pdf"])
+        for p in want:
+            if rec["pages"][p] not in mine.setdefault(p, []):
+                mine[p].append(rec["pages"][p])
+        fd, tmp = tempfile.mkstemp(dir=args.dir, prefix="seen.", suffix=".part")
+        with os.fdopen(fd, "w") as fh:
+            json.dump(seen, fh)
+        os.replace(tmp, os.path.join(args.dir, "seen.json"))
     print(f"seen: round-{k} of {os.path.basename(rec['pdf'])}: "
           + " ".join(f"p{p}" for p in want))
     return 0
@@ -611,50 +619,63 @@ def cmd_xml(args):
 
 def cmd_midi(args):
     import mido
+    if not os.path.isdir(args.dir):
+        raise SystemExit(f"ERROR: no such directory: {args.dir}")
     files = sorted(f for f in os.listdir(args.dir) if f.endswith(".mid"))
     if not files:
         raise SystemExit(f"ERROR: no .mid files in {args.dir}")
-    problems = 0
+    read, problems = {}, 0
     for f in files:
-        path = os.path.join(args.dir, f)
-        lyric_file = "带歌词" in f
-        charset = "gbk" if "GBK" in f.upper() else "utf-8"
         try:
-            mf = mido.MidiFile(path, charset=charset)
-        except (OSError, ValueError, EOFError, UnicodeError) as e:
-            print(f"PROBLEM: {f}: cannot read ({e})")
+            read[f] = mido.MidiFile(os.path.join(args.dir, f), charset=(
+                "gbk" if "GBK" in f.upper() else "utf-8"))
+        except Exception as e:  # mido raises many types on corrupt data
+            print(f"PROBLEM: {f}: cannot read ({type(e).__name__}: {e})")
             problems += 1
-            continue
-        names, notes, missing, cjk = [], 0, [], 0
+
+    def tracks(mf):
         for tr in mf.tracks:
-            t, ons, lyr, name = 0, [], set(), ""
+            t, ons, lyr, name, cjk = 0, [], set(), "", 0
             for msg in tr:
                 t += msg.time
                 if msg.type == "track_name":
                     name = msg.name
                 elif msg.type == "note_on" and msg.velocity:
                     ons.append(t)
-                elif msg.type == "lyrics":
+                elif msg.type == "lyrics" and msg.text.strip():
                     lyr.add(t)
                     cjk += bool(re.search(r"[\u4e00-\u9fff]", msg.text))
             if ons:
-                names.append(name or "(no name)")
-            if lyric_file and ons:
+                yield name, ons, lyr, cjk
+
+    # vocal tracks = the tracks of the *带歌词* files; the 全轨 file's
+    # tracks of the same name must carry the lyrics too (ACE reads them)
+    vocal = {n for f, mf in read.items() if "带歌词" in f
+             for n, *_ in tracks(mf)}
+    for f, mf in read.items():
+        names, notes, missing, cjk, checked = [], 0, [], 0, False
+        for name, ons, lyr, c in tracks(mf):
+            names.append(name or "(no name)")
+            if "带歌词" in f or ("全轨" in f and name in vocal):
+                checked = True
                 notes += len(ons)
+                cjk += c
                 missing += [(name, t) for t in ons if t not in lyr]
         print(f"{f}: tracks: {' / '.join(names) or 'none'}")
-        if lyric_file:
-            if missing:
-                problems += 1
-                ticks = ", ".join(f"{n or '?'}@{t}" for n, t in missing[:8])
-                print(f"PROBLEM: {f}: {len(missing)} of {notes} notes have "
-                      f"no lyric at their onset ({ticks}{' ...' if len(missing) > 8 else ''})")
-            if not cjk:
-                problems += 1
-                print(f"PROBLEM: {f}: no Chinese characters in the lyrics "
-                      f"as {charset} (wrong encoding?)")
-            if not missing and cjk:
-                print(f"  OK: {notes} notes, every one with a lyric or '-'")
+        if not checked:
+            continue
+        if missing:
+            problems += 1
+            ticks = ", ".join(f"{n or '?'}@{t}" for n, t in missing[:8])
+            print(f"PROBLEM: {f}: {len(missing)} of {notes} vocal notes have "
+                  f"no lyric at their onset ({ticks}"
+                  f"{' ...' if len(missing) > 8 else ''})")
+        if not cjk:
+            problems += 1
+            print(f"PROBLEM: {f}: no Chinese characters in the lyrics "
+                  "(wrong encoding, or no lyrics?)")
+        if not missing and cjk:
+            print(f"  OK: {notes} vocal notes, every one with a lyric or '-'")
     return 1 if problems else 0
 
 
@@ -678,8 +699,8 @@ def main():
     s.set_defaults(fn=cmd_pages)
     s = sub.add_parser("seen")
     s.add_argument("dir")
-    s.add_argument("--round", type=int, help="the round you looked at "
-                   "(default: the latest round in dir)")
+    s.add_argument("--round", type=int, required=True, help="the round you "
+                   "looked at (pages prints the whole command)")
     s.add_argument("pages", nargs="*", default=[], help="pN ... (default: "
                    "all pages of that round)")
     s.set_defaults(fn=cmd_seen)

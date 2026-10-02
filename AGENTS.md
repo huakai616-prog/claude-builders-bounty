@@ -113,7 +113,7 @@
 3. 先定和声骨架（每半小节一个和弦），再写声部。弦乐的旋律只在人声的长音和气口里动，不抢词。拨弦、弱音器 ACE 认不出来（见「踩过的坑」）。
 4. 把数据写进 `build.py`，运行 `--check` 直到没有任何输出，再生成文件。
 5. 渲染 PDF 和 PNG，用 `qa.py` 查过，再自己看一遍排版（见「交付标准」第 4 条）。
-6. 写目录 README；在 `docs/编配手法索引.md` 第三节给这首歌加一段（标志 / 织体 / 和声 / 前奏 / 推进与高潮 / 尾奏，格式照前面几首），用到了第一节的手法就把歌名补进那一条；更新上面的精简表和 `docs/项目地图.md`；提交并推送。
+6. 写目录 README；在 `docs/编配手法索引.md` 第三节末尾给这首歌加一段（格式照前面几首），用到了第一节的手法就把歌名补进那一条，和某首旧歌撞了、第一节还没有的手法在第一节新加一条；更新上面的精简表和 `docs/项目地图.md`；提交并推送；然后照 `.claude/skills/hollywood-score/references/delivery-center.md` 放进交付中心，开 PR 合并进 `main`。
 
 ## 交付物（每首歌一个目录，以泪海为例）
 
@@ -133,7 +133,7 @@
 
 ```bash
 bash tools/setup.sh               # 新的云端容器先跑一次：装依赖、字体、MuseScore 4、MusicXML schema，只打印几行
-                                  # 在用户的 Mac 上它只列出缺什么（pip3 install music21 mido pypdf cffi；brew install poppler fluid-synth ffmpeg）
+                                  # 在用户的 Mac 上它什么都不装，只列出缺什么（python3 -m pip install …、brew install poppler fluid-synth ffmpeg、MuseScore 4 和 Chrome）
 python3 leihai/build.py --check   # 只检查：音域、小二度/小九度冲突（含人声）、平行五八度
 python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT，并回读核对每小节 4 拍
 ```
@@ -153,7 +153,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
   ffmpeg -y -i /tmp/p.wav -af loudnorm=I=-16:TP=-1.5 -b:a 160k 粗略试听_GM音色_非ACE效果.mp3
   ```
 
-- 看排版：`python3 tools/hollywood/qa.py score <PDF> -v`（每页每行是哪几小节、有什么问题）和 `qa.py pages <PDF> <草稿目录>` / `qa.py seen <草稿目录>`（按页出白底 PNG、列出要看的页、记下看过的页；每个 PDF 一个草稿目录）。草稿目录放在仓库外（会话的 scratchpad，或 `/tmp/qa-<歌>`），绝不要放进 `<歌>/output/`。泪海旧版 MuseScore 3 预览的做法见 `docs/项目地图.md` 末尾。
+- 看排版：照「交付标准」第 4 条跑 `qa.py score` / `pages` / `seen`。草稿目录放在仓库外（会话的 scratchpad，或 `/tmp/qa-<歌>`），每个 PDF 一个，绝不要放进 `<歌>/output/`。泪海旧版 MuseScore 3 预览的做法见 `docs/项目地图.md` 末尾。
 - MusicXML 合法性以 MusicXML 4.0 schema 为准：`python3 tools/hollywood/qa.py xml <文件>`（用 xmllint；schema 从 w3c/musicxml 仓库下载，缓存在 `~/.cache/musicxml/`；没有网络时照它打印的提示做）。MuseScore 3 的「not a valid MusicXML file」提示不可靠，不要以它为准。
 - 人声 MIDI：`python3 tools/hollywood/qa.py midi <歌>/output`（每个音都有歌词或 `-`、GBK 版能读、各文件的音轨名）。
 
@@ -169,7 +169,7 @@ python3 leihai/build.py           # 生成 output/ 下的 MusicXML / MIDI / SRT�
 - **圆滑线从连音线的后半个音开始**（例如 `Bb4/1~=时 (Bb4/1 Ab4/1)`）：泪海版 `merged_notes()` 会漏掉后面拖腔音符的 `-` 歌词。`wobunanguo/build.py` 和 `chatang/build.py` 都已修，新歌从 `chatang/build.py` 复制。
 - **MuseScore 4 排 PDF 的坑**：直接导入 MusicXML 时 `-S` 样式不生效、导入的署名位置会乱，`tools/hollywood/hollywood.py` 都已经处理了（详见 SKILL.md 的 `references/template-internals.md`）。pypdf 报 `_cffi_backend` 时 `pip install cffi`（`tools/setup.sh` 已装）。
 - **MS4 一行放不下时**：它会把最后一两小节挤到下一行单独成行，调小 `measureSpacing` 没用（已经是最小宽度）。先用 `qa.py score <PDF> -v` 看实际分行（它从 `pdftotext -bbox` 读方框小节号、按纵坐标分组）。解决办法是每行少放小节，或者去掉占宽的东西（土耳其进行曲把大提琴的三个倚音琶音改成了琶音和弦）。
-- **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。 弱起开头又没有前奏时，MIDI 开头补一整个空小节让小节线和总谱对齐（做法见 `.claude/skills/hollywood-score/references/instrumental.md`「The MIDI's barlines」），并在 README 和 `howto` 里写明。
+- **music21 的弱起小节**要设 `m.paddingLeft`，否则导出 MusicXML 时会补一个隐藏休止符，小节变成整小节。弱起开头又没有前奏时，MIDI 怎么对齐小节线见 `.claude/skills/hollywood-score/references/instrumental.md`「The MIDI's barlines」。
 - **转写时注意低八度点**：我不难过的谱上有几处「高音之间突然掉一个八度」的点（「陪」「寞」「看」），照谱写了，但在回复和 README 里单独列出来请用户核对。
 - **拨弦、弱音器**：ACE 的智能模式不会从 MIDI 推出来，要用户手动改。要导给 ACE 的编配尽量不用；用了就在 README 和 `catalog.py` 的 `howto` 里写明第几小节要在 ACE 里手动改演奏法（照土耳其进行曲）。
 - **music21 的六连音**会被写成 3:2、按半小节连梁，MS4 也不认 `show-number="none"`：歌里有六连音、或要藏连音数字时，照 `dongfeng/`（`engine.py`、`build.py` 的 `_mscx_hook`）做，见 `docs/钢琴谱改编.md`「冬风的做法」。
