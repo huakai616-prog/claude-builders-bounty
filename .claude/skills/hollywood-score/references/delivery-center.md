@@ -1,6 +1,6 @@
 # Delivery center (编曲交付中心)
 
-**GPT / Codex** (no `Artifact` / `ArtifactData` tools): do step 1 (the catalog entry: `ref=None` if your branch is merged into `main`, else the branch name) and step 2 (`package.py <slug> --files`, only to check that the work packs), skip steps 3–6, do step 8, and end your reply with 「请 Claude 把它加进交付中心」.
+**GPT / Codex** (no `Artifact` / `ArtifactData` tools): do step 1 (the catalog entry; you merge into `main` in step 8, so `ref=None`), commit `<song>/output/` and run step 2 only to check that the work packs, skip steps 3–7 (your reply does not open with the center link: say the files are committed but not yet in the delivery center), and do step 8, setting the work's status in AGENTS.md's 精简表 and `docs/项目地图.md` to 「已完成，还没进交付中心」. End the reply with 「请 Claude 把它加进交付中心：slug `<slug>`，目录 `<dir>/`，已合并进 main，catalog.py 已写」.
 
 The page is `tools/deliver/center.html`, published at https://claude.ai/artifact/He3NTJ1vbPydtB8fRJJjsN and pinned in the user's claude.ai sidebar.
 
@@ -21,14 +21,14 @@ To add or update a work, after its files are built and committed:
    - Fill in `main` (the four files), `pdf_kind` (`"hollywood"` for the tools/hollywood PDF), `audio`, and the open questions for the user.
    - Instrumental work: `main=dict(musicxml=…, pdf=…, strings=…, parts=…)` plus `other_note` and `howto` (no SRT or GBK file); with a pickup, `howto` says 「ACE 第 N 小节 = 总谱第 N−1 小节」. See `instrumental.md`.
    - Pizzicato or con sordino anywhere: ACE's smart mode does not read them from the MIDI, so `howto` lists the bars where the user must switch the technique by hand (see alla-turca).
-2. `python3 tools/deliver/package.py <slug> --files`. This prints the `files` map to publish. Output goes to `tools/deliver/dist/`, which is git-ignored.
-3. `Artifact` `action: "read"` on the URL. A publish from a new conversation is refused until you have read it.
+2. `python3 tools/deliver/package.py <slug> --files` (commit `<song>/output/` first: on an uncommitted `src` it dies with `ValueError: not enough values to unpack`). This prints the `files` map to publish. Output goes to `tools/deliver/dist/`, which is git-ignored.
+3. `Artifact` `action: "read"` on the URL. A publish from a new conversation is refused until you have read it. Also `Artifact` `action: "list"` with `scope: "files"` on the URL: a publish that replaces a published path you have neither read nor listed (`files/works.json`, an existing song's `files/<slug>/…`) is refused. If the page the read returns differs from `tools/deliver/center.html`, merge the difference into the repo file before publishing.
 4. `Artifact` publish:
    - `url` = the page URL;
    - `file_path` = `tools/deliver/center.html`;
    - `files` = the printed map.
    Files you leave out are kept. Omit `capabilities` and `icon` so they stay as they are.
-5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row, because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
+5. `ArtifactData` `set` on collection `works`, doc_id `<slug>`, `file_path` = `tools/deliver/dist/rows/<slug>.json`. If the document already exists, `get` it first and pass its `version` as `if_version`. Also carry over its `removed` and `deleted` fields into the new row (write them into `tools/deliver/dist/rows/<slug>.json` before the `set`), because those are the user's own deletions. Drop them only if the user asked to bring the files back, or if the new bundle no longer has those paths.
 6. Refresh the fallback list: `ArtifactData` `list` on collection `works` with `out_dir` = a scratch dir, then `python3 tools/deliver/package.py --snapshot <dir>` and publish the printed `files/works.json`. The page shows this snapshot when its database does not answer.
 7. Reply to the user with the page link first, then what changed.
 8. Commit (including `catalog.py`, the song's entry in `docs/编配手法索引.md`, and its rows in `docs/项目地图.md` and in AGENTS.md's 精简表), push, open a PR to `main`, and merge it.
@@ -41,4 +41,4 @@ python3 -c "s=open('tools/deliver/center.html',encoding='utf-8').read(); open('/
 
 Shell commands inside a JS template literal (`MAC_CMD`) must escape `${` as `\${`; an unescaped `${p%/…}` broke the page once.
 
-Works that live on other branches keep their branch name as `ref`. `package.py` reads them with `git archive`, so fetch first: `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.
+Works that live on other branches keep `origin/<branch>` as `ref` (e.g. `ref="origin/claude/serene-darwin-2l4jy4"`). `package.py` reads them with `git archive`, so fetch first: `git fetch origin '+refs/heads/*:refs/remotes/origin/*'`.

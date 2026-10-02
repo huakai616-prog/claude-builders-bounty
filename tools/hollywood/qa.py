@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Mechanical QA for tools/hollywood PDFs and MusicXML: catches the layout
-slips a reviewer would hunt for on PNGs, and says which pages changed since
-the last look.  Standard library + poppler (pdftotext, pdftoppm) + xmllint.
+"""Mechanical QA for tools/hollywood PDFs, MusicXML and MIDI: catches the
+layout slips a reviewer would hunt for on PNGs, and lists only the pages
+not yet seen in their current form.  Standard library + poppler (pdftotext, pdftoppm) + xmllint.
 pN is always the PDF page (a full score's cover is p1).
 
   qa.py score <pdf> [--bars N] [--musicxml F] [--systems 3] [-v]
@@ -26,13 +26,20 @@ pN is always the PDF page (a full score's cover is p1).
       Renders the pages at 90 dpi on white into <dir>/round-K/pNN.png (K =
       next free number) and prints the round's path, "look at:" (pages
       whose decoded pixels you have not marked as seen) and "unchanged:"
-      (pixel-identical to a page you marked as seen).  Keep <dir> outside
-      the repo (e.g. the session scratchpad or /tmp/qa-<song>).
-  qa.py seen <dir> [pN ...]
-      After looking at the "look at" pages of the latest round, mark them
-      as seen (default: every page of that round; or only the pages
-      named).  A page you never marked stays "look at" in every later
-      round, so a rendered-but-unviewed round can never hide a page.
+      (pixel-identical to the same page of the same PDF as you marked it
+      seen).  Keep <dir> outside the repo (e.g. the session scratchpad or
+      /tmp/qa-<song>), one <dir> per PDF (score and parts apart).
+  qa.py seen --round K <dir> [pN ...]
+      After looking at the "look at" pages of round K, mark them as seen
+      (default: every page of that round; or only the pages named, as p2,
+      p02 or 2).  `pages` prints the exact command.  A page you never
+      marked stays "look at" in every later round, so a rendered-but-
+      unviewed round can never hide a page.
+
+  qa.py midi <output dir>
+      Every *带歌词*.mid: each note has a lyric (a syllable or "-") at its
+      onset, and the lyrics decode (UTF-8, or GBK for the *GBK* file).
+      Every *.mid: prints its track names.  Exit 0 clean, 1 problems.
 
   qa.py xml <file.musicxml|.mxl>  "OK: valid" or the first 20 xmllint errors
   qa.py fetch-schema            only fill the schema cache (tools/setup.sh)
@@ -46,6 +53,7 @@ import html
 import json
 import os
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -415,8 +423,14 @@ def cmd_pages(args):
     os.makedirs(args.dir, exist_ok=True)
     done = sorted(int(m.group(1)) for d in os.listdir(args.dir)
                   if (m := re.fullmatch(r"round-(\d+)", d)))
-    out = os.path.join(args.dir, f"round-{done[-1] + 1 if done else 1}")
-    os.makedirs(out)
+    k_out = done[-1] + 1 if done else 1
+    while True:  # two `pages` runs into one dir at once take different rounds
+        out = os.path.join(args.dir, f"round-{k_out}")
+        try:
+            os.makedirs(out)
+            break
+        except FileExistsError:
+            k_out += 1
     r = subprocess.run(["pdftoppm", "-r", "90", "-png", pdf,
                         os.path.join(out, "p")], capture_output=True, text=True)
     files = {int(m.group(1)): f for f in os.listdir(out)
@@ -451,7 +465,8 @@ def cmd_pages(args):
         print("gone (the PDF is shorter now):",
               show(sorted(set(prev) - set(pages), key=int)))
     if look:
-        print(f"after looking at them: qa.py seen {args.dir}")
+        print(f"after looking at them: python3 {shlex.quote(sys.argv[0])} "
+              f"seen --round {k_out} {shlex.quote(args.dir)}")
     return 0
 
 
@@ -467,30 +482,45 @@ def load_round(d, k):
 def load_seen(d):
     try:
         with open(os.path.join(d, "seen.json")) as fh:
-            return json.load(fh)
+            data = json.load(fh)
     except (OSError, ValueError):
         return {}
+    return data if isinstance(data, dict) else {}
 
 
 def cmd_seen(args):
     done = sorted(int(m.group(1)) for d in os.listdir(args.dir)
                   if (m := re.fullmatch(r"round-(\d+)", d))) \
         if os.path.isdir(args.dir) else []
-    rec = load_round(args.dir, done[-1]) if done else None
+    k = args.round or next((k for k in reversed(done)
+                            if load_round(args.dir, k)), None)
+    rec = load_round(args.dir, k) if k else None
     if not rec:
-        raise SystemExit(f"ERROR: no round in {args.dir}; run qa.py pages first")
-    want = [p.lstrip("p") for p in args.pages] or list(rec["pages"])
+        raise SystemExit(f"ERROR: no round{f'-{k}' if k else ''} in "
+                         f"{args.dir}; run qa.py pages first")
+    want = []
+    for p in args.pages:
+        m = re.fullmatch(r"[pP]?0*(\d+)", p)
+        if not m:
+            raise SystemExit(f"ERROR: {p!r}: name pages as p2, p02 or 2")
+        want.append(m.group(1))
+    want = want or list(rec["pages"])
     bad = [p for p in want if p not in rec["pages"]]
     if bad:
-        raise SystemExit(f"ERROR: round-{done[-1]} has no page " + " ".join(bad))
+        raise SystemExit(f"ERROR: round-{k} has no page " + " ".join(bad))
     seen = load_seen(args.dir)
     mine = seen.setdefault(rec["pdf"], {})
+    if not isinstance(mine, dict):
+        mine = seen[rec["pdf"]] = {}
     for p in want:
         if rec["pages"][p] not in mine.setdefault(p, []):
             mine[p].append(rec["pages"][p])
-    with open(os.path.join(args.dir, "seen.json"), "w") as fh:
+    tmp = os.path.join(args.dir, "seen.json.part")
+    with open(tmp, "w") as fh:
         json.dump(seen, fh)
-    print(f"seen: round-{done[-1]} " + " ".join(f"p{p}" for p in want))
+    os.replace(tmp, os.path.join(args.dir, "seen.json"))
+    print(f"seen: round-{k} of {os.path.basename(rec['pdf'])}: "
+          + " ".join(f"p{p}" for p in want))
     return 0
 
 
@@ -526,13 +556,15 @@ def fetch_schema():
     os.makedirs(SCHEMA_DIR, exist_ok=True)
     for name in ("xml.xsd", "xlink.xsd", "musicxml.xsd"):
         path = os.path.join(SCHEMA_DIR, name)
-        if os.path.exists(path) and complete(open(path, "rb").read()):
-            continue
-        data = download(SCHEMA_URL + name)
+        data = open(path, "rb").read() if os.path.exists(path) else b""
         if not complete(data):
-            raise SystemExit(f"fetch-schema: {SCHEMA_URL}{name}: not a "
-                             "whole schema")
-        if name == "musicxml.xsd":
+            data = download(SCHEMA_URL + name)
+            if not complete(data):
+                raise SystemExit(f"fetch-schema: {SCHEMA_URL}{name}: not a "
+                                 "whole schema")
+        elif name != "musicxml.xsd" or b'schemaLocation="http' not in data:
+            continue
+        if name == "musicxml.xsd":  # import the local copies (xmllint --nonet)
             data = re.sub(rb'schemaLocation="[^"]*?([a-z]+\.xsd)"',
                           rb'schemaLocation="\1"', data)
         with open(path + ".part", "wb") as fh:
@@ -577,6 +609,55 @@ def cmd_xml(args):
     return 1
 
 
+def cmd_midi(args):
+    import mido
+    files = sorted(f for f in os.listdir(args.dir) if f.endswith(".mid"))
+    if not files:
+        raise SystemExit(f"ERROR: no .mid files in {args.dir}")
+    problems = 0
+    for f in files:
+        path = os.path.join(args.dir, f)
+        lyric_file = "带歌词" in f
+        charset = "gbk" if "GBK" in f.upper() else "utf-8"
+        try:
+            mf = mido.MidiFile(path, charset=charset)
+        except (OSError, ValueError, EOFError, UnicodeError) as e:
+            print(f"PROBLEM: {f}: cannot read ({e})")
+            problems += 1
+            continue
+        names, notes, missing, cjk = [], 0, [], 0
+        for tr in mf.tracks:
+            t, ons, lyr, name = 0, [], set(), ""
+            for msg in tr:
+                t += msg.time
+                if msg.type == "track_name":
+                    name = msg.name
+                elif msg.type == "note_on" and msg.velocity:
+                    ons.append(t)
+                elif msg.type == "lyrics":
+                    lyr.add(t)
+                    cjk += bool(re.search(r"[\u4e00-\u9fff]", msg.text))
+            if ons:
+                names.append(name or "(no name)")
+            if lyric_file and ons:
+                notes += len(ons)
+                missing += [(name, t) for t in ons if t not in lyr]
+        print(f"{f}: tracks: {' / '.join(names) or 'none'}")
+        if lyric_file:
+            if missing:
+                problems += 1
+                ticks = ", ".join(f"{n or '?'}@{t}" for n, t in missing[:8])
+                print(f"PROBLEM: {f}: {len(missing)} of {notes} notes have "
+                      f"no lyric at their onset ({ticks}{' ...' if len(missing) > 8 else ''})")
+            if not cjk:
+                problems += 1
+                print(f"PROBLEM: {f}: no Chinese characters in the lyrics "
+                      f"as {charset} (wrong encoding?)")
+            if not missing and cjk:
+                print(f"  OK: {notes} notes, every one with a lyric or '-'")
+    return 1 if problems else 0
+
+
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__,
@@ -597,9 +678,14 @@ def main():
     s.set_defaults(fn=cmd_pages)
     s = sub.add_parser("seen")
     s.add_argument("dir")
-    s.add_argument("pages", nargs="*", help="pN ... (default: all pages "
-                   "of the latest round)")
+    s.add_argument("--round", type=int, help="the round you looked at "
+                   "(default: the latest round in dir)")
+    s.add_argument("pages", nargs="*", default=[], help="pN ... (default: "
+                   "all pages of that round)")
     s.set_defaults(fn=cmd_seen)
+    s = sub.add_parser("midi")
+    s.add_argument("dir", help="the song's output directory")
+    s.set_defaults(fn=cmd_midi)
     s = sub.add_parser("xml")
     s.add_argument("file")
     s.set_defaults(fn=cmd_xml)

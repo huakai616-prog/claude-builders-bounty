@@ -21,15 +21,25 @@
 
 if [ "$(uname)" = Darwin ]; then
     # The user's Mac: install nothing, only say what is missing.
-    echo "setup.sh installs only on Linux cloud containers; on the Mac, MuseScore 4 and Chrome are picked up from /Applications."
-    miss=$(python3 -c "import importlib.util as u, sys
-print(' '.join(m for m in sys.argv[1:] if u.find_spec(m) is None))" music21 mido pypdf cffi 2>/dev/null)
-    [ -n "$miss" ] && echo "missing Python packages: pip3 install $miss"
+    echo "setup.sh installs only on Linux cloud containers; on the Mac it only lists what is missing."
+    need=""
+    if miss=$(python3 -c "import importlib.util as u, sys
+print(' '.join(m for m in sys.argv[1:] if u.find_spec(m) is None))" music21 mido pypdf cffi 2>/dev/null); then
+        [ -n "$miss" ] && need=1 && echo "missing Python packages: python3 -m pip install $miss"
+    else
+        need=1
+        echo "python3 does not run: install Python 3 (brew install python, or xcode-select --install)"
+    fi
     tools=""
     command -v pdftotext >/dev/null 2>&1 || tools="$tools poppler"
     command -v fluidsynth >/dev/null 2>&1 || tools="$tools fluid-synth"
     command -v ffmpeg >/dev/null 2>&1 || tools="$tools ffmpeg"
-    [ -n "$tools" ] && echo "missing tools: brew install$tools"
+    [ -n "$tools" ] && need=1 && echo "missing tools: brew install$tools"
+    [ -n "$MSCORE4" ] || [ -e "/Applications/MuseScore 4.app/Contents/MacOS/mscore" ] \
+        || { need=1; echo "missing: MuseScore 4 in /Applications (musescore.org)"; }
+    [ -n "$CHROME" ] || [ -e "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ] \
+        || { need=1; echo "missing: Google Chrome in /Applications (or set CHROME=/path)"; }
+    [ -z "$need" ] && echo "nothing missing"
     exit 0
 fi
 
@@ -169,7 +179,7 @@ if [ -n "$good" ]; then $how "$MS4"; else fail "$MS4"; fi
 # --- 5. Chromium (cover page and running headers) --------------------------
 begin "chromium"
 CHROME=$(holly 'print(hollywood.find_chrome())' 2>> "$LOG")
-if [ -n "$CHROME" ]; then ok "$CHROME"; else fail "not found; set CHROME=/path"; fi
+if [ -n "$CHROME" ]; then ok "$CHROME"; else fail "not found; set CHROME=/path (none here? pip install playwright && python3 -m playwright install chromium)"; fi
 
 # --- 6. MusicXML 4.0 schema ------------------------------------------------
 begin "schema"

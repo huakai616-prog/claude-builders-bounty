@@ -74,7 +74,7 @@ hollywood.polish_musicxml(base + ".musicxml", META)
 - **Song-specific engraving touch-ups**: `META["mscx_hook"]` is a function applied to the imported MuseScore file before engraving (for example right-aligning a text at the end of a system, which MS4 ignores from MusicXML `justify`). See `chatang/build.py`. Ready-made recipes (section titles that won't lift, room under one staff, tuplet side, 8va hooks, accidentals after an 8va): `references/ms4-touchups.md`.
 - **8va lines**: when a violin line sits above about E6 for a bar or more, add `OTTAVA = [("Violin I", first_bar, last_bar)]` and the `<octave-shift>` block in `polish()` (copy it from `chatang/build.py`). The MusicXML keeps the sounding pitches, so the MIDI is unaffected; MS4 and Sibelius only shift the display. When an 8va ends mid-bar, MS4 can drop an accidental written for the other octave, and the 8va hook can run into the next note: check those bars on the page; fixes in `references/ms4-touchups.md`.
 - `polish()` in `build.py` keeps only the song-specific work: instrument sounds, dynamics placement, `SYSTEM_BREAKS`. Page layout and credits come from `hollywood`.
-- **Engraving rules learned on Unravel** (`unravel/build.py` has them; copy into new engines):
+- **Engraving rules learned on Unravel** (`unravel/build.py` has them; copy into new engines. `chatang/build.py` does not have `rebeam` / `_fits_rest` yet: a song built from it needs them when 16th figures cross the beat or rests fall inside a beat, so check beams and rests on the page):
   - `rebeam()` after `polish_musicxml`: music21 beams across the middle of a 4/4 bar and leaves orphan `end` beams. Rebeam per beat, merge beats only where a note crosses the beat (3+3+2 figures), never across beat 3; secondary beams per beat, a lone 16th hooked toward the note it completes.
   - Rests never hide a beat: dotted rests only on the beat, shorter rests inside their beat (`_fits_rest`).
   - Expressive words (`dolce`, `cantabile`, `espressivo`, `subito`, `morendo`, …) go **below** the staff; when a dynamic sits on the same beat they are merged into its `<direction>` so MS4 and Sibelius print one line ("*f* subito", "*p* dolce"). Techniques (sul tasto, spicc., marcato, legato) stay above. Don't hang an expressive word on a pickup: it runs through the barline (the quartet's barlines are connected); put it on the next downbeat.
@@ -100,7 +100,7 @@ It installs whatever is missing: `pip install music21 mido pypdf cffi` (cffi: th
 
 - **MuseScore 4**: `hollywood.find_ms4()` downloads the 4.4.4 AppImage to `/opt/ms4` and extracts it if it is missing (about 170 MB, via github.com releases). Override with `MSCORE4=/path`.
 - **Chromium**: found under `/opt/pw-browsers/chromium-*/chrome-linux/chrome`, or set `CHROME=/path`.
-- On the user's Mac: MuseScore 4 at `/Applications/MuseScore 4.app`, Chrome at `/Applications/Google Chrome.app`. Both are picked up automatically (`tools/setup.sh` is for Linux cloud containers and exits on macOS).
+- On the user's Mac: MuseScore 4 at `/Applications/MuseScore 4.app`, Chrome at `/Applications/Google Chrome.app`. Both are picked up automatically. On macOS `tools/setup.sh` installs nothing and only lists what is missing (`python3 -m pip install …`, `brew install poppler fluid-synth ffmpeg`, MuseScore 4 / Chrome in /Applications).
 
 ## Instrumental works and parts
 
@@ -138,14 +138,15 @@ On 11 × 17 at 7.2 mm staves:
 ```bash
 python3 tools/hollywood/qa.py score <song>/output/<歌名>_副歌_总谱.pdf -v   # layout report, PROBLEM lines (exit 0 = clean)
 python3 tools/hollywood/qa.py pages <song>/output/<歌名>_副歌_总谱.pdf <scratch>/pages   # PNGs; lists pages not yet seen
-python3 tools/hollywood/qa.py seen <scratch>/pages                                   # after looking at them
+python3 tools/hollywood/qa.py seen --round K <scratch>/pages                         # after looking at them (pages prints it)
+python3 tools/hollywood/qa.py midi <song>/output                                   # lyric or '-' on every vocal note, GBK file, track names
 python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # MusicXML 4.0 schema
 ```
 
 - `qa.py` has its usage in its docstring (`python3 tools/hollywood/qa.py -h`). It also works on a parts PDF (told apart by page size). It takes the bar count and the part list from the one `*.musicxml` next to the PDF (or `--musicxml F`). `--systems N` sets the systems-per-page target when a score has fewer on purpose (我和我的祖国: 8 staves, 2 per page).
 - Run `score` after every render and fix what it reports before you look at pages. It reads the boxed bar numbers back from the PDF and lists the bars of every system on every page (`-v`); it flags missing bar numbers, one-bar systems, pages without 3 systems, a lonely last system, and missing headers, footers, page numbers, cover credits and instrumentation.
-- Then look at every page that `pages` lists under "look at" (all pages the first time), and record that with `python3 tools/hollywood/qa.py seen <scratch>/pages` (or `seen <dir> p2 p5` for only the pages you looked at). A page is listed as unchanged only when it is pixel-identical to a page you marked as seen; a page you never marked is listed again in every round. So by delivery every page has been looked at in its final form. Keep `<scratch>` outside the repo, never in `<song>/output/`.
-- Instrumental work: run `score` and `pages` on the parts PDF (`<名>_分谱.pdf`) too.
+- Then look at every page that `pages` lists under "look at" (all pages the first time), and record that with the command `pages` prints (`python3 tools/hollywood/qa.py seen --round K <scratch>/pages`; add `p2 p5` to mark only the pages you looked at). A page is listed as unchanged only when it is pixel-identical to a page you marked as seen; a page you never marked is listed again in every round. So by delivery every page has been looked at in its final form. Keep `<scratch>` outside the repo, never in `<song>/output/`.
+- Instrumental work: run `score` and `pages` on the parts PDF (`<名>_分谱.pdf`) too, with its own `<scratch>` dir (one dir per PDF).
 - The eye checks the script cannot do:
   - The cover shows the title, credits table (both 花开当富贵 rows), key · tempo · duration, and instrumentation, with nothing clipped.
   - No collisions between dynamics, texts, lyrics or hairpins; bar-number boxes, header and footer clear of the music.
@@ -153,7 +154,7 @@ python3 tools/hollywood/qa.py xml <song>/output/<file>.musicxml               # 
   - The first-page title block is symmetric: left and right credit blocks share a bottom line and don't touch the music.
   - Systems are spread down the page and breaks fall at phrases.
 - The script's checks, for reference: every page has its header and footer and a correct "PAGE n OF N"; there is a boxed bar number on every bar; each page has 3 systems (the last page may have fewer, but not a lone system with half a page empty) and there is no one-bar system; the MusicXML validates against the schema.
-- The MIDI reads back: every vocal note has a lyric or `-`, and the track names are right.
+- The MIDI reads back (`qa.py midi <song>/output`): every vocal note has a lyric or `-`, the GBK file decodes, and the track names are right (`Vocal 人声` / `Violin I` / `Violin II` / `Viola` / `Violoncello`, see AGENTS.md 交付物).
 
 ## Known pitfalls
 
