@@ -23,6 +23,21 @@ the page sorts by `updated`), then run tools/deliver/package.py <slug>.
 
 WORKS = [
     dict(
+        slug="juebieshu", section="song", ref="origin/claude/determined-galileo-0epaj3",
+        title="诀别书", subtitle="全曲 · 弦乐五重奏",
+        artist="", key="F 大调（原调，d 小调色彩）", tempo="♩=112",
+        instrumentation="弦乐五重奏（邓垚钢琴曲）",
+        src="干活/诀别书", layout="keep",
+        main=dict(musicxml="1_西贝柳斯工程/诀别书_弦乐五重奏.musicxml",
+                  pdf="2_总谱与分谱PDF/诀别书_弦乐五重奏_总谱.pdf",
+                  strings="3_ACE_Studio_MIDI/诀别书_弦乐五重奏_全轨.mid",
+                  parts="2_总谱与分谱PDF/诀别书_弦乐五重奏_全部分谱.pdf"),
+        pdf_kind="hollywood", audio="粗略试听_GM音色_非ACE效果.mp3",
+        note="纯器乐曲，没有人声。压缩包就是按用途分好的成品文件夹，先看里面的「使用说明.md」。总谱 11×17 带封面和「花开当富贵」署名，用 LilyPond 排版。全曲 52 小节，约 2 分钟。",
+        howto=["ACE Studio：在第 1 小节导入「3_ACE_Studio_MIDI/诀别书_弦乐五重奏_全轨.mid」（五条轨），保留速度信息，每轨加载 String Section，speaker 依次选 Violins I / Violins II / Violas / Celli / Basses。没有用拨弦和弱音器，演奏法保持智能模式。",
+               "第 40 小节第 4 拍五条轨同时休止一拍（G.P.），是有意的，不要补音。"],
+        questions=[]),
+    dict(
         slug="dongfeng", section="song", ref=None,
         title="冬风", subtitle="全曲 · 弦乐四重奏 · 肖邦练习曲 Op. 25 No. 11",
         artist="", key="a 小调（原调）", tempo="二分音符=69（♩=138）",

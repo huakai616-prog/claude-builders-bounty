@@ -186,10 +186,10 @@ def package(w):
                 for p in ps:
                     entries.append((f"{top}/{folder}/{os.path.basename(p)}",
                                     os.path.join(tmp, p)))
-            for k in MAIN_KEYS:
-                if k in w["main"]:
-                    v = w["main"][k]
-                    main_rel.append((k, v))
+            main = w["main"]
+            for k in (MAIN_KEYS if set(main) <= set(MAIN_KEYS) else main):
+                if k in main:
+                    main_rel.append((k, main[k]))
             note = None
         for arc, path in entries:
             assert os.path.exists(path), (slug, arc)
