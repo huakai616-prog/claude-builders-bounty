@@ -28,7 +28,7 @@ The user set these rules once and does not want to be asked again.
 | Element | Standard |
 |---|---|
 | Paper | 11 × 17 in (tabloid) portrait, the Hollywood full-score size. Score in C (concert pitch) |
-| Cover | Double-rule frame, "FULL SCORE / Score in C · Concert Pitch", large title (Noto Serif CJK), pinyin or English title, subtitle in Chinese and English, credits table (作曲 / 作词 / 原唱 / 改编 / 制谱), key · tempo · duration, instrumentation, and 花开当富贵 at the foot. The user finds this cover too plain: eight master-style alternatives wait for their choice in `tools/hollywood/covers/README.md` (until then this one stays) |
+| Cover | Double-rule frame, "FULL SCORE / Score in C · Concert Pitch", large title (Noto Serif CJK), pinyin or English title, subtitle in Chinese and English, credits table (作曲 / 作词 / 原唱 / 改编 / 制谱), key · tempo · duration, instrumentation, and 花开当富贵 at the foot. The user likes this layout and wants it kept, with **one small ornament drawn from each song's title or content** (ink plus at most one cinnabar accent, nothing kitsch); first drafts: `tools/hollywood/covers/zhongguorennengfei/` (《中国人能飞》, waiting for the user's pick) |
 | First page | Title block: title and subtitle centred; lyricist and original artist bottom-left; composer, arranger and engraver bottom-right |
 | Every page | Running header (title · section, "FULL SCORE IN C", big page number top right, hairline); footer (改编 · 制谱 花开当富贵 / Arranged & Music Preparation by 花开当富贵, "PAGE n OF N") |
 | Bar numbers | Every bar, bold, boxed, centred over the bar |
